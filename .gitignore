@@ -1,0 +1,27 @@
+# Rproject
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+.DS_store
+
+# Raw data
+data-raw/*
+!data-raw/README.md
+
+# misc and  LaTeX
+*.tmp
+*.swp
+*.bak
+*.log
+*.aux
+*.lof
+*.fls
+*.out
+*.toc
+*.fmt
+*.fot
+.*.lb
+*.bbl
+*.blg
+*.tex
