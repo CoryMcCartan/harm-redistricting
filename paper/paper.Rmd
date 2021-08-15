@@ -1,0 +1,58 @@
+---
+title: Individual Injury and Representational Harms (?)
+authors:
+  - name: Cory McCartan
+    thanks: Footnote stuff
+    department: Department of Statistics
+    affiliation: Harvard University
+    location: Cambridge, MA
+    email: cmccartan@fas.harvard.edu
+  - name: Christopher T. Kenny
+    department: Department of Government
+    affiliation: Harvard University
+    location: Cambridge, MA
+    email: christopherkenny@fas.harvard.edu
+abstract: |
+  Enter the text of your abstract here.
+keywords:
+  - partisan fairness
+  - representation
+  - redistricting simulation
+  - standing
+bibliography: references.bib
+biblio-style: unsrt
+output: 
+  rticles::arxiv_article:
+    keep_tex: true
+---
+
+# Introduction
+
+- introduce partisan symmetry
+  - Katz, King, Rosenblatt 2019; Deford et al 2021; Katz, King, Rosenblatt 2021
+
+
+- Election law side is very indivudalized
+  - Standing discussions 
+    - Lujan v Defenders of Wildlife (1992)
+    - Shaw v. Reno (1993) -- racial gerrymandering
+    - Issacharoff and Karlan 1998
+    
+- Recent work
+  - EGap
+  - Partisan Dislocation
+
+- Power of Ensemble Analysis
+  - Recent advances allow us to make claims about harm based in counterfactuals that are realistic and statistically useful
+
+
+
+# Towards Individualized Representational Harm
+
+# Connections to the Partisan Symmetry Standard 
+
+# Measures of Individual Injury 
+
+# Differences Between Classes of Fairness Metrics
+
+# Discussion
