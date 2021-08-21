@@ -29,23 +29,29 @@ output:
 # Introduction
 
 - introduce partisan symmetry
-  - Katz, King, Rosenblatt 2019; Deford et al 2021; Katz, King, Rosenblatt 2021
+    - Katz, King, Rosenblatt 2019; Deford et al 2021; Katz, King, Rosenblatt 2021
 
 
 - Election law side is very indivudalized
-  - Standing discussions 
-    - Lujan v Defenders of Wildlife (1992)
-    - Shaw v. Reno (1993) -- racial gerrymandering
-    - Issacharoff and Karlan 1998
+    - Standing discussions 
+        - Lujan v Defenders of Wildlife (1992)
+        - Shaw v. Reno (1993) -- racial gerrymandering
+        - Issacharoff and Karlan 1998
     
 - Recent work
-  - EGap
-  - Partisan Dislocation
+    - EGap
+    - Partisan Dislocation
+  
+- Important to consider benefits and harms to individual voters
+
 
 - Power of Ensemble Analysis
-  - Recent advances allow us to make claims about harm based in counterfactuals that are realistic and statistically useful
+    - Recent advances allow us to make claims about harm based in counterfactuals that are realistic and statistically useful
 
 
+# Voter Utility in Election Outcomes
+
+1. 
 
 # Towards Individualized Representational Harm
 

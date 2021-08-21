@@ -25,3 +25,4 @@ data-raw/*
 *.bbl
 *.blg
 *.tex
+paper/*.pdf
