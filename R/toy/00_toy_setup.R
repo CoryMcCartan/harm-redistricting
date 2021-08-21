@@ -49,7 +49,7 @@ make_people = function(pop, dem, geometry, row, col, ...) {
     read_table(url, col_names=F, col_types=cols(.default="d")) %>%
         select(-X1) %>%
         as.matrix() %>%
-        apply(1, function(x) st_point(x/6 + offset), simplify=FALSE) %>%
+        apply(1, function(x) st_point(x/6.28 + offset), simplify=FALSE) %>%
         st_sfc(crs=3857) %>%
         st_as_sf() %>%
         rename(geometry=x) %>%
