@@ -9,8 +9,9 @@ minichusetts <- grid %>%
            col = rep(1:6, 6),
            pop = 5,
            dem = 3,
-           rep = 2
-           )
+           rep = 2) %>%
+    relocate(geometry, .after=rep) %>%
+    redist_map(ndists=3, pop_tol=0.1)
 
 minissouri <- grid %>%
     mutate(row = rep(6:1, each=6),
@@ -25,8 +26,9 @@ minissouri <- grid %>%
            dem = if_else(city2, 5, dem),
            rep = 3,
            rep = if_else(city1, 2, rep),
-           rep = if_else(city2, 2, rep)
-           )
+           rep = if_else(city2, 2, rep)) %>%
+    relocate(geometry, .after=rep) %>%
+    redist_map(ndists=3, pop_tol=0.1)
 
 mininois = grid %>%
     mutate(row = rep(6:1, each=6),
