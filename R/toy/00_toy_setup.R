@@ -13,12 +13,12 @@ mininois = grid %>%
            dem = if_else(city, 8, 1),
            rep = if_else(city, 3, 2)) %>%
     relocate(geometry, .after=rep) %>%
-    redist_map(ndists=3, pop_tol=0.001)
+    redist_map(ndists=3, pop_tol=0.1)
 
 
 # functions
 sim_toy = function(map, N=500) {
-    redist_smc(mininois, N) %>%
+    redist_smc(map, N, verbose=F) %>%
         mutate(comp = distr_compactness(map),
                dem = group_frac(map, dem, pop))
 }
