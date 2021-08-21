@@ -40,8 +40,30 @@ mininois = grid %>%
     relocate(geometry, .after=rep) %>%
     redist_map(ndists=3, pop_tol=0.1)
 
+# functions and helpers
 
-# functions
+make_people = function(pop, dem, geometry, row, col, ...) {
+    url = str_glue("http://hydra.nat.uni-magdeburg.de/packing/csq/txt/csq{pop}.txt")
+    offset = as.numeric(st_centroid(geometry))
+    dem_vec = c(rep(TRUE, dem), rep(FALSE, pop-dem))
+    read_table(url, col_names=F, col_types=cols(.default="d")) %>%
+        select(-X1) %>%
+        as.matrix() %>%
+        apply(1, function(x) st_point(x/6 + offset), simplify=FALSE) %>%
+        st_sfc() %>%
+        st_as_sf() %>%
+        rename(geometry=x) %>%
+        mutate(row = row, col = col,
+               dem = sample(dem_vec))
+}
+
+mininois_people = mininois %>%
+    pmap_dfr(make_people)
+minichusetts_people = minichusetts %>%
+    pmap_dfr(make_people)
+minissouri_people = minissouri %>%
+    pmap_dfr(make_people)
+
 sim_toy = function(map, N=500) {
     redist_smc(map, N, verbose=F) %>%
         mutate(comp = distr_compactness(map),
