@@ -1,6 +1,7 @@
 library(tidyverse)
 library(geomander)
 library(redist)
+library(sf)
 library(scales)
 library(wacolors)
 library(here)
