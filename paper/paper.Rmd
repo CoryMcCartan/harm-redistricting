@@ -38,12 +38,11 @@ output:
         - Shaw v. Reno (1993) -- racial gerrymandering
         - Issacharoff and Karlan 1998
     
-- Recent work
+- Recent, related work
     - EGap
     - Partisan Dislocation
   
 - Important to consider benefits and harms to individual voters
-
 
 - Power of Ensemble Analysis
     - Recent advances allow us to make claims about harm based in counterfactuals that are realistic and statistically useful
