@@ -50,7 +50,7 @@ make_people = function(pop, dem, geometry, row, col, ...) {
         select(-X1) %>%
         as.matrix() %>%
         apply(1, function(x) st_point(x/6 + offset), simplify=FALSE) %>%
-        st_sfc() %>%
+        st_sfc(crs=3857) %>%
         st_as_sf() %>%
         rename(geometry=x) %>%
         mutate(row = row, col = col,
