@@ -18,30 +18,31 @@ plans = plans %>%
            competitive = competitiveness(iowa, nrv, ndv, ),
            mean_med = partisan_metrics(iowa, "MeanMedian", nrv, ndv),
            pbias = partisan_metrics(iowa, "Bias", nrv, ndv))
+m_dem = district_group(plans, dem)
+
 pl_sum = plans %>%
     group_by(draw) %>%
     summarize(n_dem = sum(dem > 0.5),
-              across(c(dev, comp, competitive:pbias), ~ .[1]))
+              across(c(dev, comp, competitive:pbias), ~ .[1])) %>%
+    mutate(u_loc_dem = utility_local(iowa, ndv, m_dem),
+           u_loc_rep = utility_local(iowa, ndv, m_dem, invert=TRUE),
+           h1_dem = harm_v1(iowa, ndv, m_dem, idx_2=-1:-2),
+           h1_rep = harm_v1(iowa, ndv, m_dem, idx_2=-1:-2, invert=TRUE),
+           h2_dem = harm_v2(iowa, ndv, m_dem, idx_2=-1:-2),
+           h2_rep = harm_v2(iowa, ndv, m_dem, idx_2=-1:-2, invert=TRUE),
+           u_loc = total(u_loc_dem, u_loc_rep, iowa, ndv, nrv),
+           h1 = total(h1_dem, h1_rep, iowa, ndv, nrv),
+           h2 = total(h2_dem, h2_rep, iowa, ndv, nrv))
 
-m_dem = arrange(plans, as.integer(draw), district)$dem %>%
-    matrix(nrow=attr(iowa, "ndists"))
-m_prec = matrix(nrow=nrow(iowa), ncol=nrow(pl_sum))
-for (i in seq_len(ncol(m_prec))) m_prec[, i] = m_dem[, i][as.matrix(plans)[, i]]
-
-flog = \(x) if_else(x <= 0, -1, suppressWarnings(log(x)))
-voters = sum(iowa$ndv) + sum(iowa$nrv)
-pl_sum$h_dem = as.numeric(iowa$ndv %*% (m_prec > 0.5) - sum(iowa$ndv * rowMeans(m_prec > 0.5))) / sum(iowa$ndv)
-pl_sum$h_rep = as.numeric(iowa$nrv %*% (m_prec < 0.5) - sum(iowa$nrv * rowMeans(m_prec < 0.5))) / sum(iowa$nrv)
-pl_sum$u_indiv = as.numeric(iowa$ndv %*% (m_prec > 0.5) + iowa$nrv %*% (m_prec < 0.5)) / voters
-pl_sum$u_tot = (sum(iowa$ndv)*flog(pl_sum$n_dem) + sum(iowa$ndv)*flog(pl_sum$n_dem)) / voters
-
-hist(pl_sum, mean_med, bins=30)
-hist(pl_sum, competitive, bins=30)
-hist(pl_sum, u_indiv, bins=30)
-hist(pl_sum, u_tot)
-qplot(u_tot, u_indiv, data=pl_sum, geom="jitter", size=I(0.5))
-qplot(h_dem, h_rep, data=pl_sum, geom="jitter", size=I(0.5))
-
-u_avg = mean(pl_sum$u_indiv[-1:-2])
-hist(pl_sum, u_indiv - u_avg, bins=60)
+hist(pl_sum, mean_med, bins=100)
+hist(pl_sum, competitive, bins=100)
+hist(pl_sum, h1, bins=100)
+hist(pl_sum, h2, bins=100)
+hist(pl_sum, u_loc, bins=100)
+hist(pl_sum, h1_dem - h1_rep, bins=100)
+hist(pl_sum, h2_dem - h2_rep, bins=100)
+redist.plot.scatter(pl_sum, h1, h2)
+redist.plot.scatter(pl_sum, h1_dem - h1_rep, h2_dem - h2_rep)
+redist.plot.scatter(pl_sum, h1_dem, h2_dem)
+redist.plot.scatter(pl_sum, h1_rep, h2_rep)
 
