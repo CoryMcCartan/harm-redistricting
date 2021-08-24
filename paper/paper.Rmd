@@ -37,9 +37,16 @@ In this article, we offer an approach to understanding partisan fairness through
 This does not supplant existing understandings of partisan fairness, but instead offers an alternative rooted in understanding how the individual potential voters are impacted by districting plans.
 
 Several existing methods of redistricting simulation rely on randomness, such as Random Seed and Grow (Chen and Rodden 2013) or Recombination (Deford et al. 2021).
-Moving beyond these hueristic methods, we can use sampling methods that have defined target distributions to ensure that we characterize the space of applicable plans properly.
+Moving beyond these heuristic methods, we can use sampling methods that have defined target distributions to ensure that we characterize the space of applicable plans properly.
 Methods which operationalize a statistics-based approach include Fifield et al. 2020, McCartan and Imai (2020), and Autrey et al (2020).
 Using these methods advance us beyond the critiques of Katz, King, and Roseblatt (2020) by sampling plans using weights within a Gibbs distribution, rather than assuming that uniform sampling weights alone are sufficient.
+
+Metrics often associated with partisan symmetry, such as TODO, are indicative of violations of partisan symmetry.
+Notably, these are only defined for full legislatures (see Katz, King, and Rosenblatt (2021)).
+As such, theory-based interpretations of these measures do not indicate signs of unfairness to parities in the congressional district setting, unless they are consistent across many, many states.
+We offer measures of partisan harm which are rooted directly in the representational harms inflicted upon individuals by those who choose to draw a amap.
+
+These measures are deeply connected to the law and constitutional understandings of partisan fairness, due to their related roots in the individual.
 
 -   introduce partisan symmetry
 
