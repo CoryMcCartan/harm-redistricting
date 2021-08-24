@@ -1,5 +1,5 @@
 ---
-title: Individual Injury and Representational Harms (?)
+title: Individual Representation: Harm and Utility(?)
 authors:
   - name: Cory McCartan
     thanks: Footnote stuff
@@ -28,35 +28,51 @@ output:
 
 # Introduction
 
-- introduce partisan symmetry
-    - Katz, King, Rosenblatt 2019; Deford et al 2021; Katz, King, Rosenblatt 2021
+Understanding fairness in electoral systems has long suffered from a focus on parties over the individuals who vote for them.
+There is no doubt that parties are interesting units in electoral discussions.
+They offer stability over candidates, information for the under-informed, and shortcuts for understanding preferred vote choices.
+Yet, court histories and academic traditions value the harm of the individual over the harm to a transient political body, such as the party.
 
+In this article, we offer an approach to understanding partisan fairness through a lens of individual harm and utility.
+This does not supplant existing understandings of partisan fairness, but instead offers an alternative rooted in understanding how the individual potential voters are impacted by districting plans.
 
-- Election law side is very indivudalized
-    - Standing discussions 
-        - Lujan v Defenders of Wildlife (1992)
-        - Shaw v. Reno (1993) -- racial gerrymandering
-        - Issacharoff and Karlan 1998
-    
-- Recent, related work
-    - EGap
-    - Partisan Dislocation
-  
-- Important to consider benefits and harms to individual voters
+Several existing methods of redistricting simulation rely on randomness, such as Random Seed and Grow (Chen and Rodden 2013) or Recombination (Deford et al. 2021).
+Moving beyond these hueristic methods, we can use sampling methods that have defined target distributions to ensure that we characterize the space of applicable plans properly.
+Methods which operationalize a statistics-based approach include Fifield et al. 2020, McCartan and Imai (2020), and Autrey et al (2020).
+Using these methods advance us beyond the critiques of Katz, King, and Roseblatt (2020) by sampling plans using weights within a Gibbs distribution, rather than assuming that uniform sampling weights alone are sufficient.
 
-- Power of Ensemble Analysis
-    - Recent advances allow us to make claims about harm based in counterfactuals that are realistic and statistically useful
+-   introduce partisan symmetry
 
+    -   Katz, King, Rosenblatt 2019; Deford et al 2021; Katz, King, Rosenblatt 2021
+
+-   Election law side is very indivudalized
+
+    -   Standing discussions
+
+        -   Lujan v Defenders of Wildlife (1992)
+        -   Shaw v. Reno (1993) -- racial gerrymandering
+        -   Issacharoff and Karlan 1998
+
+-   Recent, related work
+
+    -   EGap
+    -   Partisan Dislocation
+
+-   Important to consider benefits and harms to individual voters
+
+-   Power of Ensemble Analysis
+
+    -   Recent advances allow us to make claims about harm based in counterfactuals that are realistic and statistically useful
 
 # Voter Utility in Election Outcomes
 
-1. 
+1.  
 
 # Towards Individualized Representational Harm
 
-# Connections to the Partisan Symmetry Standard 
+# Connections to the Partisan Symmetry Standard
 
-# Measures of Individual Injury 
+# Measures of Individual Injury
 
 # Differences Between Classes of Fairness Metrics
 
