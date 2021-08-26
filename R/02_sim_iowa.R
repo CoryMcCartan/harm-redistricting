@@ -20,17 +20,23 @@ plans = plans %>%
            pbias = partisan_metrics(iowa, "Bias", nrv, ndv))
 m_dem = district_group(plans, dem)
 
+ker = k_t()
 pl_sum = plans %>%
     group_by(draw) %>%
     summarize(n_dem = sum(dem > 0.5),
+              n_dem_smooth = sum(ker(dem)),
               across(c(dev, comp, competitive:pbias), ~ .[1])) %>%
-    mutate(u_loc_dem = utility_local(iowa, ndv, m_dem),
-           u_loc_rep = utility_local(iowa, ndv, m_dem, invert=TRUE),
-           h1_dem = harm_v1(iowa, ndv, m_dem, idx_2=-1:-2),
-           h1_rep = harm_v1(iowa, ndv, m_dem, idx_2=-1:-2, invert=TRUE),
-           h2_dem = harm_v2(iowa, ndv, m_dem, idx_2=-1:-2),
-           h2_rep = harm_v2(iowa, ndv, m_dem, idx_2=-1:-2, invert=TRUE),
+    mutate(u_loc_dem = utility_local(iowa, ndv, m_dem, ker),
+           u_loc_rep = utility_local(iowa, ndv, m_dem, ker, invert=TRUE),
+           u_glb_dem = utility_global(plans, dem, ker),
+           u_glb_rep = utility_global(plans, dem, ker, invert=TRUE),
+           h1_dem = harm_v1(iowa, ndv, m_dem, idx_2=-1:-2, kernel=ker),
+           h1_rep = harm_v1(iowa, ndv, m_dem, idx_2=-1:-2, kernel=ker, invert=TRUE),
+           h2_dem = harm_v2(iowa, ndv, m_dem, idx_2=-1:-2, kernel=ker),
+           h2_rep = harm_v2(iowa, ndv, m_dem, idx_2=-1:-2, kernel=ker, invert=TRUE),
+           u_loc_log = total(log(u_loc_dem), log(u_loc_rep), iowa, ndv, nrv),
            u_loc = total(u_loc_dem, u_loc_rep, iowa, ndv, nrv),
+           u_glb = total(u_glb_dem, u_glb_rep, iowa, ndv, nrv),
            h1 = total(h1_dem, h1_rep, iowa, ndv, nrv),
            h2 = total(h2_dem, h2_rep, iowa, ndv, nrv))
 
@@ -39,10 +45,17 @@ hist(pl_sum, competitive, bins=100)
 hist(pl_sum, h1, bins=100)
 hist(pl_sum, h2, bins=100)
 hist(pl_sum, u_loc, bins=100)
+hist(pl_sum, u_loc_dem, bins=100)
 hist(pl_sum, h1_dem - h1_rep, bins=100)
 hist(pl_sum, h2_dem - h2_rep, bins=100)
 redist.plot.scatter(pl_sum, h1, h2)
-redist.plot.scatter(pl_sum, h1_dem - h1_rep, h2_dem - h2_rep)
+redist.plot.scatter(pl_sum, u_glb, u_loc)
+redist.plot.scatter(pl_sum, h1_dem - h1_rep, u_loc*0.8 + u_glb*0.2)
+redist.plot.scatter(pl_sum, h1_dem - h1_rep, h2_dem - h2_rep) +
+    geom_abline(slope=2, lty="dashed", color="grey")
 redist.plot.scatter(pl_sum, h1_dem, h2_dem)
 redist.plot.scatter(pl_sum, h1_rep, h2_rep)
+redist.plot.scatter(pl_sum, n_dem_smooth, h1_dem - h1_rep)
+ggplot(pl_sum, aes(n_dem, h1_dem-h1_rep, group=n_dem)) +
+    geom_boxplot()
 
