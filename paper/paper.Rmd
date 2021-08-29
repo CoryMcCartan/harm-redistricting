@@ -125,11 +125,11 @@ It depends on the form of $h$, as the following result describes.
 
 ```{=tex}
 \begin{restatable}{prop}{propglobal} \label{prop:global}
-Let $\{s_p:p\in P\}$ be a set of party popular vote shares, and $f:[0,1]\bijto[0,1]$ be a rule for assigning each party a share of seats according to their share of the overall vote.
+Let $S=\{s_p:p\in P\}$ be a set of party popular vote shares, and $f:[0,1]\bijto[0,1]$ be a rule for assigning each party a share of seats according to their share of the popular vote.
 Define the total utility for this rule as \[
     U_e^{(G)}(f) = \sum_{v\in V} h\qty(f\qty(s_{\vote_e(v)})).
 \] 
-Then if $h$ is convex, $U_e^{(G)}$ is maximized for $f(x)=\ind\{x\ge \half\}$, and if $h$ is concave, $U_e^{(G)}$ is maximized by an increasing $f$.
+Then if $h$ is convex, $U_e^{(G)}$ is maximized for $f(x)=\ind\{x\ge \max S\}$, and if $h$ is concave, the maximizer of $U_e^{(G)}$ will be an increasing function.
 In particular, if $h(x)=\log(x)$ and every party receives at least one vote, then $f(x)=x$ maximizes $U_e^{(G)}$.
 
 \end{restatable}
