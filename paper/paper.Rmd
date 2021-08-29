@@ -1,5 +1,5 @@
 ---
-title: Individual Representation: Harm and Utility(?)
+title: Individualized Measures of Partisan Fairness and Utility in Redistricting (??)
 authors:
   - name: Cory McCartan
     thanks: Footnote stuff
@@ -24,7 +24,20 @@ biblio-style: unsrt
 output: 
   rticles::arxiv_article:
     keep_tex: true
+    includes:
+      in_header: "header.tex"
+    latex_engine: pdflatex
 ---
+
+**Title suggestions**
+
+-   Individual Representation: Harm and Utility
+
+-   Redistricting and Individual Representational Harm
+
+-   Fairness and Utility in Redistricting: an Individual Perspective
+
+-   Individualized Measures of Fairness and Utility in Redistricting
 
 # Introduction
 
@@ -73,7 +86,66 @@ These measures are deeply connected to the law and constitutional understandings
 
 # Voter Utility in Election Outcomes
 
-1.  
+The utility voters gain from a particular election outcome naturally varies across the electorate, depending on factors such as political engagement, partisanship, race and ethnicity, individual policy preferences, individual candidate attributes, and more.
+Here, we restrict our attention to what we believe are the two dominant contributors to partisan utility: which party represents a voter's district, and how many overall seats a voter's preferred party wins.
+
+## Notation and Setup
+
+Let $V$ be the set of voters in the region and time period under consideration, who can vote in a set of legislative elections $E$.
+Each election involves the selection of one of a set of political parties $P$ to represent each of a set of legislative districts, indexed by $D$.
+We take these four sets to be fixed (which does not require that voters do not move, or that parties contest every election).
+
+For each election $e\in E$, every voter resides in some legislative district; this assignment is referred to as a *districting plan* and is formally represented by a function $\xi_e:V\surjto D$.
+The set of all possible districting plans is $\Xi_e$.
+
+Voters either vote for a candidate running in their district, or abstain from voting.
+Notationally, we have a set of functions $\vote_e:V\to P\cup\{\textsc{abstain}\}$.
+Votes may be tallied at the district level, either in total or by party: \begin{align*}
+    \votes_e&: D\to \N, \qquad 
+    \votes_e(d) = \sum_{v\in\xi_e^{-1}(d)} \ind\{\vote_e(v)\in P\} \\
+    \votes_e^{(p)}&: D\to \N, \qquad 
+    \votes_e^{(p)}(d) = \sum_{v\in\xi_e^{-1}(d)} \ind\{\vote_e(v) = p\}.
+\end{align*} The political party of the candidate with the most votes wins each district, as captured by the function $$
+    \win_e: D\to P, \qquad \win_e(d) = \argmax_{p\in P} \votes_e^{(p)}(d).
+$$Thus an individual voter $v\in V$ is represented after election $e$ by political party $\win_e\circ\xi_e(v)$, and each political party can be said to win a number of seats, formalized as$$
+\seats_e:P\to\N, \qquad \seats_e(p) = \sum_{d\in D} \ind\{\win_e(d) = p\}.
+$$
+
+## Global Outcome Utility
+
+We posit that a utility of the global election outcome to a voter is an increasing function of the share of total seats that the voter's preferred party wins.
+Their global outcome utility function for election $e\in E$ can thus be written$$
+u_e^{(G)}:V\to\R, \qquad u_e^{(G)}(v) = h\qty(\frac{\seats_e\circ\vote_e(v)}{|D|}),
+$$
+
+for $h:[0,1]\bijto\R$ an increasing function.
+
+What kind of electoral systems does this utility function encourage, if the goal is maximizing total voter utility?
+It depends on the form of $h$, as the following result describes.
+
+\begin{prop}
+
+Let $\{s_p:p\in P\}$ be a set of party popular vote shares, and $f:[0,1]\bijto[0,1]$ be a rule for assigning each party a share of seats according to their share of the overall vote.
+Define the total utility for this rule as $$
+U_e^{(G)}(f) = \sum_{v\in V} h\qty(f\qty(s_{\vote_e(v)})).
+$$Then if $h$ is convex, $U_e^{(G)}$ is maximized for $f(x)=\ind\{x\ge \half\}$, and if $h$ is concave, $U_e^{(G)}$ is maximized by an increasing $f$.
+In particular, if $h(x)=\log(x)$ and every party receives at least one vote, then $f(x)=x$ maximizes $U_e^{(G)}$.
+
+\end{prop}
+
+Thus, if we are willing to adopt the logarithm as the functional specification of $u_e^{(G)}$, then this global outcome utility measure will encourage districting systems that create proportionality between party vote shares and seat shares.
+
+## Local Outcome Utility
+
+The specification of the utility of the local election outcome is more straightforward.
+We define$$
+u_e^{(L)}:V\to\R, \qquad u_e^{(L)}(v) = \ind\{\win_e\circ\xi_e(v) = \vote_e(v)\},
+$$that is, a voter gains utility only if they winner of their legislative district belongs to their preferred political party.
+
+Attempting to maximize the total local utility across the electorate would lead to a districting plan where every voter is assigned to a district with other voters of the same party preference; in this way, every voter's utility would be $1$.
+Whether such an districting plan is possible depends on the geographical layout of voters and the legal constraints on the districting process---must districts be contiguous, balanced in population, constructed from whole precincts, geographically compact, and so on.
+But the general tendency of this utility measure (in the context of a single election, at least), like the global utility measure, will be to push plans towards proportionality.
+The local measure will additionally reward what have been called *bipartisan gerrymanders*, where there are few or no competitive districts.
 
 # Towards Individualized Representational Harm
 
@@ -84,3 +156,7 @@ These measures are deeply connected to the law and constitutional understandings
 # Differences Between Classes of Fairness Metrics
 
 # Discussion
+
+\appendix
+
+# Proofs of Propositions
