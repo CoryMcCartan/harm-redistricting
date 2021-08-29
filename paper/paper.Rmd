@@ -123,16 +123,17 @@ for $h:[0,1]\bijto\R$ an increasing function.
 What kind of electoral systems does this utility function encourage, if the goal is maximizing total voter utility?
 It depends on the form of $h$, as the following result describes.
 
-\begin{prop}
-
+```{=tex}
+\begin{restatable}{prop}{propglobal} \label{prop:global}
 Let $\{s_p:p\in P\}$ be a set of party popular vote shares, and $f:[0,1]\bijto[0,1]$ be a rule for assigning each party a share of seats according to their share of the overall vote.
-Define the total utility for this rule as $$
-U_e^{(G)}(f) = \sum_{v\in V} h\qty(f\qty(s_{\vote_e(v)})).
-$$Then if $h$ is convex, $U_e^{(G)}$ is maximized for $f(x)=\ind\{x\ge \half\}$, and if $h$ is concave, $U_e^{(G)}$ is maximized by an increasing $f$.
+Define the total utility for this rule as \[
+    U_e^{(G)}(f) = \sum_{v\in V} h\qty(f\qty(s_{\vote_e(v)})).
+\] 
+Then if $h$ is convex, $U_e^{(G)}$ is maximized for $f(x)=\ind\{x\ge \half\}$, and if $h$ is concave, $U_e^{(G)}$ is maximized by an increasing $f$.
 In particular, if $h(x)=\log(x)$ and every party receives at least one vote, then $f(x)=x$ maximizes $U_e^{(G)}$.
 
-\end{prop}
-
+\end{restatable}
+```
 Thus, if we are willing to adopt the logarithm as the functional specification of $u_e^{(G)}$, then this global outcome utility measure will encourage districting systems that create proportionality between party vote shares and seat shares.
 
 ## Local Outcome Utility
@@ -160,3 +161,10 @@ The local measure will additionally reward what have been called *bipartisan ger
 \appendix
 
 # Proofs of Propositions
+
+```{=tex}
+\propglobal*
+
+\begin{proof}
+\end{proof}
+```
