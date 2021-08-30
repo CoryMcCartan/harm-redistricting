@@ -18,7 +18,7 @@ keywords:
   - partisan fairness
   - representation
   - redistricting simulation
-  - standing
+  - individual standing
 bibliography: references.bib
 biblio-style: unsrt
 output: 
@@ -66,7 +66,7 @@ Using these methods advance us beyond the critiques of Katz, King, and Roseblatt
 Metrics often associated with partisan symmetry, such as TODO, are indicative of violations of partisan symmetry.
 Notably, these are only defined for full legislatures (see Katz, King, and Rosenblatt (2021)).
 As such, theory-based interpretations of these measures do not indicate signs of unfairness to parities in the congressional district setting, unless they are consistent across many, many states.
-We offer measures of partisan harm which are rooted directly in the representational harms inflicted upon individuals by those who choose to draw a amap.
+We offer measures of partisan harm which are rooted directly in the representational harms inflicted upon individuals by those who choose to draw a map.
 
 These measures are deeply connected to the law and constitutional understandings of partisan fairness, due to their related roots in the individual.
 
@@ -97,7 +97,9 @@ These measures are deeply connected to the law and constitutional understandings
 
 To illustrate the notation and measures we introduce, this article will make use of three running examples, which are stylized representations of U.S. states: Mininois, Minissouri, and Minichussets.
 Mininois has one large Democratic city which can electorally dominate the rest of the state; Minissouri has two medium-sized cities which are not large enough to deliver a statewide Democratic majority; and Minichusetts has a uniform 3--2 Democratic split in every precinct.
-Schematics for these examples are shown in Figure \ref{fig:mini-schematic}.
+Each example state has the same population and should be divided into 3 districts with population between 54 and 66.
+Voters' preferences are assumed to be stable across elections, and turnout is 100%.
+Schematics for these examples are shown in Figure \ref{fig:mini-schematic}(a)--(c).
 
 ```{r mini-schematic, fig.cap="Schematic maps of the three running examples, showing the partisan composition of each of the 36 precincts. The total voting population for each example is 180."}
 include_graphics(here("paper/figures/minis_schematic.pdf"))
@@ -106,8 +108,10 @@ include_graphics(here("paper/figures/minis_schematic.pdf"))
 ## Outline of the Paper
 
 Section \ref{sec:voter-util} provides the necessary notation and introduces our measures of voter utility.
-Section \ref{sec:indiv-harm} builds a measure of individual harm from this notion of utility.
-Section \ref{sec:empirical} applies this measure to a real-world example.
+Section \ref{sec:indiv-harm} builds a measure of individual harm and a derived measure of partisan fairness from this notion of utility.
+Section \ref{sec:estimating} discusses estimating these measures from observed election results.
+Section \ref{sec:connections} connects our proposed measures to existing symmetry and fairness measures.
+Section \ref{sec:empirical} applies the proposed measures to a real-world example to illustrate their value and these comparsions.
 Section \ref{sec:discussion} concludes.
 
 # Voter Utility in Election Outcomes {#sec:voter-util}
@@ -117,66 +121,153 @@ Here, we restrict our attention to what we believe are the two dominant contribu
 
 ## Notation and Setup
 
-Let $V$ be the set of voters in the region and time period under consideration, who can vote in a set of legislative elections $E$.
-Each election involves the selection of one of a set of political parties $P$ to represent each of a set of legislative districts, indexed by $D$.
-We take these four sets to be fixed (which does not require that voters do not move, or that parties contest every election).
+Let $\Voters$ be the set of voters in the region and time period under consideration, who vote to select a candidate from one of a set of political parties $\Parties$ to represent each of a set of legislative districts, indexed by $\Distrs$.
+We take these three sets to be fixed.
 
-For each election $e\in E$, every voter resides in some legislative district; this assignment is referred to as a *districting plan* and is formally represented by a function $\xi_e:V\surjto D$.
-The set of all possible districting plans is $\Xi_e$.
+Voters vote in elections, each of which produces a specific outcome $e$ from the set $\Elecs$ of all possible election outcomes.
+A specific election contains information on how each voter voted.
 
-Voters either vote for a candidate running in their district, or abstain from voting.
-Notationally, we have a set of functions $\vote_e:V\to P\cup\{\textsc{abstain}\}$.
+Every voter resides in some legislative district; this assignment is referred to as a *districting plan* and is formally represented by a function $q:\Voters\surjto \Distrs$.
+The set of all possible districting plans is $\Plans$.[^1]
+
+[^1]: Note that these districting plans do not depend on the election; as a result, we implicitly assume that voters do not move residences during the period under consideration.
+    This is not a necessary restriction and can be dealt with formally by first mapping voters to precincts (varying by election) and then mapping precincts to districts (constant across elections).
+    Once we aggregate or average across all voters in a party or district, the differences between these two approaches disappear.
+
+In an election, voters either vote for a candidate running in their district, or abstain from voting.
+Notationally, we have a set of functions $\vote:\Voters\times\Elecs\to \Parties\cup\{\textsc{abstain}\}$.
 Votes may be tallied at the district level, either in total or by party: \begin{align*}
-    \votes_e&: D\to \N, \qquad 
-    \votes_e(d) = \sum_{v\in\xi_e^{-1}(d)} \ind\{\vote_e(v)\in P\} \\
-    \votes_e^{(p)}&: D\to \N, \qquad 
-    \votes_e^{(p)}(d) = \sum_{v\in\xi_e^{-1}(d)} \ind\{\vote_e(v) = p\}.
+    \votes&: \Distrs\times\Elecs \to \N, \qquad 
+    \votes(d, e) = \sum_{v\in q^{-1}(d)} \ind_P(\vote(v, e)) \\
+    \votes^{(p)}&: \Distrs\times\Elecs\times\Plans \to \N, \qquad 
+    \votes^{(p)}(d, e, q) = \sum_{v\in q^{-1}(d)} \ind_{\{p\}}(\vote(v, e)).
 \end{align*} The political party of the candidate with the most votes wins each district, as captured by the function $$
-    \win_e: D\to P, \qquad \win_e(d) = \argmax_{p\in P} \votes_e^{(p)}(d).
-$$Thus an individual voter $v\in V$ is represented after election $e$ by political party $\win_e\circ\xi_e(v)$, and each political party can be said to win a number of seats, formalized as$$
-\seats_e:P\to\N, \qquad \seats_e(p) = \sum_{d\in D} \ind\{\win_e(d) = p\}.
+    \win: \Distrs\times\Elecs\times\Plans\to P, \qquad 
+    \win(d, e, q) = \argmax_{p\in\Parties} \votes^{(p)}(d, e, q).
+$$Thus an individual voter $v\in V$ is represented after election $e$ by political party $\win(q(v), e, q)$, and each political party can be said to win a number of seats, formalized as$$
+    \seats:\Parties\times\Elecs\times\Plans\to\N, 
+    \qquad \seats(p,e,q) = \sum_{d\in\Distrs} \ind_{\{p\}}(\win(d,e,q)).
 $$
+
+**[CM: better letter/concept pairings possible?]**
 
 ## Global Outcome Utility
 
 We posit that a utility of the global election outcome to a voter is an increasing function of the share of total seats that the voter's preferred party wins.
-Their global outcome utility function for election $e\in E$ can thus be written$$
-u_e^{(G)}:V\to\R, \qquad u_e^{(G)}(v) = h\qty(\frac{\seats_e\circ\vote_e(v)}{|D|}),
-$$
+Their global outcome utility function for an election outcome $e\in\Elecs$ and districting plan $q\in\Plans$ can thus be written$$
+    u^{(G)}:\Voters\times\Elecs\times\Plans\to\R, 
+    \qquad u^{(G)}(v,e,q) = g\qty(\frac{\seats(\vote(v, e), e, q)}{|\Distrs|}),
+$$for $g:[0,1]\bijto\R$ an increasing function.
 
-for $h:[0,1]\bijto\R$ an increasing function.
-
-What kind of electoral systems does this utility function encourage, if the goal is maximizing total voter utility?
+What kind of electoral systems does this utility function encourage, if the goal is maximizing total voter utility (or, equivalently, average voter utility)?
 It depends on the form of $h$, as the following result describes.
 
 ```{=tex}
 \begin{restatable}{prop}{propglobal} \label{prop:global}
-Let $S=\{s_p:p\in P\}$ be a set of party popular vote shares, and $f:[0,1]\bijto[0,1]$ be a rule for assigning each party a share of seats according to their share of the popular vote.
+Let $S=\{s_p:p\in\Parties\}$ be a set of party popular vote shares, and $f:[0,1]\bijto[0,1]$ be a rule for assigning each party a share of seats according to their share of the popular vote.
 Define the total utility for this rule as \[
-    U_e^{(G)}(f) = \sum_{v\in V} h\qty(f\qty(s_{\vote_e(v)})).
+    u_{\mathrm{tot}}^{(G)}(f, e) \dfeq \sum_{v\in\Voters} g\qty(f\qty(s_{\vote(v, e)})).
 \] 
-Then if $h$ is convex, $U_e^{(G)}$ is maximized for $f(x)=\ind\{x\ge \max S\}$, and if $h$ is strictly concave, the maximizer of $U_e^{(G)}$ will be a strictly increasing function.
-In particular, if $h(x)=\log(x)$ and every party receives at least one vote, then $f(x)=x$ maximizes $U_e^{(G)}$.
+Then if $g$ is convex, $u_{\mathrm{tot}}^{(G)}$ is maximized for $f(x)=\ind_{[\max S, 1]}(x)$, and if $g$ is strictly concave, the maximizer of $u_{\mathrm{tot}}^{(G)}$ will be a strictly increasing function.
+In particular, if $g(x)=\log(x)$ and every party receives at least one vote, then $f(x)=x$ maximizes $u_{\mathrm{tot}}^{(G)}$.
 
 \end{restatable}
 ```
-Thus, if we are willing to adopt the logarithm as the functional specification of $u_e^{(G)}$, then this global outcome utility measure will encourage districting systems that create proportionality between party vote shares and seat shares.
+Thus, if we are willing to adopt the logarithm as the functional specification of $u^{(G)}$, then this global outcome utility measure will encourage districting systems that create proportionality between party vote shares and seat shares.
+
+*(running examples).*
 
 ## Local Outcome Utility
 
 The specification of the utility of the local election outcome is more straightforward.
 We define$$
-u_e^{(L)}:V\to\R, \qquad u_e^{(L)}(v) = \ind\{\win_e\circ\xi_e(v) = \vote_e(v)\},
+    u^{(L)}:\Voters\times\Elecs\times\Plans\to\R, 
+    \qquad u^{(L)}(v,e,q) = \ind\{\vote(v, e)=\win(q(v), e, q)\},
 $$that is, a voter gains utility only if they winner of their legislative district belongs to their preferred political party.
 
-Attempting to maximize the total local utility across the electorate would lead to a districting plan where every voter is assigned to a district with other voters of the same party preference; in this way, every voter's utility would be $1$.
+Attempting to maximize the average local utility across the electorate would lead to a districting plan where every voter is assigned to a district with other voters of the same party preference; in this way, every voter's utility would be $1$.
 Whether such an districting plan is possible depends on the geographical layout of voters and the legal constraints on the districting process---must districts be contiguous, balanced in population, constructed from whole precincts, geographically compact, and so on.
 But the general tendency of this utility measure (in the context of a single election, at least), like the global utility measure, will be to push plans towards proportionality.
 The local measure will additionally reward what have been called *bipartisan gerrymanders*, where there are few or no competitive districts.
 
+*(running examples).*
+
+## Multiple Elections or Districting Plans
+
+The utility measures above are defined for a single election outcome $e\in \Elecs$ and districting plan $q\in\Plans$.
+But often we will want to consider utility averaged over a set of future elections (under the same districting plan), or over a set of hypothetical districting plans.
+
+To allow this, we replace the fixed election districting plan with random variables $(E,Q)\sim \pi$, where $\pi$ is a joint probability measure on election outcomes and districting plans.
+The randomness in election outcomes comes from variations in factors such as voter preferences, the political environment, candidate quality, and campaign events.
+The randomness in districting plans reflects the constraints and preferences of the plan-drawing process.
+As we will discuss in Section \ref{sec:estimating}, generally we will assume that $E\indep Q$, though this is not required for our theoretical analysis.
+We will also consider a voter $V$ taken uniformly at random from $\Voters$, with $V\indep\pi$.
+
+Then we may define the utilities for a (randomly selected) voter as $$
+    U^{(G)} \dfeq u^{(G)}(V, E, Q) \qand
+    U^{(L)} \dfeq u^{(L)}(V, E, Q).
+$$Thus, the utility for a single voter $v$ becomes $U^{(L)}\mid V=v$; the electorate's average utility for election outcome $e$ becomes $E[U^{(L)}\mid E=e]$, and so on.
+
 # Towards Individualized Representational Harm {#sec:indiv-harm}
 
-# Connections to the Partisan Symmetry Standard
+Utility may be defined solely in terms of realized election outcomes and districting plans.
+Harm, we argue, cannot.
+Harm is not the same as disutility, for to be harmed by a decision a voter must have a better outcome in the counterfactual world where another decision was made.
+Put another way, in the context of districting plans, if no alternative districting plan could provide more utility to a voter, then that voter was not harmed by the districting plan chosen.
+
+## Individual Harm
+
+To operationalize this, we need to introduce a counterfactual districting plan $\tilde q$.
+Then we may define the harm to a voter as$$
+    h:\Voters\times\Elecs\times\Plans^2\to\R, 
+    \qquad h(v,e,q,\tilde q) = 
+        \ind\{\vote(v, e)\neq\win(q(v), e, q)\}
+        \ind\{\vote(v, e)=\win(\tilde q(v), e, \tilde q)\},
+$$that is, a voter is harmed only if they are not represented by the party of their choice *and* they would have been represented by the party of their choice under the counterfactual plan.
+
+As with the utility measures, this harm measure naturally extends to multiple elections and districting plans.
+Make the counterfactual plan a random variable $\tilde Q$, with $(E,Q,\tilde Q)\sim\pi$ such that $Q\indep\tilde Q$.
+Then the harm to a random voter is $H \dfeq h(V, E, Q, \tilde Q)$.
+
+The expected harm to a specific voter then becomes $$
+   \E[H\mid V=v] = \Pr\qty(\vote(v, E)\neq\win(Q(v), E, Q)
+    \text{ and }\vote(v, E)=\win(\tilde Q(v), E, \tilde Q)),
+$$
+
+that is, the probability that the voter is misrepresented under the adopted plan but would not have been under a counterfactual.
+
+*(Need some explanation as to why we are dropping the global measure at this point. B/c it boils down to a difference in seats?)*
+
+*(running examples).*
+
+## Fairness
+
+In practice, few voters will experience zero harm.
+Most voters living in a district with a political preference not matching their own could draw a districting plan, however contrived, which puts them in a district dominated by voters of their party.
+So merely targeting zero harm for all voters is not an adequate representation of fairness.
+Rather, intuitively, a districting plan is fair if it does not harm the voters of one party more than another, on average.
+**[CM: need to rephrase here. awkward]**
+
+From here onward we will restrict our attention to the case of two parties, so $\Parties=\{A,B\}$, since that will simplify the notation and exposition.
+But the same concepts and definitions naturally carry over to the multiparty setting.
+
+Continuing with the above notation, the average fairness of $Q$ versus counterfactual $\tilde Q$ may be defined as $$
+    F = \E[H\mid \vote(V, E) = A] - \E[H\mid \vote(V, E) = B];
+$$obviously the ordering of $A$ and $B$ is immaterial.
+
+Generally, we will want to evaluate the fairness of a specific districting plan $q$ versus a distribution of counterfactuals.
+These counterfactuals could arise from a posited probability distribution capturing the factors relevant to a non-partisan redistricting process, or they could be a set of alternative redistricting plans that were considered as part of the legislative process leading to a final enacted plan.
+We adopt the notation $F(q)$ for this scenario: $$
+    F(q) \dfeq \E[H\mid \vote(V, E) = A, Q=q] - \E[H\mid \vote(V, E) = B, Q=q],
+$$ so that we recover $F=\E[F(Q)]$.
+
+[**CM: better to define just** $F(Q)$**, since we will rarely compare two sets of plans?**]
+
+*(running examples).*
+
+# Estimating the Harm and Fairness Measures {#sec:estimating}
+
+# Connections to Partisan Symmetry and Fairness Standards {#sec:connections}
 
 # Differences Between Classes of Fairness Metrics
 

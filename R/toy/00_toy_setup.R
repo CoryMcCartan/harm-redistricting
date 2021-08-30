@@ -65,14 +65,22 @@ minissouri_people = minissouri %>%
     pmap_dfr(make_people)
 
 # functions and helpers -------
-plot_state = function(map, people, qty=NULL, ppl_size=2, ...) {
-    redist.plot.map(map, fill=qty, ...) +
+plot_state = function(map, people, plan=NULL, qty=NULL, ppl_size=2, ...) {
+    p = redist.plot.map(map, fill=qty, ...) +
         scale_fill_party_c() +
         geom_sf(data=map, size=0.8, fill=NA, color="white") +
         geom_sf(aes(color=dem), data=people, size=ppl_size) +
         scale_color_party_d(guide="none") +
         theme_repr_map() +
         theme(plot.title = element_text(hjust = 0.5))
+    if (!is.null(plan)) {
+        distrs = map %>%
+            mutate(.plan = plan) %>%
+            group_by(.plan) %>%
+            summarize()
+        p = p + geom_sf(data=distrs, fill=NA, color="black")
+    }
+    p
 }
 
 sim_toy = function(map, N=500) {
@@ -89,3 +97,5 @@ if (!file.exists(fig_path <- here("paper/figures/minis_schematic.pdf"))) {
         wrap_plots(nrow=1)
     ggsave(fig_path, width=6.5, height=2.5)
 }
+
+plan = c(2, 2, 2, 3, 3, 3, 2, 2, 2, 3, 3, 3, 2, 2, 2, 3, 3, 3, 2, 2, 2, 3, 3, 3, 1, 1, 1, 3, 3, 3, 1, 1, 1, 3, 3, 3)
