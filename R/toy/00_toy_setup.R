@@ -65,9 +65,9 @@ minissouri_people = minissouri %>%
     pmap_dfr(make_people)
 
 # functions and helpers -------
-plot_state = function(map, people, plan=NULL, qty=NULL, ppl_size=2, ...) {
+plot_state = function(map, people, plan=NULL, qty=NULL, ppl_size=1.75, ...) {
     p = redist.plot.map(map, fill=qty, ...) +
-        scale_fill_party_c() +
+        scale_fill_party_c(name="Democratic\nshare") +
         geom_sf(data=map, size=0.8, fill=NA, color="white") +
         geom_sf(aes(color=dem), data=people, size=ppl_size) +
         scale_color_party_d(guide="none") +
@@ -95,7 +95,7 @@ if (!file.exists(fig_path <- here("paper/figures/minis_schematic.pdf"))) {
          plot_state(minissouri, minissouri_people) + labs(title="(b) Minissouri"),
          plot_state(minichusetts, minichusetts_people) + labs(title="(c) Minichusetts")) %>%
         wrap_plots(nrow=1)
-    ggsave(fig_path, width=6.5, height=2.5)
+    ggsave(fig_path, width=7, height=2.75)
 }
 
 plan = c(2, 2, 2, 3, 3, 3, 2, 2, 2, 3, 3, 3, 2, 2, 2, 3, 3, 3, 2, 2, 2, 3, 3, 3, 1, 1, 1, 3, 3, 3, 1, 1, 1, 3, 3, 3)
