@@ -29,6 +29,15 @@ output:
     latex_engine: pdflatex
 ---
 
+```{r SETUP, include=FALSE}
+library(knitr)
+library(here)
+
+opts_chunk$set(echo=FALSE, message=FALSE, warning=FALSE,
+               fig.path=here("paper/figures/"), fig.align="center",
+               fig.width=(8.5-2*1)/2, out.width="100%", fig.asp=0.8)
+```
+
 **Title suggestions**
 
 -   Individual Representation: Harm and Utility
@@ -84,9 +93,26 @@ These measures are deeply connected to the law and constitutional understandings
 
     -   Recent advances allow us to make claims about harm based in counterfactuals that are realistic and statistically useful
 
-# Voter Utility in Election Outcomes
+## Running Examples
 
-The utility voters gain from a particular election outcome naturally varies across the electorate, depending on factors such as political engagement, partisanship, race and ethnicity, individual policy preferences, individual candidate attributes, and more.
+To illustrate the notation and measures we introduce, this article will make use of three running examples, which are stylized representations of U.S. states: Mininois, Minissouri, and Minichussets.
+Mininois has one large Democratic city which can electorally dominate the rest of the state; Minissouri has two medium-sized cities which are not large enough to deliver a statewide Democratic majority; and Minichusetts has a uniform 3--2 Democratic split in every precinct.
+Schematics for these examples are shown in Figure \ref{fig:mini-schematic}.
+
+```{r mini-schematic, fig.cap="Schematic maps of the three running examples, showing the partisan composition of each of the 36 precincts. The total voting population for each example is 180."}
+include_graphics(here("paper/figures/minis_schematic.pdf"))
+```
+
+## Outline of the Paper
+
+Section \ref{sec:voter-util} provides the necessary notation and introduces our measures of voter utility.
+Section \ref{sec:indiv-harm} builds a measure of individual harm from this notion of utility.
+Section \ref{sec:empirical} applies this measure to a real-world example.
+Section \ref{sec:discussion} concludes.
+
+# Voter Utility in Election Outcomes {#sec:voter-util}
+
+The utility voters gain from a particular election outcome naturally varies across the electorate, depending on factors such as political engagement, partisanship, race and ethnicity, individual policy preferences, and individual candidate attributes.
 Here, we restrict our attention to what we believe are the two dominant contributors to partisan utility: which party represents a voter's district, and how many overall seats a voter's preferred party wins.
 
 ## Notation and Setup
@@ -129,7 +155,7 @@ Let $S=\{s_p:p\in P\}$ be a set of party popular vote shares, and $f:[0,1]\bijto
 Define the total utility for this rule as \[
     U_e^{(G)}(f) = \sum_{v\in V} h\qty(f\qty(s_{\vote_e(v)})).
 \] 
-Then if $h$ is convex, $U_e^{(G)}$ is maximized for $f(x)=\ind\{x\ge \max S\}$, and if $h$ is concave, the maximizer of $U_e^{(G)}$ will be an increasing function.
+Then if $h$ is convex, $U_e^{(G)}$ is maximized for $f(x)=\ind\{x\ge \max S\}$, and if $h$ is strictly concave, the maximizer of $U_e^{(G)}$ will be a strictly increasing function.
 In particular, if $h(x)=\log(x)$ and every party receives at least one vote, then $f(x)=x$ maximizes $U_e^{(G)}$.
 
 \end{restatable}
@@ -148,15 +174,15 @@ Whether such an districting plan is possible depends on the geographical layout 
 But the general tendency of this utility measure (in the context of a single election, at least), like the global utility measure, will be to push plans towards proportionality.
 The local measure will additionally reward what have been called *bipartisan gerrymanders*, where there are few or no competitive districts.
 
-# Towards Individualized Representational Harm
+# Towards Individualized Representational Harm {#sec:indiv-harm}
 
 # Connections to the Partisan Symmetry Standard
 
-# Measures of Individual Injury
-
 # Differences Between Classes of Fairness Metrics
 
-# Discussion
+# Real-world Example {#sec:empirical}
+
+# Discussion {#sec:discussion}
 
 \appendix
 

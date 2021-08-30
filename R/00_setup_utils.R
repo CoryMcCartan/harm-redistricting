@@ -4,10 +4,12 @@ library(geomander)
 library(redist)
 library(sf)
 library(scales)
+library(patchwork)
 library(wacolors)
 library(here)
 
-theme_repr = function() theme_bw(base_family="Times New Roman", base_size=11)
+theme_repr = function() theme_bw(base_family="Times", base_size=10)
+theme_repr_map = function() theme_void(base_family="Times", base_size=10)
 
 GOP_DEM = c("#A0442C", "#B25D4C", "#C27568", "#D18E84", "#DFA8A0",
             "#EBC2BC",  "#F6DCD9", "#F9F9F9", "#DAE2F4", "#BDCCEA",

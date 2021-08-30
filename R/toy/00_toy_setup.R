@@ -40,7 +40,7 @@ mininois = grid %>%
     relocate(geometry, .after=rep) %>%
     redist_map(ndists=3, pop_tol=0.1)
 
-# functions and helpers
+# people for plotting -------
 
 make_people = function(pop, dem, geometry, row, col, ...) {
     url = str_glue("http://hydra.nat.uni-magdeburg.de/packing/csq/txt/csq{pop}.txt")
@@ -64,8 +64,28 @@ minichusetts_people = minichusetts %>%
 minissouri_people = minissouri %>%
     pmap_dfr(make_people)
 
+# functions and helpers -------
+plot_state = function(map, people, qty=NULL, ppl_size=2, ...) {
+    redist.plot.map(map, fill=qty, ...) +
+        scale_fill_party_c() +
+        geom_sf(data=map, size=0.8, fill=NA, color="white") +
+        geom_sf(aes(color=dem), data=people, size=ppl_size) +
+        scale_color_party_d(guide="none") +
+        theme_repr_map() +
+        theme(plot.title = element_text(hjust = 0.5))
+}
+
 sim_toy = function(map, N=500) {
     redist_smc(map, N, verbose=F) %>%
         mutate(comp = distr_compactness(map),
                dem = group_frac(map, dem, pop))
+}
+
+# initial plots -------
+if (!file.exists(fig_path <- here("paper/figures/minis_schematic.pdf"))) {
+    list(plot_state(mininois, mininois_people) + labs(title="(a) Mininois"),
+         plot_state(minissouri, minissouri_people) + labs(title="(b) Minissouri"),
+         plot_state(minichusetts, minichusetts_people) + labs(title="(c) Minichusetts")) %>%
+        wrap_plots(nrow=1)
+    ggsave(fig_path, width=6.5, height=2.5)
 }
