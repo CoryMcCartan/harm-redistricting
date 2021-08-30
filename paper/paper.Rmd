@@ -224,7 +224,7 @@ Then we may define the harm to a voter as $h:\Voters\times\Elecs\times\Plans^2\t
         \ind\{\vote(v, e)=\win(\tilde q(v), e, \tilde q)\},
 \end{align*}that is, a voter is harmed only if they are not represented by the party of their choice *and* they would have been represented by the party of their choice under the counterfactual plan.
 
-*(Need some explanation as to why we are dropping the global measure at this point. B/c it boils down to a difference in seats.)*
+*(Need some explanation as to why we are dropping the global measure at this point. B/c it boils down to a difference in seats?)*
 
 As with the utility measures, this harm measure naturally extends to multiple elections and districting plans.
 Make the counterfactual plan a random variable $\tilde Q$, with $(E,Q,\tilde Q)\sim\pi$ such that $Q\indep\tilde Q$.
