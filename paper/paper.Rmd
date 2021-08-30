@@ -254,6 +254,7 @@ But the same concepts and definitions naturally carry over to the multiparty set
 Continuing with the above notation, the average fairness of $Q$ versus counterfactual $\tilde Q$ may be defined as $$
     F = \E[H\mid \vote(V, E) = A] - \E[H\mid \vote(V, E) = B];
 $$obviously the ordering of $A$ and $B$ is immaterial.
+Informally, this quantity is the difference in the probability that a voter of each party is represented by the other party but counterfactually would have been represented by their own party.
 
 Generally, we will want to evaluate the fairness of a specific districting plan $q$ versus a distribution of counterfactuals.
 These counterfactuals could arise from a posited probability distribution capturing the factors relevant to a non-partisan redistricting process, or they could be a set of alternative redistricting plans that were considered as part of the legislative process leading to a final enacted plan.
