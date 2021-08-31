@@ -1,4 +1,4 @@
-# Voter Representation and Redistricting
+# Individualized Measures of Partisan Fairness and Utility in Redistricting
 
 [copy abstract here]
 

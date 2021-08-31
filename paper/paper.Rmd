@@ -1,5 +1,5 @@
 ---
-title: Individualized Measures of Partisan Fairness and Utility in Redistricting (??)
+title: Individualized Measures of Partisan Fairness and Utility in Redistricting
 authors:
   - name: Cory McCartan
     thanks: Footnote stuff

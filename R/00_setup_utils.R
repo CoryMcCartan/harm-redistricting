@@ -14,9 +14,10 @@ theme_repr_map = function() theme_void(base_family="Times", base_size=10)
 GOP_DEM = c("#A0442C", "#B25D4C", "#C27568", "#D18E84", "#DFA8A0",
             "#EBC2BC",  "#F6DCD9", "#F9F9F9", "#DAE2F4", "#BDCCEA",
             "#9FB6DE", "#82A0D2", "#638BC6", "#3D77BB", "#0063B1")
-scale_fill_party_c = function(name="Democratic share", ...) {
+scale_fill_party_c = function(name="Democratic share", midpoint=0.5, limits=0:1,
+                              labels=percent, oob=squish, ...) {
     scale_fill_gradient2(name=name, ..., low = GOP_DEM[1], high = GOP_DEM[15],
-                         midpoint=0.5, limits=0:1, labels=percent)
+                         midpoint=midpoint, limits=limits, labels=labels, oob=oob)
 }
 scale_color_party_d = function(...) {
     scale_color_manual(..., values=c(GOP_DEM[2], GOP_DEM[14]),
