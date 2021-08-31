@@ -26,3 +26,4 @@ data-raw/*
 *.blg
 *.tex
 paper/*.pdf
+!paper/header.tex

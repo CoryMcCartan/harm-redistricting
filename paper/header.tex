@@ -1,0 +1,108 @@
+% packages
+\hypersetup{hidelinks}
+\usepackage{placeins}
+\usepackage[format=plain,
+            labelfont={bf,it},
+            textfont=it]{caption}
+\setlength{\captionmargin}{0.3in}
+\usepackage{mathtools}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage[italicdiff]{physics}
+\usepackage{tocloft}
+\usepackage{dsfont}
+\usepackage{thmtools}
+
+% paper-specific
+\newcommand{\Elecs}{\mathcal{V}}
+\newcommand{\Plans}{\mathcal{Q}}
+\newcommand{\Voters}{\mathcal{I}}
+\newcommand{\Parties}{\mathcal{P}}
+\newcommand{\Distrs}{\mathcal{D}}
+\newcommand{\dem}{\textsc{dem}}
+\newcommand{\rep}{\textsc{rep}}
+\DeclareMathOperator{\res}{res}
+\DeclareMathOperator{\vote}{vote}
+\DeclareMathOperator{\votes}{votes}
+\DeclareMathOperator{\win}{win}
+\DeclareMathOperator{\seats}{seats}
+
+% generic
+\theoremstyle{plain}
+\newtheorem{prop}{Proposition}
+
+\newcommand{\C}{\ensuremath{\mathbb{C}}}
+\newcommand{\R}{\ensuremath{\mathbb{R}}}
+\newcommand{\Q}{\ensuremath{\mathbb{Q}}}
+\newcommand{\Z}{\ensuremath{\mathbb{Z}}}
+\newcommand{\N}{\ensuremath{\mathbb{N}}}
+\renewcommand{\empty}{\varnothing}
+
+\newcommand{\m}[1]{\begin{pmatrix}#1\end{pmatrix}}  % a matrix or vector
+\newcommand{\sm}[1]{\begin{psmallmatrix}#1\end{psmallmatrix}}
+\newcommand{\f}[1]{\frac{\StrBefore{#1}{/}}{\StrBehind{#1}{/}}} % easier fractions
+\renewcommand{\sf}[1]{\tfrac{\StrBefore{#1}{/}}{\StrBehind{#1}{/}}}
+\newcommand{\half}{\frac{1}{2}}
+\newcommand{\third}{\frac{1}{3}}
+\newcommand{\quarter}{\frac{1}{4}}
+
+\newcommand{\eps}{\varepsilon}
+\newcommand{\clos}[1]{\overline{#1}}
+\newcommand{\conj}[1]{\overline{#1}}
+\newcommand{\dfeq}{\coloneqq}
+\newcommand{\injto}{\hookrightarrow}
+\newcommand{\surjto}{\twoheadrightarrow}
+\newcommand{\bijto}{\hookrightarrow\mathrel{\mspace{-15mu}}\rightarrow}
+
+\let\sp\undefined
+\DeclareMathOperator{\id}{id}
+\DeclareMathOperator{\sgn}{sgn}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+
+\DeclareMathOperator{\E}{\mathbb{E}}
+\let\Pr\undefined
+\DeclareMathOperator{\Pr}{\mathbb{P}}
+\newcommand{\indep}{\mathbin{\perp\!\!\!\!\!\:\perp}}
+\newcommand{\gvn}{\;\middle|\;}
+\newcommand{\F}{\ensuremath{\mathcal{F}}}
+\newcommand{\B}{\ensuremath{\mathcal{B}}}
+\newcommand{\ind}{\mathds{1}}
+\newcommand{\iid}{\mathrel{\stackrel{iid}{\sim}}}
+\newcommand{\rv}{random variable}
+\newcommand{\rvs}{random variables}
+\newcommand{\iidt}{independent and identically distributed}
+\newcommand{\cvp}{\xrightarrow{\:p\,}}
+\newcommand{\cvw}{\xrightarrow{\,w\,}}
+\newcommand{\cvd}{\xrightarrow{\,d\,}}
+\newcommand{\cvas}{\xrightarrow{\;\!a.s.\:\!}}
+\newcommand{\cvlp}[1]{\xrightarrow{\;\!L^{#1}\,\!}}
+
+\DeclareMathOperator{\Var}{\mathbb{V}}
+\DeclareMathOperator{\Cov}{Cov}
+\DeclareMathOperator{\Corr}{Corr}
+\DeclareMathOperator{\Unif}{Unif}
+\DeclareMathOperator{\Expo}{Expo}
+\DeclareMathOperator{\Cauchy}{Cauchy}
+\DeclareMathOperator{\logit}{logit}
+\newcommand{\Inv}{\mathrm{Inv-}}
+\newcommand{\Pois}{\mathrm{Pois}\qty}
+\newcommand{\Beta}{\mathrm{Beta}\qty}
+\newcommand{\Dirichlet}{\mathrm{Dirichlet}\qty}
+\newcommand{\Gam}{\mathrm{Gamma}\qty}
+\newcommand{\Wei}{\mathrm{Wei}\qty}
+\newcommand{\Hyper}{\mathrm{HGeom}\qty}
+\newcommand{\Binom}{\mathrm{Bin}\qty}
+\newcommand{\NBinom}{\mathrm{NBin}\qty}
+\newcommand{\Multinom}{\mathrm{Multinom}\qty}
+\newcommand{\Bern}{\mathrm{Bern}\qty}
+\newcommand{\Bernoulli}{\mathrm{Bernoulli}\qty}
+\newcommand{\Norm}{\mathcal{N}\qty}
+\newcommand{\MVNorm}[1][]{\mathcal{N}_{#1}\qty}
+\DeclareMathOperator{\Student}{Student-\mathit{t}}
+
+\DeclarePairedDelimiter\br{\langle}{\rangle}
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+\DeclarePairedDelimiter\round{\lceil}{\rfloor}
+\DeclarePairedDelimiter\set{\{}{\}}
