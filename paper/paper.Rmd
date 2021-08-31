@@ -135,12 +135,10 @@ The set of all possible districting plans is $\Plans$.[^1]
     This is not a necessary restriction and can be dealt with formally by first mapping voters to precincts (varying by election) and then mapping precincts to districts (constant across elections).
     Once we aggregate or average across all voters in a party or district, the differences between these two approaches disappear.
 
-Votes may be tallied at the district level, either in total or by party: \begin{align*}
-    \votes&: \Distrs\times\Elecs \to \N, \qquad 
-    \votes(d, v) = \sum_{i\in q^{-1}(d)} \ind_P(v(i)) \\
-    \votes^{(p)}&: \Distrs\times\Elecs\times\Plans \to \N, \qquad 
+Votes may be tallied at the district level, by party, by defining for each party $p\in\Parties$ $$
+    \votes^{(p)}: \Distrs\times\Elecs\times\Plans \to \N, \qquad 
     \votes^{(p)}(d, v, q) = \sum_{i\in q^{-1}(d)} \ind_{\{p\}}(v(i)).
-\end{align*} The political party of the candidate with the most votes wins each district, as captured by the function $$
+$$ The political party of the candidate with the most votes wins each district, as captured by the function $$
     \win: \Distrs\times\Elecs\times\Plans\to P, \qquad 
     \win(d, v, q) = \argmax_{p\in\Parties} \votes^{(p)}(d, v, q).
 $$Thus an individual voter $i\in\Voters$ is represented after election $v$ by political party $\win(q(i), v, q)$, and each political party can be said to win a number of seats, formalized as$$
@@ -157,7 +155,7 @@ Their global outcome utility function for an election outcome $e\in\Elecs$ and d
 $$for $g:[0,1]\bijto\R$ an increasing function.
 
 What kind of electoral systems does this utility function encourage, if the goal is maximizing total voter utility (or, equivalently, average voter utility)?
-It depends on the form of $h$, as the following result describes.
+It depends on the form of $g$, as the following result describes.
 
 ```{=tex}
 \begin{restatable}{prop}{propglobal} \label{prop:global}
@@ -170,7 +168,7 @@ In particular, if $g(x)=\log(x)$ and every party receives at least one vote, the
 
 \end{restatable}
 ```
-Thus, if we are willing to adopt the logarithm as the functional specification of $u^{(G)}$, then this global outcome utility measure will encourage districting systems that create proportionality between party vote shares and seat shares.
+Thus, if we are willing to adopt the logarithm for the functional specification of $u^{(G)}$, then this global outcome utility measure will encourage districting systems that create proportionality between party vote shares and seat shares.
 
 ## Local Outcome Utility
 
@@ -237,7 +235,7 @@ As with the utility measures, this harm measure naturally extends to multiple el
 Make the counterfactual plan a random variable $\tilde Q$, with $(V,Q,\tilde Q)\sim\pi$ such that $Q\indep\tilde Q$.
 Then the harm to a random voter is $H \dfeq h(I, V, Q, \tilde Q)$.
 
-The expected harm to a specific voter then becomes $$
+The expected harm to an individual $i\in\Voters$ voter then becomes $$
    \E[H\mid I=i] = \Pr\qty(V(i)\neq\win(Q(i), V, Q)
     \text{ and }V(i)=\win(\tilde Q(i), V, \tilde Q)),
 $$
@@ -253,16 +251,11 @@ As might be intuitively expected, total harm to voters is concentrated in areas 
 
 ## Fairness
 
-In practice, few voters will experience zero harm.
-Most voters living in a district with a political preference not matching their own could draw a districting plan, however contrived, which puts them in a district dominated by voters of their party.
-So merely targeting zero harm for all voters is not an adequate representation of fairness.
-Rather, intuitively, a districting plan is fair if it does not harm the voters of one party more than another, on average.
-**[CM: need to rephrase here. awkward]**
-
 From here onward we will restrict our attention to the case of two parties, so $\Parties=\{A,B\}$, since that will simplify the notation and exposition.
 But the same concepts and definitions naturally carry over to the multiparty setting.
 
-Continuing with the above notation, the average fairness of $Q$ versus counterfactual $\tilde Q$ may be defined as $$
+Intuitively, a districting plan is fair if it does not harm the voters of one party more than another, on average.
+This is easily expressed using our notation above; the average fairness of $Q$ versus counterfactual $\tilde Q$ may be defined as $$
     F = \E[H\mid V(I) = A] - \E[H\mid V(I) = B];
 $$obviously the ordering of $A$ and $B$ is immaterial.
 Informally, this quantity is the difference in the probability that a voter of each party is represented by the other party but counterfactually would have been represented by their own party.

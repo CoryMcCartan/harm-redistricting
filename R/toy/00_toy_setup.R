@@ -83,6 +83,17 @@ plot_state = function(map, people, plan=NULL, qty=NULL, ppl_size=1.75, ...) {
     p
 }
 
+add_lab = function(p, txt, x, y, hjust=0.5, vjust=0.5) {
+    p + annotate("text", x, y, hjust=hjust, vjust=vjust, label=txt,
+                 family="Times", size=3)
+}
+fmt_lean = function(x) {
+    if (x > 0.5)
+        paste0("D+", round(200*(x - 0.5)), "%")
+    else
+        paste0("R+", round(200*(0.5 - x)), "%")
+}
+
 sim_toy = function(map, N=500) {
     redist_smc(map, N, verbose=F) %>%
         mutate(comp = distr_compactness(map),
