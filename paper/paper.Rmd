@@ -251,19 +251,19 @@ As might be intuitively expected, total harm to voters is concentrated in areas 
 
 ## Fairness
 
-From here onward we will restrict our attention to the case of two parties, so $\Parties=\{A,B\}$, since that will simplify the notation and exposition.
+From here onward we will restrict our attention to the case of two parties---concretely, $\Parties=\{\dem,\rep\}$---since that will simplify the notation and exposition.
 But the same concepts and definitions naturally carry over to the multiparty setting.
 
 Intuitively, a districting plan is fair if it does not harm the voters of one party more than another, on average.
 This is easily expressed using our notation above; the average fairness of $Q$ versus counterfactual $\tilde Q$ may be defined as $$
-    F = \E[H\mid V(I) = A] - \E[H\mid V(I) = B];
-$$obviously the ordering of $A$ and $B$ is immaterial.
+    F = \E[H\mid V(I) = \dem] - \E[H\mid V(I) = \rep];
+$$obviously the ordering of $\dem$ and $\rep$ is immaterial.
 Informally, this quantity is the difference in the probability that a voter of each party is represented by the other party but counterfactually would have been represented by their own party.
 
 Generally, we will want to evaluate the fairness of a specific districting plan $q$ versus a distribution of counterfactuals.
 These counterfactuals could arise from a posited probability distribution capturing the factors relevant to a non-partisan redistricting process, or they could be a set of alternative redistricting plans that were considered as part of the legislative process leading to a final enacted plan.
 We adopt the notation $F(q)$ for this scenario: $$
-    F(q) \dfeq \E[H\mid V(I) = A, Q=q] - \E[H\mid V(I) = B, Q=q],
+    F(q) \dfeq \E[H\mid V(I) = \dem, Q=q] - \E[H\mid V(I) = \rep, Q=q],
 $$ so that we recover $F=\E[F(Q)]$.
 
 [**CM: better to define just** $F(Q)$**, since we will rarely compare two sets of plans?**]
@@ -271,7 +271,20 @@ $$ so that we recover $F=\E[F(Q)]$.
 In the districting plan examples of Figure \ref{fig:mini-harm}, the fairness of the Democratic gerrymander of Mininois is $-0.494$, the fairness of the Democratic gerrymander of Minissouri is $-0.415$, and the fairness of the Republican gerrymander of Minissouri is $0.450$, where positive values indicate Republican bias.
 In other words, the average Republican voter in Mininois is 49.4% more likely to be represented by a Democrat than an average Democrat is to be represented by a Republican, compared to the utility-maximizing plan in Figure \ref{fig:mini-util-opt}(a).
 
-# Estimating the Harm and Fairness Measures {#sec:estimating}
+# Calculating the Harm and Fairness Measures {#sec:estimating}
+
+The measures $H$ and $F(q)$ defined above require specification of a probability measure on elections and districting plans, $\pi$.
+Depending on one's viewpoint, this is either a theoretical fiction which must be specified by a model, or an actual data-generating process we must aim to estimate.
+Either way, a collection of past election data and an enacted districting plan alone are not enough to calculate $H$ and $F(q)$.
+
+While not strictly necessary, modelling of $V$ and $\tilde Q$ independently will simplify the situation considerably.
+Practically, this translates to the assumption that individual voters would vote for the same political party no matter the districting plan.
+To the extent that voters reward or punish an incumbent party for the districting plan they adopt, or that an adopted districting plan affects which candidates run in a district, this assumption is violated.
+But as our suggested model for election outcomes will not account for candidate factors or policy preferences, the marginal effect on our conclusions will be minimal.
+
+## Modelling Districting Plans
+
+## Modelling Election Outcomes
 
 # Connections to Partisan Symmetry and Fairness Standards {#sec:connections}
 
