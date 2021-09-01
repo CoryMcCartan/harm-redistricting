@@ -1,5 +1,5 @@
 ---
-title: Individualized Measures of Partisan Fairness and Utility in Redistricting
+title: Measuring Individual Partisan Harm in Redistricting
 authors:
   - name: Cory McCartan
     thanks: Footnote stuff
@@ -37,16 +37,6 @@ opts_chunk$set(echo=FALSE, message=FALSE, warning=FALSE,
                fig.path=here("paper/figures/"), fig.align="center",
                fig.width=(8.5-2*1)/2, out.width="100%", fig.asp=0.8)
 ```
-
-**Title suggestions**
-
--   Individual Representation: Harm and Utility
-
--   Redistricting and Individual Representational Harm
-
--   Fairness and Utility in Redistricting: an Individual Perspective
-
--   Individualized Measures of Fairness and Utility in Redistricting
 
 # Introduction
 

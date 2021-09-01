@@ -1,4 +1,4 @@
-# Individualized Measures of Partisan Fairness and Utility in Redistricting
+# Measuring Individual Partisan Harm in Redistricting
 
 [copy abstract here]
 
