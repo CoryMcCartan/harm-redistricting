@@ -1,5 +1,5 @@
 # Measuring Individual Partisan Harm in Redistricting
-### [Cory McCartan](https://corymccartan.github.io) and [Christopher T. Kenny](christophertkenny.com)
+### [Cory McCartan](https://corymccartan.github.io) and [Christopher T. Kenny](https://www.christophertkenny.com)
 
 [copy abstract here]
 
