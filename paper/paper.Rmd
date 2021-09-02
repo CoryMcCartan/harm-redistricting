@@ -219,7 +219,10 @@ Then we may define the harm to a voter as $h:\Voters\times\Elecs\times\Plans^2\t
         \ind\{v(i)=\win(\tilde q(i), e, \tilde q)\},
 \end{align*}that is, a voter is harmed only if they are not represented by the party of their choice *and* they would have been represented by the party of their choice under the counterfactual plan.
 
-*(Need some explanation as to why we are dropping the global measure at this point. B/c it boils down to a difference in seats?)*
+Harm is defined using the local, not global, utility measure, because inherently, global utility (and thus harm) will be constant for all voters of a particular party.
+In fact, a harm measure defined analogously using global utility would essentially be a difference in seats won by a voter's party between plans $q$ and $\tilde q$ (the exact form would be affected by the function $g$).
+This measure is not particularly interesting, and nor is it novel, being a standard measure of partisan harm in simulation-based redistricting litigation, up to a monotonic transformation **[CM: cite Rucho & LWV of PA]**.
+**[CM: revisit ¶ based on NJ findings].**
 
 As with the utility measures, this harm measure naturally extends to multiple elections and districting plans.
 Make the counterfactual plan a random variable $\tilde Q$, with $(V,Q,\tilde Q)\sim\pi$ such that $Q\indep\tilde Q$.
