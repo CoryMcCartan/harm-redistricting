@@ -94,12 +94,6 @@ fmt_lean = function(x) {
         paste0("R+", round(200*(0.5 - x)), "%")
 }
 
-sim_toy = function(map, N=500) {
-    redist_smc(map, N, verbose=F) %>%
-        mutate(comp = distr_compactness(map),
-               dem = group_frac(map, dem, pop))
-}
-
 # initial plots -------
 if (!file.exists(fig_path <- here("paper/figures/minis_schematic.pdf"))) {
     list(plot_state(mininois, mininois_people) + labs(title="(a) Mininois"),
@@ -108,5 +102,3 @@ if (!file.exists(fig_path <- here("paper/figures/minis_schematic.pdf"))) {
         wrap_plots(nrow=1)
     ggsave(fig_path, width=7, height=2.75)
 }
-
-plan = c(2, 2, 2, 3, 3, 3, 2, 2, 2, 3, 3, 3, 2, 2, 2, 3, 3, 3, 2, 2, 2, 3, 3, 3, 1, 1, 1, 3, 3, 3, 1, 1, 1, 3, 3, 3)

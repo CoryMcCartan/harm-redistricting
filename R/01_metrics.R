@@ -53,7 +53,7 @@ utility_global = function(plans, group, kernel=k_step, invert=FALSE, fn_util=flo
     fn_util(pl$n_grp)
 }
 
-#' Voter harm for local representation, version 1 (nonlinear)
+#' Voter harm for local representation
 #'
 #' @param map a `redist_map` object.
 #' @param group_pop column of `map` containing the group population of each precinct.
@@ -63,7 +63,7 @@ utility_global = function(plans, group, kernel=k_step, invert=FALSE, fn_util=flo
 #' @param invert if `TRUE`, calculate utility for the out-group
 #'
 #' @returns a numeric vector matching `idx_1`
-harm_v1 = function(map, group_pop, distr_grp,
+harm = function(map, group_pop, distr_grp,
                    idx_1=seq_len(ncol(distr_grp)), idx_2=seq_len(ncol(distr_grp)),
                    kernel=k_step, invert=FALSE) {
     m = 1 - kernel(distr_grp[, idx_1, drop=FALSE])
@@ -95,7 +95,8 @@ prec_harm = function(map, group_pop, distr_grp,
         m = 1 - m
         counterfactual = 1 - counterfactual
     }
-    rowMeans(m * counterfactual)
+    voters = eval_tidy(enquo(group_pop), map)
+    voters * rowMeans(m * counterfactual)
 }
 
 #' Voter harm for local representation, version 2 (linear)
@@ -118,6 +119,7 @@ harm_v2 = function(map, group_pop, distr_grp,
     mean(util_2) - util_1
 }
 
+
 #' Calculate total utility from by-group utilities
 #'
 #' @param util_1,util_2 numeric vectors of group utilities
@@ -131,6 +133,51 @@ total = function(util_1, util_2, map, group_1, group_2) {
     (util_1 * voters_1 + util_2 * voters_2) / (voters_1 + voters_2)
 }
 
+
+# plans calculator
+calc_plans_stats = function(plans, map, dem, gop, ker=k_t()) {
+    dvote = eval_tidy(enquo(dem), map)
+    rvote = eval_tidy(enquo(gop), map)
+    statewide = sum(dvote) / (sum(dvote) + sum(rvote))
+    ndists = attr(map, "ndists")
+
+    plans = plans %>%
+        mutate(dev = plan_parity(map),
+               comp = distr_compactness(map),
+               dem = group_frac(map, dvote, dvote+rvote),
+               competitive = rep(redist:::talisman(matrix(dem, nrow=ndists), ndists), each=ndists),
+               egap = partisan_metrics(map, "EffGap", rvote, dvote))
+
+    m_dem = district_group(plans, dem)
+
+    pl_sum = plans %>%
+        group_by(draw) %>%
+        summarize(n_dem = sum(dem > 0.5),
+                  e_dem = sum(k_t()(dem)),
+                  pbias = mean(ker(pmax(pmin(dem - (statewide - 0.5), 1), 0))) - 0.5,
+                  pbias_sw = e_dem/ndists - 0.5,
+                  mean_med = median(dem) - mean(dem),
+                  across(c(dev, comp, competitive:pbias), ~ .[1])) %>%
+        mutate(u_loc_dem = utility_local(map, dvote, m_dem, ker),
+               u_loc_rep = utility_local(map, rvote, m_dem, ker, invert=TRUE),
+               u_glb_dem = utility_global(plans, dem, ker),
+               u_glb_rep = utility_global(plans, dem, ker, invert=TRUE),
+               h_dem = harm(map, dvote, m_dem, kernel=ker),
+               h_rep = harm(map, rvote, m_dem, kernel=ker, invert=TRUE),
+               h2_dem = harm_v2(map, dvote, m_dem, kernel=ker),
+               h2_rep = harm_v2(map, rvote, m_dem, kernel=ker, invert=TRUE),
+               u_loc = total(u_loc_dem, u_loc_rep, map, dvote, rvote),
+               u_glb = total(u_glb_dem, u_glb_rep, map, dvote, rvote),
+               f = h_dem - h_rep,
+               f2 = h2_dem - h2_rep,
+               h = total(h_dem, h_rep, map, dvote, rvote)) %>%
+        select(-u_loc_dem:-u_glb_rep)
+
+    list(distr=select(plans, draw:total_pop, dem), plan=pl_sum, mat=m_dem)
+}
+
+
+# global utility scorer
 scorer_util_g = function(map, group_pop, total_pop) {
     group_pop = eval_tidy(enquo(group_pop), map)
     total_pop = eval_tidy(enquo(total_pop), map)

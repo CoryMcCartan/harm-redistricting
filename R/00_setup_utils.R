@@ -1,6 +1,7 @@
 library(rlang)
 library(tidyverse)
 library(geomander)
+library(divseg)
 library(redist)
 library(sf)
 library(scales)
@@ -11,6 +12,9 @@ library(here)
 theme_repr = function() theme_bw(base_family="Times", base_size=10)
 theme_repr_map = function() theme_void(base_family="Times", base_size=10)
 
+PAL_COAST = c("#7BAEA0", "#386276", "#3A4332", "#7A7D6F", "#D9B96E", "#BED4F0")
+PAL_LARCH = c("#D2A554", "#626B5D", "#8C8F9E", "#858753", "#A4BADF", "#D3BEAF")
+PAL = PAL_COAST[c(5, 1, 2, 4, 3, 6)]
 GOP_DEM = c("#A0442C", "#B25D4C", "#C27568", "#D18E84", "#DFA8A0",
             "#EBC2BC",  "#F6DCD9", "#F9F9F9", "#DAE2F4", "#BDCCEA",
             "#9FB6DE", "#82A0D2", "#638BC6", "#3D77BB", "#0063B1")
@@ -37,6 +41,32 @@ d_hist = local({
 k_t = function(sd=d_hist$sd) {
     function(x) pt((x-0.5)/sd, df=d_hist$df)
 }
+
+plot_cds = function(map, pl, county, abbr) {
+    plan = as.factor(redist:::color_graph(get_adj(map), as.integer(pl)))
+    places = suppressMessages(tigris::places(abbr, cb=TRUE))
+
+    counties = map %>%
+        as_tibble() %>%
+        st_as_sf() %>%
+        group_by({{ county }}) %>%
+        summarize(is_coverage=TRUE)
+    map %>%
+        mutate(.plan = plan,
+               .distr = pl) %>%
+        as_tibble() %>%
+        st_as_sf() %>%
+        group_by(.distr) %>%
+        summarize(.plan = .plan[1], is_coverage=TRUE) %>%
+        ggplot(aes(fill=.plan)) +
+        geom_sf(size=0.0) +
+        geom_sf(data=places, inherit.aes=FALSE, fill="#0000002A", color=NA) +
+        geom_sf(data=counties, inherit.aes=FALSE, fill=NA, size=0.25, color="#ffffff1D") +
+        geom_sf(fill=NA, size=0.4, color="black") +
+        scale_fill_manual(values=PAL, guide="none") +
+        theme_void()
+}
+
 
 # downloads data for state `abbr` to `folder/{abbr}_2020_*.csv` and returns path to file
 download_redistricting_file = function(abbr, folder) {
