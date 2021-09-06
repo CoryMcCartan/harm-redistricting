@@ -253,8 +253,8 @@ Make the counterfactual plan a random variable $\tilde Q$, with $(V,Q,\tilde Q)\
 Then the harm to a random voter is $H \dfeq h(I, V, Q, \tilde Q)$.
 
 The expected harm to an individual $i\in\Voters$ voter then becomes $$
-   \E[H\mid I=i] = \Pr\qty(V(i)\neq\win(Q(i), V, Q)
-    \text{ and }V(i)=\win(\tilde Q(i), V, \tilde Q)),
+   \E[H\mid I=i] = \Pr[V(i)\neq\win(Q(i), V, Q)
+    \text{ and }V(i)=\win(\tilde Q(i), V, \tilde Q)],
 $$
 
 that is, the probability that the voter is misrepresented under the adopted plan but would not have been under a counterfactual.
@@ -285,8 +285,8 @@ $$ so that we recover $F=\E[F(Q)]$.
 
 [**CM: better to define just** $F(Q)$**, since we will rarely compare two sets of plans?**]
 
-In the districting plan examples of Figure \ref{fig:mini-harm}, the fairness of the Democratic gerrymander of Mininois is $-0.494$, the fairness of the Democratic gerrymander of Minissouri is $-0.415$, and the fairness of the Republican gerrymander of Minissouri is $0.450$, where positive values indicate Republican bias.
-In other words, the average Republican voter in Mininois is 49.4% more likely to be represented by a Democrat than an average Democrat is to be represented by a Republican, compared to the utility-maximizing plan in Figure \ref{fig:mini-util-opt}(a).
+In the districting plan examples of Figure \ref{fig:mini-harm}, the fairness of the Democratic gerrymander of Mininois is $-0.519$, the fairness of the Democratic gerrymander of Minissouri is $-0.415$, and the fairness of the Republican gerrymander of Minissouri is $0.450$, where positive values indicate Republican bias.
+In other words, the average Republican voter in Mininois is 51.9% more likely to be represented by a Democrat than an average Democrat is to be represented by a Republican, compared to the utility-maximizing plan in Figure \ref{fig:mini-util-opt}(a).
 
 # Calculating the Harm and Fairness Measures {#sec:estimating}
 

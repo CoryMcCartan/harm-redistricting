@@ -10,6 +10,7 @@ data-raw/*
 !data-raw/README.md
 
 # misc and  LaTeX
+out/
 *.tmp
 *.swp
 *.bak

@@ -43,10 +43,13 @@ mininois = grid %>%
 # people for plotting -------
 
 make_people = function(pop, dem, geometry, row, col, ...) {
-    url = str_glue("http://hydra.nat.uni-magdeburg.de/packing/csq/txt/csq{pop}.txt")
+    if (!file.exists(path <- str_glue("data-raw/csq{pop}.txt"))) {
+        url = str_glue("http://hydra.nat.uni-magdeburg.de/packing/csq/txt/csq{pop}.txt")
+        download.file(url, path)
+    }
     offset = as.numeric(st_centroid(geometry))
     dem_vec = c(rep(TRUE, dem), rep(FALSE, pop-dem))
-    read_table(url, col_names=F, col_types=cols(.default="d")) %>%
+    read_table(path, col_names=F, col_types=cols(.default="d")) %>%
         select(-X1) %>%
         as.matrix() %>%
         apply(1, function(x) st_point(x/6.28 + offset), simplify=FALSE) %>%

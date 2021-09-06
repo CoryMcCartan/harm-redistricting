@@ -30,21 +30,46 @@ scale_color_party_d = function(...) {
 
 # 'fixed' log that handles 0 and negative numbers
 flog = function(x) if_else(x <= 0, -1, suppressWarnings(log(x)))
+plapl = function(x) 0.5 * (1 + sign(x) * (1 - exp(-2*abs(x))))
+qlapl = function(p) -0.5 * sign(p - 0.5) * log(1 - 2*abs(p - 0.5))
 k_step = function(x) x > 0.5
 # historical congressional national shifts
 d_hist = local({
     dem_hist = c(0.575, 0.559, 0.537, 0.505, 0.552, 0.521, 0.543, 0.533, 0.521, 0.501, 0.447, 0.482, 0.473, 0.471, 0.452, 0.468, 0.523, 0.532, 0.449, 0.488, 0.455, 0.48, 0.534)
     gop_hist = c(0.407, 0.423, 0.448, 0.479, 0.434, 0.47, 0.444, 0.456, 0.443, 0.451, 0.515, 0.482, 0.484, 0.476, 0.5, 0.494, 0.443, 0.426, 0.517, 0.476, 0.512, 0.491, 0.448)
-    dem_tpp = dem_hist / (dem_hist + gop_hist)
+    dem_tpp = qlapl(dem_hist / (dem_hist + gop_hist))
     list(sd=sd(dem_tpp), df=length(dem_hist)-1)
 })
+sd_app = d_hist$sd * sd(rt(1e5, df=d_hist$df))
 k_t = function(sd=d_hist$sd) {
-    function(x) pt((x-0.5)/sd, df=d_hist$df)
+    function(x) pt(qlapl(x)/sd, df=d_hist$df)
+}
+e_approx = function(a, b) {
+    y = sd_app * (dnorm(a/sd_app) - dnorm(b/sd_app)) / (pnorm(b/sd_app) - pnorm(a/sd_app))
+    if_else(is.finite(y), y,
+            if_else(is.finite(a),
+                    if_else(is.finite(b), 0.5*(a+b), a), b))
 }
 
-plot_cds = function(map, pl, county, abbr) {
+
+plot_cds = function(map, pl, county, abbr, qty="ndv") {
     plan = as.factor(redist:::color_graph(get_adj(map), as.integer(pl)))
     places = suppressMessages(tigris::places(abbr, cb=TRUE))
+
+    if (qty == "dem") {
+        dvote = map$dem
+        rvote = map$rep
+        qty = expr(dem)
+        scale = scale_fill_party_c(limits=c(0.3, 0.7))
+    } else if (qty == "ndv") {
+        dvote = map$ndv
+        rvote = map$nrv
+        qty = expr(dem)
+        scale = scale_fill_party_c(limits=c(0.3, 0.7))
+    } else {
+        qty = expr(.plan)
+        scale = scale_fill_manual(values=PAL, guide="none")
+    }
 
     counties = map %>%
         as_tibble() %>%
@@ -53,20 +78,51 @@ plot_cds = function(map, pl, county, abbr) {
         summarize(is_coverage=TRUE)
     map %>%
         mutate(.plan = plan,
-               .distr = pl) %>%
+               .distr = pl,
+               dvote = dvote,
+               rvote = rvote) %>%
         as_tibble() %>%
         st_as_sf() %>%
         group_by(.distr) %>%
-        summarize(.plan = .plan[1], is_coverage=TRUE) %>%
-        ggplot(aes(fill=.plan)) +
+        summarize(.plan = .plan[1],
+                  dem = 1 / (1 + sum(rvote) / sum(dvote)),
+                  is_coverage=TRUE) %>%
+        ggplot(aes(fill={{ qty }})) +
         geom_sf(size=0.0) +
-        geom_sf(data=places, inherit.aes=FALSE, fill="#0000002A", color=NA) +
-        geom_sf(data=counties, inherit.aes=FALSE, fill=NA, size=0.25, color="#ffffff1D") +
+        geom_sf(data=places, inherit.aes=FALSE, fill="#0000003A", color=NA) +
         geom_sf(fill=NA, size=0.4, color="black") +
-        scale_fill_manual(values=PAL, guide="none") +
+        geom_sf(data=counties, inherit.aes=FALSE, fill=NA, size=0.4, color="#ffffff3A") +
+        scale +
         theme_void()
 }
 
+expl_vars = function(pl, ...) {
+    panel.hist <- function(x, ...) {
+        usr <- par("usr"); on.exit(par(usr))
+        par(usr = c(usr[1:2], 0, 1.5) )
+        h <- hist(x, plot = FALSE)
+        breaks <- h$breaks; nB <- length(breaks)
+        y <- h$counts; y <- y/max(y)
+        rect(breaks[-nB], 0, breaks[-1], y, col="gray")
+    }
+    panel.cor <- function(x, y, digits = 2, prefix = "", ...) {
+        usr <- par("usr"); on.exit(par(usr))
+        par(usr = c(0, 1, 0, 1))
+        r <- abs(cor(x, y, use="complete.obs"))
+        txt <- format(c(r, 0.123456789), digits = digits)[1]
+        txt <- paste0(prefix, txt)
+        text(0.5, 0.5, txt, cex=2.5*sqrt(r), offset=0, adj=c(0.5, 0.5))#cex.cor)
+    }
+    panel.points <- function(x, y, ...) {
+        points(x, y, ...)
+        abline(h=0, v=0, lty="dashed")
+    }
+    seats_vec = as.integer(as.factor(pl$plan$n_dem))
+    select(pl$plan, ...) %>%
+        pairs(cex=0.2, gap=0.5,
+              lower.panel=panel.cor, diag.panel=panel.hist, upper.panel=panel.points,
+              col=wa_pal("sea_star", n=max(seats_vec))[seats_vec])
+}
 
 # downloads data for state `abbr` to `folder/{abbr}_2020_*.csv` and returns path to file
 download_redistricting_file = function(abbr, folder) {
