@@ -247,7 +247,8 @@ Then we may define the harm to a voter as $h:\Voters\times\Elecs\times\Plans^2\t
 
 Harm is defined using the local, not global, utility measure, because inherently, global utility (and thus harm) will be constant for all voters of a particular party.
 In fact, a harm measure defined analogously using global utility would essentially be a difference in seats won by a voter's party between plans $q$ and $\tilde q$ (the exact form would be affected by the function $g$).
-This measure is not particularly interesting, and nor is it novel, being a standard measure of partisan harm in simulation-based redistricting litigation, up to a monotonic transformation [@2018league; @2019rucho; @2019lewis]. **[CM: revisit ¶ based on NJ findings]****.**
+This measure is not particularly interesting, and nor is it novel, being a standard measure of partisan harm in simulation-based redistricting litigation, up to a monotonic transformation [@2018league; @2019rucho; @2019lewis].
+**[CM: revisit ¶ based on NJ findings].**
 
 As with the utility measures, this harm measure naturally extends to multiple elections and districting plans.
 Make the counterfactual plan a random variable $\tilde Q$, with $(V,Q,\tilde Q)\sim\pi$ such that $Q\indep\tilde Q$.
@@ -355,7 +356,9 @@ But as our suggested model for election outcomes will not account for candidate 
 
 # Connections to Partisan Symmetry and Fairness, Standards {#sec:connections}
 
-Over the past decade [**CM: correct?!**], researchers have developed a veritable zoo of measures to identify partisan gerrymanders. Specifically, these measures aim to quantify deviations from partisan symmetry, fairness, or competitiveness. Some of the most commonly used are perhaps the *efficiency gap* [@stephanopoulos2015], *partisan bias* [@tufte1973pb; @king1987democratic], and the *mean-median* measure [@mcdonald2015unfair; @wang2016three].
+Over the past decade [**CM: correct?!**], researchers have developed a veritable zoo of measures to identify partisan gerrymanders.
+Specifically, these measures aim to quantify deviations from partisan symmetry, fairness, or competitiveness.
+Some of the most commonly used are perhaps the *efficiency gap* [@stephanopoulos2015], *partisan bias* [@tufte1973pb; @king1987democratic], and the *mean-median* measure [@mcdonald2015unfair; @wang2016three].
 All of these measures may be estimated using district vote shares.
 
 ## The Efficiency Gap
@@ -403,7 +406,7 @@ Buttressing our choice of local utility function, he analyzes ANES survey data t
     2.  moderate number of districts
 
 ```{r nj-vars, fig.cap="Various measures for an ensemble of New Jersey districting plans.", fig.width=6.5, fig.height=6.5}
-include_graphics(here("out/nj_vars.pdf"))
+#include_graphics(here("out/nj_vars.pdf"))
 ```
 
 # Discussion {#sec:discussion}
@@ -428,3 +431,4 @@ include_graphics(here("out/nj_vars.pdf"))
 \begin{proof}
 \end{proof}
 ```
+
