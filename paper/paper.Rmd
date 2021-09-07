@@ -19,8 +19,9 @@ keywords:
   - representation
   - redistricting simulation
   - individual standing
+citation_package: biblatex
 bibliography: references.bib
-biblio-style: apalike
+biblio-style: apa
 output: 
   rticles::arxiv_article:
     keep_tex: true
@@ -378,7 +379,7 @@ All of these measures may be estimated using district vote shares.
 
 The notion of district *competitiveness*, while related to the slope of the seats-vote curve around $\half$, is not the same as partisan symmetry.
 However, one commonly used measure of competitiveness, from @tamcho2016, is related to our local utility measure $U^{(L)}$.
-The measure of @tamcho2016, which we will denote by $\mathrm{comp}_\alpha(v,q)$ contains two terms: one, $T_p(v,q)$, measuring the closeness of district vote shares to 50%, and the other, $T_e(v,q)$, measuring the closeness of the overall share of seats to 50%; the relative importance of these two terms is controlled by $\alpha$.
+The measure of @tamcho2016, which we will denote by $\mathrm{comp}_\alpha(v,q)$, contains two terms: one, $T_p(v,q)$, measuring the closeness of district vote shares to 50%, and the other, $T_e(v,q)$, measuring the closeness of the overall share of seats to 50%; the relative importance of these two terms is controlled by $\alpha$.
 It is this first term which his closely related to $U^{(L)}$, as stated in Proposition \ref{prop:comp} below.
 
 ```{=tex}
@@ -411,6 +412,13 @@ Buttressing our choice of local utility function, he analyzes ANES survey data t
 
 # Discussion {#sec:discussion}
 
+# References {.unnumbered}
+
+::: {#refs}
+:::
+
+\clearpage
+
 \appendix
 
 # Proofs of Propositions
@@ -431,4 +439,6 @@ Buttressing our choice of local utility function, he analyzes ANES survey data t
 \begin{proof}
 \end{proof}
 ```
+# Computing Utility, Harm, and Fairness from Precinct-level Election Data
 
+formulas here.
