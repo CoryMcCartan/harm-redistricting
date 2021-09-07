@@ -255,7 +255,7 @@ As with the utility measures, this harm measure naturally extends to multiple el
 Make the counterfactual plan a random variable $\tilde Q$, with $(V,Q,\tilde Q)\sim\pi$ such that $Q\indep\tilde Q$.
 Then the harm to a random voter is $H \dfeq h(I, V, Q, \tilde Q)$.
 
-The expected harm to an individual $i\in\Voters$ voter then becomes $$
+The expected harm to an individual $i\in\Voters$ then becomes $$
    \E[H\mid I=i] = \Pr[V(i)\neq\win(Q(i), V, Q)
     \text{ and }V(i)=\win(\tilde Q(i), V, \tilde Q)],
 $$
