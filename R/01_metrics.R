@@ -173,19 +173,3 @@ calc_plans_stats = function(plans, map, dem, gop, ker=k_t()) {
 
     list(distr=select(plans, draw:total_pop, dem), plan=pl_sum, mat=m_dem)
 }
-
-
-# global utility scorer
-scorer_util_g = function(map, group_pop, total_pop) {
-    group_pop = eval_tidy(enquo(group_pop), map)
-    total_pop = eval_tidy(enquo(total_pop), map)
-    n1 = sum(group_pop)
-    n2 = sum(total_pop) - n1
-    ndists = attr(map, "ndists")
-    fn = function(plans) {
-        seats = colSums(redist:::group_pct(plans, group_pop, total_pop, ndists) > 0.5)
-        (flog(seats)*n1 + flog(ndists - seats)*n2) / (n1 + n2)
-    }
-    class(fn) = c("redist_scorer", "function")
-    fn
-}

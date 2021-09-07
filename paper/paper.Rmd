@@ -20,7 +20,7 @@ keywords:
   - redistricting simulation
   - individual standing
 bibliography: references.bib
-biblio-style: unsrt
+biblio-style: apalike
 output: 
   rticles::arxiv_article:
     keep_tex: true
@@ -175,7 +175,7 @@ It depends on the form of $g$, as the following result describes.
 \begin{restatable}{prop}{propglobal} \label{prop:global}
 Let $S=\{s_p:p\in\Parties\}$ be a set of party popular vote shares, and $f:[0,1]\bijto[0,1]$ be a rule for assigning each party a share of seats according to their share of the popular vote.
 Define the total utility for this rule as \[
-    u_{\mathrm{tot}}^{(G)}(f, e) \dfeq \sum_{v\in\Voters} g\qty(f\qty(s_{\vote(v, e)})).
+    u_{\mathrm{tot}}^{(G)}(f, v) \dfeq \sum_{i\in\Voters} g\qty(f\qty(s_{v(i)})).
 \] 
 Then if $g$ is convex, $u_{\mathrm{tot}}^{(G)}$ is maximized for $f(x)=\ind_{[\max S, 1]}(x)$, and if $g$ is strictly concave, the maximizer of $u_{\mathrm{tot}}^{(G)}$ will be a strictly increasing function.
 In particular, if $g(x)=\log(x)$ and every party receives at least one vote, then $f(x)=x$ maximizes $u_{\mathrm{tot}}^{(G)}$.
@@ -189,13 +189,14 @@ Thus, if we are willing to adopt the logarithm for the functional specification 
 The specification of the utility of the local election outcome is more straightforward.
 We define$$
     u^{(L)}:\Voters\times\Elecs\times\Plans\to\R, 
-    \qquad u^{(L)}(i,v,q) = \ind\{v(i)=\win(q(i), e, q)\},
+    \qquad u^{(L)}(i,v,q) = \ind\{v(i)=\win(q(i), v, q)\},
 $$that is, a voter gains utility only if they winner of their legislative district belongs to their preferred political party.
 
 Attempting to maximize the average local utility across the electorate would lead to a districting plan where every voter is assigned to a district with other voters of the same party preference; in this way, every voter's utility would be $1$.
 Whether such an districting plan is possible depends on the geographical layout of voters and the legal constraints on the districting process---must districts be contiguous, balanced in population, constructed from whole precincts, geographically compact, and so on.
 But the general tendency of this utility measure (in the context of a single election, at least), like the global utility measure, will be to push plans towards proportionality.
-The local measure will additionally reward what have been called *bipartisan gerrymanders*, where there are few or no competitive districts.
+Unlike with the global measure, a specific kind of proportionality is preferred: that which creates as many lopsided districts as possible (what is often termed a *bipartisan gerrymander*).
+This point is discussed further in Section \ref{sec:competitive} below.
 
 ## Examples
 
@@ -221,11 +222,12 @@ The randomness in election outcomes comes from variations in factors such as vot
 The randomness in districting plans reflects the constraints and preferences of the plan-drawing process.
 As we will discuss in Section \ref{sec:estimating}, generally we will assume that $V\indep Q$, though this is not required for our theoretical analysis.
 We will also consider a voter $I$ taken uniformly at random from $\Voters$, with $I\indep\pi$.
+This has the effect of treating voters exchangeably and valuing their personal utilities equally.
 
 Then we may define the utilities for a (randomly selected) voter as $$
     U^{(G)} \dfeq u^{(G)}(I, V, Q) \qand
     U^{(L)} \dfeq u^{(L)}(I, V, Q).
-$$Thus, the utility for a single voter $v$ becomes $U^{(L)}\mid I=i$; the electorate's average utility for election outcome $e$ becomes $\E[U^{(L)}\mid V=v]$, and so on.
+$$Thus, the utility for a single voter $v$ becomes $U^{(L)}\mid I=i$; the electorate's average utility for election outcome $v$ becomes $\E[U^{(L)}\mid V=v]$, and so on.
 
 # Towards Individualized Representational Harm {#sec:indiv-harm}
 
@@ -239,14 +241,13 @@ Put another way, in the context of districting plans, if no alternative district
 To operationalize this, we need to introduce a counterfactual districting plan $\tilde q$.
 Then we may define the harm to a voter as $h:\Voters\times\Elecs\times\Plans^2\to\R$, \begin{align*}
     h(i,v,q,\tilde q) &= (1 - u^{(L)}(i, v, q))\cdot u^{(L)}(i, v, \tilde q) \\
-    &= \ind\{v(i)\neq\win(q(i), e, q)\}
-        \ind\{v(i)=\win(\tilde q(i), e, \tilde q)\},
+    &= \ind\{v(i)\neq\win(q(i), v, q)\}
+        \ind\{v(i)=\win(\tilde q(i), v, \tilde q)\},
 \end{align*}that is, a voter is harmed only if they are not represented by the party of their choice *and* they would have been represented by the party of their choice under the counterfactual plan.
 
 Harm is defined using the local, not global, utility measure, because inherently, global utility (and thus harm) will be constant for all voters of a particular party.
 In fact, a harm measure defined analogously using global utility would essentially be a difference in seats won by a voter's party between plans $q$ and $\tilde q$ (the exact form would be affected by the function $g$).
-This measure is not particularly interesting, and nor is it novel, being a standard measure of partisan harm in simulation-based redistricting litigation, up to a monotonic transformation **[CM: cite Rucho & LWV of PA]**.
-**[CM: revisit ¶ based on NJ findings].**
+This measure is not particularly interesting, and nor is it novel, being a standard measure of partisan harm in simulation-based redistricting litigation, up to a monotonic transformation [@2018league; @2019rucho; @2019lewis]. **[CM: revisit ¶ based on NJ findings]****.**
 
 As with the utility measures, this harm measure naturally extends to multiple elections and districting plans.
 Make the counterfactual plan a random variable $\tilde Q$, with $(V,Q,\tilde Q)\sim\pi$ such that $Q\indep\tilde Q$.
@@ -288,6 +289,20 @@ $$ so that we recover $F=\E[F(Q)]$.
 In the districting plan examples of Figure \ref{fig:mini-harm}, the fairness of the Democratic gerrymander of Mininois is $-0.519$, the fairness of the Democratic gerrymander of Minissouri is $-0.415$, and the fairness of the Republican gerrymander of Minissouri is $0.450$, where positive values indicate Republican bias.
 In other words, the average Republican voter in Mininois is 51.9% more likely to be represented by a Democrat than an average Democrat is to be represented by a Republican, compared to the utility-maximizing plan in Figure \ref{fig:mini-util-opt}(a).
 
+Despite being derived from a local harm measure, $F(Q)$ is in fact closely related to the overall number of seats won by each party, as Proposition \ref{prop:fairness} describes below.
+Yet unlike a simple measure of seats, $F(Q)$ is shifted to an interpretable scale, where a value of zero corresponds to partisan fairness.
+In other words, $F(Q)$ provides a connection between fairness and seats, establishing a normative guide to overall election outcomes.
+This connection further supports the use of total seats as a summary statistic in redistricting simulation methods, as advocated by @deford2020symmetry.
+
+```{=tex}
+\begin{restatable}{prop}{propfairness} \label{prop:fairness}
+Basically, if turnout is equal across districts, for a districting plan $q\in\Plans$ and political party $p\in\Parties$, we have
+\begin{align*}
+    F(q) = \E[\seats(p, V, Q)\mid Q=q] - \E[\seats(p, V, \tilde Q)].
+\end{align*}
+
+\end{restatable}
+```
 # Calculating the Harm and Fairness Measures {#sec:estimating}
 
 The measures $H$ and $F(q)$ defined above require specification of a probability measure on elections and districting plans, $\pi$.
@@ -301,13 +316,95 @@ But as our suggested model for election outcomes will not account for candidate 
 
 ## Modelling Districting Plans
 
+1.  discrete and no universal metric structure
+
+2.  algorithms developed to sample from maximum-entropy distributions [@fifield2020mcmc; @deford2019; @carter2019; @mccartan2020]
+
+3.  impose constraints required by law and tradition; then samples are exchangeable
+
 ## Modelling Election Outcomes
 
-# Connections to Partisan Symmetry and Fairness Standards {#sec:connections}
+1.  complex, with many unknown future factors
 
-# Differences Between Classes of Fairness Metrics
+2.  need simple model that will capture primary factor (nationwide political environment).
+    Ideally would be easy to implement
+
+3.  we propose **Proportionate Uniform Shift**, where a constant fraction of voters of one party are assumed to switch to the other.
+
+    1.  Not mathematically equivalent Butler's Uniform Partisan Swing [@butler1951swing], but near-identical for most precincts and districts.
+
+    2.  Highly accurate in out-of-sample prediction, considering simplicity [@katz2020].
+
+    3.  Can be viewed as mapping vote shares through a Laplace CDF centered at 0.5 with rate 2
+
+    4.  Model shift amounts as Normal.
+        Fit to historical variability in nationwide vote shares to get $\mathrm{t}_{22}(0, 0.03723)$.
+
+4.  More complicated models certainly possible and straightforward (if not particularly efficient) to compute.
+    Could e.g. model district deviations as a systematic national shift plus a local idiosyncratic effect, like the Stochastic Uniform Partisan Swing of @gelman1994unified.
+
+5.  Formulas to actually compute these things are in the Appendix:
+
+    1.  Global utility is discrete, so we can compute the range of shifts that produce each number of seats, and the average vote share for those ranges.
+        Combine these
+
+    2.  To be computationally efficient, local utility requires linearizing the vote share curve.
+
+    3.  For voter fairness, PUS means that relative share of party's voters in each precinct remains the same.
+        Need only to apply a kernel function (composition of Laplace ICDF + model shift CDF)
+
+# Connections to Partisan Symmetry and Fairness, Standards {#sec:connections}
+
+Over the past decade [**CM: correct?!**], researchers have developed a veritable zoo of measures to identify partisan gerrymanders. Specifically, these measures aim to quantify deviations from partisan symmetry, fairness, or competitiveness. Some of the most commonly used are perhaps the *efficiency gap* [@stephanopoulos2015], *partisan bias* [@tufte1973pb; @king1987democratic], and the *mean-median* measure [@mcdonald2015unfair; @wang2016three].
+All of these measures may be estimated using district vote shares.
+
+## The Efficiency Gap
+
+1.  has been criticized [@tamcho2017egap; @bernstein2017egap; @deford2020symmetry]
+
+## Partisan Bias
+
+1.  Integrating yields a related measure of @nagle2015measures, which has also been criticized by @deford2020symmetry.
+2.  Focuses on only one part of S-V curve, which may not be relevant
+
+## Mean-Median
+
+1.  Like PB, focuses on only one part of S-V curve, which may not be relevant
+
+## Districting Plan Competitiveness {#sec:competitive}
+
+The notion of district *competitiveness*, while related to the slope of the seats-vote curve around $\half$, is not the same as partisan symmetry.
+However, one commonly used measure of competitiveness, from @tamcho2016, is related to our local utility measure $U^{(L)}$.
+The measure of @tamcho2016, which we will denote by $\mathrm{comp}_\alpha(v,q)$ contains two terms: one, $T_p(v,q)$, measuring the closeness of district vote shares to 50%, and the other, $T_e(v,q)$, measuring the closeness of the overall share of seats to 50%; the relative importance of these two terms is controlled by $\alpha$.
+It is this first term which his closely related to $U^{(L)}$, as stated in Proposition \ref{prop:comp} below.
+
+```{=tex}
+\begin{restatable}{prop}{propcomp} \label{prop:comp}
+Basically, if turnout is equal across districts, for an election $v\in\Elecs$ and districting plan $q\in\Plans$ and two political parties, we have
+\begin{align*}
+    \E[U^{(L)}\mid V=v, Q=q] &= \frac{1}{2|D|}\sum_{d\in D}
+        \qty|\frac{\votes^{(p_a)}}{\votes^{(p_b)} + \votes^{(p_b)}}-\half| \\
+    &= \half T_p(v,q) = \frac{\mathrm{comp}_\alpha(v,q)}{1+\alpha T_e(v_q)}.
+\end{align*}
+
+\end{restatable}
+```
+Importantly, $\mathrm{comp}_\alpha(v,q)$ is designed to be *minimized*---smaller values correspond to more competitive districts.
+But, as briefly discussed above, this actually runs counter to the local utility measure, which encourages lopsided districts with as many similarly-minded voters as possible.
+@brunell2010 discusses this point in much more detail, arguing that competitive districts should be avoided where possible.
+Buttressing our choice of local utility function, he analyzes ANES survey data to show that voters approve more highly of their representative and of Congress overall when their representative votes in alignment with their preferences.
 
 # Real-world Example {#sec:empirical}
+
+1.  New Jersey
+
+    1.  Not a 50-50 state
+
+    2.  moderate number of districts
+
+```{r nj-vars, fig.cap="Various measures for an ensemble of New Jersey districting plans.", fig.width=6.5, fig.height=6.5}
+include_graphics(here("out/nj_vars.pdf"))
+```
 
 # Discussion {#sec:discussion}
 
@@ -317,6 +414,16 @@ But as our suggested model for election outcomes will not account for candidate 
 
 ```{=tex}
 \propglobal*
+
+\begin{proof}
+\end{proof}
+
+\propfairness*
+
+\begin{proof}
+\end{proof}
+
+\propcomp*
 
 \begin{proof}
 \end{proof}
