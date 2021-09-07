@@ -15,7 +15,7 @@ prop_seats = round(attr(nj, "ndists") * statewide)
 pl = calc_plans_stats(plans, nj, ndv, nrv)
 
 pdf("out/nj_vars.pdf", 9, 9)
-expl_vars(pl, e_dem, u_glb, u_loc, f, h_dem, h, egap, pbias, mean_med, competitive)
+expl_vars(pl, e_dem, u_glb, u_loc, f, f_glb, h, egap, pbias, mean_med, competitive)
 dev.off()
 
 select(pl$plan, e_dem, u_glb, u_loc, f, egap, pbias, mean_med, competitive) %>%

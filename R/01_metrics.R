@@ -83,6 +83,31 @@ utility_global = function(plans, group, kernel=k_step, statewide, fn_util=flog, 
     })
 }
 
+# try fairness
+fairness_global = function(plans, group,
+                           idx_1=seq_len(ncol(as.matrix(plans))), idx_2=seq_len(ncol(as.matrix(plans))),
+                           kernel=k_step, statewide, fn_util=flog, ker_mean=e_approx) {
+    n_dists = max(plans$district)
+    distr_dem = matrix(eval_tidy(enquo(group), plans), nrow=n_dists)
+    dist_seq_a = fn_util(seq(n_dists, 0L, -1L))
+    dist_seq_b = fn_util(seq(0L, n_dists))
+    m_u = apply(distr_dem, 2, function(x) {
+        x = sort(x)
+        pr_bins = diff(c(0, kernel(x), 1)) # pr of each seat combo
+        # avg d vote share for each seat combo
+        if (identical(kernel, k_step)) {
+            share_a = rep(statewide, n_dists+1L)
+        } else {
+            y = c(-Inf, qlapl(x - statewide + 0.5), Inf)
+            share_a = plapl(ker_mean(y[-n_dists-2L], y[-1])) - 0.5 + statewide
+        }
+        c(sum(dist_seq_a * pr_bins * share_a),
+          sum(dist_seq_b * pr_bins * (1 - share_a)))
+    })
+    pmax(mean(m_u[1, idx_2]) - m_u[1, idx_1], 0) -
+        pmax(mean(m_u[2, idx_2]) - m_u[2, idx_1], 0)
+}
+
 #' Voter harm for local representation
 #'
 #' @param map a `redist_map` object.
@@ -146,6 +171,8 @@ calc_plans_stats = function(plans, map, dem, gop, ker=k_t()) {
     rvote = eval_tidy(enquo(gop), map)
     statewide = sum(dvote) / (sum(dvote) + sum(rvote))
     ndists = attr(map, "ndists")
+    n_ref = redist:::get_n_ref(plans)
+    idx_2 = if (n_ref > 1) -seq_len(-n_ref) else seq_len(ncol(as.matrix(plans)))
 
     plans = plans %>%
         mutate(dev = plan_parity(map),
@@ -166,9 +193,10 @@ calc_plans_stats = function(plans, map, dem, gop, ker=k_t()) {
                   across(c(dev, comp, competitive:pbias), ~ .[1])) %>%
         mutate(u_loc = utility_local(map, dvote, rvote, m_dem, ker),
                u_glb = utility_global(plans, dem, ker, statewide),
-               h_dem = harm(map, dvote, m_dem, kernel=ker),
-               h_rep = harm(map, rvote, m_dem, kernel=ker, invert=TRUE),
+               h_dem = harm(map, dvote, m_dem, idx_2=idx_2, kernel=ker),
+               h_rep = harm(map, rvote, m_dem, idx_2=idx_2, kernel=ker, invert=TRUE),
                f = h_dem - h_rep,
+               f_glb = fairness_global(plans, dem, idx_2=idx_2, kernel=ker, statewide=statewide),
                h = total(h_dem, h_rep, map, dvote, rvote))
 
     list(distr=select(plans, draw:total_pop, dem), plan=pl_sum, mat=m_dem)

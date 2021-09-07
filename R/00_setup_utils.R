@@ -151,3 +151,7 @@ join_shapefile = function(data) {
     left_join(data, geom_d, by="GEOID20") %>%
         sf::st_as_sf()
 }
+
+
+if (!exists("utility_global")) source(here("R/01_metrics.R"))
+if (!exists("mininois")) source(here("R/toy/00_toy_setup.R"))

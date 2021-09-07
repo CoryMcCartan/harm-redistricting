@@ -17,7 +17,7 @@ prop_seats = round(attr(wi, "ndists") * statewide)
 pl = calc_plans_stats(plans, wi, ndv, nrv)
 
 pdf("out/wi_vars.pdf", 9, 9)
-expl_vars(pl, e_dem, u_glb, u_loc, f, h_dem, h, egap, pbias, mean_med, competitive)
+expl_vars(pl, e_dem, u_glb, u_loc, f, f_glb, h, egap, pbias, mean_med, competitive)
 dev.off()
 
 plot(wi, rowMeans(pl$mat > 0.5)) + scale_fill_party_c()
