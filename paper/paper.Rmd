@@ -171,6 +171,7 @@ $$for $g:[0,1]\bijto\R$ an increasing function.
 
 What kind of electoral systems does this utility function encourage, if the goal is maximizing total voter utility (or, equivalently, average voter utility)?
 It depends on the form of $g$, as the following result describes.
+Proofs of this and all other propositions are deferred to Appendix \ref{app:proofs}.
 
 ```{=tex}
 \begin{restatable}{prop}{propglobal} \label{prop:global}
@@ -248,8 +249,7 @@ Then we may define the harm to a voter as $h:\Voters\times\Elecs\times\Plans^2\t
 
 Harm is defined using the local, not global, utility measure, because inherently, global utility (and thus harm) will be constant for all voters of a particular party.
 In fact, a harm measure defined analogously using global utility would essentially be a difference in seats won by a voter's party between plans $q$ and $\tilde q$ (the exact form would be affected by the function $g$).
-This measure is not particularly interesting, and nor is it novel, being a standard measure of partisan harm in simulation-based redistricting litigation, up to a monotonic transformation [@2018league; @2019rucho; @2019lewis].
-**[CM: revisit ¶ based on NJ findings].**
+This measure is not particularly interesting, and nor is it novel, being a standard measure of partisan harm in simulation-based redistricting litigation, up to a monotonic transformation [@2018league; @2019rucho; @2019lewis]. **[CM: revisit ¶ based on NJ findings]****.**
 
 As with the utility measures, this harm measure naturally extends to multiple elections and districting plans.
 Make the counterfactual plan a random variable $\tilde Q$, with $(V,Q,\tilde Q)\sim\pi$ such that $Q\indep\tilde Q$.
@@ -307,59 +307,59 @@ Basically, if turnout is equal across districts, for a districting plan $q\in\Pl
 ```
 # Calculating the Harm and Fairness Measures {#sec:estimating}
 
-The measures $H$ and $F(q)$ defined above require specification of a probability measure on elections and districting plans, $\pi$.
+The measures $U^{(G)}, U^{(L)}, H$ and $F$ defined above require specification of a probability measure on elections and districting plans, $\pi$.
 Depending on one's viewpoint, this is either a theoretical fiction which must be specified by a model, or an actual data-generating process we must aim to estimate.
-Either way, a collection of past election data and an enacted districting plan alone are not enough to calculate $H$ and $F(q)$.
+Either way, a collection of past election data and an enacted districting plan alone are not enough to calculate these measures.
 
-While not strictly necessary, modelling of $V$ and $\tilde Q$ independently will simplify the situation considerably.
+While not strictly necessary, modeling of $V$ and $\tilde Q$ independently will simplify the situation considerably.
 Practically, this translates to the assumption that individual voters would vote for the same political party no matter the districting plan.
 To the extent that voters reward or punish an incumbent party for the districting plan they adopt, or that an adopted districting plan affects which candidates run in a district, this assumption is violated.
 But as our suggested model for election outcomes will not account for candidate factors or policy preferences, the marginal effect on our conclusions will be minimal.
 
-## Modelling Districting Plans
+## Modeling Districting Plans
 
-1.  discrete and no universal metric structure
+It is difficult to construct a tractable probability distribution for districting plans, since the space of plans is discrete and lacks a natural metric structure.
+Thankfully, in recent years a number of algorithms have been developed which sample districting plans from specific distributions [@fifield2020mcmc; @deford2019; @carter2019; @mccartan2020].
+These distributions can generally be characterized as maximum-entropy distributions on the space of all valid districting plans, in combination with several moment constraints.
 
-2.  algorithms developed to sample from maximum-entropy distributions [@fifield2020mcmc; @deford2019; @carter2019; @mccartan2020]
+For example, the algorithms of @carter2019 and @mccartan2020 sample from the maximum-entropy distribution of districting plans which are geographically contiguous, have district populations within a deviation from equality, and which have a certain average compactness value (according to a particular graph-theoretic compactness measure).
+These maximum-entropy distributions put as few restraints as possible on the districting sampling process, subject to a set of constraints imposed by the researcher.
+If these constraints are precisely those which are required by law or traditional redistricting criteria, then samples from this distribution provide a natural set of counterfactual districting plans, uninfluenced by partisan considerations, to use in estimating $H$ and $F$.
 
-3.  impose constraints required by law and tradition; then samples are exchangeable
+## Modeling Election Outcomes
 
-## Modelling Election Outcomes
+Election results present a different set of modeling challenges, given the large number of factors that influence the outcome, and the general unpredictability of future events.
+As far as estimating measures like $U^{(G)}, U^{(L)}, H$, and $F$, we would ideally use a relatively simple model that captures the primary drivers of election outcomes.
+In the interest of fairness, the model should not err on the side of simplicity and symmetry, and avoid making any biasing assumptions about the future (e.g., that demographic shifts will favor one party, or that past trends in election returns will continue in the same direction).
 
-1.  complex, with many unknown future factors
+We propose a *proportionate uniform shift* model, which focuses on swings in the national political environment as the main determinant of election outcomes.
+Each election outcome over the period of interest (generally ten years or less) is modeled as a random deviation from a baseline outcome, and these deviations are assumed to consist of a constant fraction of voters of one party in each precinct switching to the other.
+The baseline itself can be established by averaging the results of all available statewide elections over the past decade or other suitable period.
 
-2.  need simple model that will capture primary factor (nationwide political environment).
-    Ideally would be easy to implement
+The proportionate uniform shift model is not mathematically equivalent to the uniform partisan swing model of @butler1951swing, but is near-identical for most precincts and districts. Despite their simplicity, uniform-swing--type models are highly accurate for out-of-sample prediction [@katz2020], and are intuitive and easy to implement.
 
-3.  we propose **Proportionate Uniform Shift**, where a constant fraction of voters of one party are assumed to switch to the other.
+The proportionate shift, where we assume that a constant fraction of *voters of one party* in each precinct switch to the other party, has several advantages over the uniform swing model, where a constant fraction of *all voters* shifts parties.
+First, the proportionate shift prevents hypothetical party vote shares from exceeding 1 or falling below 0 in any precinct.
+Second, as it has the effect of scaling vote shares across precincts by a constant multiple, it preserves the relative balance of a party's voters across precincts.
+For measures like $H$ and $F$ which consider voters in each party separately, this helpfully simplifies computations.
 
-    1.  Not mathematically equivalent Butler's Uniform Partisan Swing [@butler1951swing], but near-identical for most precincts and districts.
+The proportionate shift can be mathematically framed as linear shift on a transformed scale, analogous to the generalized linear model setting.
+Specifically, we define $\gamma:[0,1]\to\R$, $$
+\gamma(x) = -\thalf\sgn(x-\thalf)\log(1-2\qty|x-\thalf|),
+$$ which is the inverse CDF of a Laplace with rate 2.
+Then a party's vote share in precinct $k$, notated here as $s_k$, is modeled as $$
+\gamma(s_k) = \gamma(\overline s_k) + \eps, \qquad \eps \sim \Norm(0, \sigma^2_{\mathrm{hist}}),
+$$ where $\overline{s}_k$ is the party baseline, and $\sigma^2_\mathrm{hist}$ is estimated from the historical variability in nationwide popular vote shares.
+For congressional elections in the United States from 1974--2018, we have $\widehat\sigma^2_\mathrm{hist}=0.03723$, and so draw predictive deviations from $\mathrm{t}_{22}(0, \widehat\sigma^2_\mathrm{hist})$.
 
-    2.  Highly accurate in out-of-sample prediction, considering simplicity [@katz2020].
-
-    3.  Can be viewed as mapping vote shares through a Laplace CDF centered at 0.5 with rate 2
-
-    4.  Model shift amounts as Normal.
-        Fit to historical variability in nationwide vote shares to get $\mathrm{t}_{22}(0, 0.03723)$.
-
-4.  More complicated models certainly possible and straightforward (if not particularly efficient) to compute.
-    Could e.g. model district deviations as a systematic national shift plus a local idiosyncratic effect, like the Stochastic Uniform Partisan Swing of @gelman1994unified.
-
-5.  Formulas to actually compute these things are in the Appendix:
-
-    1.  Global utility is discrete, so we can compute the range of shifts that produce each number of seats, and the average vote share for those ranges.
-        Combine these
-
-    2.  To be computationally efficient, local utility requires linearizing the vote share curve.
-
-    3.  For voter fairness, PUS means that relative share of party's voters in each precinct remains the same.
-        Need only to apply a kernel function (composition of Laplace ICDF + model shift CDF)
+More complicated election outcome models are certainly possible and straightforward to use with the measures proposed here.
+For example, one could model district deviations as a systematic national shift plus a local idiosyncratic effect, as is done in the Stochastic Uniform Partisan Swing model of @gelman1994unified.
+For ease and efficiency of computation, we stick to the simple proportionate uniform shift model here.
+Appendix \ref{app:formulas} contains the specific formulas used to compute $U^{(G)}, U^{(L)}, H$, and $F$ from a set of past election returns and a sample of districting plans from a redistricting sampling algorithm.
 
 # Connections to Partisan Symmetry and Fairness, Standards {#sec:connections}
 
-Over the past decade [**CM: correct?!**], researchers have developed a veritable zoo of measures to identify partisan gerrymanders.
-Specifically, these measures aim to quantify deviations from partisan symmetry, fairness, or competitiveness.
-Some of the most commonly used are perhaps the *efficiency gap* [@stephanopoulos2015], *partisan bias* [@tufte1973pb; @king1987democratic], and the *mean-median* measure [@mcdonald2015unfair; @wang2016three].
+Over the past decade [**CM: correct?!**], researchers have developed a veritable zoo of measures to identify partisan gerrymanders. Specifically, these measures aim to quantify deviations from partisan symmetry, fairness, or competitiveness. Some of the most commonly used are perhaps the *efficiency gap* [@stephanopoulos2015], *partisan bias* [@tufte1973pb; @king1987democratic], and the *mean-median* measure [@mcdonald2015unfair; @wang2016three].
 All of these measures may be estimated using district vote shares.
 
 ## The Efficiency Gap
@@ -421,7 +421,7 @@ Buttressing our choice of local utility function, he analyzes ANES survey data t
 
 \appendix
 
-# Proofs of Propositions
+# Proofs of Propositions {#app:proofs}
 
 ```{=tex}
 \propglobal*
@@ -439,6 +439,14 @@ Buttressing our choice of local utility function, he analyzes ANES survey data t
 \begin{proof}
 \end{proof}
 ```
-# Computing Utility, Harm, and Fairness from Precinct-level Election Data
+# Computing Utility, Harm, and Fairness from Precinct-level Election Data {#app:formulas}
 
-formulas here.
+1.  Global utility is discrete, so we can compute the range of shifts that produce each number of seats, and the average vote share for those ranges.
+    Combine these
+
+2.  To be computationally efficient, local utility requires linearizing the vote share curve.
+
+3.  For voter fairness, PUS means that relative share of party's voters in each precinct remains the same.
+    Need only to apply a kernel function (composition of Laplace ICDF + model shift CDF)
+
+Formulas here.

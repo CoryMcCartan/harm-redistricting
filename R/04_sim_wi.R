@@ -20,6 +20,31 @@ pdf("out/wi_vars.pdf", 9, 9)
 expl_vars(pl, e_dem, u_glb, u_loc, f, f_glb, h, egap, pbias, mean_med, competitive)
 dev.off()
 
+
+d_plot = pl$plan %>%
+    mutate(`terc_Local Utility` = ntile(u_loc, 10),
+           `terc_Global Utility` = ntile(u_glb, 10),
+           terc_Fairness = ntile(f, 10)) %>%
+    mutate(across(starts_with("terc_"), ~ if_else(. %in% c(1L, 10L), ., 5L))) %>%
+    select(draw, n_dem, e_dem, u_loc, u_glb, f, starts_with("terc_")) %>%
+    as_tibble()
+d_plot = number_by(pl$distr, dem) %>%
+    left_join(d_plot, by="draw") %>%
+    pivot_longer(starts_with("terc_"), names_to="qty",
+                 values_to="tercile", names_prefix="terc_")
+
+ggplot(d_plot, aes(as.factor(district), dem, fill=as.factor(tercile))) +
+    facet_grid(qty ~ .) +
+    geom_hline(yintercept=0.5, lty="dashed") +
+    geom_boxplot(size=0.3, outlier.size=0.1) +
+    scale_y_continuous("Democratic two-party share", labels=percent) +
+    labs(x="Districts, ordered by Democratic share",
+         fill="Tercile\nof measure") +
+    scale_fill_wa_d("sound_sunset", which=c(1, 8, 13)) +
+    theme_repr()
+ggsave("paper/figures/wi_terciles2.pdf", width=6.5, height=6)
+
+
 plot(wi, rowMeans(pl$mat > 0.5)) + scale_fill_party_c()
 plot(wi, rowMeans(pl$mat)) + scale_fill_party_c(limits=c(0.3, 0.7))
 

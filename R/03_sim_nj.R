@@ -23,6 +23,30 @@ select(pl$plan, e_dem, u_glb, u_loc, f, egap, pbias, mean_med, competitive) %>%
     pairsD3::pairsD3(cex=1.5, opacity=0.5, group=pl$plan$n_dem)
 
 
+d_plot = pl$plan %>%
+    mutate(`terc_Local Utility` = ntile(u_loc, 3),
+           `terc_Global Utility` = ntile(u_glb, 3),
+           terc_Fairness = ntile(f, 3)) %>%
+    select(draw, n_dem, e_dem, u_loc, u_glb, f, starts_with("terc_")) %>%
+    as_tibble()
+d_plot = number_by(pl$distr, dem) %>%
+    left_join(d_plot, by="draw") %>%
+    pivot_longer(starts_with("terc_"), names_to="qty",
+                 values_to="tercile", names_prefix="terc_")
+
+ggplot(d_plot, aes(as.factor(district), dem, fill=as.factor(tercile))) +
+    facet_grid(qty ~ .) +
+    geom_hline(yintercept=0.5, lty="dashed") +
+    geom_boxplot(size=0.3, outlier.size=0.1) +
+    scale_y_continuous("Democratic two-party share", labels=percent) +
+    labs(x="Districts, ordered by Democratic share",
+         fill="Tercile\nof measure") +
+    scale_fill_wa_d("sound_sunset", which=c(1, 8, 13)) +
+    theme_repr()
+ggsave("paper/figures/nj_terciles.pdf", width=6.5, height=6)
+
+
+
 plot(nj, rowMeans(pl$mat > 0.5)) + scale_fill_party_c()
 
 
