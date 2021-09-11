@@ -19,9 +19,8 @@ keywords:
   - representation
   - redistricting simulation
   - individual standing
-citation_package: biblatex
 bibliography: references.bib
-biblio-style: apa
+biblio-style: apalike
 output: 
   rticles::arxiv_article:
     keep_tex: true
@@ -50,26 +49,26 @@ Yet this misses that parties are formed by voters who ally with parties.
 Rather than considering parties, we ask how individuals are harmed or benefited by the districting process?
 
 Decades of literature on redistricting have focused on the fairness to parties.
-This literature defers to symmetric outcomes for parties, commonly referred to as partisan symmetry \cite{a:bunch:of:king}.
+This literature defers to symmetric outcomes for parties, commonly referred to as partisan symmetry [@katz2020].
 Partisan symmetry is a useful idea which greatly improves academic understanding of the redistricting process.
-We Why is it hard?
+Why is it hard?
 Understanding the redistricting process requires a feasible and reliable understanding of the counterfactual set of redistricting plans.
-Early methodologies for simulating plans relied on randomness to generate many different plans and enhanced understanding of redistricting greatly \\citep{ciri:etal:00, chen:rodd:13, defO:duch:solo:21.
+Early methodologies for simulating plans relied on randomness to generate many different plans and enhanced understanding of redistricting greatly [@ciri:etal:00; @chen:rodd:13; @defO:duch:solo:21].
 These methods greatly enhanced the understanding of redistricting within contexts of a particular state with set populations.
-Yet, without a known target distribution, these heuristic approaches to simulation fall do not offer necessary guarantees for confidence in the simulated plans to represent the total space of possible plans \cite{fife:etal:20b}.
-Recent advances in Markov Chain methods as applied to redistricting allow us move beyond simulation towards sampling plans from this definable space \\cite{fife:etal:20, mcca:imai:20, autr:etal:21}.
+Yet, without a known target distribution, these heuristic approaches to simulation fall do not offer necessary guarantees for confidence in the simulated plans to represent the total space of possible plans [@fifield2020essential].
+Recent advances in Markov Chain methods as applied to redistricting allow us move beyond simulation towards sampling plans from this definable space [@fifield2020mcmc; @carter2019; @deford2019; @mccartan2020].
 
-Using sampling methods, we can then develop a reliable counterfactual that can be tuned to consider the samping constraints imposed by the laws and practices of a state.
+Using sampling methods, we can then develop a reliable counterfactual that can be tuned to consider the sampling constraints imposed by the laws and practices of a state.
 This counterfactual allows us to characterize the likely plans from a state.
 Often, we can would then call this an ensemble analysis, which is a flexible approach to sampling redistricting plans by simulation, relying on large numbers of plans for stability \cite{matt:etal:21} or sufficient diversity of nearly-independent plans \cite{kenn:etal:forth}.
-using this counterfactual, we thus create measures of harm, utility, and fairness which are based on a single plan compared to a set of other reasonable and feasible plans which encorporate the necessary legal constraints to make a plan viable.
+using this counterfactual, we thus create measures of harm, utility, and fairness which are based on a single plan compared to a set of other reasonable and feasible plans which incorporate the necessary legal constraints to make a plan viable.
 
 We offer a reminder that geographic context is key to understanding common problems in political science..
 Elections themselves are geographically determined.
 Recent research offers important resolution of the degree of partisan sorting in the US \cite{brow:enos:something}.
 By combining those understandings with the necessities of redistricting, we are able to expand the localized aspect of harm.
 Further, we suggest that while the efficiency gap may not incorporate geographic information, it often helps capture individual harm better than other common measures.
-This is a great benefit as an indicator to detect extreme gerrymanders in cases where sufficiently local geographic data to simulate plans is not available.\
+This is a great benefit as an indicator to detect extreme gerrymanders in cases where sufficiently local geographic data to simulate plans is not available.
 We further clarify that common existing measures of partisan fairness -- while they may capture the difficulties offered to a party -- do not necessarily capture the representational harms incurred by individuals who live in districts which do not at all represent their preferences.
 
 Our metrics offer a framework for understanding approximately individual harms, benefits, and net fairness.
@@ -264,7 +263,8 @@ Then we may define the harm to a voter as $h:\Voters\times\Elecs\times\Plans^2\t
 
 Harm is defined using the local, not global, utility measure, because inherently, global utility (and thus harm) will be constant for all voters of a particular party.
 In fact, a harm measure defined analogously using global utility would essentially be a difference in seats won by a voter's party between plans $q$ and $\tilde q$ (the exact form would be affected by the function $g$).
-This measure is not particularly interesting, and nor is it novel, being a standard measure of partisan harm in simulation-based redistricting litigation, up to a monotonic transformation [@2018league; @2019rucho; @2019lewis]. **[CM: revisit ¶ based on NJ findings]****.**
+This measure is not particularly interesting, and nor is it novel, being a standard measure of partisan harm in simulation-based redistricting litigation, up to a monotonic transformation [@2018league; @2019rucho; @2019lewis].
+**[CM: revisit ¶ based on NJ findings].**
 
 As with the utility measures, this harm measure naturally extends to multiple elections and districting plans.
 Make the counterfactual plan a random variable $\tilde Q$, with $(V,Q,\tilde Q)\sim\pi$ such that $Q\indep\tilde Q$.
@@ -351,7 +351,8 @@ We propose a *proportionate uniform shift* model, which focuses on swings in the
 Each election outcome over the period of interest (generally ten years or less) is modeled as a random deviation from a baseline outcome, and these deviations are assumed to consist of a constant fraction of voters of one party in each precinct switching to the other.
 The baseline itself can be established by averaging the results of all available statewide elections over the past decade or other suitable period.
 
-The proportionate uniform shift model is not mathematically equivalent to the uniform partisan swing model of @butler1951swing, but is near-identical for most precincts and districts. Despite their simplicity, uniform-swing--type models are highly accurate for out-of-sample prediction [@katz2020], and are intuitive and easy to implement.
+The proportionate uniform shift model is not mathematically equivalent to the uniform partisan swing model of @butler1951swing, but is near-identical for most precincts and districts.
+Despite their simplicity, uniform-swing--type models are highly accurate for out-of-sample prediction [@katz2020], and are intuitive and easy to implement.
 
 The proportionate shift, where we assume that a constant fraction of *voters of one party* in each precinct switch to the other party, has several advantages over the uniform swing model, where a constant fraction of *all voters* shifts parties.
 First, the proportionate shift prevents hypothetical party vote shares from exceeding 1 or falling below 0 in any precinct.
@@ -374,7 +375,9 @@ Appendix \ref{app:formulas} contains the specific formulas used to compute $U^{(
 
 # Connections to Partisan Symmetry and Fairness, Standards {#sec:connections}
 
-Over the past decade [**CM: correct?!**], researchers have developed a veritable zoo of measures to identify partisan gerrymanders. Specifically, these measures aim to quantify deviations from partisan symmetry, fairness, or competitiveness. Some of the most commonly used are perhaps the *efficiency gap* [@stephanopoulos2015], *partisan bias* [@tufte1973pb; @king1987democratic], and the *mean-median* measure [@mcdonald2015unfair; @wang2016three].
+Over the past decade [**CM: correct?!**], researchers have developed a veritable zoo of measures to identify partisan gerrymanders.
+Specifically, these measures aim to quantify deviations from partisan symmetry, fairness, or competitiveness.
+Some of the most commonly used are perhaps the *efficiency gap* [@stephanopoulos2015], *partisan bias* [@tufte1973pb; @king1987democratic], and the *mean-median* measure [@mcdonald2015unfair; @wang2016three].
 All of these measures may be estimated using district vote shares.
 
 ## The Efficiency Gap
@@ -468,3 +471,4 @@ include_graphics(here("paper/figures/nj_maps.pdf"))
     Need only to apply a kernel function (composition of Laplace ICDF + model shift CDF)
 
 Formulas here.
+
