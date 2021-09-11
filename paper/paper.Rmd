@@ -423,6 +423,7 @@ include_graphics(here("paper/figures/nj_maps.pdf"))
 ```
 
 Figure \ref{fig:nj-maps} shows the baseline Democratic vote share by precinct, along with two hypothetical gerrymanders of the state, which were generated using the short-burst optimization approach of @cannon2020.
+The Democratic gerrymander has 11 Democratic seats and 1 Republican seat at baseline, while the Republican gerrymander has 6 Democratic and 6 Republican seats.
 
 # Discussion {#sec:discussion}
 
@@ -431,10 +432,12 @@ Figure \ref{fig:nj-maps} shows the baseline Democratic vote share by precinct, a
 ::: {#refs}
 :::
 
+```{=tex}
 \clearpage
-
 \appendix
-
+\renewcommand\thefigure{\thesection.\arabic{figure}}
+\setcounter{figure}{0}
+```
 # Proofs of Propositions {#app:proofs}
 
 ```{=tex}
@@ -464,3 +467,9 @@ Figure \ref{fig:nj-maps} shows the baseline Democratic vote share by precinct, a
     Need only to apply a kernel function (composition of Laplace ICDF + model shift CDF)
 
 Formulas here.
+
+# Relationship Between Districting Metrics in New Jersey {#app:nj}
+
+```{r nj-pairs, fig.cap="Scatterplots for all pairs of metrics. Color indicates the number of Democratic seats won (ranging from 7 to 10). Below the diagonal, numbers indicate the absolute value of the correlation between variables.", fig.width=7, fig.height=7}
+include_graphics(here("paper/figures/nj_pairs.pdf"))
+```
