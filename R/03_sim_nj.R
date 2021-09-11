@@ -46,9 +46,37 @@ ggsave(here("paper/figures/nj_maps.pdf"), plot=p, width=8, height=4.5)
 
 
 # variables plot -----
-meas_labels = labels=c("Expected\nDem. seats", expression(U^G), expression(U^L),
-                       "F(q)", "H", "Efficiency\ngap", "Partisan\nbias", "Mean-median")
-select(pl$plan, n_dem, e_dem, u_glb, u_loc, f, h, egap, pbias, mean_med)
+meas_labels = c(e_dem="Expected\nDem. seats", u_glb=expression(U^G), u_loc=expression(U^L),
+                f="F(q)", h="H", egap="Efficiency\ngap", pbias="Partisan\nbias", mean_med="Mean-median")
+plot_var = function(nm, i) { suppressMessages({
+    lab = meas_labels[nm]
+    if (str_detect(as.character(lab), "\n"))
+        lab = str_replace(lab, "\n", " ")
+    p = hist(pl$plan, !!ensym(nm), fill="#aaaaaa", bins=32) +
+        scale_color_party_d(guide="none") +
+        labs(x=NULL, title=lab) +
+        scale_y_continuous(name = if (i %% 4 == 1) "Fraction of plans" else NULL,
+                           labels=function(x) percent(x, 1),
+                           limits=c(0, 0.405), expand=expansion(mult=c(0, 0.05))) +
+        theme_repr() +
+        theme(plot.title=element_text(size=10),
+              panel.grid.minor=element_blank(),
+              panel.grid.major.x=element_blank())
+    if (min(pl$plan[[nm]]) < 0 & max(pl$plan[[nm]]) > 0)
+        p = p + geom_vline(xintercept=0, lty="dashed", size=0.25)
+    if (nm == "e_dem")
+        p = p + geom_vline(xintercept=statewide*12, lty="dashed", size=0.25) +
+            annotate("label", x=statewide*12, y=0.35, label="Proportional share",
+                     family="Times", size=2.5, hjust=-0.05, label.size=0,
+                     label.r=unit(0, "pt"), label.padding=unit(1, "pt"))
+    if (i %% 4 != 1)
+        p = p + theme(axis.text.y=element_blank(),
+                      axis.ticks.y=element_blank())
+    p
+})}
+p = imap(names(meas_labels), plot_var) %>%
+    wrap_plots(nrow=2, ncol=4)
+ggsave(here("paper/figures/nj_vars.pdf"), plot=p, width=8, height=4)
 
 
 

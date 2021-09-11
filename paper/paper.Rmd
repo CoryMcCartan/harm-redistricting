@@ -418,12 +418,20 @@ As discussed above, many gerrymandering metrics function well in highly competit
 New Jersey, with an average Democratic two-party vote share of 56.6% across our two baseline elections (2016 presidential and 2018 senatorial), will demonstrate that this is not a problem unique to lopsided states.
 Additionally, New Jersey has 12 congressional districts, which is enough to produce some variability in seats outcomes across counterfactual plans, but not so many as to render trivial the challenges of discreteness.
 
-```{r nj-maps, fig.cap="Baseline vote patterns, and two hypothetical gerrymanders.", fig.width=6.5, fig.height=3.5}
+```{r nj-maps, fig.cap="Baseline vote patterns, and two hypothetical gerrymanders. Census-designated places are shaded in gray.", fig.width=6.5, fig.height=3.5}
 include_graphics(here("paper/figures/nj_maps.pdf"))
 ```
 
 Figure \ref{fig:nj-maps} shows the baseline Democratic vote share by precinct, along with two hypothetical gerrymanders of the state, which were generated using the short-burst optimization approach of @cannon2020.
 The Democratic gerrymander has 11 Democratic seats and 1 Republican seat at baseline, while the Republican gerrymander has 6 Democratic and 6 Republican seats.
+
+We sample 1,000 districting plans using the SMC algorithm of @mccartan2020, setting constraints to favor compact plans with district boundaries that tend to follow county lines.
+For each of these sampled plans and the two gerrymanders, we calculate the utility, harm, and fairness measures, as well as the expected number of Democratic seats, the efficiency gap, partisan bias, and the mean-median score.
+The distribution of these measures is shown in Figure \ref{fig:nj-vars}.
+
+```{r nj-vars, fig.cap="Distributions of districting measures for simulated New Jersey distriting plans, the Republican gerrymander (red), and the Democratic gerrymander (blue).", fig.width=6.5, fig.height=3.25}
+include_graphics(here("paper/figures/nj_vars.pdf"))
+```
 
 # Discussion {#sec:discussion}
 
