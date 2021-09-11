@@ -398,13 +398,16 @@ But, as briefly discussed above, this actually runs counter to the local utility
 @brunell2010 discusses this point in much more detail, arguing that competitive districts should be avoided where possible.
 Buttressing our choice of local utility function, he analyzes ANES survey data to show that voters approve more highly of their representative and of Congress overall when their representative votes in alignment with their preferences.
 
-# Real-world Example {#sec:empirical}
+# Application: New Jersey {#sec:empirical}
 
-1.  New Jersey
+To illustrate the connections in the preceding section and to demonstrate the value of the proposed measures in a real-world setting, we provide a brief analysis of congressional districting in the state of New Jersey.
+As discussed above, many gerrymandering metrics function well in highly competitive states, but may produce more counterintuitive results in other states.
+New Jersey, with an average Democratic two-party vote share of 56.6% across our two baseline elections (2016 presidential and 2018 senatorial), will demonstrate that this is not a problem unique to lopsided states.
+Additionally, New Jersey has 12 congressional districts, which is enough to produce some variability in seats outcomes across counterfactual plans, but not so many as to render trivial the challenges of discreteness.
 
-    1.  Not a 50-50 state
-
-    2.  moderate number of districts
+```{r nj-maps, fig.cap="Baseline vote patterns, and two hypothetical gerrymanders.", fig.width=6.5, fig.height=3.5}
+include_graphics(here("paper/figures/nj_maps.pdf"))
+```
 
 ```{r nj-vars, fig.cap="Various measures for an ensemble of New Jersey districting plans.", fig.width=6.5, fig.height=6.5}
 #include_graphics(here("out/nj_vars.pdf"))

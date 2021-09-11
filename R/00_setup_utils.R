@@ -96,14 +96,14 @@ plot_cds = function(map, pl, county, abbr, qty="ndv") {
         theme_void()
 }
 
-expl_vars = function(pl, ...) {
+expl_vars = function(pl, labels, ...) {
     panel.hist <- function(x, ...) {
         usr <- par("usr"); on.exit(par(usr))
         par(usr = c(usr[1:2], 0, 1.5) )
         h <- hist(x, plot = FALSE)
         breaks <- h$breaks; nB <- length(breaks)
         y <- h$counts; y <- y/max(y)
-        rect(breaks[-nB], 0, breaks[-1], y, col="gray")
+        rect(breaks[-nB], 0, breaks[-1], y, family="Times", col="gray")
     }
     panel.cor <- function(x, y, digits = 2, prefix = "", ...) {
         usr <- par("usr"); on.exit(par(usr))
@@ -111,17 +111,17 @@ expl_vars = function(pl, ...) {
         r <- abs(cor(x, y, use="complete.obs"))
         txt <- format(c(r, 0.123456789), digits = digits)[1]
         txt <- paste0(prefix, txt)
-        text(0.5, 0.5, txt, cex=2.5*sqrt(r), offset=0, adj=c(0.5, 0.5))#cex.cor)
+        text(0.5, 0.5, txt, cex=2.5*sqrt(r), family="Times", offset=0, adj=c(0.5, 0.5))#cex.cor)
     }
     panel.points <- function(x, y, ...) {
-        points(x, y, ...)
+        points(x, y, family="Times", ...)
         abline(h=0, v=0, lty="dashed")
     }
-    seats_vec = as.integer(as.factor(pl$plan$n_dem))
-    select(pl$plan, ...) %>%
-        pairs(cex=0.2, gap=0.5,
-              lower.panel=panel.cor, diag.panel=panel.hist, upper.panel=panel.points,
-              col=wa_pal("sea_star", n=max(seats_vec))[seats_vec])
+    seats_vec = as.integer(as.factor(pl$n_dem))
+    pairs(select(pl, -n_dem), labels=labels,
+          cex=0.2, gap=0.5, family="Times", cex.labels=0.9, ...,
+          lower.panel=panel.cor, diag.panel=panel.hist, upper.panel=panel.points,
+          col=wa_pal("sea_star", n=max(seats_vec))[seats_vec])
 }
 
 # downloads data for state `abbr` to `folder/{abbr}_2020_*.csv` and returns path to file

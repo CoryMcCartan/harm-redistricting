@@ -4,7 +4,17 @@ nj = read_rds(here("data/NJ_cd_final_vtd_20.rds")) %>%
 if (!file.exists(sim_path <- here("data/nj_sims.rds"))) {
     N_sim = 1000
     plans = redist_smc(nj, N_sim, counties=county, pop_temper=0.01, verbose=TRUE)#FALSE)
-    write_rds(plans, sim_path, compress="xz")
+
+    # gerrymanders
+    set.seed(5118)
+    opt_dem = redist_shortburst(nj, scorer_group_pct(nj, ndv, ndv+nrv, 11))
+    set.seed(5118)
+    opt_rep = redist_shortburst(nj, scorer_group_pct(nj, nrv, ndv+nrv, 6))
+
+    plans %>%
+        add_reference(last_plan(opt_dem), "dem_gerry") %>%
+        add_reference(last_plan(opt_rep), "rep_gerry") %>%
+        write_rds(sim_path, compress="xz")
 } else {
     plans = read_rds(sim_path)
 }
@@ -14,8 +24,38 @@ prop_seats = round(attr(nj, "ndists") * statewide)
 
 pl = calc_plans_stats(plans, nj, ndv, nrv)
 
+# Initial plots
+p1 = ggplot(nj, aes(fill=ndv/(ndv+nrv))) +
+    geom_sf(size=0, color="#00000000") +
+    scale_fill_party_c(limits=c(0.15, 0.85)) +
+    labs(title="(a) Partisan patterns") +
+    theme_repr_map() +
+    theme(plot.title = element_text(hjust = 0.5))
+p2 = plot_cds(nj, as.matrix(plans)[,"dem_gerry"], county, "NJ") +
+    labs(title="(b) Democratic gerrymander") +
+    scale_fill_party_c(limits=c(0.15, 0.85)) +
+    theme_repr_map() +
+    theme(plot.title = element_text(hjust = 0.5))
+p3 = plot_cds(nj, as.matrix(plans)[,"rep_gerry"], county, "NJ") +
+    labs(title="(c) Republican gerrymander") +
+    scale_fill_party_c(limits=c(0.15, 0.85)) +
+    theme_repr_map() +
+    theme(plot.title = element_text(hjust = 0.5))
+p = p1 + p2 + p3 + plot_layout(guides="collect")
+ggsave(here("paper/figures/nj_maps.pdf"), plot=p, width=8, height=4.5)
+
+
+
+
 pdf("out/nj_vars.pdf", 9, 9)
 expl_vars(pl, e_dem, u_glb, u_loc, f, f_glb, h, egap, pbias, mean_med, competitive)
+dev.off()
+
+pdf("out/nj_vars2.pdf", 9, 9)
+subset_sampled(pl$plan) %>%
+    select(n_dem, e_dem, u_glb, u_loc, f, h, egap, pbias, mean_med) %>%
+    expl_vars(labels=c("Expected\nDem. seats", expression(U^G), expression(U^L),
+                       "F(q)", "H", "Efficiency\ngap", "Partisan\nbias", "Mean-median"))
 dev.off()
 
 select(pl$plan, e_dem, u_glb, u_loc, f, egap, pbias, mean_med, competitive) %>%

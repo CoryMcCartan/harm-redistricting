@@ -172,7 +172,7 @@ calc_plans_stats = function(plans, map, dem, gop, ker=k_t()) {
     statewide = sum(dvote) / (sum(dvote) + sum(rvote))
     ndists = attr(map, "ndists")
     n_ref = redist:::get_n_ref(plans)
-    idx_2 = if (n_ref > 1) -seq_len(-n_ref) else seq_len(ncol(as.matrix(plans)))
+    idx_2 = if (n_ref > 1) -seq_len(n_ref) else seq_len(ncol(as.matrix(plans)))
 
     plans = plans %>%
         mutate(dev = plan_parity(map),
