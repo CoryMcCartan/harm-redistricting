@@ -418,7 +418,7 @@ As discussed above, many gerrymandering measures function well in highly competi
 New Jersey, with an average Democratic two-party vote share of 56.6% across our two baseline elections (2016 presidential and 2018 senatorial), will demonstrate that this is not a problem unique to lopsided states.
 Additionally, New Jersey has 12 congressional districts, which is enough to produce some variability in seats outcomes across counterfactual plans, but not so many as to render trivial the challenges of discreteness.
 
-```{r nj-maps, fig.cap="Baseline vote patterns, and two hypothetical gerrymanders. Census-designated places are shaded in gray.", fig.width=6.5, fig.height=3.5}
+```{r nj-maps, fig.cap="Baseline vote patterns, and two hypothetical gerrymanders. Census-designated places are shaded in gray and county lines in white.", fig.width=6.5, fig.height=3.5}
 include_graphics(here("paper/figures/nj_maps.pdf"))
 ```
 
@@ -435,11 +435,10 @@ include_graphics(here("paper/figures/nj_vars.pdf"))
 
 The efficiency gap and $F(q)$ both correctly classify the gerrymandered plans as such, and with the correct sign.
 Both gerrymanders also have a higher average harm than any of the simulated plans.
-In contrast, under the partisan bias measure the Republican gerrymander is completely unbiased.
-And according to the mean-median measure both gerrymanders strongly favor Democrats.
+In contrast, under the partisan bias measure the Republican gerrymander is completely unbiased, and according to the mean-median measure, both gerrymanders strongly favor Democrats.
+
 For the utility measures, the Democratic plan is a low-utility outlier.
 But the Republican plan is near the median for both global and local utility.
-
 How to square this with the finding that the Republican plan is an unfair gerrymander which harms more voters than expected under a neutral process?
 As the distribution of expected Democratic seats shows, Democrats are structurally favored in New Jersey, able to win a larger fraction of seats than their statewide vote share under a neutral process.
 Plans which actively counteract this to try to draw proportional districts, like the Republican gerrymander, will necessarily harm Democratic voters versus the neutral counterfactual.
