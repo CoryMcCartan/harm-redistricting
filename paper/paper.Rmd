@@ -414,7 +414,7 @@ Buttressing our choice of local utility function, he analyzes ANES survey data t
 # Application: New Jersey {#sec:empirical}
 
 To illustrate the connections in the preceding section and to demonstrate the value of the proposed measures in a real-world setting, we provide a brief analysis of congressional districting in the state of New Jersey.
-As discussed above, many gerrymandering metrics function well in highly competitive states, but may produce more counterintuitive results in other states.
+As discussed above, many gerrymandering measures function well in highly competitive states, but may produce more counterintuitive results in other states.
 New Jersey, with an average Democratic two-party vote share of 56.6% across our two baseline elections (2016 presidential and 2018 senatorial), will demonstrate that this is not a problem unique to lopsided states.
 Additionally, New Jersey has 12 congressional districts, which is enough to produce some variability in seats outcomes across counterfactual plans, but not so many as to render trivial the challenges of discreteness.
 
@@ -432,6 +432,18 @@ The distribution of these measures is shown in Figure \ref{fig:nj-vars}.
 ```{r nj-vars, fig.cap="Distributions of districting measures for simulated New Jersey distriting plans, the Republican gerrymander (red), and the Democratic gerrymander (blue).", fig.width=6.5, fig.height=3.25}
 include_graphics(here("paper/figures/nj_vars.pdf"))
 ```
+
+The efficiency gap and $F(q)$ both correctly classify the gerrymandered plans as such, and with the correct sign.
+Both gerrymanders also have a higher average harm than any of the simulated plans.
+In contrast, under the partisan bias measure the Republican gerrymander is completely unbiased.
+And according to the mean-median measure both gerrymanders strongly favor Democrats.
+For the utility measures, the Democratic plan is a low-utility outlier.
+But the Republican plan is near the median for both global and local utility.
+
+How to square this with the finding that the Republican plan is an unfair gerrymander which harms more voters than expected under a neutral process?
+As the distribution of expected Democratic seats shows, Democrats are structurally favored in New Jersey, able to win a larger fraction of seats than their statewide vote share under a neutral process.
+Plans which actively counteract this to try to draw proportional districts, like the Republican gerrymander, will necessarily harm Democratic voters versus the neutral counterfactual.
+But in doing so they will create a more proportional plan that will tend to pack voters of each party into more homogeneous districts, increasing both global and local utility.
 
 # Discussion {#sec:discussion}
 
