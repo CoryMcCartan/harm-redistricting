@@ -82,42 +82,6 @@ if (!file.exists(path <- here("paper/figures/nj_vars.pdf")))
 
 
 
-# terciles plot -----
-
-d_plot = pl$plan %>%
-    subset_sampled() %>%
-    mutate(terc_u_loc = ntile(u_loc, 5),
-           terc_u_glb = ntile(u_glb, 5),
-           terc_f = ntile(-abs(f), 5)) %>%
-    mutate(across(starts_with("terc_"), ~ if_else(. %in% 2:4, 3L, .))) %>%
-    select(draw, n_dem, e_dem, u_loc, u_glb, f, starts_with("terc_")) %>%
-    as_tibble()
-d_plot = number_by(pl$distr, dem) %>%
-    inner_join(d_plot, by="draw") %>%
-    pivot_longer(starts_with("terc_"), names_to="qty",
-                 values_to="tercile", names_prefix="terc_")
-
-terc_labs = c("Bottom 20%", "", "Middle 60%", "", "Top 20%")
-meas_labels = c(u_glb="U^(G)", u_loc="U^(L)", f="-abs(F(q))")
-p = d_plot %>%
-    mutate(qty = meas_labels[qty],
-           tercile = ordered(terc_labs[tercile], levels=terc_labs[c(1, 3, 5)])) %>%
-ggplot(aes(as.factor(district), dem, fill=tercile)) +
-    facet_grid(. ~ qty, labeller=label_parsed) +
-    geom_hline(yintercept=0.5, lty="dashed") +
-    geom_boxplot(size=0.2, outlier.size=0.05, width=0.8) +
-    #geom_violin(bw=0.001, size=0.2) +
-    scale_y_continuous("Democratic two-party share", labels=\(x) percent(x, 1)) +
-    labs(x="Districts, ordered by Democratic share",
-         fill="Quantile\nof measure") +
-    scale_fill_wa_d("sea_star", which=c(3, 9, 15)) +
-    theme_repr() +
-    theme(legend.position=c(0.9, 0.15),
-          legend.background=element_blank())
-if (!file.exists(path <- here("paper/figures/nj_district_shares.pdf")))
-    ggsave(path, plot=p, width=8, height=4.5)
-
-
 # best / worst
 find_best = function(qty1, qty2=NULL) {
     p = subset_sampled(pl$plan)
@@ -131,24 +95,21 @@ find_best = function(qty1, qty2=NULL) {
     }
 }
 
-comp_plans = list(
-    Fairest = find_best(-abs(f)),
-    `Best overall utility` = find_best(u_loc, u_glb),
-    `High global, low local utility` = find_best(-u_loc, u_glb),
-    `Low global, high local utility` = find_best(u_loc, -u_glb),
-    `Fair but low local utility` = find_best(-abs(f), -u_loc),
-    `Unfair but high local utility` = find_best(abs(f), u_loc)
-)
-
-
-comp_pl = imap(comp_plans, function(x, nm) {
-    pl$distr %>%
-        filter(as.character(draw) == as.character(x)) %>%
-        mutate(draw = nm)
-}) %>%
+comp_pl = list(Fairest = find_best(-abs(f)),
+               `Best overall utility` = find_best(u_loc, u_glb),
+               `High global, low local utility` = find_best(-u_loc, u_glb),
+               `Low global, high local utility` = find_best(u_loc, -u_glb),
+               `Fair but low local utility` = find_best(-abs(f), -u_loc),
+               `Unfair but high local utility` = find_best(abs(f), u_loc)) %>%
+    imap(function(x, nm) {
+        pl$distr %>%
+            filter(as.character(draw) == as.character(x)) %>%
+            mutate(draw = nm)
+    }) %>%
     do.call(rbind, .) %>%
     mutate(draw = fct_inorder(draw)) %>%
     number_by(dem)
+
 p = plot(subset_sampled(pl$distr), dem, coef=100, size=0, geom="boxplot") +
     geom_hline(yintercept=0.5, lty="dashed") +
     geom_boxplot(fill="#eeeeee", color="#777777", size=0.25, coef=100) +
@@ -164,6 +125,18 @@ p = plot(subset_sampled(pl$distr), dem, coef=100, size=0, geom="boxplot") +
           panel.grid.major.x=element_blank())
 if (!file.exists(path <- here("paper/figures/nj_district_shares.pdf")))
     ggsave(path, plot=p, width=8, height=5)
+
+
+ex_plots = map(seq_len(n_distinct(comp_pl$draw)), function(i) { suppressMessages({
+    plot_cds(nj, as.matrix(comp_pl)[, i], county, "NJ") +
+        labs(title=levels(comp_pl$draw)[i]) +
+        scale_fill_party_c(limits=c(0.15, 0.85)) +
+        theme_repr_map() +
+        theme(plot.title = element_text(hjust = 0.5))
+})})
+p = wrap_plots(ex_plots, nrow=2) + plot_layout(guides="collect")
+if (!file.exists(path <- here("paper/figures/nj_ex_maps.pdf")))
+    ggsave(path, plot=p, width=8, height=8)
 
 
 # appendix pairs plot ----

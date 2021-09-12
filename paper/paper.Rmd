@@ -451,13 +451,14 @@ As the distribution of expected Democratic seats shows, Democrats are structural
 Plans which actively counteract this to try to draw proportional districts, like the Republican gerrymander, will necessarily harm Democratic voters versus the neutral counterfactual.
 But in doing so they will create a more proportional plan that will tend to pack voters of each party into more homogeneous districts, increasing both global and local utility.
 
-```{r nj-district-shares, fig.cap="Distribution of district vote shares, with districts ordrered by Democratic two-part vote share, and divided by quantile for each of three districting measures.", fig.width=6.5, fig.height=4.875}
+```{r nj-district-shares, fig.cap="Distribution of district vote shares, with districts ordrered by baseline Democratic two-part vote share. Displayed on top are the district vote shares for six example plans, each extremal for some combination of districting measures.", fig.width=6.5, fig.height=3.9}
 include_graphics(here("paper/figures/nj_district_shares.pdf"))
 ```
 
 This is manifested in the district-level vote shares shown in Figure \ref{fig:nj-district-shares}.
 Within each districting plan, we number districts in order of their Democratic vote share, with district 1 the least Democratic.
-The figure shows the distribution of these vote shares for each ordered district, but broken out according to each plan's values of $F(q)$, $U^{(G)}$, and $U^{(L)}$.
+The figure shows these vote shares for six selected districting plans, and compares them to the distribution of shares for the entire sample.
+The selected plans themselves are shown in Appendix \ref{app:nj}.
 
 # Discussion {#sec:discussion}
 
@@ -502,8 +503,12 @@ The figure shows the distribution of these vote shares for each ordered district
 
 Formulas here.
 
-# Relationship Between Districting Metrics in New Jersey {#app:nj}
+# Districting Measures in New Jersey {#app:nj}
 
-```{r nj-pairs, fig.cap="Scatterplots for all pairs of metrics. Color indicates the number of Democratic seats won (ranging from 7 to 10). Below the diagonal, numbers indicate the absolute value of the correlation between variables.", fig.width=7, fig.height=7}
+```{r nj-pairs, fig.cap="Scatterplots for all pairs of measures. Color indicates the number of Democratic seats won (ranging from 7 to 10). Below the diagonal, numbers indicate the absolute value of the correlation between variables.", fig.width=7, fig.height=7}
 include_graphics(here("paper/figures/nj_pairs.pdf"))
+```
+
+```{r nj-ex-maps, fig.cap="Example districting plans selected according to their scores on $F(q)$, $U^{(G)}$, and $U^{(L)}$. District shares for these example plans are shown in Figure \\ref{fig:nj-district-shares}.", fig.width=7, fig.height=7}
+include_graphics(here("paper/figures/nj_ex_maps.pdf"))
 ```
