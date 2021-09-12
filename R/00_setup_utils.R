@@ -119,9 +119,9 @@ expl_vars = function(pl, labels, ...) {
     }
     seats_vec = as.integer(as.factor(pl$n_dem))
     pairs(select(pl, -n_dem), labels=labels,
-          cex=0.2, gap=0.5, family="Times", cex.labels=0.9, ...,
+          cex=0.15, gap=0.5, family="Times", cex.labels=0.9, ...,
           lower.panel=panel.cor, diag.panel=panel.hist, upper.panel=panel.points,
-          col=wa_pal("sea_star", n=max(seats_vec))[seats_vec])
+          col=str_c(wa_pal("sea_star", n=max(seats_vec))[seats_vec], "a0"))
 }
 
 # downloads data for state `abbr` to `folder/{abbr}_2020_*.csv` and returns path to file

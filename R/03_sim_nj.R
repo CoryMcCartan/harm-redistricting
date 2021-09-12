@@ -2,19 +2,19 @@ nj = read_rds(here("data/NJ_cd_final_vtd_20.rds")) %>%
     redist_map(pop_tol=0.01, ndists=12, adj=.$adj)
 
 if (!file.exists(sim_path <- here("data/nj_sims.rds"))) {
-    N_sim = 1000
-    plans = redist_smc(nj, N_sim, counties=county, pop_temper=0.01, verbose=TRUE)#FALSE)
+    N_sim = 10000
+    plans = redist_smc(nj, N_sim, counties=county, pop_temper=0.005, verbose=TRUE)#FALSE)
 
     # gerrymanders
     set.seed(5118)
-    opt_dem = redist_shortburst(nj, scorer_group_pct(nj, ndv, ndv+nrv, 11))
+    opt_dem = redist_shortburst(nj, scorer_group_pct(nj, ndv, ndv+nrv, 11), max_bursts=800)
     set.seed(5118)
-    opt_rep = redist_shortburst(nj, scorer_group_pct(nj, nrv, ndv+nrv, 6))
+    opt_rep = redist_shortburst(nj, scorer_group_pct(nj, nrv, ndv+nrv, 6), max_bursts=800)
 
-    plans %>%
+    plans = plans %>%
         add_reference(last_plan(opt_dem), "dem_gerry") %>%
-        add_reference(last_plan(opt_rep), "rep_gerry") %>%
-        write_rds(sim_path, compress="xz")
+        add_reference(last_plan(opt_rep), "rep_gerry")
+    write_rds(plans, sim_path, compress="xz")
 } else {
     plans = read_rds(sim_path)
 }
@@ -42,7 +42,8 @@ p3 = plot_cds(nj, as.matrix(plans)[,"rep_gerry"], county, "NJ") +
     theme_repr_map() +
     theme(plot.title = element_text(hjust = 0.5))
 p = p1 + p2 + p3 + plot_layout(guides="collect")
-ggsave(here("paper/figures/nj_maps.pdf"), plot=p, width=8, height=4.5)
+if (!file.exists(path <- here("paper/figures/nj_maps.pdf")))
+    ggsave(path, plot=p, width=8, height=4.5)
 
 
 # variables plot -----
@@ -52,7 +53,7 @@ plot_var = function(nm, i) { suppressMessages({
     lab = meas_labels[nm]
     if (str_detect(as.character(lab), "\n"))
         lab = str_replace(lab, "\n", " ")
-    p = hist(pl$plan, !!ensym(nm), fill="#aaaaaa", bins=32) +
+    p = hist(pl$plan, !!ensym(nm), fill="#aaaaaa", bins=48) +
         scale_color_party_d(guide="none") +
         labs(x=NULL, title=lab) +
         scale_y_continuous(name = if (i %% 4 == 1) "Fraction of plans" else NULL,
@@ -76,38 +77,101 @@ plot_var = function(nm, i) { suppressMessages({
 })}
 p = imap(names(meas_labels), plot_var) %>%
     wrap_plots(nrow=2, ncol=4)
-ggsave(here("paper/figures/nj_vars.pdf"), plot=p, width=8, height=4)
+if (!file.exists(path <- here("paper/figures/nj_vars.pdf")))
+    ggsave(path, plot=p, width=8, height=4)
 
 
 
 # terciles plot -----
 
 d_plot = pl$plan %>%
-    mutate(`terc_Local Utility` = ntile(u_loc, 3),
-           `terc_Global Utility` = ntile(u_glb, 3),
-           terc_Fairness = ntile(f, 3)) %>%
+    subset_sampled() %>%
+    mutate(terc_u_loc = ntile(u_loc, 5),
+           terc_u_glb = ntile(u_glb, 5),
+           terc_f = ntile(-abs(f), 5)) %>%
+    mutate(across(starts_with("terc_"), ~ if_else(. %in% 2:4, 3L, .))) %>%
     select(draw, n_dem, e_dem, u_loc, u_glb, f, starts_with("terc_")) %>%
     as_tibble()
 d_plot = number_by(pl$distr, dem) %>%
-    left_join(d_plot, by="draw") %>%
+    inner_join(d_plot, by="draw") %>%
     pivot_longer(starts_with("terc_"), names_to="qty",
                  values_to="tercile", names_prefix="terc_")
 
-ggplot(d_plot, aes(as.factor(district), dem, fill=as.factor(tercile))) +
-    facet_grid(qty ~ .) +
+terc_labs = c("Bottom 20%", "", "Middle 60%", "", "Top 20%")
+meas_labels = c(u_glb="U^(G)", u_loc="U^(L)", f="-abs(F(q))")
+p = d_plot %>%
+    mutate(qty = meas_labels[qty],
+           tercile = ordered(terc_labs[tercile], levels=terc_labs[c(1, 3, 5)])) %>%
+ggplot(aes(as.factor(district), dem, fill=tercile)) +
+    facet_grid(. ~ qty, labeller=label_parsed) +
     geom_hline(yintercept=0.5, lty="dashed") +
-    geom_boxplot(size=0.3, outlier.size=0.1) +
-    scale_y_continuous("Democratic two-party share", labels=percent) +
+    geom_boxplot(size=0.2, outlier.size=0.05, width=0.8) +
+    #geom_violin(bw=0.001, size=0.2) +
+    scale_y_continuous("Democratic two-party share", labels=\(x) percent(x, 1)) +
     labs(x="Districts, ordered by Democratic share",
-         fill="Tercile\nof measure") +
-    scale_fill_wa_d("sound_sunset", which=c(1, 8, 13)) +
-    theme_repr()
-ggsave("paper/figures/nj_terciles.pdf", width=6.5, height=6)
+         fill="Quantile\nof measure") +
+    scale_fill_wa_d("sea_star", which=c(3, 9, 15)) +
+    theme_repr() +
+    theme(legend.position=c(0.9, 0.15),
+          legend.background=element_blank())
+if (!file.exists(path <- here("paper/figures/nj_district_shares.pdf")))
+    ggsave(path, plot=p, width=8, height=4.5)
+
+
+# best / worst
+find_best = function(qty1, qty2=NULL) {
+    p = subset_sampled(pl$plan)
+    x1 = eval_tidy(enquo(qty1), p)
+    if (missing(qty2)) {
+        p$draw[which.max(x1)]
+    } else {
+        x2 = eval_tidy(enquo(qty2), p)
+        x = as.numeric(scale(x1) + scale(x2))
+        p$draw[which.max(x)]
+    }
+}
+
+comp_plans = list(
+    Fairest = find_best(-abs(f)),
+    `Best overall utility` = find_best(u_loc, u_glb),
+    `High global, low local utility` = find_best(-u_loc, u_glb),
+    `Low global, high local utility` = find_best(u_loc, -u_glb),
+    `Fair but low local utility` = find_best(-abs(f), -u_loc),
+    `Unfair but high local utility` = find_best(abs(f), u_loc)
+)
+
+
+comp_pl = imap(comp_plans, function(x, nm) {
+    pl$distr %>%
+        filter(as.character(draw) == as.character(x)) %>%
+        mutate(draw = nm)
+}) %>%
+    do.call(rbind, .) %>%
+    mutate(draw = fct_inorder(draw)) %>%
+    number_by(dem)
+p = plot(subset_sampled(pl$distr), dem, coef=100, size=0, geom="boxplot") +
+    geom_hline(yintercept=0.5, lty="dashed") +
+    geom_boxplot(fill="#eeeeee", color="#777777", size=0.25, coef=100) +
+    geom_point(aes(district, dem, color=draw, shape=draw), position=position_dodge(0.8),
+                 data=comp_pl, inherit.aes=F, size=3.0) +
+    scale_shape_manual(values=c(18, 16, 15, 8, 7, 17)) +
+    scale_y_continuous("Democratic two-party share", labels=\(x) percent(x, 1)) +
+    labs(x="Districts, ordered by Democratic share",
+         color="Districting plan", shape="Districting plan") +
+    theme_repr() +
+    theme(legend.position=c(0.2, 0.8),
+          legend.background=element_blank(),
+          panel.grid.major.x=element_blank())
+if (!file.exists(path <- here("paper/figures/nj_district_shares.pdf")))
+    ggsave(path, plot=p, width=8, height=5)
 
 
 # appendix pairs plot ----
-pdf("paper/figures/nj_pairs.pdf", 9, 9)
-subset_sampled(pl$plan) %>%
-    select(n_dem, e_dem, u_glb, u_loc, f, h, egap, pbias, mean_med) %>%
-    expl_vars(labels=meas_labels)
-dev.off()
+if (!file.exists(path <- here("paper/figures/nj_pairs.pdf"))) {
+    pdf(path, 9, 9)
+    subset_sampled(pl$plan) %>%
+        slice_sample(n=1200) %>%
+        select(n_dem, e_dem, u_glb, u_loc, f, h, egap, pbias, mean_med) %>%
+        expl_vars(labels=meas_labels)
+    dev.off()
+}
