@@ -21,7 +21,7 @@ keywords:
   - individual standing
 bibliography: references.bib
 biblio-style: apalike
-output: 
+output:
   rticles::arxiv_article:
     keep_tex: true
     includes:
@@ -138,6 +138,8 @@ include_graphics(here("paper/figures/minis_schematic.pdf"))
 
 ## Outline of the Paper
 
+<!--  Section 1 here should really be what we're interested in I think -->
+
 Section \ref{sec:voter-util} provides the necessary notation and introduces our measures of voter utility.
 Section \ref{sec:indiv-harm} builds a measure of individual harm and a derived measure of partisan fairness from this notion of utility.
 Section \ref{sec:estimating} discusses estimating these measures from observed election results.
@@ -167,13 +169,13 @@ The set of all possible districting plans is $\Plans$.[^1]
     Once we aggregate or average across all voters in a party or district, the differences between these two approaches disappear.
 
 Votes may be tallied at the district level, by party, by defining for each party $p\in\Parties$ $$
-    \votes^{(p)}: \Distrs\times\Elecs\times\Plans \to \N, \qquad 
+    \votes^{(p)}: \Distrs\times\Elecs\times\Plans \to \N, \qquad
     \votes^{(p)}(d, v, q) = \sum_{i\in q^{-1}(d)} \ind_{\{p\}}(v(i)).
 $$ The political party of the candidate with the most votes wins each district, as captured by the function $$
-    \win: \Distrs\times\Elecs\times\Plans\to P, \qquad 
+    \win: \Distrs\times\Elecs\times\Plans\to P, \qquad
     \win(d, v, q) = \argmax_{p\in\Parties} \votes^{(p)}(d, v, q).
 $$Thus an individual voter $i\in\Voters$ is represented after election $v$ by political party $\win(q(i), v, q)$, and each political party can be said to win a number of seats, formalized as$$
-    \seats:\Parties\times\Elecs\times\Plans\to\N, 
+    \seats:\Parties\times\Elecs\times\Plans\to\N,
     \qquad \seats(p,v,q) = \sum_{d\in\Distrs} \ind_{\{p\}}(\win(d,v,q)).
 $$
 
@@ -181,7 +183,7 @@ $$
 
 We posit that a utility of the global election outcome to a voter is an increasing function of the share of total seats that the voter's preferred party wins.
 Their global outcome utility function for an election outcome $e\in\Elecs$ and districting plan $q\in\Plans$ can thus be written$$
-    u^{(G)}:\Voters\times\Elecs\times\Plans\to\R, 
+    u^{(G)}:\Voters\times\Elecs\times\Plans\to\R,
     \qquad u^{(G)}(i,v,q) = g\qty(\frac{\seats(v(i), v, q)}{|\Distrs|}),
 $$for $g:[0,1]\bijto\R$ an increasing function.
 
@@ -194,7 +196,7 @@ Proofs of this and all other propositions are deferred to Appendix \ref{app:proo
 Let $S=\{s_p:p\in\Parties\}$ be a set of party popular vote shares, and $f:[0,1]\bijto[0,1]$ be a rule for assigning each party a share of seats according to their share of the popular vote.
 Define the total utility for this rule as \[
     u_{\mathrm{tot}}^{(G)}(f, v) \dfeq \sum_{i\in\Voters} g\qty(f\qty(s_{v(i)})).
-\] 
+\]
 Then if $g$ is convex, $u_{\mathrm{tot}}^{(G)}$ is maximized for $f(x)=\ind_{[\max S, 1]}(x)$, and if $g$ is strictly concave, the maximizer of $u_{\mathrm{tot}}^{(G)}$ will be a strictly increasing function.
 In particular, if $g(x)=\log(x)$ and every party receives at least one vote, then $f(x)=x$ maximizes $u_{\mathrm{tot}}^{(G)}$.
 
@@ -206,7 +208,7 @@ Thus, if we are willing to adopt the logarithm for the functional specification 
 
 The specification of the utility of the local election outcome is more straightforward.
 We define$$
-    u^{(L)}:\Voters\times\Elecs\times\Plans\to\R, 
+    u^{(L)}:\Voters\times\Elecs\times\Plans\to\R,
     \qquad u^{(L)}(i,v,q) = \ind\{v(i)=\win(q(i), v, q)\},
 $$that is, a voter gains utility only if they winner of their legislative district belongs to their preferred political party.
 
@@ -377,24 +379,66 @@ Appendix \ref{app:formulas} contains the specific formulas used to compute $U^{(
 
 # Connections to Partisan Symmetry and Fairness, Standards {#sec:connections}
 
-Over the past decade [**CM: correct?!**], researchers have developed a veritable zoo of measures to identify partisan gerrymanders.
+In the years since Vieth [@2004vieth] researchers have developed a veritable zoo of measures to identify partisan gerrymanders.
 Specifically, these measures aim to quantify deviations from partisan symmetry, fairness, or competitiveness.
 Some of the most commonly used are perhaps the *efficiency gap* [@stephanopoulos2015], *partisan bias* [@tufte1973pb; @king1987democratic], and the *mean-median* measure [@mcdonald2015unfair; @wang2016three].
 All of these measures may be estimated using district vote shares.
+We now discuss the relationship between our measure and these three measures.
+<!-- chris thinks we shouldn't cite wang here because he copied mcdonald -->
 
 ## The Efficiency Gap
 
-1.  has been criticized [@tamcho2017egap; @bernstein2017egap; @deford2020symmetry]
+The efficiency gap interrogates how a party's votes were wasted in an election under a districting system.
+By comparing the wasted votes for Democrats to the wasted votes for Republicans, rescaled by the total votes cast, it offers a signed percent.
+Interpretation of the efficiency gap is intended to be straightforward and usable by courts.
+The sign indicates that a plan favors one party over another, while the magnitude indicates the degree of preference.
+The general recommendation for use in court is that a bias amounting to the size of two Congressional seats or 8% for state legislative plans would be deemed unacceptable.
+When we unpack the idea behind the efficiency gap, we see that it shares significant intuition with our measure $F(q)$.
+Both measures try to understand how individuals are rendered unable to effectively participate in democratic processes.
 
+Various criticisms of the efficiency gap have been made due to its potential for volatility in noncompetitive elections [@tamcho2017egap; @bernstein2017egap; @deford2020symmetry].
+By directly including simulated plans and electoral data in the formation of $F(q)$, despite shared intuition with the efficiency gap, our measure is not prey to this susceptibility.
+
+```{=html}
+<!--
+Further literature indicates that while the efficiency gap was originally introduced as a measure of partisan symmetry, "it does not imply a coherent seats--votes curve" and thus cannot be a measure of partisan symmetry [@katz2020].
+-->
+```
 ## Partisan Bias
 
+Partisan bias can be considered the classic measure of partisan symmetry.
+The bias is the number of seats that would need to be reallocated to make the system symmetric at a chosen statewide proportion of votes, often 0.50.
+It should not be surprising then that these measures differ often and greatly.
+
+Further, by relying on alternative districting plans, we do not necessitate the use of partisan swings.
+This is of great benefit in scenarios where swings must be so significant that they stray far from the data.
+Instead, the measures of harm and utility rely on $votes^{p}$ which can be model-free estimates of electoral performance of a party (namely historical election returns) or can be some sort of model, such as precinct-level election forecasts.
+Of course, the votes could even be generated by notions of partisan swings, but as a choice rather than a requirement.
+
+Notably, as the quantity of interest is not partisan symmetry, our measures do not require the existence of a seats-votes curve.
+This is consequential for the study of congressional redistricting.
+As a seats-votes curve is defined for a legislature, rather than a delegation, to understand the impact of single state's congressional map, you would be forced to consider how every other state drew their maps [@katz:king:rose:21a].
+Thus, if this taken as the definition of a seats-votes curve, then measures of partisan symmetry lack diagnostic power to identify gerrymanders for the delegations that academics, legal scholars, and the general public are often focused on.
+The individualized focus of our measures are, however, portable to congressional, state legislative, or any other form of districting and elections.
+
+```{=html}
+<!--
 1.  Integrating yields a related measure of @nagle2015measures, which has also been criticized by @deford2020symmetry.
 2.  Focuses on only one part of S-V curve, which may not be relevant
+-->
+```
+## Mean-Median Difference
 
-## Mean-Median
+Our measures greatly differ from the Mean-Median Difference.
+With the focus on individuals, the considerations of the mean district are only related to individuals in-so-far as they describe the general propensity to be harmed or benefited by a particular map.
+The consideration of a median district is similarly distanced.
+As with partisan bias, as our measures do not attempt to measure partisan symmetry, our measures can be applied to congressional delegations.
 
+```{=html}
+<!--
 1.  Like PB, focuses on only one part of S-V curve, which may not be relevant
-
+-->
+```
 ## Districting Plan Competitiveness {#sec:competitive}
 
 The notion of district *competitiveness*, while related to the slope of the seats-vote curve around $\half$, is not the same as partisan symmetry.
@@ -462,6 +506,8 @@ The selected plans themselves are shown in Appendix \ref{app:nj}.
 
 # Discussion {#sec:discussion}
 
+We should say something about the importance in developing further measures which utilize simulation approaches
+
 # References {.unnumbered}
 
 ::: {#refs}
@@ -512,3 +558,4 @@ include_graphics(here("paper/figures/nj_pairs.pdf"))
 ```{r nj-ex-maps, fig.cap="Example districting plans selected according to their scores on $F(q)$, $U^{(G)}$, and $U^{(L)}$. District shares for these example plans are shown in Figure \\ref{fig:nj-district-shares}.", fig.width=7, fig.height=7}
 include_graphics(here("paper/figures/nj_ex_maps.pdf"))
 ```
+
