@@ -2,7 +2,9 @@
 title: Measuring Individual Partisan Harm in Redistricting
 authors:
   - name: Cory McCartan
-    thanks: Footnote stuff
+    thanks: |
+      To whom correspondence should be addressed. 
+      The authors thank ____ for helpful comments and discussion.
     department: Department of Statistics
     affiliation: Harvard University
     location: Cambridge, MA
@@ -53,10 +55,7 @@ This literature defers to symmetric outcomes for parties, commonly referred to a
 Partisan symmetry is a useful idea which greatly improves academic understanding of the redistricting process.
 
 Understanding the redistricting process requires a feasible and reliable understanding of the counterfactual set of redistricting plans.
-Early methodologies for simulating plans relied on randomness to generate many different plans and enhanced understanding of redistricting greatly [@ciri:darl:orou:00; @chen:rodd:13; @deford2019].
-These methods greatly enhanced the understanding of redistricting within contexts of a particular state with set populations.
-Yet, without a known target distribution, these heuristic approaches to simulation fall do not offer necessary guarantees for confidence in the simulated plans to represent the total space of possible plans [@fifield2020essential].
-Recent advances in Markov Chain methods as applied to redistricting allow us move beyond simulation towards sampling plans from this definable space [@fifield2020mcmc; @carter2019; @mccartan2020].
+Early methodologies for simulating plans relied on randomness to generate many different plans and enhanced understanding of redistricting greatly [@ciri:darl:orou:00; @chen:rodd:13; @deford2019]. These methods greatly enhanced the understanding of redistricting within contexts of a particular state with set populations. Yet, without a known target distribution, these heuristic approaches to simulation fall do not offer necessary guarantees for confidence in the simulated plans to represent the total space of possible plans [@fifield2020essential]. Recent advances in Markov Chain methods as applied to redistricting allow us move beyond simulation towards sampling plans from this definable space [@fifield2020mcmc; @carter2019; @mccartan2020].
 
 Using sampling methods, we can then develop a reliable counterfactual that can be tuned to consider the sampling constraints imposed by the laws and practices of a state.
 This counterfactual allows us to characterize the likely plans from a state.
@@ -265,8 +264,7 @@ Then we may define the harm to a voter as $h:\Voters\times\Elecs\times\Plans^2\t
 
 Harm is defined using the local, not global, utility measure, because inherently, global utility (and thus harm) will be constant for all voters of a particular party.
 In fact, a harm measure defined analogously using global utility would essentially be a difference in seats won by a voter's party between plans $q$ and $\tilde q$ (the exact form would be affected by the function $g$).
-This measure is not particularly interesting, and nor is it novel, being a standard measure of partisan harm in simulation-based redistricting litigation, up to a monotonic transformation [@2018league; @2019rucho; @2019lewis].
-**[CM: revisit ¶ based on NJ findings].**
+This measure is not particularly interesting, and nor is it novel, being a standard measure of partisan harm in simulation-based redistricting litigation, up to a monotonic transformation [@2018league; @2019rucho; @2019lewis]. **[CM: revisit ¶ based on NJ findings]****.**
 
 ```{=html}
 <!--  
@@ -364,8 +362,7 @@ We propose a *proportionate uniform shift* model, which focuses on swings in the
 Each election outcome over the period of interest (generally ten years or less) is modeled as a random deviation from a baseline outcome, and these deviations are assumed to consist of a constant fraction of voters of one party in each precinct switching to the other.
 The baseline itself can be established by averaging the results of all available statewide elections over the past decade or other suitable period.
 
-The proportionate uniform shift model is not mathematically equivalent to the uniform partisan swing model of @butler1951swing, but is near-identical for most precincts and districts.
-Despite their simplicity, uniform-swing--type models are highly accurate for out-of-sample prediction [@katz2020], and are intuitive and easy to implement.
+The proportionate uniform shift model is not mathematically equivalent to the uniform partisan swing model of @butler1951swing, but is near-identical for most precincts and districts. Despite their simplicity, uniform-swing--type models are highly accurate for out-of-sample prediction [@katz2020], and are intuitive and easy to implement.
 
 The proportionate shift, where we assume that a constant fraction of *voters of one party* in each precinct switch to the other party, has several advantages over the uniform swing model, where a constant fraction of *all voters* shifts parties.
 First, the proportionate shift prevents hypothetical party vote shares from exceeding 1 or falling below 0 in any precinct.
@@ -388,9 +385,7 @@ Appendix \ref{app:formulas} contains the specific formulas used to compute $U^{(
 
 # Connections to Partisan Symmetry and Fairness, Standards {#sec:connections}
 
-In the years since Vieth [@2004vieth] researchers have developed a veritable zoo of measures to identify partisan gerrymanders.
-Specifically, these measures aim to quantify deviations from partisan symmetry, fairness, or competitiveness.
-Some of the most commonly used are perhaps the *efficiency gap* [@stephanopoulos2015], *partisan bias* [@tufte1973pb; @king1987democratic], and the *mean-median* measure [@mcdonald2015unfair; @wang2016three].
+In the years since Vieth [@2004vieth] researchers have developed a veritable zoo of measures to identify partisan gerrymanders. Specifically, these measures aim to quantify deviations from partisan symmetry, fairness, or competitiveness. Some of the most commonly used are perhaps the *efficiency gap* [@stephanopoulos2015], *partisan bias* [@tufte1973pb; @king1987democratic], and the *mean-median* measure [@mcdonald2015unfair; @wang2016three].
 All of these measures may be estimated using district vote shares.
 We now discuss the relationship between our measure and these three measures.
 <!-- chris thinks we shouldn't cite wang here because he copied mcdonald -->
@@ -443,11 +438,6 @@ With the focus on individuals, the considerations of the mean district are only 
 The consideration of a median district is similarly distanced.
 As with partisan bias, as our measures do not attempt to measure partisan symmetry, our measures can be applied to congressional delegations.
 
-```{=html}
-<!--
-1.  Like PB, focuses on only one part of S-V curve, which may not be relevant
--->
-```
 ## Districting Plan Competitiveness {#sec:competitive}
 
 The notion of district *competitiveness*, while related to the slope of the seats-vote curve around $\half$, is not the same as partisan symmetry.
@@ -512,6 +502,14 @@ This is manifested in the district-level vote shares shown in Figure \ref{fig:nj
 Within each districting plan, we number districts in order of their Democratic vote share, with district 1 the least Democratic.
 The figure shows these vote shares for six selected districting plans, and compares them to the distribution of shares for the entire sample.
 The selected plans themselves are shown in Appendix \ref{app:nj}.
+
+The fairest, best overall utility, and high global, low local utility plans have 8 Democratic and 4 Republican seats at baseline, but the best-utility plan has more extreme vote shares, i.e., less competitive districts, while the high global, low local utility plan has vote shares closer to 50%, with the fairest plan falling somewhere in the middle.
+
+In contrast, the low global, high local utility plan has 9 Democratic seats, 1 Republican seat, and 2 highly competitive seats at baseline.
+While generally local utility encourages proportionality and noncompetitive districts, conditional on low global utility (poor proportionality) the local utility measure encourages a Democratic gerrymander which satisfies the state's majority of Democratic voters, at the expense of the minority of Republican voters.
+
+The fair but low local utility plan has a similar vote share pattern to the fair plan, but overall with more competitive districts, which are generally penalized by the local utility measure.
+Conversely, the unfair but high local utility plan has 9 Democratic seats, 2 Republican seats, and 1 highly competitive seat at baseline---an unfair Democratic gerrymander---while keeping district vote shares relatively noncompetitive.
 
 # Discussion {#sec:discussion}
 
