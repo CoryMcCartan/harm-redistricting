@@ -138,8 +138,6 @@ include_graphics(here("paper/figures/minis_schematic.pdf"))
 
 ## Outline of the Paper
 
-<!--  Section 1 here should really be what we're interested in I think -->
-
 Section \ref{sec:voter-util} provides the necessary notation and introduces our measures of voter utility.
 Section \ref{sec:indiv-harm} builds a measure of individual harm and a derived measure of partisan fairness from this notion of utility.
 Section \ref{sec:estimating} discusses estimating these measures from observed election results.
@@ -270,6 +268,17 @@ In fact, a harm measure defined analogously using global utility would essential
 This measure is not particularly interesting, and nor is it novel, being a standard measure of partisan harm in simulation-based redistricting litigation, up to a monotonic transformation [@2018league; @2019rucho; @2019lewis].
 **[CM: revisit ¶ based on NJ findings].**
 
+```{=html}
+<!--  
+With Harm defined, we can thus define Partisan Equity as: $E[H|V(I) = DEM] = E[H|V(I) = REP]$
+ 
+Thus Fairness can be described as the signed movement away from equity. This naming works because it's condition on the votes and geographic distribution that you have, rather than some neutral midpoint that would be hard to justify.
+
+This clarifies our QOI and by later focusing on fairness, that gives us the analogous connection between bias (symmetry) and fairness (equity). 
+
+Later, that also gives room in the discussion of the EGAP to talk about why you could describe a utility function based on $Pr(Vote not wasted)$, which 
+-->
+```
 As with the utility measures, this harm measure naturally extends to multiple elections and districting plans.
 Make the counterfactual plan a random variable $\tilde Q$, with $(V,Q,\tilde Q)\sim\pi$ such that $Q\indep\tilde Q$.
 Then the harm to a random voter is $H \dfeq h(I, V, Q, \tilde Q)$.
@@ -558,4 +567,3 @@ include_graphics(here("paper/figures/nj_pairs.pdf"))
 ```{r nj-ex-maps, fig.cap="Example districting plans selected according to their scores on $F(q)$, $U^{(G)}$, and $U^{(L)}$. District shares for these example plans are shown in Figure \\ref{fig:nj-district-shares}.", fig.width=7, fig.height=7}
 include_graphics(here("paper/figures/nj_ex_maps.pdf"))
 ```
-
