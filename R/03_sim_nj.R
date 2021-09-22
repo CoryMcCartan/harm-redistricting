@@ -48,7 +48,7 @@ if (!file.exists(path <- here("paper/figures/nj_maps.pdf")))
 
 # variables plot -----
 meas_labels = c(e_dem="Expected\nDem. seats", u_glb=expression(U^G), u_loc=expression(U^L),
-                f="F(q)", h="H", egap="Efficiency\ngap", pbias="Partisan\nbias", mean_med="Mean-median")
+                f="ΔH(q)", h="H", egap="Efficiency\ngap", pbias="Partisan\nbias", mean_med="Mean-median")
 plot_var = function(nm, i) { suppressMessages({
     lab = meas_labels[nm]
     if (str_detect(as.character(lab), "\n"))
@@ -95,7 +95,7 @@ find_best = function(qty1, qty2=NULL) {
     }
 }
 
-comp_pl = list(Fairest = find_best(-abs(f)),
+comp_pl = list(`Smallest differential harm` = find_best(-abs(f)),
                `Best overall utility` = find_best(u_loc, u_glb),
                `High global, low local utility` = find_best(-u_loc, u_glb),
                `Low global, high local utility` = find_best(u_loc, -u_glb),
@@ -141,6 +141,7 @@ if (!file.exists(path <- here("paper/figures/nj_ex_maps.pdf")))
 
 # appendix pairs plot ----
 if (!file.exists(path <- here("paper/figures/nj_pairs.pdf"))) {
+    meas_labels["f"] = expression(f = Delta~"H(q)")
     pdf(path, 9, 9)
     subset_sampled(pl$plan) %>%
         slice_sample(n=1200) %>%
