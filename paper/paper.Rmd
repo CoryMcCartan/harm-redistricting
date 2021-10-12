@@ -52,31 +52,34 @@ Rather than considering parties, we ask how individuals are harmed or benefited 
 
 Decades of literature on redistricting have focused on the fairness to parties.
 This literature defers to symmetric outcomes for parties, commonly referred to as partisan symmetry [@katz2020].
-Partisan symmetry is a useful idea which greatly improves academic understanding of the redistricting process.
+Partisan symmetry offers the idea that the number of seats awarded to a party by a set of votes would be the same if the labels on the parties were swapped.
+Partisan symmetry is a useful quantity of interest which has been widely used to improve academic and legal understanding of the redistricting process.
+We do not challenge the value of partisan symmetry, but instead suggest that a different question should be asked to describe the fairness of district based democracies.
 
-Understanding the redistricting process requires a feasible and reliable understanding of the counterfactual set of redistricting plans.
+We argue that understanding the redistricting process requires a feasible and reliable understanding of the counterfactual set of redistricting plans.
+Our metrics offer a framework for understanding approximately individual harms, benefits, and net fairness.
+Using counterfactual plans to understand this space allows us to properly calibrate understandings of the impact of redistricting plans on individual understanding.
+Thus, we create measures which capture the possibility that no plans exist which favor one community [@duch:18].
+Using this class of metrics which describe the individual affect via representation consequently allow us to better align legalistic interpretations of harm for standing with political science understandings.
+
+To describe a reasonable counterfactual to measure our quantity of interest, we rely on advances in redistricting simulation methodologies.
 Early methodologies for simulating plans relied on randomness to generate many different plans and enhanced understanding of redistricting greatly [@ciri:darl:orou:00; @chen:rodd:13; @deford2019].
 These methods greatly enhanced the understanding of redistricting within contexts of a particular state with set populations.
 Yet, without a known target distribution, these heuristic approaches to simulation fall do not offer necessary guarantees for confidence in the simulated plans to represent the total space of possible plans [@fifield2020essential].
-Recent advances in Markov Chain methods as applied to redistricting allow us move beyond simulation towards sampling plans from this definable space [@fifield2020mcmc; @carter2019; @mccartan2020].
+Recent advances in Monte Carlo methods allow us move beyond simulation towards sampling plans from this definable space [@fifield2020mcmc; @carter2019; @mccartan2020].
 
-Using sampling methods, we can then develop a reliable counterfactual that can be tuned to consider the sampling constraints imposed by the laws and practices of a state.
+Using these sampling methods, we can then develop a reliable counterfactual that can be tuned to consider the sampling constraints imposed by the laws and practices of a state.
 This counterfactual allows us to characterize the likely plans from a state.
 Often, we can would then call this an ensemble analysis, which is a flexible approach to sampling redistricting plans by simulation, relying on large numbers of plans for stability [@matt:hers:21].
 using this counterfactual, we thus create measures of harm, utility, and fairness which are based on a single plan compared to a set of other reasonable and feasible plans which incorporate the necessary legal constraints to make a plan viable.
 
-We offer a reminder that geographic context is key to understanding common problems in political science..
+We offer a reminder that geographic context is key to understanding common problems in political science.
 Elections themselves are geographically determined.
 Recent research offers important resolution of the degree of partisan sorting in the US [@enos:brown:21].
 By combining those understandings with the necessities of redistricting, we are able to expand the localized aspect of harm.
 Further, we suggest that while the efficiency gap may not incorporate geographic information, it often helps capture individual harm better than other common measures.
 This is a great benefit as an indicator to detect extreme gerrymanders in cases where sufficiently local geographic data to simulate plans is not available.
 We further clarify that common existing measures of partisan fairness -- while they may capture the difficulties offered to a party -- do not necessarily capture the representational harms incurred by individuals who live in districts which do not at all represent their preferences.
-
-Our metrics offer a framework for understanding approximately individual harms, benefits, and net fairness.
-Using counterfactual plans to understand this space allows us to properly calibrate understandings of the impact of redistricting plans on individual understanding.
-Thus, we create measures which capture the possibility that no plans exist which favor one community [@duch:18].
-Using this class of metrics which describe the individual affect via representation allow us to better align legalistic interpretations of harm with political science understandings.
 
 TODO: Add findings!
 
@@ -134,7 +137,7 @@ Each example state has the same population and should be divided into 3 district
 Voters' preferences are assumed to be stable across elections, and turnout is 100%.
 Schematics for these examples are shown in Figure \ref{fig:mini-schematic}(a)--(c).
 
-```{r mini-schematic, fig.cap="Schematic maps of the three running examples, showing the partisan composition of each of the 36 precincts. The total voting population for each example is 180."}
+```{r mini-schematic, fig.cap="Schematic maps of the three running examples, showing the partisan composition of each of the 36 precincts. The total voting population for each example is 180. White lines delineate precincts."}
 include_graphics(here("paper/figures/minis_schematic.pdf"))
 ```
 
@@ -213,7 +216,7 @@ We define$$
 $$that is, a voter gains utility only if they winner of their legislative district belongs to their preferred political party.
 
 Attempting to maximize the average local utility across the electorate would lead to a districting plan where every voter is assigned to a district with other voters of the same party preference; in this way, every voter's utility would be $1$.
-Whether such an districting plan is possible depends on the geographical layout of voters and the legal constraints on the districting process---must districts be contiguous, balanced in population, constructed from whole precincts, geographically compact, and so on.
+Whether such an districting plan is possible depends on the geographical layout of voters and the legal constraints on the districting process---districts must be contiguous, balanced in population, constructed from whole precincts, geographically compact, and so on.
 But the general tendency of this utility measure (in the context of a single election, at least), like the global utility measure, will be to push plans towards proportionality.
 Unlike with the global measure, a specific kind of proportionality is preferred: that which creates as many lopsided districts as possible (what is often termed a *bipartisan gerrymander*).
 This point is discussed further in Section \ref{sec:competitive} below.
@@ -228,7 +231,7 @@ In none of the three states is it possible to create a perfect bipartisan gerrym
 [^2]: These examples present a slight complication---what to do when a party wins no seats?
     The easiest solution, perhaps, is to define the utility to that party's voters to be $-1$; this will make the utility well-defined while still encouraging proportionality.
 
-```{r mini-util-opt, fig.cap="Utility-maximizing redistricting plans for the three running examples, with each district shaded by its partisan lean."}
+```{r mini-util-opt, fig.cap="Utility-maximizing redistricting plans for the three running examples, with each district shaded by its partisan lean. Black lines indicate districts. Red and blue dots indicate Republicans and Democrats, respectively."}
 include_graphics(here("paper/figures/minis_util_opt.pdf"))
 ```
 
@@ -280,7 +283,7 @@ $$
 
 that is, the probability that the voter is misrepresented under the adopted plan but would not have been under a counterfactual.
 
-```{r mini-harm, fig.cap="Three potential districting plans for Mininois and Minissouris, showing district partisan lean (top row) and total voter harm versus the counterfactuals in Figure 2(a)-(b) (bottom row; darker shading indicates more harm)."}
+```{r mini-harm, fig.cap="Three potential districting plans for Mininois and Minissouris, showing district partisan lean (top row) and total voter harm versus the counterfactuals in Figure 2(a)-(b) (bottom row; darker shading indicates more harm).**CK: Should there be a second scale here?**"}
 include_graphics(here("paper/figures/mini_harm.pdf"))
 ```
 
@@ -335,7 +338,7 @@ These distributions can generally be characterized as maximum-entropy distributi
 
 For example, the algorithms of @carter2019 and @mccartan2020 sample from the maximum-entropy distribution of districting plans which are geographically contiguous, have district populations within a deviation from equality, and which have a certain average compactness value (according to a particular graph-theoretic compactness measure).
 These maximum-entropy distributions put as few conditions as possible on the districting sampling process, as long as a set of constraints imposed by the researcher are met.
-If these constraints are precisely those which are required by law or traditional redistricting criteria, then samples from this distribution provide a natural set of counterfactual districting plans, uninfluenced by partisan considerations, to use in estimating $H$ and $\Delta H(q)$.
+If these constraints are precisely those which are required by law or traditional redistricting criteria, then samples from this distribution provide a natural set of counterfactual districting plans, uninfluenced by superfluous partisan considerations, to use in estimating $H$ and $\Delta H(q)$.
 
 ## Modeling Election Outcomes
 
@@ -409,7 +412,7 @@ The bias is the number of seats that would need to be reallocated to make the sy
 It should not be surprising then that these measures differ often and greatly.
 
 Further, by relying on alternative districting plans, we do not necessitate the use of partisan swings.
-This is of great benefit in scenarios where swings must be so significant that they stray far from the data.
+This is of great benefit in scenarios where swings must be so significant in magnitude that they stray far from the data.
 Instead, the measures of harm and utility rely on $votes^{p}$ which can be model-free estimates of electoral performance of a party (namely historical election returns) or can be some sort of model, such as precinct-level election forecasts.
 Of course, the votes could even be generated by notions of partisan swings, but as a choice rather than a requirement.
 
@@ -470,8 +473,10 @@ Figure \ref{fig:nj-maps} shows the baseline Democratic vote share by precinct, a
 The Democratic gerrymander has 11 Democratic seats and 1 Republican seat at baseline, while the Republican gerrymander has 6 Democratic and 6 Republican seats.
 
 We sample 1,000 districting plans using the SMC algorithm of @mccartan2020, setting constraints to favor compact plans with district boundaries that tend to follow county lines.
-For each of these sampled plans and the two gerrymanders, we calculate the utility, harm, and fairness measures, as well as the expected number of Democratic seats, the efficiency gap, partisan bias, and the mean-median score.
+For each of these sampled plans and the two gerrymanders, we calculate the utility, harm, and fairness measures, as well as the expected number of Democratic seats, the efficiency gap, partisan bias, and the mean-median score.[^4]
 The distribution of these measures is shown in Figure \ref{fig:nj-vars}.
+
+[^4]: We include partisan bias and mean-median in these figures as it is common practice, though it may have theoretical issues when used for a delegation rather than a legislature[@katz21].
 
 ```{r nj-vars, fig.cap="Distributions of districting measures for simulated New Jersey distriting plans, the Republican gerrymander (red), and the Democratic gerrymander (blue).", fig.width=6.5, fig.height=3.25}
 include_graphics(here("paper/figures/nj_vars.pdf"))
