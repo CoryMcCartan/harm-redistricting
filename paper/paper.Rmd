@@ -15,7 +15,7 @@ authors:
     location: Cambridge, MA
     email: christopherkenny@fas.harvard.edu
 abstract: |
-  Most existing standards for assessing partisan gerrymandering focus on the symmetric treatment of parties by electoral systems. We develop measures of utility and harm for individual voters by considering counterfactual redistricting plans, and use these notions to construct a normative standard of partisan fairness which is centered on the individual. We estimate these measures from real-world data by leveraging recent advances in redistricting sampling methodology, which allow researchers to generate large numbers of districting plans which reflect local legal and practical requirements. We apply our measures to congressional redistricting in New Jersey, and compare them to existing measures of partisan symmetry and competitiveness.
+  Most existing standards for assessing partisan gerrymandering focus on the symmetric treatment of parties by electoral systems. We develop measures of utility and harm for individual voters by considering counterfactual redistricting plans, and use these notions to construct a normative standard of partisan fairness which is centered on the individual. We calculate these measures on real-world data by leveraging recent advances in redistricting sampling methodology, which allow researchers to generate large numbers of districting plans which reflect local legal and practical requirements. We apply our measures to congressional redistricting in New Jersey, and compare them to existing measures of partisan symmetry and competitiveness.
 keywords:
   - partisan fairness
   - representation
@@ -59,7 +59,7 @@ To proceed with a legal challenge to a gerrymander, a voter must demonstrate tha
 Crucially, for a voter to be harmed by a districting plan, there must exist another districting plan which remedies the harm.
 An example we will return to frequently is that of a Massachusetts Republican: based on residential patterns of party voters, it is not possible to draw a Republican congressional district in Massachusetts, and so a Republican voter cannot be harmed by a districting plan that yields a fully Democratic delegation [@duch:18].
 
-We argue that understanding the redistricting process requires a feasible and reliable understanding of a counterfactual set of redistricting plans.
+We argue that understanding the redistricting process requires a counterfactual set of feasible redistricting plans.
 To that end, we define two individual utility measures for districting plans: a *local utility* capturing the value to a voter of having a representative of the same party, and a *global utility* reflecting the value in maximizing the number of seats awarded to a voter's chosen party.
 From these two utility measures, we derive a measure of harm, based on counterfactual plans, and a notion of individual partisan fairness, which occurs when harms are evenly distributed across voters of each party.
 Deviations from fairness are measured by *differential harm*, which, as we show, is intimately connected to the number of seats won by each party.
@@ -67,7 +67,7 @@ Deviations from fairness are measured by *differential harm*, which, as we show,
 Taken together, our measures offer a framework for understanding the individual impacts of a districting plan, and how these impacts are borne by members of each party.
 The use of counterfactual plans allows us to better relate legalistic interpretations of harm to those of political science.
 
-To estimate these measures requires generating counterfactual districting plans, for which we rely on advances in redistricting simulation methodology.
+To calculate these measures in practice requires generating counterfactual districting plans, for which we rely on advances in redistricting simulation methodology.
 Early methodologies for simulating plans relied on randomness to generate many different districting plans [@ciri:darl:orou:00; @chen:rodd:13; @deford2019]. These methods greatly enhanced the understanding of redistricting within contexts of a particular state with set populations. Yet, lacking a specific target probability distribution, these heuristic approaches to simulation do not allow for probabilistic interpretations, and risk misrepresenting the total space of possible districting plans [@fifield2020essential]. Recent advances in Monte Carlo methods allow us move beyond random simulation and towards sampling plans from this definable space [@fifield2020mcmc; @carter2019; @mccartan2020]. We can thus develop a reliable set of counterfactual plans that can be tuned to reflect the constraints imposed by the laws and practices of a particular state [@matt:hers:21].
 
 We offer a reminder that geographic context is key to understanding common problems in political science; elections themselves are geographically determined.
@@ -519,4 +519,3 @@ include_graphics(here("paper/figures/nj_pairs.pdf"))
 ```{r nj-ex-maps, fig.cap="Example districting plans selected according to their scores on $\\Delta H(q)$, $U^{(G)}$, and $U^{(L)}$. District shares for these example plans are shown in Figure \\ref{fig:nj-district-shares}.", fig.width=7, fig.height=7}
 include_graphics(here("paper/figures/nj_ex_maps.pdf"))
 ```
-
