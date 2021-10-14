@@ -61,9 +61,13 @@ Our metrics offer a framework for understanding approximately individual harms, 
 Using counterfactual plans to understand this space allows us to properly calibrate understandings of the impact of redistricting plans on individual understanding.
 Thus, we create measures which capture the possibility that no plans exist which favor one community [@duch:18].
 Using this class of metrics which describe the individual affect via representation consequently allow us to better align legalistic interpretations of harm for standing with political science understandings.
+Standing itself is an individual endeavor. Individuals must show that they themselves have suffered injury directly, not just via the larger system they partake in [@1992lujan].
 
 To describe a reasonable counterfactual to measure our quantity of interest, we rely on advances in redistricting simulation methodologies.
-Early methodologies for simulating plans relied on randomness to generate many different plans and enhanced understanding of redistricting greatly [@ciri:darl:orou:00; @chen:rodd:13; @deford2019]. These methods greatly enhanced the understanding of redistricting within contexts of a particular state with set populations. Yet, without a known target distribution, these heuristic approaches to simulation fall do not offer necessary guarantees for confidence in the simulated plans to represent the total space of possible plans [@fifield2020essential]. Recent advances in Monte Carlo methods allow us move beyond simulation towards sampling plans from this definable space [@fifield2020mcmc; @carter2019; @mccartan2020].
+Early methodologies for simulating plans relied on randomness to generate many different plans and enhanced understanding of redistricting greatly [@ciri:darl:orou:00; @chen:rodd:13; @deford2019].
+These methods greatly enhanced the understanding of redistricting within contexts of a particular state with set populations.
+Yet, without a known target distribution, these heuristic approaches to simulation fall do not offer necessary guarantees for confidence in the simulated plans to represent the total space of possible plans [@fifield2020essential].
+Recent advances in Monte Carlo methods allow us move beyond simulation towards sampling plans from this definable space [@fifield2020mcmc; @carter2019; @mccartan2020].
 
 Using these sampling methods, we can then develop a reliable counterfactual that can be tuned to consider the sampling constraints imposed by the laws and practices of a state.
 This counterfactual allows us to characterize the likely plans from a state.
@@ -347,7 +351,8 @@ We propose a *proportionate uniform shift* model, which focuses on swings in the
 Each election outcome over the period of interest (generally ten years or less) is modeled as a random deviation from a baseline outcome, and these deviations are assumed to consist of a constant fraction of voters of one party in each precinct switching to the other.
 The baseline itself can be established by averaging the results of all available statewide elections over the past decade or other suitable period.
 
-The proportionate uniform shift model is not mathematically equivalent to the uniform partisan swing model of @butler1951swing, but is near-identical for most precincts and districts. Despite their simplicity, uniform-swing--type models are highly accurate for out-of-sample prediction [@katz2020], and are intuitive and easy to implement.
+The proportionate uniform shift model is not mathematically equivalent to the uniform partisan swing model of @butler1951swing, but is near-identical for most precincts and districts.
+Despite their simplicity, uniform-swing--type models are highly accurate for out-of-sample prediction [@katz2020], and are intuitive and easy to implement.
 
 Proportionate shift, where we assume that a constant fraction of *voters of one party* in each precinct switch to the other party, has several advantages over the uniform swing model, where a constant fraction of *all voters* shifts parties.
 First, the proportionate shift prevents hypothetical party vote shares from exceeding 1 or falling below 0 in any precinct.
@@ -372,7 +377,9 @@ Appendix \ref{app:formulas} contains the specific formulas used to compute $U^{(
 
 # Connections to Partisan Symmetry and Fairness, Standards {#sec:connections}
 
-In the years since @2004vieth, researchers have developed a veritable zoo of measures to identify partisan gerrymanders. Specifically, these measures aim to quantify deviations from partisan symmetry, fairness, or competitiveness. Some of the most commonly used are perhaps the *efficiency gap* [@stephanopoulos2015], *partisan bias* [@tufte1973pb; @king1987democratic], and the *mean-median* measure [@mcdonald2015unfair].
+In the years since @2004vieth, researchers have developed a veritable zoo of measures to identify partisan gerrymanders.
+Specifically, these measures aim to quantify deviations from partisan symmetry, fairness, or competitiveness.
+Some of the most commonly used are perhaps the *efficiency gap* [@stephanopoulos2015], *partisan bias* [@tufte1973pb; @king1987democratic], and the *mean-median* measure [@mcdonald2015unfair].
 All of these measures may be estimated using district vote shares alone, and as we discuss next, are to varying degrees related to our proposed measures.
 
 ## The Efficiency Gap
@@ -506,7 +513,10 @@ Conversely, the unfair but high local utility plan has 9 Democratic seats, 2 Rep
 
 # Discussion {#sec:discussion}
 
-We should say something about the importance in developing further measures which utilize simulation approaches
+This paper offers an attempt to bridge the quantitative gap between votes and representation. We break from existing redistricting literature and focus on the relationship between votes and representation by copartisans, rather than the relationship between votes and seats. This develops a new quantity of interest, partisan fairness, different from the standard of partisan symmetry for consideration.
+Chiefly, this centers measurement strategies around how individual voters in a given geography would have likely faired under counterfactual plans, not how parties would have faired under symmetric elections.
+
+This offers new purchase into the foundational questions of how to quantity the harms and benefits incurred to voters in district-based democracies--where the rules of defining districts are fixed, but the choice of how to how to draw the districts remains a policy question. This approach is flexible and we offer a baseline selection of clear and flexible, yet interesting, measures for improving the understanding of redistricting. Further work needs to be done to characterize how the potential rules of redistricting and other aspects, like the number or size of districts, impact these possibilities.
 
 # References {.unnumbered}
 
@@ -537,6 +547,7 @@ We should say something about the importance in developing further measures whic
 \begin{proof}
 \end{proof}
 ```
+<!--
 # Computing Utility, Harm, and Fairness from Precinct-level Election Data {#app:formulas}
 
 1.  Global utility is discrete, so we can compute the range of shifts that produce each number of seats, and the average vote share for those ranges.
@@ -548,7 +559,7 @@ We should say something about the importance in developing further measures whic
     Need only to apply a kernel function (composition of Laplace ICDF + model shift CDF)
 
 Formulas here.
-
+-->
 # Districting Measures in New Jersey {#app:nj}
 
 ```{r nj-pairs, fig.cap="Scatterplots for all pairs of measures. Color indicates the number of Democratic seats won (ranging from 7 to 10). Below the diagonal, numbers indicate the absolute value of the correlation between variables.", fig.width=7, fig.height=7}
