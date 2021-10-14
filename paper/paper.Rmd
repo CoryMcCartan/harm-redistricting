@@ -4,7 +4,7 @@ authors:
   - name: Cory McCartan
     thanks: |
       To whom correspondence should be addressed. 
-      The authors thank ____ for helpful comments and discussion.
+      The authors thank {you} for helpful comments and discussion.
     department: Department of Statistics
     affiliation: Harvard University
     location: Cambridge, MA
