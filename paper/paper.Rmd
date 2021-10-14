@@ -388,7 +388,7 @@ It is this first term which his closely related to $U^{(L)}$, as stated in Propo
 
 ```{=tex}
 \begin{restatable}{prop}{propcomp} \label{prop:comp}
-Basically, if turnout is equal across districts, for an election $v\in\Elecs$ and districting plan $q\in\Plans$ and two political parties, we have
+If turnout is equal across districts, for an election $v\in\Elecs$ and districting plan $q\in\Plans$ and two political parties, we have
 \begin{align*}
     \E[U^{(L)}\mid V=v, Q=q] &= \frac{1}{2|D|}\sum_{d\in D}
         \qty|\frac{\votes^{(p_a)}}{\votes^{(p_b)} + \votes^{(p_b)}}-\half| \\
