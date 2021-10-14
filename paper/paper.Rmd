@@ -471,7 +471,7 @@ Further work is needed to characterize how existing redistricting requirements a
 :::
 
 ```{=tex}
-\clearpage
+\vspace{1in}
 \appendix
 \renewcommand\thefigure{\thesection.\arabic{figure}}
 \setcounter{figure}{0}
@@ -494,9 +494,10 @@ Further work is needed to characterize how existing redistricting requirements a
 \begin{proof}
 \end{proof}
 ```
+# Computing Utility, Harm, and Fairness from Precinct-level Election Data {#app:formulas}
+
 ```{=html}
 <!--
-# Computing Utility, Harm, and Fairness from Precinct-level Election Data {#app:formulas}
 
 1.  Global utility is discrete, so we can compute the range of shifts that produce each number of seats, and the average vote share for those ranges.
     Combine these
@@ -518,3 +519,4 @@ include_graphics(here("paper/figures/nj_pairs.pdf"))
 ```{r nj-ex-maps, fig.cap="Example districting plans selected according to their scores on $\\Delta H(q)$, $U^{(G)}$, and $U^{(L)}$. District shares for these example plans are shown in Figure \\ref{fig:nj-district-shares}.", fig.width=7, fig.height=7}
 include_graphics(here("paper/figures/nj_ex_maps.pdf"))
 ```
+
