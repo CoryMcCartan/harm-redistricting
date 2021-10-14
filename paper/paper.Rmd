@@ -15,7 +15,7 @@ authors:
     location: Cambridge, MA
     email: christopherkenny@fas.harvard.edu
 abstract: |
-  Enter the text of your abstract here.
+  Standards for assessing gerrymandering have often focused on the symmetric treatment of parties by electoral systems. By focusing on counterfactual redistricting plans, we develop measures of utility in district-based representation. We use this to introduce an alternative quantity of interest, partisan fairness, and measures of deviations from this, differential harm. We offer strategies for estimating these measures by leveraging advances in redistricting sampling methodologies which can allow for generating large numbers of legal and feasible plans from a specified target distribution which encapsulates the stated legal constraints for a districting plan. We apply our measures to an example in New Jersey and demonstrate how the basis in counterfactual districting plans allows for straightforward interpretation.
 keywords:
   - partisan fairness
   - representation
@@ -29,6 +29,9 @@ output:
     includes:
       in_header: "header.tex"
     latex_engine: pdflatex
+editor_options: 
+  markdown: 
+    wrap: sentence
 ---
 
 ```{r SETUP, include=FALSE}
@@ -61,7 +64,8 @@ Our metrics offer a framework for understanding approximately individual harms, 
 Using counterfactual plans to understand this space allows us to properly calibrate understandings of the impact of redistricting plans on individual understanding.
 Thus, we create measures which capture the possibility that no plans exist which favor one community [@duch:18].
 Using this class of metrics which describe the individual affect via representation consequently allow us to better align legalistic interpretations of harm for standing with political science understandings.
-Standing itself is an individual endeavor. Individuals must show that they themselves have suffered injury directly, not just via the larger system they partake in [@1992lujan].
+Standing itself is an individual endeavor.
+Individuals must show that they themselves have suffered injury directly, not just via the larger system they partake in [@1992lujan].
 
 To describe a reasonable counterfactual to measure our quantity of interest, we rely on advances in redistricting simulation methodologies.
 Early methodologies for simulating plans relied on randomness to generate many different plans and enhanced understanding of redistricting greatly [@ciri:darl:orou:00; @chen:rodd:13; @deford2019].
@@ -513,10 +517,14 @@ Conversely, the unfair but high local utility plan has 9 Democratic seats, 2 Rep
 
 # Discussion {#sec:discussion}
 
-This paper offers an attempt to bridge the quantitative gap between votes and representation. We break from existing redistricting literature and focus on the relationship between votes and representation by copartisans, rather than the relationship between votes and seats. This develops a new quantity of interest, partisan fairness, different from the standard of partisan symmetry for consideration.
+This paper offers an attempt to bridge the quantitative gap between votes and representation.
+We break from existing redistricting literature and focus on the relationship between votes and representation by copartisans, rather than the relationship between votes and seats.
+This develops a new quantity of interest, partisan fairness, different from the standard of partisan symmetry for consideration.
 Chiefly, this centers measurement strategies around how individual voters in a given geography would have likely faired under counterfactual plans, not how parties would have faired under symmetric elections.
 
-This offers new purchase into the foundational questions of how to quantity the harms and benefits incurred to voters in district-based democracies--where the rules of defining districts are fixed, but the choice of how to how to draw the districts remains a policy question. This approach is flexible and we offer a baseline selection of clear and flexible, yet interesting, measures for improving the understanding of redistricting. Further work needs to be done to characterize how the potential rules of redistricting and other aspects, like the number or size of districts, impact these possibilities.
+This offers new purchase into the foundational questions of how to quantity the harms and benefits incurred to voters in district-based democracies--where the rules of defining districts are fixed, but the choice of how to how to draw the districts remains a policy question.
+This approach is flexible and we offer a baseline selection of clear and flexible, yet interesting, measures for improving the understanding of redistricting.
+Further work needs to be done to characterize how the potential rules of redistricting and other aspects, like the number or size of districts, impact these possibilities.
 
 # References {.unnumbered}
 
@@ -547,6 +555,7 @@ This offers new purchase into the foundational questions of how to quantity the 
 \begin{proof}
 \end{proof}
 ```
+```{=html}
 <!--
 # Computing Utility, Harm, and Fairness from Precinct-level Election Data {#app:formulas}
 
@@ -560,6 +569,7 @@ This offers new purchase into the foundational questions of how to quantity the 
 
 Formulas here.
 -->
+```
 # Districting Measures in New Jersey {#app:nj}
 
 ```{r nj-pairs, fig.cap="Scatterplots for all pairs of measures. Color indicates the number of Democratic seats won (ranging from 7 to 10). Below the diagonal, numbers indicate the absolute value of the correlation between variables.", fig.width=7, fig.height=7}
