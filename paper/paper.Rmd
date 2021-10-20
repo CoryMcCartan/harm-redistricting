@@ -68,7 +68,11 @@ Taken together, our measures offer a framework for understanding the individual 
 The use of counterfactual plans allows us to better relate legalistic interpretations of harm to those of political science.
 
 To calculate these measures in practice requires generating counterfactual districting plans, for which we rely on advances in redistricting simulation methodology.
-Early methodologies for simulating plans relied on randomness to generate many different districting plans [@ciri:darl:orou:00; @chen:rodd:13; @deford2019]. These methods greatly enhanced the understanding of redistricting within contexts of a particular state with set populations. Yet, lacking a specific target probability distribution, these heuristic approaches to simulation do not allow for probabilistic interpretations, and risk misrepresenting the total space of possible districting plans [@fifield2020essential]. Recent advances in Monte Carlo methods allow us move beyond random simulation and towards sampling plans from this definable space [@fifield2020mcmc; @carter2019; @mccartan2020]. We can thus develop a reliable set of counterfactual plans that can be tuned to reflect the constraints imposed by the laws and practices of a particular state [@matt:hers:21].
+Early methodologies for simulating plans relied on randomness to generate many different districting plans [@ciri:darl:orou:00; @chen:rodd:13; @deford2019].
+These methods greatly enhanced the understanding of redistricting within contexts of a particular state with set populations.
+Yet, lacking a specific target probability distribution, these heuristic approaches to simulation do not allow for probabilistic interpretations, and risk misrepresenting the total space of possible districting plans [@fifield2020essential].
+Recent advances in Monte Carlo methods allow us move beyond random simulation and towards sampling plans from this definable space [@fifield2020mcmc; @carter2019; @mccartan2020].
+We can thus develop a reliable set of counterfactual plans that can be tuned to reflect the constraints imposed by the laws and practices of a particular state [@matt:hers:21].
 
 We offer a reminder that geographic context is key to understanding common problems in political science; elections themselves are geographically determined.
 Recent research offers important resolution of the degree of partisan sorting in the US [@enos:brown:21].
@@ -298,7 +302,8 @@ We propose a *proportionate uniform shift* model, which focuses on swings in the
 Each election outcome over the period of interest (generally ten years or less) is modeled as a random deviation from a baseline outcome, and these deviations are assumed to consist of a constant fraction of voters of one party in each precinct switching to the other.
 The baseline itself can be established by averaging the results of all available statewide elections over the past decade or other suitable period.
 
-The proportionate uniform shift model is not mathematically equivalent to the uniform partisan swing model of @butler1951swing, but is near-identical for most precincts and districts. Despite their simplicity, uniform-swing--type models are highly accurate for out-of-sample prediction [@katz2020], and are intuitive and easy to implement.
+The proportionate uniform shift model is not mathematically equivalent to the uniform partisan swing model of @butler1951swing, but is near-identical for most precincts and districts.
+Despite their simplicity, uniform-swing--type models are highly accurate for out-of-sample prediction [@katz2020], and are intuitive and easy to implement.
 
 Proportionate shift, where we assume that a constant fraction of *voters of one party* in each precinct switch to the other party, has several advantages over the uniform swing model, where a constant fraction of *all voters* shifts parties.
 First, the proportionate shift prevents hypothetical party vote shares from exceeding 1 or falling below 0 in any precinct.
@@ -323,7 +328,9 @@ Appendix \ref{app:formulas} contains the specific formulas used to compute $U^{(
 
 # Connections to Partisan Symmetry and Fairness, Standards {#sec:connections}
 
-In the years since @2004vieth, researchers have developed a veritable zoo of measures to identify partisan gerrymanders. Specifically, these measures aim to quantify deviations from partisan symmetry, fairness, or competitiveness. Some of the most commonly used are perhaps the *efficiency gap* [@stephanopoulos2015], *partisan bias* [@tufte1973pb; @king1987democratic], and the *mean-median* measure [@mcdonald2015unfair].
+In the years since @2004vieth, researchers have developed a veritable zoo of measures to identify partisan gerrymanders.
+Specifically, these measures aim to quantify deviations from partisan symmetry, fairness, or competitiveness.
+Some of the most commonly used are perhaps the *efficiency gap* [@stephanopoulos2015], *partisan bias* [@tufte1973pb; @king1987democratic], and the *mean-median* measure [@mcdonald2015unfair].
 All of these measures may be estimated using district vote shares alone, and as we discuss next, are to varying degrees related to our proposed measures.
 
 ## The Efficiency Gap
@@ -519,3 +526,31 @@ include_graphics(here("paper/figures/nj_pairs.pdf"))
 ```{r nj-ex-maps, fig.cap="Example districting plans selected according to their scores on $\\Delta H(q)$, $U^{(G)}$, and $U^{(L)}$. District shares for these example plans are shown in Figure \\ref{fig:nj-district-shares}.", fig.width=7, fig.height=7}
 include_graphics(here("paper/figures/nj_ex_maps.pdf"))
 ```
+
+# Misrepresentation Map
+
+The intuition that drives these measures is the misrepresentation map.
+Consider a state that is partitioned into smaller geographies, typically called precincts or voter tabulation districts.
+These units act as the atoms of redistricting.
+We assume that they are not split in the redistricting process.
+Thus, districts are made of whole precincts.
+For a given precinct, we can thus calculate the expected party share of the district that a precinct is in for any given plan.
+The expected party share can take many forms, as mentioned in *Modeling Election Outcomes*.
+By combining the information about the geographic precinct, we can measure the expected party share that an individual living in that precinct would expect to experience.
+
+Visually, we can consider a map colored by party share of the district that each precinct is assigned to.
+Most often, we represent this in a blue to red gradient which offers the typical Democratic or Republican representative dynamic.
+Given a counterfactual, we can then take the difference of the expected party share, precinct-by-precinct.
+This offers a precinct-level coloration based on difference in expected party share at the district level.
+In the typical two-party scenario, using Democratic two-party vote share, a positive difference would indicate that the individuals in those precincts are likely to be represented by Democrats.
+A negative difference would indicate that the individuals in those precincts are likely to be represented by Republicans.
+Thus, positives would be map-matically represented by blues and negatives by reds.
+
+Note that this takes a similar visual form as a dislocation map, though these are conceptually distinct [@defoeubarodd21].
+The dislocation map indicates within a single plan how nearby individuals are likely or unlikely to be represented by the same party.
+
+We focus largely on the case of a misrepresentation map that is the difference between a single enacted districting plan and an ensemble of alternate, legal districting plans.
+This does not need to be the case, however.
+A misrepresentation map can indicate the difference between two singular maps, calculating the difference in expected district-level party representation.
+This would allow direct computation of utility, fairness, or other metrics based on the difference in the two maps.
+Similarly, given two sets of ensembles, likely generated under different target distributions, we can create a similar misrepresentation map that would allow us to estimate interesting measures, such as the differential harm caused by the inclusion of an additional criteria in state district drawing rules.
