@@ -1,6 +1,10 @@
 svc::svc(pl$distr, dem) + scale_color_party_d()
 
-ggsave('paper/figures/svc.png', dpi = 320, height = 6, width = 6)
+
+ggsave('paper/figures/png/svc.png', dpi = 320, height = 6, width = 6)
+
+svc::svc(pl$distr %>% subset_ref(), dem) + scale_color_party_d()
+ggsave('paper/figures/png/svc_ref.png', dpi = 320, height = 6, width = 6)
 
 counterfactual <- function(map, pl, r, d, lim = 1, ref_idx = 1) {
   r <- rlang::eval_tidy(rlang::enquo(r), data = map)
@@ -36,4 +40,6 @@ calc_cf <- function(map, pl, r, d, ref_idx) {
 }
 
 counterfactual(nj, pl$distr, r = nrv, d = ndv, ref_idx = 1, lim = 0.5)
-counterfactual(nj, pl$distr, r = nrv, d = ndv, ref_idx = 1, lim = 0.5)
+ggsave('paper/figures/png/misr_rep.png', dpi = 320, height = 6, width = 4)
+counterfactual(nj, pl$distr, r = nrv, d = ndv, ref_idx = 2, lim = 0.5)
+ggsave('paper/figures/png/misr_dem.png', dpi = 320, height = 6, width = 4)
