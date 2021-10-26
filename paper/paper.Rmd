@@ -4,7 +4,7 @@ authors:
   - name: Cory McCartan
     thanks: |
       To whom correspondence should be addressed. 
-      The authors thank {you} for helpful comments and discussion.
+      The authors thank participants of the Harvard American Politics Research Workshop for helpful comments and discussion.
     department: Department of Statistics
     affiliation: Harvard University
     location: Cambridge, MA
@@ -46,7 +46,7 @@ opts_chunk$set(echo=FALSE, message=FALSE, warning=FALSE,
 # Introduction
 
 How do you measure a partisan gerrymander?
-Researchers, courts, and the public may agree that gerrymandering involves the manipulation of district boundaries for political gain, but beyond this vague definition are liable to disagree on a particular operationalization.
+Researchers, courts, and the public may agree that gerrymandering involves the manipulation of district boundaries for political gain, but beyond this vague definition, most are liable to disagree on a particular operationalization.
 
 Decades of academic literature on redistricting have focused on the fairness to parties.
 The normative standard for redistricting in this line of research is for electoral outcomes to be symmetric across political parties---what is commonly referred to as *partisan symmetry* [@katz2020].
