@@ -75,6 +75,7 @@ Recent advances in Monte Carlo methods allow us move beyond random simulation an
 We can thus develop a reliable set of counterfactual plans that can be tuned to reflect the constraints imposed by the laws and practices of a particular state [@matt:hers:21].
 
 We offer a reminder that geographic context is key to understanding common problems in political science; elections themselves are geographically determined.
+<!-- people super hate this sentence above, which is fair, though is a problem in this lit -->
 Recent research offers important resolution of the degree of partisan sorting in the US [@enos:brown:21].
 By combining those understandings with the necessities of redistricting, we are able to expand the localized aspect of harm.
 Further, we suggest that while the efficiency gap may not incorporate geographic information, it often helps capture individual harm better than other common measures.

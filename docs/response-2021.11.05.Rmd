@@ -2,12 +2,13 @@
 title: "Response to Comments"
 subtitle: "Individual Partisan Harm and Utility in Redistricting"
 author: "Christopher T. Kenny (Work with Cory McCartan)"
-date: "2021.11.04"
+date: "2021.11.05"
 output: 
   beamer_presentation:
     slide_level: 2
     theme: "Singapore"
     colortheme: "beaver"
+    toc: true
 classoption: handout 
 ---
 
@@ -16,6 +17,8 @@ knitr::opts_chunk$set(echo = FALSE)
 library(here)
 library(knitr)
 ```
+
+# Abstract and Intro
 
 ## Abstract
 
@@ -45,18 +48,21 @@ Most existing standards for assessing partisan gerrymandering focus on the symme
 >- Why do we care about the *individual*? (Soubhik)
 >- The focus on individuals isn't super novel, courtwise (Adam)
 >- Make a starker contrast with the party-centric approaches
->- Using statistics to guide ethical questions (Georgie)
+>- There's a literature on using statistics to guide ethical questions (Georgie)
 >- When is this better than the existing? Is it ever worse? (Tyler)
+
+# Notation, Utility, Harm, Assumptions
 
 ## Notation
 
 >- _too_ much formality (Soubhik)
->- Subscripts vs function inputs (Soubhik, Georgie)
+>- Subscripts vs. function inputs (Soubhik, Georgie)
 >    -   $votes^(p)(d,v,q) \to V_{ijt}$
+>- Delta H(q) with upper- and sub-script should be changed (Soichiro)
 >- Add a glossary table (Soubhik)
 >- Spend more time explaining the notation and its intuition (David, Shusei)
 >- Only introduce the the notation (and figures) as needed (Georgie)
->- Specify the variables we take expectation wrt (David, Sooahn)
+>- Specify the variables we take expectation with respect to (David, Sooahn)
 
 
 ## Utility
@@ -78,22 +84,45 @@ Most existing standards for assessing partisan gerrymandering focus on the symme
 >    - Give it cooler notation (Soichiro)
 >- Visualize this (Soichiro)
 
-## Section 5 (Connections to Partisan Symmetry and Fairness Standards)
+## Assumptions about votes/voters
 
->- Incorporate uncertainty calculation into the S5 metric calculations (David)
->- Make this section smaller and instead use this to motivate the discussion (Sayumi)
+>- Votes independent of districting plans seems too strong (Adeline)
+>- Should we discuss turnout as a function of competitiveness? (Avery)
+>- Too much reinventing the wheel re election modelling (Georgie)
+>- How would votes being non-fixed impact measures? (Avery [and others])
+>- The Individual may be unclear depending on how this is focused (Tyler)
 
-# New Jersey
+# Mini Examples
 
-## New Jersey
+## Examples
 
->- Explain the structural advantage of Democrats in New Jersey (, Tyler)
+>- Mininois, Minichusetts, and Minisouri seemed to be more helpful than silly
+>- Elaborate more on their usage and choice of _these_ examples
+>- Appear a bit too early/move them out of Section 1 (Adam)
+
+## Alternative examples
+
+>- Can we better classify gerrymanders and non-gerrymanders by using enacted districts? (Jake)
+>- Mini examples, but for measures (Casey)
+>- Study all fifty-states and demonstrate that this is convincing everywhere (Tyler)
+
+# Sampling
 
 ## Sampling
 
 >- 1,000 seems small for a sample size (Adam, Jake)
 >- Why is the set of legally feasible plans the relevant counterfactual? (Georgie)
->    - Explain "Superfluous partisan considerations" (Avery)
+>- Explain "Superfluous partisan considerations" (Avery)
+
+# New Jersey
+
+## New Jersey
+
+>- Explain the structural advantage of Democrats in New Jersey (Tyler)
+
+```{r nj-maps, fig.cap="Baseline vote patterns, and two hypothetical gerrymanders. Census-designated places are shaded in gray and county lines in white.", fig.width=6.5, fig.height=3.5}
+include_graphics(here("paper/figures/nj_maps.pdf"))
+```
 
 ## Figure 5
 
@@ -104,14 +133,15 @@ include_graphics(here("paper/figures/nj_vars.pdf"))
 ## Figure 5
 
 >- What's the takeaway? (Soubhik)
->- Please add names, not just symbols to subtitles (most people)
+>- Add names, not just symbols to subtitles (most people)
 >    - Reminders of what they mean (Sooahn)
 >- Is this validation or comparison?
+>    - Yes!
 
 
 ## Figure 6
 
-```{r nj-district-shares, fig.cap="Distribution of district vote shares, with districts ordrered by baseline Democratic two-part vote share. Displayed on top are the district vote shares for six example plans, each extremal for some combination of districting measures.", fig.width=6.5, fig.height=3.9}
+```{r nj-district-shares, fig.cap="Distribution of district vote shares, with districts ordrered by baseline Democratic two-part vote share. Displayed on top are the district vote shares for six example plans, each extremal for some combination of districting measures.", fig.width=5.8, fig.height=3.5}
 include_graphics(here("paper/figures/nj_district_shares.pdf"))
 ```
 
@@ -121,47 +151,24 @@ include_graphics(here("paper/figures/nj_district_shares.pdf"))
 >    - Everyone who mentioned it was for confusion, which is a strong signal
 >- Spend more time _explaining_ the figure, rather than _describing_ the figure
 
+## Section 5 (Connections to Partisan Symmetry and Fairness Standards)
+
+>- Incorporate uncertainty calculation into the S5 metric calculations (David)
+>- Make this section smaller and instead use this to motivate the discussion (Sayumi)
 
 
-## Examples
-
->- Mininois, Minichusetts, and Minisouri seemed to be more helpful than silly
->- Elaborate more on their usage and choice of _these_ examples
->- Appear a bit too early/move them out of Section 1 (Adam)
-
-## Assumptions about votes/voters
-
->- Votes independent of districting plans seems too strong (Adeline)
->- Should we discuss turnout as a function of competitiveness? (Avery)
->- Too much reinventing the wheel re election modelling (Georgie)
->- How would votes being non-fixed impact measures? (Avery [and others])
->- The Individual may be unclear depending on how this is focused (Tyler)
-
-# Other than Jersey
-
-## Alternative examples
-
->- Can we better classify gerrymanders and non-gerrymanders by using enacted districts? (Jake)
->- Mini examples, but for measures (Casey)
->- Study all fifty-states and demonstrate that this is convincing everywhere (Tyler)
-
-
-# Broader Comments
+# Going Forward
 
 ## Formatting
 
->- Many, many sections. What's the target journal? (Sun Young)
 >- Add a longer discussion section that better frames the contribution (Jake, Sayumi)
+>- Many, many sections. What's the target journal? (Sun Young)
 >- Move propositions to appendix (Georgie)
 >- Utility (or maybe global utility) to appendix (Tyler)
-
-## Figures
-
 >- Figure 3 is hard to digest with two color scales (Sayumi, Casey)
 
 ## Expanding Focus 
 
 >- How does this extend to multiple groups? (Adeline)
 >- Handwaving towards multiple parties might be too little for potential strategic considerations (Sooahn)
-
 
