@@ -43,7 +43,7 @@ knitr::opts_chunk$set(echo = TRUE)
     -   Mix across types of utility
     -   Basic mixing of local and global (rather than pure)
 
--   Should think about how ideology mattesr
+-   Should think about how ideology matters
 
     -   Use a school district?
     -   Lean into a locality for a cleaner example where party is different
@@ -123,4 +123,3 @@ knitr::opts_chunk$set(echo = TRUE)
 
 -   For discussing New Jersey, spend some time talking about the when/where/why/so what of the differences across measures?
     [less meaningful if we focus on partisan harm]
-
