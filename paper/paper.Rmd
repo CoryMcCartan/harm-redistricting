@@ -126,7 +126,7 @@ As might be intuitively expected, total harm to voters is concentrated in areas 
 In the districting plan examples of Figure \ref{fig:mini-harm}, the differential harm of the Democratic gerrymander of Mininois is $-0.519$, the differential harm of the Democratic gerrymander of Minissouri is $-0.415$, and the differential harm of the Republican gerrymander of Minissouri is $0.450$, where positive values indicate Republican bias.
 In other words, the average Republican voter in Mininois is 51.9% more likely to be represented by a Democrat than an average Democrat is to be represented by a Republican, compared to the utility-maximizing plan in Figure \ref{fig:mini-util-opt}(a).
 
-# Individual Representational Harm
+# Individual Representational Harm {#sec:indiv-harm}
 
 -   this section: formalize and generalize the concepts in Section \ref{sec:motivation}.
 
@@ -256,7 +256,7 @@ For example, one could model district deviations as a systematic national shift 
 For ease and efficiency of computation, we stick to the simple proportionate uniform shift model here.
 Appendix \ref{app:formulas} contains the specific formulas used to compute $U^{(G)}, U^{(L)}, H$, and $\Delta H(q)$ from a set of past election returns and a sample of districting plans from a redistricting sampling algorithm.
 
-# Connections to Partisan Symmetry and Fairness, Standards {#sec:connections}
+# Connections to Partisan Symmetry and Fairness Standards {#sec:connections}
 
 In the years since @2004vieth, researchers have developed a veritable zoo of measures to identify partisan gerrymanders. Specifically, these measures aim to quantify deviations from partisan symmetry, fairness, or competitiveness. Some of the most commonly used are perhaps the *efficiency gap* [@stephanopoulos2015], *partisan bias* [@tufte1973pb; @king1987democratic], and the *mean-median* measure [@mcdonald2015unfair].
 All of these measures may be estimated using district vote shares alone, and as we discuss next, are to varying degrees related to our proposed measures.
