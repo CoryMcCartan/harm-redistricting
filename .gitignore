@@ -8,6 +8,7 @@
 # Raw data
 data-raw/*
 !data-raw/README.md
+!data-raw/*.R
 
 # misc and  LaTeX
 out/

@@ -73,7 +73,7 @@ Section \ref{sec:motivation} motivates our framework for measuring harm and illu
 Section \ref{sec:indiv-harm} formalizes the intuition of Section \ref{sec:motivation} and defines a general measure of individual and differential harm.
 Section \ref{sec:estimating} discusses estimating these measures from observed election results.
 Section \ref{sec:connections} connects our proposed measures to existing symmetry and fairness measures.
-Section \ref{sec:empirical} applies the proposed measures to congressional representation in New Jersey and primary elections for the New York City Council.
+Sections \ref{sec:nj} and \ref{sec:boston} apply the proposed measures to partisan gerrymandering of New Jersey congressional districts and racial impacts of district boundaries on Boston City Council primary elections.
 Section \ref{sec:discussion} concludes.
 
 # Motivation {#sec:motivation}
@@ -136,11 +136,9 @@ In other words, the average Republican voter in Mininois is 51.9% more likely to
 
 -   Voters vote in elections, each of which produces a specific outcome $v$ from the set $\Elecs$ of all possible election outcomes.
     In an election, voters either vote for a candidate running in their district, or abstain from voting.
-    We write $v_i$ [**CM: should this be** $v(i)$?]
-    to mean the candidate that individual $i$ votes for in election $v$.
+    We write $v(i)$ to mean the candidate that individual $i$ votes for in election $v$.
 
--   Every voter resides in some legislative district; this assignment is referred to as a *districting plan* and is represented here by a function $q_i$ [**CM:** $q(i)$?]
-    indicating the district that individual $i$ lives in.
+-   Every voter resides in some legislative district; this assignment is referred to as a *districting plan* and is represented here by a function $q(i)$ indicating the district that individual $i$ lives in.
     The set of all possible districting plans is $\Plans$.
 
 -   For an election $v$, we can tally the votes for each candidate; the candidate with the most votes wins.
@@ -153,8 +151,8 @@ In other words, the average Republican voter in Mininois is 51.9% more likely to
 To be harmed by a decision a voter must have a better outcome in the counterfactual world where another decision was made.
 To operationalize this, we need to introduce a counterfactual districting plan $\tilde q$.
 Then we may define the harm to an individual $i$ as $$
-h_i(v,q,\tilde q) = \ind\{v_i \neq \win_{q(i)}(v, q)\}
-        \ind\{v_i = \win_{\tilde q(i)}(v, \tilde q)\},
+h_i(v,q,\tilde q) = \ind\{v(i) \neq \win_{q(i)}(v, q)\}
+        \ind\{v(i) = \win_{\tilde q(i)}(v, \tilde q)\},
 $$that is, a voter is harmed only if they are not represented by the party of their choice *and* they would have been represented by the party of their choice under the counterfactual plan.
 
 ## Multiple Elections or Districting Plans
@@ -174,37 +172,39 @@ Thus, for example, the harm for a single individual $i$ becomes $H\mid I=i$; and
     \text{ and }V(I)=\win_{\tilde Q(I)}(V, \tilde Q)],
 $$that is, the probability that a randomly selected voter is misrepresented under the adopted plan but would not have been under a randomly selected counterfactual.
 
-**--------------- CM: this is as far as I've gotten. ---------------**
-
 # Differential Harm and Fairness {#subsec:diff-harm}
 
-Intuitively, a districting plan is fair if it does not harm the voters of one party more than another, on average.
-This is easily expressed using our notation above; $Q$ is *fair* in comparison to counterfactual $\tilde Q$ if $\E[H\mid V(I) = p]$ is constant across parties $p\in\Parties$.
+A natural extension of studying the average harm to voters is to examine how harm is distributed across certain groups of voters, defined by race, party, or other attributes of interest.
+Let $\Groups=\{G_1,G_2,\dots\}$ be a set of mutually exclusive groups of voters, so that for each voter $i$, we have $i\in G_k$ for some group $G_k$.
+
+Then we say that a plan $Q$ is *fair* in comparison to counterfactual $\tilde Q$ if $\E[H\mid I\in G_k]$ is constant across groups $G_k\in\Groups$.
 
 To quantify deviations from fairness, we introduce of a measure of \textit{differential harm}, defined as $$
-  \Delta^{p_1}_{p_2}H(q) \dfeq \E[H\mid V(I)=p_1, Q=q] - \E[H\mid V(I)=p_2, Q=q],
-$$ for two parties $p_1$ and $p_2$.
-So $\Delta^{p_1}_{p_2}H(q)=0$ for all $p_1,p_2\in\Parties$ if and only if $q$ is fair.
-From here onward we will restrict our attention to the case of two parties---concretely, $\Parties=\{\dem,\rep\}$---and simply write $\Delta H(q)=\Delta^\dem_\rep H(q)$.
-But the same concepts and definitions naturally carry over to the multiparty setting.
+  \Delta_{G_k-G_l}H(q) \dfeq \E[H\mid I\in G_k, Q=q] - \E[H\mid I\in G_l, Q=q],
+$$ for two groups $G_k$ and $G_l$.
+So $\Delta_{G_k-G_l}H(q)=0$ for all $G_k,G_l\in\Groups$ if and only if $q$ is fair.
+<!--
+From here onward we will restrict our attention to the case of two groups---concretely, $\Groups=\{\dem,\rep\}$---and simply write $\Delta H(q)=\Delta^\dem_\rep H(q)$.
+But the same concepts and definitions naturally carry over to the multigroup setting.
+-->
 
-Despite being derived from a local harm measure, $\Delta H(Q)$ is in fact closely related to the overall number of seats won by each party, as Proposition \ref{prop:fairness} describes below.
-Yet unlike a simple measure of seats, $\Delta H(Q)$ is shifted to an interpretable scale, where a value of zero corresponds to partisan fairness.
+Despite being derived from a local harm measure, $\Delta H(Q)$ is in fact closely related to the overall number of seats won by each group, as Proposition \ref{prop:fairness} describes below.
+Yet unlike a simple measure of seats, $\Delta H(Q)$ is shifted to an interpretable scale, where a value of zero corresponds to fairness.
 In other words, $\Delta H(Q)$ provides a connection between fairness and seats, establishing a normative guide to overall election outcomes.
-This connection further supports the use of total seats as a summary statistic in redistricting simulation methods, as advocated by @deford2020symmetry.
+This connection further supports the use of total seats won by each party as a summary statistic in partisan redistricting simulation methods, as advocated by @deford2020symmetry.
 
 ```{=tex}
 \begin{restatable}{prop}{propfairness} \label{prop:fairness}
-If turnout is equal across districts, i.e., if $\sum_{p\in\Parties} \votes^{(p)}(d,v,q)$ is constant across $d$, $v$, and $q$, then for a specific districting plan $q\in\Plans$ and political party $p\in\Parties$, we have
+Suppose $\Groups=\{G_1,G_2\}$. If turnout is equal across districts, then for a specific districting plan $q\in\Plans$,
 \begin{align*}
-    \Delta H(q) = \E[\seats(p, V, Q)\mid Q=q] - \E[\seats(p, V, \tilde Q)].
+    \Delta_{G_1-G_2} H(q) = \E[\seats(G_1, V, Q)\mid Q=q] - \E[\seats(G_1, V, \tilde Q)].
 \end{align*}
 
 \end{restatable}
 ```
 # Estimating the Harm Measures {#sec:estimating}
 
-The measures $U^{(G)}, U^{(L)}, H$ and $\Delta H(q)$ defined above require specification of a probability distribution on elections and districting plans, $\pi$.
+The measures $H$ and $\Delta H(q)$ defined above require specification of a probability distribution on elections and districting plan.
 Depending on one's viewpoint, this is either a theoretical fiction which must be specified by a model, or an actual data-generating process we must aim to estimate.
 Either way, past election data and an enacted districting plan alone are not enough to calculate these measures.
 
@@ -226,39 +226,26 @@ If these constraints are precisely those which are required by law or traditiona
 ## Modeling Election Outcomes
 
 Election results present a different set of modeling challenges, given the large number of factors that influence the outcome, and the general unpredictability of future events.
-As far as estimating measures like $U^{(G)}, U^{(L)}, H$, and $\Delta H(q)$, we would ideally use a relatively simple model that captures the primary drivers of election outcomes.
+As far as estimating measures like $H$ and $\Delta H(q)$, we would ideally use a relatively simple model that captures the primary drivers of election outcomes.
 In the interest of fairness, the model should not make any biasing assumptions about the future (e.g., that demographic shifts will favor one party, or that past trends in election returns will continue in the same direction).
 
-We propose a *proportionate uniform shift* model, which focuses on swings in the national political environment as the main determinant of election outcomes.
+Here, motivated primarily by computational convenience, we use a *proportionate uniform shift* model, which focuses on swings in the national political environment as the main determinant of election outcomes.
 Each election outcome over the period of interest (generally ten years or less) is modeled as a random deviation from a baseline outcome, and these deviations are assumed to consist of a constant fraction of voters of one party in each precinct switching to the other.
 The baseline itself can be established by averaging the results of all available statewide elections over the past decade or other suitable period.
-
-The proportionate uniform shift model is not mathematically equivalent to the uniform partisan swing model of @butler1951swing, but is near-identical for most precincts and districts. Despite their simplicity, uniform-swing--type models are highly accurate for out-of-sample prediction [@katz2020], and are intuitive and easy to implement.
-
-Proportionate shift, where we assume that a constant fraction of *voters of one party* in each precinct switch to the other party, has several advantages over the uniform swing model, where a constant fraction of *all voters* shifts parties.
-First, the proportionate shift prevents hypothetical party vote shares from exceeding 1 or falling below 0 in any precinct.
-Second, as it has the effect of scaling vote shares across precincts by a constant multiple, it preserves the relative balance of a party's voters across precincts.
-For measures like $H$ and $F$ which consider voters in each party separately, this helpfully simplifies computations.
-
-The proportionate shift may be mathematically expressed as linear shift on a transformed scale, not unlikea generalized linear model.
-Specifically, we define $\gamma:[0,1]\to\R$, $$
-\gamma(x) = -\thalf\sgn(x-\thalf)\log(1-2\qty|x-\thalf|),
-$$ which is the inverse CDF of a Laplace distribution with rate 2.[^1]
-Then a party's vote share in precinct $k$, notated here as $s_k$, is modeled as $$
-\gamma(s_k) = \gamma(\overline s_k) + \eps, \qquad \eps \sim \Norm(0, \sigma^2_{\mathrm{hist}}),
-$$ where $\overline{s}_k$ is the party baseline, and $\sigma^2_\mathrm{hist}$ is estimated from the historical variability in nationwide popular vote shares.
-For congressional elections in the United States from 1974--2018, we have $\widehat\sigma^2_\mathrm{hist}=0.03723$, and so draw predictive deviations from $\mathrm{t}_{22}(0, \widehat\sigma^2_\mathrm{hist})$.
-
-[^1]: A rate of 2 is chosen so that the slope of the link function at $\half$ is exactly 1, meaning that transformed vote shares will be on approximately the same scale as the original shares.
+The proportionate uniform shift model is nearly identical to the uniform partisan swing model of @butler1951swing for most precincts and districts, but is more computationally convenient and avoids issues of vote shares exceeding 100% or falling below 0%.
+Despite their simplicity, uniform-swing--type models are highly accurate for out-of-sample prediction [@katz2020], and are intuitive and easy to implement.
+More details about our proportionate uniform shift model may be found in Appendix \ref{app:formulas}.
 
 More complicated election outcome models are certainly possible and straightforward to use with the measures proposed here.
 For example, one could model district deviations as a systematic national shift plus a local idiosyncratic effect, as is done in the Stochastic Uniform Partisan Swing model of @gelman1994unified.
 For ease and efficiency of computation, we stick to the simple proportionate uniform shift model here.
-Appendix \ref{app:formulas} contains the specific formulas used to compute $U^{(G)}, U^{(L)}, H$, and $\Delta H(q)$ from a set of past election returns and a sample of districting plans from a redistricting sampling algorithm.
+Appendix \ref{app:formulas} contains the specific formulas used to compute $H$, and $\Delta H(q)$ from a set of past election returns and a sample of districting plans from a redistricting sampling algorithm.
 
 # Connections to Partisan Symmetry and Fairness Standards {#sec:connections}
 
-In the years since @2004vieth, researchers have developed a veritable zoo of measures to identify partisan gerrymanders. Specifically, these measures aim to quantify deviations from partisan symmetry, fairness, or competitiveness. Some of the most commonly used are perhaps the *efficiency gap* [@stephanopoulos2015], *partisan bias* [@tufte1973pb; @king1987democratic], and the *mean-median* measure [@mcdonald2015unfair].
+In the years since @2004vieth, researchers have developed a veritable zoo of measures to identify partisan gerrymanders.
+Specifically, these measures aim to quantify deviations from partisan symmetry, fairness, or competitiveness.
+Some of the most commonly used are perhaps the *efficiency gap* [@stephanopoulos2015], *partisan bias* [@tufte1973pb; @king1987democratic], and the *mean-median* measure [@mcdonald2015unfair].
 All of these measures may be estimated using district vote shares alone, and as we discuss next, are to varying degrees related to our proposed measures.
 
 ## The Efficiency Gap
@@ -314,30 +301,7 @@ In practice, the mean-median differences is moderately correlated with other par
 However, considerations of the mean and median district are only related to individuals insofar as they describe the general propensity to be harmed or benefited by a particular map.
 As [@katz2020] discuss, the mean-median difference can be interpreted as an estimator of *votes-denominated bias*, another value derived from the seats-votes curve.
 
-## Districting Plan Competitiveness {#sec:competitive}
-
-The notion of district *competitiveness*, while related to the slope of the seats-vote curve around $\half$, is not the same as partisan symmetry.
-However, one commonly used measure of competitiveness, from @tamcho2016, is related to our local utility measure $U^{(L)}$.
-The measure of @tamcho2016, which we will denote by $\mathrm{comp}_\alpha(v,q)$, contains two terms: one, $T_p(v,q)$, measuring the closeness of district vote shares to 50%, and the other, $T_e(v,q)$, measuring the closeness of the overall share of seats to 50%; the relative importance of these two terms is controlled by $\alpha$.
-It is this first term which his closely related to $U^{(L)}$, as stated in Proposition \ref{prop:comp} below.
-
-```{=tex}
-\begin{restatable}{prop}{propcomp} \label{prop:comp}
-If turnout is equal across districts, for an election $v\in\Elecs$ and districting plan $q\in\Plans$ and two political parties, we have
-\begin{align*}
-    \E[U^{(L)}\mid V=v, Q=q] &= \frac{1}{2|D|}\sum_{d\in D}
-        \qty|\frac{\votes^{(p_a)}}{\votes^{(p_b)} + \votes^{(p_b)}}-\half| \\
-    &= \half T_p(v,q) = \frac{\mathrm{comp}_\alpha(v,q)}{1+\alpha T_e(v_q)}.
-\end{align*}
-
-\end{restatable}
-```
-Importantly, $\mathrm{comp}_\alpha(v,q)$ is designed to be *minimized*---smaller values correspond to more competitive districts.
-But, as briefly discussed above, this actually runs counter to the local utility measure, which encourages lopsided districts with as many similarly-minded voters as possible.
-@brunell2010 discusses this point in much more detail, arguing that competitive districts should be avoided where possible.
-Buttressing our choice of local utility function, he analyzes ANES survey data to show that voters approve more highly of their representative and of Congress overall when their representative votes in alignment with their preferences.
-
-# Application: New Jersey {#sec:empirical}
+# Application to Partisan Gerrymandering in New Jersey {#sec:nj}
 
 To illustrate the connections in the preceding section and to demonstrate the value of the proposed measures in a real-world setting, we provide a brief analysis of congressional districting in the state of New Jersey.
 As discussed above, many gerrymandering measures function well in highly competitive states, but may produce more counterintuitive results in other states.
@@ -352,10 +316,10 @@ Figure \ref{fig:nj-maps} shows the baseline Democratic vote share by precinct, a
 The Democratic gerrymander has 11 Democratic seats and 1 Republican seat at baseline, while the Republican gerrymander has 6 Democratic and 6 Republican seats.
 
 We sample 1,000 districting plans using the SMC algorithm of @mccartan2020, setting constraints to favor compact plans with district boundaries that tend to follow county lines.
-For each of these sampled plans and the two gerrymanders, we calculate the utility, harm, and fairness measures, as well as the expected number of Democratic seats, the efficiency gap, partisan bias, and the mean-median score.[^2]
+For each of these sampled plans and the two gerrymanders, we calculate the utility, harm, and fairness measures, as well as the expected number of Democratic seats, the efficiency gap, partisan bias, and the mean-median score.[^1]
 The distribution of these measures is shown in Figure \ref{fig:nj-vars}.
 
-[^2]: We include partisan bias and mean-median in these figures as it is common practice, though it may have theoretical issues when used for a delegation rather than a legislature[@katz21].
+[^1]: We include partisan bias and mean-median in these figures as it is common practice, though it may have theoretical issues when used for a delegation rather than a legislature[@katz21].
 
 The efficiency gap and $\Delta H(q)$ both correctly classify the gerrymandered plans as such, and with the correct sign.
 Both gerrymanders also have a higher average harm than any of the simulated plans.
@@ -385,6 +349,8 @@ While generally local utility encourages proportionality and noncompetitive dist
 The fair but low local utility plan has a similar vote share pattern to the fair plan, but overall with more competitive districts, which are generally penalized by the local utility measure.
 Conversely, the unfair but high local utility plan has 9 Democratic seats, 2 Republican seats, and 1 highly competitive seat at baseline---an unfair Democratic gerrymander---while keeping district vote shares relatively noncompetitive.
 
+# Application to Primary Elections in Boston {#sec:boston}
+
 # Discussion {#sec:discussion}
 
 This paper is an attempt to bridge the quantitative gap between votes and representation.
@@ -407,20 +373,15 @@ Further work is needed to characterize how existing redistricting requirements a
 \renewcommand\thefigure{\thesection.\arabic{figure}}
 \setcounter{figure}{0}
 ```
+
 # Proofs of Propositions {#app:proofs}
 
-```{=tex}
 \propfairness*
 
 \begin{proof}
 \end{proof}
 
-\propcomp*
-
-\begin{proof}
-\end{proof}
-```
-# Computing Utility, Harm, and Fairness from Precinct-level Election Data {#app:formulas}
+# Computing Harm and Fairness from Precinct-level Election Data {#app:formulas}
 
 ```{=html}
 <!--
@@ -436,6 +397,22 @@ Further work is needed to characterize how existing redistricting requirements a
 Formulas here.
 -->
 ```
+Proportionate shift, where we assume that a constant fraction of *voters of one party* in each precinct switch to the other party, has several advantages over the uniform swing model, where a constant fraction of *all voters* shifts parties.
+First, the proportionate shift prevents hypothetical party vote shares from exceeding 1 or falling below 0 in any precinct.
+Second, as it has the effect of scaling vote shares across precincts by a constant multiple, it preserves the relative balance of a party's voters across precincts.
+For measures like $H$ and $F$ which consider voters in each party separately, this helpfully simplifies computations.
+
+The proportionate shift may be mathematically expressed as linear shift on a transformed scale, not unlikea generalized linear model.
+Specifically, we define $\gamma:[0,1]\to\R$, $$
+\gamma(x) = -\thalf\sgn(x-\thalf)\log(1-2\qty|x-\thalf|),
+$$ which is the inverse CDF of a Laplace distribution with rate 2.[^2]
+Then a party's vote share in precinct $k$, notated here as $s_k$, is modeled as $$
+\gamma(s_k) = \gamma(\overline s_k) + \eps, \qquad \eps \sim \Norm(0, \sigma^2_{\mathrm{hist}}),
+$$ where $\overline{s}_k$ is the party baseline, and $\sigma^2_\mathrm{hist}$ is estimated from the historical variability in nationwide popular vote shares.
+For congressional elections in the United States from 1974--2018, we have $\widehat\sigma^2_\mathrm{hist}=0.03723$, and so draw predictive deviations from $\mathrm{t}_{22}(0, \widehat\sigma^2_\mathrm{hist})$.
+
+[^2]: A rate of 2 is chosen so that the slope of the link function at $\half$ is exactly 1, meaning that transformed vote shares will be on approximately the same scale as the original shares.
+
 # Districting Measures in New Jersey {#app:nj}
 
 ```{r nj-pairs, fig.cap="Scatterplots for all pairs of measures. Color indicates the number of Democratic seats won (ranging from 7 to 10). Below the diagonal, numbers indicate the absolute value of the correlation between variables.", fig.width=7, fig.height=7}
@@ -473,3 +450,4 @@ This does not need to be the case, however.
 A misrepresentation map can indicate the difference between two singular maps, calculating the difference in expected district-level party representation.
 This would allow direct computation of utility, fairness, or other metrics based on the difference in the two maps.
 Similarly, given two sets of ensembles, likely generated under different target distributions, we can create a similar misrepresentation map that would allow us to estimate interesting measures, such as the differential harm caused by the inclusion of an additional criteria in state district drawing rules.
+

@@ -6,7 +6,7 @@ AlwaysSaveHistory: Default
 
 EnableCodeIndexing: Yes
 UseSpacesForTab: Yes
-NumSpacesForTab: 2
+NumSpacesForTab: 4
 Encoding: UTF-8
 
 RnwWeave: Sweave
@@ -16,4 +16,3 @@ AutoAppendNewline: Yes
 StripTrailingWhitespace: Yes
 
 MarkdownWrap: Sentence
-MarkdownCanonical: Yes
