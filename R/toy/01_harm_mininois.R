@@ -12,10 +12,8 @@ pl_gerry = c(2, 2, 2, 3, 3, 1,
              2, 3, 3, 3, 1, 1,
              1, 1, 1, 1, 1, 1)
 
-dem_gerry = with(mininois, tapply(dem, pl_gerry, sum)/tapply(pop, pl_gerry, sum))[pl_gerry]
 dem_fair = with(mininois, tapply(dem, pl_fair, sum)/tapply(pop, pl_fair, sum))[pl_fair]
-dem_harm = weighted.mean((dem_gerry<0.5)*(dem_fair>0.5), mininois$dem)
-rep_harm = weighted.mean((dem_gerry>0.5)*(dem_fair<0.5), mininois$rep)
+dem_gerry = with(mininois, tapply(dem, pl_gerry, sum)/tapply(pop, pl_gerry, sum))[pl_gerry]
 
 coords_fair = list(x=c(1/4, 1/6, 2/3),
                    y=c(1.04, -0.04, -0.04))
@@ -46,7 +44,7 @@ for (i in 1:3) {
 p3 = plot_state(mininois, mininois_people,
            pl_gerry, mininois$rep*round(1 - dem_fair)) +
     scale_fill_gradient("Total\nharm", low="#e5e6e5", high="#666666") +
-    labs(title="(c), Voter harm, (a) vs. (b)") +
+    labs(title="(c) Voter harm, (a) vs. (b)") +
     theme(legend.key.width=unit(0.2, "cm"))
 })
 

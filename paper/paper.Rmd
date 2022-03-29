@@ -79,7 +79,7 @@ Section \ref{sec:discussion} concludes.
 
 # Motivation {#sec:motivation}
 
-To illustrate the concepts and measures we introduce, we will make use of three running examples, which are stylized representations of U.S. states: Mininois, Minissouri, and Minichussets.
+To illustrate the concepts and measures we introduce, we will make use of three examples, which are stylized representations of U.S. states: Mininois, Minissouri, and Minichussets.
 Mininois has one large Democratic city which can electorally dominate the rest of the state; Minissouri has two medium-sized cities which are not large enough to deliver a statewide Democratic majority; and Minichusetts has a uniform 3--2 Democratic split in every precinct.
 Each example state has the same population and should be divided into 3 districts with population between 54 and 66.
 Voters' preferences are assumed to be stable across elections, and turnout is 100%.
@@ -109,7 +109,9 @@ Mininois also has a Democratic majority, but the voters are no longer integrated
 In a familiar pattern of partisan sorting, Democrats are sorted asymmetrically into a single population-dominating city whereas Republicans dominate the less ideologically segregated rural regions [@chen:rodd:13; @enos:brown:21].
 This allows for significantly greater variation in the expected partisanship of the districts drawn.
 
--   show a fair map and a gerrymandered map
+```{r harm-mininois, fig.cap="Two potential districting plans for Mininois: a Democratic gerrymander (a) and a close-to-proportional plan (b). Panel (c) shows the total harm to voters in each precinct done by (a), using (b) as a counterfactual."}
+include_graphics(here("paper/figures/harm_mininois.pdf"))
+```
 
 A Democratic gerrymander in Mininois effectuates Democratic control by splitting its city into with the blades of a pinwheel reaching out into the more Republican, rural remainder of the state..
 If we consider the two plans in Figure TODO, we see that the Democratic gerrymander would likely elect zero Republicans and three Democrats, whereas the fair map would likely elect two Democrats and one Republican.
@@ -135,8 +137,8 @@ While we've begun with a two group case, Republicans and Democrats, this can be 
 Perhaps we are interested in a third party or the interaction between White and Black with Democrats and Republicans.
 This framework allows for us to index by these groups and simply break down the interactions as components of the sum of the harms.
 
-```{r mini-harm, fig.cap="Three potential districting plans for Mininois and Minissouris, showing district partisan lean (top row) and total voter harm versus the counterfactuals in Figure 2(a)-(b) (bottom row; darker shading indicates more harm)."}
-include_graphics(here("paper/figures/mini_harm.pdf"))
+```{r diffharm-minissouri, fig.cap="Three potential districting plans for Minissouris: a Democratic gerrymander (a), a close-to-proportional plan (b), and a Republican gerrymander (c). Panels (d) and (f) show the total harm to voters in each precinct done by their corresponding gerrymander, using (b) as a counterfactual.  Panel (e) summarizes this harm by party and across precincts, showing the average harm done to voters of each party by each gerrymander."}
+include_graphics(here("paper/figures/diffharm_minissouri.pdf"))
 ```
 
 Figure \ref{fig:mini-harm} illustrates this measure for a set of hypothetical gerrymanders, comparing to the set of optimal plans from Figure .
