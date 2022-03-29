@@ -280,7 +280,7 @@ And as discussed above, $U^{(G)}$ and $U^{(L)}$ both reward proportionality.
 Of course, proportionality is not always possible, given a state's political geography.
 The harm measures $H$ and $\Delta H(q)$ both reflect this by comparing to a set of counterfactual districting plans.
 This addresses one inherent shortcoming of the efficiency gap, illustrated best by the state of Massachusetts.
-According to the efficiency gap, Massachussetts' congressional districting plan is a Democratic gerrymander ($EG=-0.14$).
+According to the efficiency gap, Massachusetts' congressional districting plan is a Democratic gerrymander ($EG=-0.14$).
 But it is impossible to draw a single Republican congressional district in the state.
 Consequently $H$ and $\Delta H(q)$ are everywhere 0.
 
@@ -403,7 +403,7 @@ Further work is needed to characterize how existing redistricting requirements a
 \begin{proof}
 \end{proof}
 ```
-# Computing Harm and Fairness from Precinct-level Election Data {#app:formulas}
+# Computing Harm Measures from Precinct-level Election Data {#app:formulas}
 
 ```{=html}
 <!--
