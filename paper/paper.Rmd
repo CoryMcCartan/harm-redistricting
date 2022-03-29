@@ -147,7 +147,6 @@ As might be intuitively expected, total harm to voters is concentrated in areas 
 In the districting plan examples of Figure \ref{fig:mini-harm}, the differential harm of the Democratic gerrymander of Mininois is $-0.519$, the differential harm of the Democratic gerrymander of Minissouri is $-0.415$, and the differential harm of the Republican gerrymander of Minissouri is $0.450$, where positive values indicate Republican bias.
 In other words, the average Republican voter in Mininois is 51.9% more likely to be represented by a Democrat than an average Democrat is to be represented by a Republican, compared to the utility-maximizing plan in Figure.
 
-
 # Individual Representational Harm {#sec:indiv-harm}
 
 This section will formalize and generalize the concepts in Section \ref{sec:motivation}, beginning with some notation.
@@ -217,7 +216,13 @@ Single-member districts are often motivated by the value in representation to sp
 It is therefore natural to consider not just the average harm to voters done by a plan, but also how this harm is distributed across certain groups of voters, defined by race, party, or other attributes of interest.
 
 To that end, let $\Groups=\{G_1,G_2,\dots\}$ be a set of mutually exclusive groups of voters, so that for each voter $i$, we have $i\in G_k$ for some group $G_k$.
-We will say that a plan $q$ is *fair* in comparison to a counterfactual $\tilde Q$ if $\E[H(q)\mid I\in G_k]$ is constant across groups $G_k\in\Groups$.
+In general we will not require the group identities to be fixed with respect to elections.[^1]
+This is because some group identities, like partisan preference, may themselves change election-to-election.
+
+[^1]: Formally, we have random indicator variables $\ind\{i\in G_k\}$ for all $i$ and $k$, subject to the constraint that $\sum_k \ind\{i\in G_k\}=1$ for all $i$.
+    These indicator variables may be correlated with $V$ and/or $\tilde Q$, in general.
+
+Once we have defined a set of groups, we say that a plan $q$ is *fair* in comparison to a counterfactual $\tilde Q$ if $\E[H(q)\mid I\in G_k]$ is constant across groups $G_k\in\Groups$.
 
 Fairness is a strict condition; any real-life plan will never be exactly fair.
 To quantify deviations from fairness, we introduce the concept of *differential harm*, defined as $$
@@ -316,7 +321,7 @@ Like our proposed measures, this quantity is defined independent of electoral da
 Each value of $s$ yields information about a different point on the seats-votes curve.
 
 In competitive states, where the baseline election has a statewide vote share near 50%, $\beta(\half)$ is highly correlated with $\E[\seats(\dem, V, Q)\mid Q=q]$ and thus $\Delta H(q)$ as well.
-But in more lopsided states, $\beta(\half)$ can give unintuitive results, which, if not interpreted carefully, can lead practictioners to make incorrect conclusions about the presence and direction of a partisan gerrymander.
+But in more lopsided states, $\beta(\half)$ can give unintuitive results, which, if not interpreted carefully, can lead practitioners to make incorrect conclusions about the presence and direction of a partisan gerrymander.
 
 Fundamentally, however, $\beta(s)$ measures partisan symmetry, and not partisan harm or utility.
 It should not be surprising, then, that it can and does "disagree" about the partisan effects of a particular plan.
@@ -370,10 +375,10 @@ Figure \ref{fig:nj-maps} shows the baseline Democratic vote share by precinct, a
 The Democratic gerrymander has 11 Democratic seats and 1 Republican seat at baseline, while the Republican gerrymander has 6 Democratic and 6 Republican seats.
 
 We sample 1,000 districting plans using the SMC algorithm of @mccartan2020, setting constraints to favor compact plans with district boundaries that tend to follow county lines.
-For each of these sampled plans and the two gerrymanders, we calculate the utility, harm, and fairness measures, as well as the expected number of Democratic seats, the efficiency gap, partisan bias, and the mean-median score.[^1]
+For each of these sampled plans and the two gerrymanders, we calculate the utility, harm, and fairness measures, as well as the expected number of Democratic seats, the efficiency gap, partisan bias, and the mean-median score.[^2]
 The distribution of these measures is shown in Figure \ref{fig:nj-pairs}.
 
-[^1]: We include partisan bias and mean-median in these figures as it is common practice, though it may have theoretical issues when used for a delegation rather than a legislature[@katz21].
+[^2]: We include partisan bias and mean-median in these figures as it is common practice, though it may have theoretical issues when used for a delegation rather than a legislature [@katz21].
 
 The efficiency gap and $\Delta H(q)$ both correctly classify the gerrymandered plans as such, and with the correct sign.
 Both gerrymanders also have a higher average harm than any of the simulated plans.
@@ -414,7 +419,6 @@ Further work is needed to characterize how existing redistricting requirements a
 \renewcommand\thefigure{\thesection.\arabic{figure}}
 \setcounter{figure}{0}
 ```
-
 # Computing Harm Measures from Precinct-level Election Data {#app:formulas}
 
 ```{=html}
@@ -436,13 +440,13 @@ For $\Delta H(q)$, which considers voters in each party separately, this helpful
 The proportionate shift may be mathematically expressed as linear shift on a transformed scale, not unlike a generalized linear model.
 Specifically, we define $\gamma:[0,1]\to\R$, $$
 \gamma(x) = -\thalf\sgn(x-\thalf)\log(1-2\qty|x-\thalf|),
-$$ which is the inverse CDF of a Laplace distribution with rate 2.[^2]
+$$ which is the inverse CDF of a Laplace distribution with rate 2.[^3]
 Then a party's vote share in precinct $k$ and election $v$, notated here as $s_{kv}$, is modeled as $$
 \gamma(s_{kv}) = \gamma(\overline s_k) + \eps_v, \qquad \eps_v \iid \Norm(0, \sigma^2_{\mathrm{hist}}),
 $$ where $\overline{s}_k$ is the party baseline, and $\sigma^2_\mathrm{hist}$ is estimated from the historical variability in nationwide popular vote shares.
 For congressional elections in the United States from 1974--2018, we have $\widehat\sigma^2_\mathrm{hist}=0.03723$, and so draw predictive deviations from $\mathrm{t}_{22}(0, \widehat\sigma^2_\mathrm{hist})$.
 
-[^2]: A rate of 2 is chosen so that the slope of the link function at $\half$ is exactly 1, meaning that transformed vote shares will be on approximately the same scale as the original shares.
+[^3]: A rate of 2 is chosen so that the slope of the link function at $\half$ is exactly 1, meaning that transformed vote shares will be on approximately the same scale as the original shares.
 
 # Districting Measures in New Jersey {#app:nj}
 
