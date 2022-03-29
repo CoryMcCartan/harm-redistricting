@@ -12,6 +12,7 @@
 \usepackage{tocloft}
 \usepackage{dsfont}
 \usepackage{thmtools}
+\usepackage{apxproof}
 
 % paper-specific
 \newcommand{\Elecs}{\mathcal{V}}
@@ -29,7 +30,12 @@
 
 % generic
 \theoremstyle{plain}
-\newtheorem{prop}{Proposition}
+\newtheoremrep{prop}{Proposition}[section]
+\newtheoremrep{claim}[prop]{Claim}
+\newtheoremrep{corollary}{Corollary}[prop]
+\newtheoremrep{theorem}[prop]{Theorem}
+\newtheoremrep{lemma}[prop]{Lemma}
+
 
 \newcommand{\C}{\ensuremath{\mathbb{C}}}
 \newcommand{\R}{\ensuremath{\mathbb{R}}}

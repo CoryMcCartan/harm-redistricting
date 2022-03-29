@@ -93,7 +93,7 @@ include_graphics(here("paper/figures/minis_schematic.pdf"))
 
 First, we consider the case of Minichusetts.
 Modeled on Massachusetts, Minichusetts contains a remarkable lack of partisan segregation.
-This high level of integration, combined with Democrats receiving the majority of votes, leads to a Republican inability to win any seats under recent historical voting patterns \[@duch:18\].
+This high level of integration, combined with Democrats receiving the majority of votes, leads to a Republican inability to win any seats under recent historical voting patterns [@duch:18].
 For existing measures, this creates a conflict: Republicans win about 40% of the vote, but zero of the nine seats.
 The Efficiency Gap would correctly identify that the enacted map favors Democrats, whereas both Partisan Bias and Mean-Median indicate a pro-Republican bias (ref planscore).
 
@@ -106,18 +106,19 @@ In places like Minichusetts, as no plan can be drawn which improves the partisan
 
 Not all cases are as simple as those where one party wins all the seats.
 Mininois also has a Democratic majority, but the voters are no longer integrated.
-In a familiar pattern of partisan sorting, Democrats are sorted asymmetrically into a single population-dominating city whereas Republicans dominate the less ideologically segregated rural regions \[@chen:rodd:13\] \[@enos:brown:21\]. This allows for significantly greater variation in the expected partisanship of the districts drawn.
+In a familiar pattern of partisan sorting, Democrats are sorted asymmetrically into a single population-dominating city whereas Republicans dominate the less ideologically segregated rural regions [@chen:rodd:13; @enos:brown:21].
+This allows for significantly greater variation in the expected partisanship of the districts drawn.
 
 -   show a fair map and a gerrymandered map
 
 A Democratic gerrymander in Mininois effectuates Democratic control by splitting its city into with the blades of a pinwheel reaching out into the more Republican, rural remainder of the state..
 If we consider the two plans in Figure TODO, we see that the Democratic gerrymander would likely elect zero Republicans and three Democrats, whereas the fair map would likely elect two Democrats and one Republican.
-Consider the precincts \[4, 1\] (maybe highlighted in a color).
-\[4,1\] is placed in a Republican district in the fair map, while it is in a Democratic district in the gerrymandered map.
+Consider the precincts $(4, 1)$ (maybe highlighted in a color).
+$(4,1)$ is placed in a Republican district in the fair map, while it is in a Democratic district in the gerrymandered map.
 This precinct has 2 Republicans who are not represented by their co-partisan in the gerrymandered plan, but would have been represented by a co-partisan in the fair plan.
 Conversely, the 1 Democrat is represented by their co-partisan in the gerrymandered plan, but not the fair plan.
 Each of these three voters can show a counterfactual where they would be better represented and thus have a claim to harm.
-Yet, if we instead consider any voter who lives in the (other color) \[1,1\] precinct, those voters must always be in a Democratic district given the distribution of voters.
+Yet, if we instead consider any voter who lives in the (other color) $(1, 1)$ precinct, those voters must always be in a Democratic district given the distribution of voters.
 While the Republicans in that precinct are not represented by their co-partisan, they never would be.
 Those Republicans can't be individually harmed by redistricting.
 
@@ -138,19 +139,12 @@ This framework allows for us to index by these groups and simply break down the 
 include_graphics(here("paper/figures/mini_harm.pdf"))
 ```
 
-Figure \ref{fig:mini-harm} illustrates this measure for a set of hypothetical gerrymanders, comparing to the set of optimal plans from Figure \ref{fig:mini-util-opt}.
+Figure \ref{fig:mini-harm} illustrates this measure for a set of hypothetical gerrymanders, comparing to the set of optimal plans from Figure .
 As might be intuitively expected, total harm to voters is concentrated in areas whose party representation flips from the gerrymander to the counterfactual plan.
 
 In the districting plan examples of Figure \ref{fig:mini-harm}, the differential harm of the Democratic gerrymander of Mininois is $-0.519$, the differential harm of the Democratic gerrymander of Minissouri is $-0.415$, and the differential harm of the Republican gerrymander of Minissouri is $0.450$, where positive values indicate Republican bias.
-In other words, the average Republican voter in Mininois is 51.9% more likely to be represented by a Democrat than an average Democrat is to be represented by a Republican, compared to the utility-maximizing plan in Figure \ref{fig:mini-util-opt}(a).
+In other words, the average Republican voter in Mininois is 51.9% more likely to be represented by a Democrat than an average Democrat is to be represented by a Republican, compared to the utility-maximizing plan in Figure.
 
-| State      | Plan                   | Total Harm | Differential Harm | Efficiency Gap | Partisan Bias | Mean-Median | Declination |
-|------------|------------------------|------------|-------------------|----------------|---------------|-------------|-------------|
-| Mininois   | "Fair"                 |            |                   |                |               |             |             |
-| Mininois   | Democratic Gerrymander |            | -0.519            |                |               |             |             |
-| Minissouri | Fair                   |            |                   |                |               |             |             |
-| Minissouri | Democratic Gerrymander |            | -0.415            |                |               |             |             |
-| Minissouri | Republican Gerrymander |            | 0.450             |                |               |             |             |
 
 # Individual Representational Harm {#sec:indiv-harm}
 
@@ -229,10 +223,6 @@ To quantify deviations from fairness, we introduce the concept of *differential 
 $$ for two groups $G_k$ and $G_l$.
 So $\Delta_{G_k-G_l}H(q)$ will be positive if voters in group $G_k$ are harmed at a higher rate than voters in group $G_l$, indicating that plan $q$ favors $G_l$ over $G_k$.
 Using our definition of fairness, $\Delta_{G_k-G_l}H(q)=0$ for all $G_k,G_l\in\Groups$ if and only if $q$ is fair.
-<!--
-From here onward we will restrict our attention to the case of two groups---concretely, $\Groups=\{\dem,\rep\}$---and simply write $\Delta H(q)=\Delta^\dem_\rep H(q)$.
-But the same concepts and definitions naturally carry over to the multigroup setting.
--->
 
 It is this measure of differential harm that we propose as a unified framework for evaluating a districting plan across a variety of dimensions.
 It is derived from an individual-level measure of representation and it accounts for the space of counterfactual possibilities.
@@ -270,13 +260,13 @@ In the interest of fairness, the model should not make any biasing assumptions a
 Here, motivated primarily by computational convenience, we use a *proportionate uniform shift* model, which focuses on swings in the national political environment as the main determinant of election outcomes.
 Each election outcome over the period of interest (generally ten years or less) is modeled as a random deviation from a baseline outcome, and these deviations are assumed to consist of a constant fraction of voters of one party in each precinct switching to the other.
 The baseline itself can be established by averaging the results of all available statewide elections over the past decade or other suitable period.
-The proportionate uniform shift model is nearly identical to the uniform partisan swing model of @butler1951swing for most precincts and districts, but is more computationally convenient and avoids issues of vote shares exceeding 100% or falling below 0%.
-Despite their simplicity, uniform-swing--type models are highly accurate for out-of-sample prediction [@katz2020], and are intuitive and easy to implement.
+The proportionate uniform shift model is nearly identical to the uniform partisan swing model of @butler1951swing for most precincts and districts, but is more computationally convenient and avoids issues of vote shares exceeding 100% or falling below 0%. Despite their simplicity, uniform-swing--type models are highly accurate for out-of-sample prediction [@katz2020], and are intuitive and easy to implement.
 More details about our proportionate uniform shift model may be found in Appendix \ref{app:formulas}.
 
 More complicated election outcome models are certainly possible and straightforward to use with the measures proposed here.
 For example, one could model district deviations as a systematic national shift plus a local idiosyncratic effect, as is done in the Stochastic Uniform Partisan Swing model of @gelman1994unified.
 For ease and efficiency of computation, we stick to the simple proportionate uniform shift model here.
+In Section \ref{sec:boston}, however, we consider a more complicated model for primary elections.
 
 ## Calculating Harm and Differential Harm
 
@@ -289,9 +279,7 @@ Appendix \ref{app:formulas} contains the specific formulas used to compute $H(q)
 
 # Connections to Existing Partisan and Racial Gerrymandering Metrics {#sec:connections}
 
-In the years since @2004vieth, researchers have developed a veritable zoo of measures to identify partisan gerrymanders.
-Specifically, these measures aim to quantify deviations from partisan symmetry, fairness, or competitiveness.
-Some of the most commonly used are perhaps the *efficiency gap* [@stephanopoulos2015], *partisan bias* [@tufte1973pb; @king1987democratic], and the *mean-median* measure [@mcdonald2015unfair].
+In the years since @2004vieth, researchers have developed a veritable zoo of measures to identify partisan gerrymanders. Specifically, these measures aim to quantify deviations from partisan symmetry, fairness, or competitiveness. Some of the most commonly used are perhaps the *efficiency gap* [@stephanopoulos2015], *partisan bias* [@tufte1973pb; @king1987democratic], and the *mean-median* measure [@mcdonald2015unfair].
 All of these measures may be estimated using district vote shares alone, and as we discuss next, are to varying degrees related to our proposed measures.
 
 ## The Efficiency Gap
@@ -355,14 +343,15 @@ In other words, differential harm provides a connection between fairness and sea
 This connection further supports the use of total seats won by each party as a summary statistic in partisan redistricting simulation methods, as advocated by @deford2020symmetry.
 
 ```{=tex}
-\begin{restatable}{prop}{propfairness} \label{prop:fairness}
+\begin{proprep} \label{prop:fairness}
 Suppose $\Groups=\{\dem,\rep\}$. If turnout is equal across districts, then for a specific districting plan $q\in\Plans$,
 \begin{align*}
     \Delta_{\rep-\dem} H(q) = \E[\seats(\dem, V, \tilde Q)] - \E[\seats(\dem, V, q)].
 \end{align*}
 \textbf{CM note: define $\seats$ or replace with sum.}
-
-\end{restatable}
+\end{proprep}
+\begin{proof}
+\end{proof}
 ```
 # Application to Partisan Gerrymandering in New Jersey {#sec:nj}
 
@@ -423,14 +412,7 @@ Further work is needed to characterize how existing redistricting requirements a
 \renewcommand\thefigure{\thesection.\arabic{figure}}
 \setcounter{figure}{0}
 ```
-# Proofs of Propositions {#app:proofs}
 
-\propfairness
-
-```{=tex}
-\begin{proof}
-\end{proof}
-```
 # Computing Harm Measures from Precinct-level Election Data {#app:formulas}
 
 ```{=html}

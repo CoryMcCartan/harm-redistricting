@@ -26,6 +26,7 @@ out/
 .*.lb
 *.bbl
 *.blg
+*.axp
 *.tex
 paper/*.pdf
 !paper/header.tex
