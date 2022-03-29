@@ -33,6 +33,10 @@ flog = function(x) if_else(x <= 0, -1, suppressWarnings(log(x)))
 plapl = function(x) 0.5 * (1 + sign(x) * (1 - exp(-2*abs(x))))
 qlapl = function(p) -0.5 * sign(p - 0.5) * log(1 - 2*abs(p - 0.5))
 k_step = function(x) x > 0.5
+pos_part = function(x) {
+    x[x < 0] = 0
+    x
+}
 # historical congressional national shifts
 d_hist = local({
     dem_hist = c(0.575, 0.559, 0.537, 0.505, 0.552, 0.521, 0.543, 0.533, 0.521, 0.501, 0.447, 0.482, 0.473, 0.471, 0.452, 0.468, 0.523, 0.532, 0.449, 0.488, 0.455, 0.48, 0.534)

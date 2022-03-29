@@ -72,8 +72,9 @@ plot_state = function(map, people, plan=NULL, qty=NULL, ppl_size=1.75, ...) {
     p = redist.plot.map(map, fill=qty, ...) +
         scale_fill_party_c(name="Democratic\nshare") +
         geom_sf(data=map, size=0.8, fill=NA, color="white") +
-        geom_sf(aes(color=dem), data=people, size=ppl_size) +
+        geom_sf(aes(color=dem, shape=dem), data=people, size=ppl_size) +
         scale_color_party_d(guide="none") +
+        scale_shape_manual(values=c(15, 19), guide="none") +
         theme_repr_map() +
         theme(plot.title = element_text(hjust = 0.5))
     if (!is.null(plan)) {

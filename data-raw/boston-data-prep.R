@@ -1,5 +1,9 @@
 library(tidyverse)
 library(sf)
+library(censable)
+library(geomander)
+library(easycensus)
+library(redist)
 library(here)
 
 # functions -----
@@ -64,39 +68,99 @@ d_pres = read_csv(here("data-raw/ma_pres_primary_2020_prec.csv"),
     mutate(candidate = str_to_upper(candidate)) %>%
     pivot_name("pres_prelim_")
 
-
-# geometry ----
+# additional datasets ------
+## ward geometry ----
 d_geom = read_sf(here("data-raw/ma_wardsprecincts/WARDSPRECINCTS_POLY.shp")) %>%
     filter(TOWN == "BOSTON") %>%
     select(precinct=DISTRICT, pop_2010=POP_2010, geometry)
+
+
+## census data ----
+d_cens = build_dec("voting district", "MA", county="Suffolk", geometry=TRUE, year=2020)
+idx_match = geo_match(st_as_sf(d), d_cens, method="area")
+d_cens = as_tibble(d_cens) %>%
+    slice(idx_match) %>%
+    select(pop:vap_two)
+
+d_acs = get_acs_table("tract", "B19301", year=2020, state="MA", county="Suffolk") %>%
+    transmute(GEOID=GEOID, med_inc=estimate, moe_inc=moe, race=tidy_race(race_ethnicity)) %>%
+    filter(race %in% c("total", "white_nh", "black", "hisp")) %>%
+    mutate(race = if_else(race == "white_nh", "white", as.character(race))) %>%
+    distinct() %>%
+    pivot_wider(names_from=race, values_from=c(med_inc, moe_inc))
+
+d_tract = tigris::tracts("MA", "Suffolk", cb=T, year=2020)
+idx_match = geo_match(st_as_sf(d), d_tract, method="area")
+d_tract = as_tibble(d_tract) %>%
+    select(GEOID) %>%
+    slice(idx_match)
+
+## district geometry ----
+d_distr = read_sf(here("data-raw/City_Council_Districts_View/city_council_districts.shp")) %>%
+    arrange(DISTRICT)
+
+## neighborhood geometry ----
+d_nbhd = read_sf(here("data-raw/Boston_Neighborhoods/Boston_Neighborhoods.shp"))
 
 d = d_geom %>%
     slice(str_order(precinct, numeric=TRUE)) %>%
     left_join(d_gen, by="precinct") %>%
     left_join(d_prelim, by="precinct") %>%
     left_join(d_pres, by="precinct") %>%
-    relocate(geometry, .after=everything())
-
-# Add Census data ----
-d_cens = censable::build_dec("voting district", "MA", county="Suffolk", geometry=TRUE, year=2020)
-idx_match = geomander::geo_match(d_idx, d_cens, method="area")
-
-d = as_tibble(d_cens) %>%
-    slice(idx_match) %>%
-    select(pop:vap_two) %>%
+    relocate(geometry, .after=everything()) %>%
+    bind_cols(d_cens, .) %>%
+    select(precinct, pop_2010, everything(), geometry)
+d = left_join(d_tract, d_acs, by="GEOID") %>%
+    select(-GEOID) %>%
     bind_cols(d) %>%
-    select(precinct, everything(), geometry) %>%
-    select(-pop_2010)
+    relocate(med_inc_total:moe_inc_hisp, .after=vap_two) %>%
+    st_as_sf() %>%
+    mutate(ccd_2010 = geo_match(., d_distr, method="area"),
+           nbhd = d_nbhd$Name[geo_match(., d_nbhd, method="area")],
+           .after=precinct)
 
+# adjacency graph
+d$adj = redist.adjacency(d) %>% suppressWarnings()
+d$adj = with(d, add_edge(adj, which(precinct == "2-1"),
+                              which(precinct == "3-5")))
+d$adj = with(d, add_edge(adj, which(precinct == "2-1"),
+                              which(precinct == "3-2")))
+d$adj = with(d, add_edge(adj, which(precinct == "1-4"),
+                              which(precinct == "3-1")))
+d$adj = with(d, add_edge(adj, which(precinct == "3-6"),
+                              which(precinct == "6-1")))
+d$adj = with(d, add_edge(adj, which(precinct == "1-1"),
+                              which(precinct == "6-1")))
+d$adj = with(d, add_edge(adj, which(precinct == "6-1"),
+                              which(precinct == "6-5")))
+d$adj = with(d, add_edge(adj, which(precinct == "1-15"),
+                              which(precinct == "13-10")))
+
+# save
 write_rds(d, here("data/boston_elec.rds"), compress="xz")
+
+map = redist_map(d, existing_plan=ccd_2010, adj=d$adj)
+map$pca1 = pca$x[, 1]
+plans = redist_smc(map, 1000, counties=nbhd)
+plans = plans %>%
+    mutate(pca1 = group_frac(map, vap*pca1, vap),
+           white = group_frac(map, vap_white, vap),
+           black = group_frac(map, vap_black, vap),
+           hisp = group_frac(map, vap_hisp, vap))
+plot(plans, pca1, geom="boxplot")
+
+map %>%
+    mutate(sim_pca = avg_by_prec(plans, pnorm(pca1, sd=0.5)),
+           enac_pca = avg_by_prec(plans, pnorm(pca1, sd=0.5), "ccd_2010")) %>%
+    plot(enac_pca - sim_pca) +
+    wacolors::scale_fill_wa_c("stuart", midpoint=0.0, name="Green = Enacted more progr.\nPurple = Enacted less progr.\n")
+    ggplot(aes((vap_black+vap_hisp)/vap, enac_pca - sim_pca)) +
+    geom_point() +
+    geom_smooth(method=lm)
+
 
 
 # Plotting checks ----
-
-ggplot(d, aes(fill=mayor_gen_wu/(mayor_gen_wu+mayor_gen_essaibi_george))) +
-    geom_sf(size=0) +
-    wacolors::scale_fill_wa_c("lopez", name="Wu", labels=scales::percent, midpoint=0.5) +
-    theme_void()
 
 norm_votes = function(d, elec="mayor_gen") {
     m = as.data.frame(d) %>%
@@ -125,11 +189,18 @@ d_sum = d %>%
            black = vap_black / vap,
            hisp = vap_hisp / vap,
            other = 1 - white - black - hisp) %>%
-    select(precinct, mayor_gen, mayor_prelim, pres_prelim, pca1:pca3, vap, white:other, geometry) %>%
-    st_as_sf()
+    select(precinct, mayor_gen, mayor_prelim, pres_prelim, pca1:pca3,
+           vap, white:other, starts_with("med_inc"), geometry)
 
 ggplot(d_sum, aes(pca1, pres_prelim, color=black+hisp, size=vap)) +
     geom_point()
+ggplot(d_sum, aes(pca3, med_inc_total, color=black+hisp, size=vap)) +
+    geom_point()
+
+ggplot(d_sum, aes(fill=mayor_gen)) +
+    geom_sf(size=0) +
+    wacolors::scale_fill_wa_c("lopez", name="Wu", labels=scales::percent, midpoint=0.5) +
+    theme_void()
 
 ggplot(d_sum, aes(fill=pca2)) +
     geom_sf(size=0) +
@@ -137,10 +208,9 @@ ggplot(d_sum, aes(fill=pca2)) +
                               midpoint=0.0, limits=c(-5, 5), oob=scales::squish) +
     theme_void()
 
-ggplot(d_sum, aes(fill=black+hisp)) +
+ggplot(d_sum, aes(fill=med_inc_total)) +
     geom_sf(size=0) +
-    wacolors::scale_fill_wa_b() +
+    wacolors::scale_fill_wa_c(na.value="black") +
+    #wacolors::scale_fill_wa_b() +
     theme_void()
-
-
 
