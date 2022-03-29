@@ -1,1 +1,1 @@
-lapply(sort(Sys.glob(here::here("R/**/*.R"))), source)
+lapply(sort(Sys.glob(here::here("R/toy/*.R"))), source)
