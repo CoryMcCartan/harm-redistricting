@@ -16,7 +16,7 @@ authors:
     location: Cambridge, MA
     email: christopherkenny@fas.harvard.edu
 abstract: |
-  Abstract here.
+  We propose a unified framework for evaluating the impact of a districting plan on voters overall and in different groups. By aggregating the harm done to individual voters by their inability to elect a candiate of choice, and taking into account the space of counterfactual possibilities, we derive at a set of measures that flexibly adapts to local geographic constraints, different types of elections, and different groups of study.  The measures have connections to, and distinct advantages over, common redistricting metrics.  We provide recommendations for estimating these measures from historical election returns, and apply these methods to study partisan gerrymandering of New Jersey congressional districts and the racial impacts of district boundaries for primary elections for the Boston city council.
 keywords:
   - representation
   - redistricting simulation
@@ -385,7 +385,7 @@ For each of these sampled plans and the two gerrymanders, we calculate the avera
 
 [^3]: We include partisan bias and mean-median in these figures as it is common practice, though it may have theoretical issues when used for a delegation rather than a legislature [@katz21].
 
-```{r nj-pairs, fig.cap="Scatterplots for all pairs of measures. Point lightness indicates the number of Democratic seats won (ranging from 7 (dark) to 10 (light)). The Democratic and Republican gerrymanders are shown with the blue and red lines and crosses. The dashed line indicates a value of zero. Below the diagonal, numbers indicate the absolute value of the correlation between variables.", fig.width=7, fig.height=7}
+```{r nj-pairs, fig.cap="Scatterplots for all pairs of measures. Point lightness indicates the number of Democratic seats won at baseline (ranging from 7 (dark) to 10 (light)). The Democratic and Republican gerrymanders are shown with the blue and red lines and crosses. The dashed line indicates a value of zero. Below the diagonal, numbers indicate the absolute value of the correlation between variables.", fig.width=7, fig.height=7}
 include_graphics(here("paper/figures/nj_pairs.pdf"))
 ```
 
