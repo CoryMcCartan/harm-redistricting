@@ -376,7 +376,7 @@ include_graphics(here("paper/figures/nj_maps.pdf"))
 
 Figure \ref{fig:nj-maps} shows the baseline Democratic vote share by precinct, along with two hypothetical gerrymanders of the state, which were generated using the short-burst optimization approach of @cannon2020. The Democratic gerrymander has 11 Democratic seats and 1 Republican seat at baseline, while the Republican gerrymander has 6 Democratic and 6 Republican seats.
 
-We sample 1,000 districting plans using the SMC algorithm of @mccartan2020, setting constraints to favor compact plans with district boundaries that tend to follow county lines.
+We sample 10,000 districting plans using the SMC algorithm of @mccartan2020, setting constraints to favor compact plans with district boundaries that tend to follow county lines.
 One such plan is shown in Figure \ref{fig:nj-maps}(d).
 For each of these sampled plans and the two gerrymanders, we calculate the average harm and differential partisan harm,[^2] as well as the expected number of Democratic seats, the efficiency gap, partisan bias, the mean-median score, and partisan declination.
 [^3] The distribution of these measures, along with their pairwise relationships, are shown in Figure \ref{fig:nj-pairs}.
@@ -385,7 +385,7 @@ For each of these sampled plans and the two gerrymanders, we calculate the avera
 
 [^3]: We include partisan bias and mean-median in these figures as it is common practice, though it may have theoretical issues when used for a delegation rather than a legislature [@katz21].
 
-```{r nj-pairs, fig.cap="Scatterplots for all pairs of measures. Point lightness indicates the number of Democratic seats won at baseline (ranging from 7 (dark) to 10 (light)). The Democratic and Republican gerrymanders are shown with the blue and red lines and crosses. The dashed line indicates a value of zero. Below the diagonal, numbers indicate the absolute value of the correlation between variables.", fig.width=7, fig.height=7}
+```{r nj-pairs, fig.cap="Scatterplots for all pairs of measures. Point lightness indicates the number of Democratic seats won at baseline, ranging from 7 (dark) to 10 (light). The Democratic and Republican gerrymanders are shown with the blue and red lines and crosses. The dashed line indicates a value of zero. Below the diagonal, numbers indicate the absolute value of the correlation between variables.", fig.width=7, fig.height=7}
 include_graphics(here("paper/figures/nj_pairs.pdf"))
 ```
 
