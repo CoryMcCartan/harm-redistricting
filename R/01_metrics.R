@@ -75,7 +75,8 @@ calc_plans_stats = function(plans, map, dem, gop, ker=k_t()) {
         mutate(dev = plan_parity(map),
                comp = distr_compactness(map),
                dem = group_frac(map, dvote, dvote+rvote),
-               egap = partisan_metrics(map, "EffGap", rvote, dvote))
+               decl = part_decl(., map, dvote, rvote),
+               egap = part_egap(., map, rvote, dvote))
 
     m_dem = district_group(plans, dem)
 
@@ -86,11 +87,11 @@ calc_plans_stats = function(plans, map, dem, gop, ker=k_t()) {
                   pbias = mean(ker(pos_part(pmin(dem - (statewide - 0.5), 1)))) - 0.5,
                   pbias_sw = e_dem/ndists - statewide,
                   mean_med = median(dem) - mean(dem),
-                  across(c(dev, comp, competitive:pbias), ~ .[1])) %>%
+                  across(c(dev, comp, decl, egap), ~ .[1])) %>%
         mutate(h_dem = harm(map, dvote, m_dem, idx_2=idx_2, kernel=ker),
                h_rep = harm(map, rvote, m_dem, idx_2=idx_2, kernel=ker, invert=TRUE),
                dh = h_dem - h_rep,
-               h = total(h_dem, h_rep, map, dvote, rvote))
+               h = h_dem*statewide + h_rep*(1-statewide))
 
     list(distr=select(plans, draw:total_pop, dem), plan=pl_sum, mat=m_dem)
 }

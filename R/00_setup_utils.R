@@ -100,32 +100,49 @@ plot_cds = function(map, pl, county, abbr, qty="ndv") {
         theme_void()
 }
 
-expl_vars = function(pl, labels, ...) {
+expl_vars = function(pl, labels, refs=character(0), lines_off_diag=FALSE, ...) {
+    n_ref = length(refs)
+    idx = if (n_ref == 0L) seq_len(nrow(pl)) else -seq_len(n_ref)
+
     panel.hist <- function(x, ...) {
         usr <- par("usr"); on.exit(par(usr))
         par(usr = c(usr[1:2], 0, 1.5) )
-        h <- hist(x, plot = FALSE)
+        h <- hist(x[idx], breaks=24, plot=FALSE)
         breaks <- h$breaks; nB <- length(breaks)
         y <- h$counts; y <- y/max(y)
-        rect(breaks[-nB], 0, breaks[-1], y, family="Times", col="gray")
+        rect(breaks[-nB], 0, breaks[-1], y, family="Times",
+             col="#888888", border="#88888800", lwd=0)
+        for (i in seq_len(n_ref)) {
+            abline(v=x[i], col=refs[i], lwd=3.0)
+        }
+    }
+    panel.text <- function(x, y, labels, cex, font, ...) {
+        text(x, y, labels=labels, family="Times", font=2)
     }
     panel.cor <- function(x, y, digits = 2, prefix = "", ...) {
         usr <- par("usr"); on.exit(par(usr))
         par(usr = c(0, 1, 0, 1))
-        r <- abs(cor(x, y, use="complete.obs"))
+        r <- abs(cor(x[idx], y[idx], use="complete.obs"))
         txt <- format(c(r, 0.123456789), digits = digits)[1]
         txt <- paste0(prefix, txt)
         text(0.5, 0.5, txt, cex=2.5*sqrt(r), family="Times", offset=0, adj=c(0.5, 0.5))#cex.cor)
     }
     panel.points <- function(x, y, ...) {
-        points(x, y, family="Times", ...)
+        points(x[idx], y[idx], family="Times", ...)
         abline(h=0, v=0, lty="dashed")
+        for (i in seq_len(n_ref)) {
+            points(x[i], y[i], col=refs[i], pch=3, cex=1.2)
+            if (isTRUE(lines_off_diag))
+                abline(h=y[i], v=x[i], col=refs[i], lwd=2.0)
+        }
     }
-    seats_vec = as.integer(as.factor(pl$n_dem))
-    pairs(select(pl, -n_dem), labels=labels,
+
+    seats_vec = as.integer(as.factor(pl$n_dem))[idx]
+    pairs(select(pl, -n_dem), labels=labels, oma=rep(1.75, 4),
           cex=0.15, gap=0.5, family="Times", cex.labels=0.9, ...,
-          lower.panel=panel.cor, diag.panel=panel.hist, upper.panel=panel.points,
-          col=str_c(wa_pal("sea_star", n=max(seats_vec))[seats_vec], "a0"))
+          lower.panel=panel.cor, upper.panel=panel.points,
+          diag.panel=panel.hist,  text.panel=panel.text,
+          col=str_c(wa_pal("foothills", n=max(seats_vec), which=1:12)[seats_vec], "a0"))
 }
 
 # downloads data for state `abbr` to `folder/{abbr}_2020_*.csv` and returns path to file
@@ -156,6 +173,23 @@ join_shapefile = function(data) {
         sf::st_as_sf()
 }
 
+# get a two-sided p-value
+pval = function(x, n_ref=redist:::get_n_ref(plans)) {
+    p = numeric(length(x))
+    idx = seq_len(n_ref)
+    n = length(x[-idx])
+    p[-idx] = cume_dist(x[-idx]) * (n/n+1)
+    p[-idx] = 2*pmin(p[-idx], 1-p[-idx])
+    for (i in idx) {
+        p[i] = 2*(1 + sum(x[-idx] <= x[i])) / (n+1)
+        if (p[i] > 1) {
+            p[i] = 2*(1 + sum(x[-idx] >= x[i])) / (n+1)
+        }
+    }
+    p
+}
 
-if (!exists("utility_global")) source(here("R/01_metrics.R"))
+
+
+if (!exists("harm")) source(here("R/01_metrics.R"))
 if (!exists("mininois")) source(here("R/toy/00_toy_setup.R"))

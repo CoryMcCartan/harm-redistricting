@@ -267,7 +267,8 @@ In the interest of fairness, the model should not make any biasing assumptions a
 Here, motivated primarily by computational convenience, we use a *proportionate uniform shift* model, which focuses on swings in the national political environment as the main determinant of election outcomes.
 Each election outcome over the period of interest (generally ten years or less) is modeled as a random deviation from a baseline outcome, and these deviations are assumed to consist of a constant fraction of voters of one party in each precinct switching to the other.
 The baseline itself can be established by averaging the results of all available statewide elections over the past decade or other suitable period.
-The proportionate uniform shift model is nearly identical to the uniform partisan swing model of @butler1951swing for most precincts and districts, but is more computationally convenient and avoids issues of vote shares exceeding 100% or falling below 0%. Despite their simplicity, uniform-swing--type models are highly accurate for out-of-sample prediction [@katz2020], and are intuitive and easy to implement.
+The proportionate uniform shift model is nearly identical to the uniform partisan swing model of @butler1951swing for most precincts and districts, but is more computationally convenient and avoids issues of vote shares exceeding 100% or falling below 0%.
+Despite their simplicity, uniform-swing--type models are highly accurate for out-of-sample prediction [@katz2020], and are intuitive and easy to implement.
 More details about our proportionate uniform shift model may be found in Appendix \ref{app:formulas}.
 
 More complicated election outcome models are certainly possible and straightforward to use with the measures proposed here.
@@ -282,11 +283,13 @@ For each sample $\tilde q$ of a counterfactual districting plan, we use the elec
 This probability is a simple difference in CDF functions under our proportionate uniform shift model.
 When the groups used in $\Delta H(q)$ vary within precincts, we must repeat these computations for each group.
 Then by summing across precincts and/or groups and dividing by the appropriate totals, we arrive at values for $H(q)$ and $\Delta H(q)$.
-Appendix \ref{app:formulas} contains the specific formulas used to compute $H(q)$, and $\Delta H(q)$ from a set of past election returns and a sample of districting plans from a redistricting sampling algorithm.
+Appendix \ref{app:formulas} contains more details, including the specific formulas used to compute $H(q)$, and $\Delta H(q)$ from a set of past election returns and a sample of districting plans from a redistricting sampling algorithm.
 
 # Connections to Existing Partisan and Racial Gerrymandering Metrics {#sec:connections}
 
-In the years since @2004vieth, researchers have developed a veritable zoo of measures to identify partisan gerrymanders. Specifically, these measures aim to quantify deviations from partisan symmetry, fairness, or competitiveness. Some of the most commonly used are perhaps the *efficiency gap* [@stephanopoulos2015], *partisan bias* [@tufte1973pb; @king1987democratic], and the *mean-median* measure [@mcdonald2015unfair].
+In the years since @2004vieth, researchers have developed a veritable zoo of measures to identify partisan gerrymanders.
+Specifically, these measures aim to quantify deviations from partisan symmetry, fairness, or competitiveness.
+Some of the most commonly used are perhaps the *efficiency gap* [@stephanopoulos2015], *partisan bias* [@tufte1973pb; @king1987democratic], and the *mean-median* measure [@mcdonald2015unfair].
 All of these measures may be estimated using district vote shares alone, and as we discuss next, are to varying degrees related to our proposed measures.
 
 ## The Efficiency Gap
@@ -367,33 +370,38 @@ As discussed above, many gerrymandering measures function well in highly competi
 New Jersey, with an average Democratic two-party vote share of 56.6% across our two baseline elections (2016 presidential and 2018 senatorial), will demonstrate that this is not a problem unique to lopsided states.
 Additionally, New Jersey has 12 congressional districts, which is enough to produce some variability in seats outcomes across counterfactual plans, but not so many as to render trivial the challenges of discreteness.
 
-```{r nj-maps, fig.cap="Baseline vote patterns, and two hypothetical gerrymanders. Census-designated places are shaded in gray and county lines in white.", fig.width=6.5, fig.height=3.5}
+```{r nj-maps, fig.cap="Baseline vote patterns, two hypothetical gerrymanders, and one randomly sampled plan. Census-designated places are shaded in gray and county lines in white.", fig.width=6.5, fig.height=3}
 include_graphics(here("paper/figures/nj_maps.pdf"))
 ```
 
-Figure \ref{fig:nj-maps} shows the baseline Democratic vote share by precinct, along with two hypothetical gerrymanders of the state, which were generated using the short-burst optimization approach of @cannon2020.
-The Democratic gerrymander has 11 Democratic seats and 1 Republican seat at baseline, while the Republican gerrymander has 6 Democratic and 6 Republican seats.
+Figure \ref{fig:nj-maps} shows the baseline Democratic vote share by precinct, along with two hypothetical gerrymanders of the state, which were generated using the short-burst optimization approach of @cannon2020. The Democratic gerrymander has 11 Democratic seats and 1 Republican seat at baseline, while the Republican gerrymander has 6 Democratic and 6 Republican seats.
 
 We sample 1,000 districting plans using the SMC algorithm of @mccartan2020, setting constraints to favor compact plans with district boundaries that tend to follow county lines.
-For each of these sampled plans and the two gerrymanders, we calculate the utility, harm, and fairness measures, as well as the expected number of Democratic seats, the efficiency gap, partisan bias, and the mean-median score.[^2]
-The distribution of these measures is shown in Figure \ref{fig:nj-pairs}.
+One such plan is shown in Figure \ref{fig:nj-maps}(d).
+For each of these sampled plans and the two gerrymanders, we calculate the average harm and differential partisan harm,[^2] as well as the expected number of Democratic seats, the efficiency gap, partisan bias, the mean-median score, and partisan declination.
+[^3] The distribution of these measures, along with their pairwise relationships, are shown in Figure \ref{fig:nj-pairs}.
 
-[^2]: We include partisan bias and mean-median in these figures as it is common practice, though it may have theoretical issues when used for a delegation rather than a legislature [@katz21].
+[^2]: As in section \ref{sec:connections}, this is $\Delta_{\dem-\rep}H(q)$, so that positive values correspond to a plan that favors Republicans.
 
-The efficiency gap and $\Delta H(q)$ both correctly classify the gerrymandered plans as such, and with the correct sign.
-Both gerrymanders also have a higher average harm than any of the simulated plans.
-In contrast, under the partisan bias measure the Republican gerrymander is completely unbiased, and according to the mean-median measure, both gerrymanders strongly favor Democrats.
+[^3]: We include partisan bias and mean-median in these figures as it is common practice, though it may have theoretical issues when used for a delegation rather than a legislature [@katz21].
 
-For the utility measures, the Democratic plan is a low-utility outlier.
-But the Republican plan is near the median for both global and local utility.
-How to square this with the finding that the Republican plan is an unfair gerrymander which harms more voters than expected under a neutral process?
-As the distribution of expected Democratic seats shows, Democrats are structurally favored in New Jersey, able to win a larger fraction of seats than their statewide vote share under a neutral process.
-Plans which actively counteract this to try to draw proportional districts, like the Republican gerrymander, will necessarily harm Democratic voters versus the neutral counterfactual.
-But in doing so they will create a more proportional plan that will tend to pack voters of each party into more homogeneous districts, increasing both global and local utility.
-
-```{r nj-pairs, fig.cap="Scatterplots for all pairs of measures. Color indicates the number of Democratic seats won (ranging from 7 to 10). Below the diagonal, numbers indicate the absolute value of the correlation between variables.", fig.width=7, fig.height=7}
+```{r nj-pairs, fig.cap="Scatterplots for all pairs of measures. Point lightness indicates the number of Democratic seats won (ranging from 7 (dark) to 10 (light)). The Democratic and Republican gerrymanders are shown with the blue and red lines and crosses. The dashed line indicates a value of zero. Below the diagonal, numbers indicate the absolute value of the correlation between variables.", fig.width=7, fig.height=7}
 include_graphics(here("paper/figures/nj_pairs.pdf"))
 ```
+
+The expected number of Democratic seats and the differential partisan harm measures identify each gerrymanders as an outlier in the correct direction (two-sided $p=0.0002$), and as expected from Proposition \ref{prop:fairness}, these two measures are highly correlated.
+The efficiency gap and declination measures also correctly identify the gerrymanders ($p=0.0002$), though they are much more discrete, and some nonlinearity is evident for declination.
+In contrast, the partisan bias and mean-median measures incorrectly classify the Republican gerrymander as a fair plan and a Democratic-leaning outlier, respectively ($p=0.099$ and $p=0.0022$).
+These measures are weakly correlated with the expected number of Democratic seats, and show substantial variation even for fixed values of total seats won at baseline.
+There is also disagreement between the measures about the natural bias of districting plans in New Jersey: the median sampled plan has a partisan bias of $0.047$, indicating a natural Republican bias, but the median mean-median score is just $0.0069$, and the median differential partisan harm is $-0.13$, indicating a natural Democratic bias.
+Which is correct?
+Democrats win 8.47 seats on average across the simulations, which is more than the 6.79 seats that would be expected under a completely proportional outcome.
+
+Both gerrymanders excessively harm the average voter, with the Democratic plan doing so at a moderately higher rate ($p=0.0002$ for the Democratic plan, $p=0.0006$ for the Republican plan).
+Notably, the plans which minimize total harm are also those which have near-zero differential partisan harm.
+Thus, at least in New Jersey, overall harm reduction is consistent with a fair map on a partisan basis.
+Minimizing bias with other measures, however, could lead one astray: plans which score an efficiency gap of zero can have a large average harm, which may not be distributed fairly between parties.
+Plans with zero partisan bias or mean-median score actually have higher-than-average harm and tend to differentially harm Republicans.
 
 # Application to Primary Elections in Boston {#sec:boston}
 
@@ -440,13 +448,13 @@ For $\Delta H(q)$, which considers voters in each party separately, this helpful
 The proportionate shift may be mathematically expressed as linear shift on a transformed scale, not unlike a generalized linear model.
 Specifically, we define $\gamma:[0,1]\to\R$, $$
 \gamma(x) = -\thalf\sgn(x-\thalf)\log(1-2\qty|x-\thalf|),
-$$ which is the inverse CDF of a Laplace distribution with rate 2.[^3]
+$$ which is the inverse CDF of a Laplace distribution with rate 2.[^4]
 Then a party's vote share in precinct $k$ and election $v$, notated here as $s_{kv}$, is modeled as $$
 \gamma(s_{kv}) = \gamma(\overline s_k) + \eps_v, \qquad \eps_v \iid \Norm(0, \sigma^2_{\mathrm{hist}}),
 $$ where $\overline{s}_k$ is the party baseline, and $\sigma^2_\mathrm{hist}$ is estimated from the historical variability in nationwide popular vote shares.
 For congressional elections in the United States from 1974--2018, we have $\widehat\sigma^2_\mathrm{hist}=0.03723$, and so draw predictive deviations from $\mathrm{t}_{22}(0, \widehat\sigma^2_\mathrm{hist})$.
 
-[^3]: A rate of 2 is chosen so that the slope of the link function at $\half$ is exactly 1, meaning that transformed vote shares will be on approximately the same scale as the original shares.
+[^4]: A rate of 2 is chosen so that the slope of the link function at $\half$ is exactly 1, meaning that transformed vote shares will be on approximately the same scale as the original shares.
 
 # Districting Measures in New Jersey {#app:nj}
 

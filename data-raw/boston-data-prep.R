@@ -114,7 +114,9 @@ d = left_join(d_tract, d_acs, by="GEOID") %>%
     select(-GEOID) %>%
     bind_cols(d) %>%
     relocate(med_inc_total:moe_inc_hisp, .after=vap_two) %>%
-    st_as_sf() %>%
+    rows_update(tibble(precinct="1-15", pop=3, pop_white=3, vap=3, vap_white=3),
+                by="precinct") %>% # PATCH Harbor Islands population
+    st_as_sf()
     mutate(ccd_2010 = geo_match(., d_distr, method="area"),
            nbhd = d_nbhd$Name[geo_match(., d_nbhd, method="area")],
            .after=precinct)
@@ -138,79 +140,4 @@ d$adj = with(d, add_edge(adj, which(precinct == "1-15"),
 
 # save
 write_rds(d, here("data/boston_elec.rds"), compress="xz")
-
-map = redist_map(d, existing_plan=ccd_2010, adj=d$adj)
-map$pca1 = pca$x[, 1]
-plans = redist_smc(map, 1000, counties=nbhd)
-plans = plans %>%
-    mutate(pca1 = group_frac(map, vap*pca1, vap),
-           white = group_frac(map, vap_white, vap),
-           black = group_frac(map, vap_black, vap),
-           hisp = group_frac(map, vap_hisp, vap))
-plot(plans, pca1, geom="boxplot")
-
-map %>%
-    mutate(sim_pca = avg_by_prec(plans, pnorm(pca1, sd=0.5)),
-           enac_pca = avg_by_prec(plans, pnorm(pca1, sd=0.5), "ccd_2010")) %>%
-    plot(enac_pca - sim_pca) +
-    wacolors::scale_fill_wa_c("stuart", midpoint=0.0, name="Green = Enacted more progr.\nPurple = Enacted less progr.\n")
-    ggplot(aes((vap_black+vap_hisp)/vap, enac_pca - sim_pca)) +
-    geom_point() +
-    geom_smooth(method=lm)
-
-
-
-# Plotting checks ----
-
-norm_votes = function(d, elec="mayor_gen") {
-    m = as.data.frame(d) %>%
-        select(starts_with(elec))
-    m / c(1e-7 + rowSums(m))
-}
-
-pca = cbind(norm_votes(d, "mayor_gen"),
-            norm_votes(d, "mayor_prelim"),
-            norm_votes(d, "pres_prelim")) %>%
-    select(-mayor_prelim_other) %>%
-    prcomp(rank=3, scale.=T)
-
-d_sum = d %>%
-    group_by(precinct) %>%
-    mutate(mayor_gen = mayor_gen_wu / sum(c_across(starts_with("mayor_gen"))),
-           mayor_prelim = (mayor_prelim_wu + mayor_prelim_campbell + mayor_prelim_janey) /
-               sum(c_across(starts_with("mayor_prelim"))),
-           pres_prelim = (pres_prelim_warren + pres_prelim_sanders) /
-               sum(c_across(starts_with("pres_prelim")))) %>%
-    ungroup() %>%
-    mutate(pca1 = pca$x[, 1],
-           pca2 = pca$x[, 2],
-           pca3 = pca$x[, 3],
-           white = vap_white / vap,
-           black = vap_black / vap,
-           hisp = vap_hisp / vap,
-           other = 1 - white - black - hisp) %>%
-    select(precinct, mayor_gen, mayor_prelim, pres_prelim, pca1:pca3,
-           vap, white:other, starts_with("med_inc"), geometry)
-
-ggplot(d_sum, aes(pca1, pres_prelim, color=black+hisp, size=vap)) +
-    geom_point()
-ggplot(d_sum, aes(pca3, med_inc_total, color=black+hisp, size=vap)) +
-    geom_point()
-
-ggplot(d_sum, aes(fill=mayor_gen)) +
-    geom_sf(size=0) +
-    wacolors::scale_fill_wa_c("lopez", name="Wu", labels=scales::percent, midpoint=0.5) +
-    theme_void()
-
-ggplot(d_sum, aes(fill=pca2)) +
-    geom_sf(size=0) +
-    wacolors::scale_fill_wa_c("stuart", name="Progressive\nIndex (PCA)",
-                              midpoint=0.0, limits=c(-5, 5), oob=scales::squish) +
-    theme_void()
-
-ggplot(d_sum, aes(fill=med_inc_total)) +
-    geom_sf(size=0) +
-    wacolors::scale_fill_wa_c(na.value="black") +
-    #wacolors::scale_fill_wa_b() +
-    theme_void()
 
