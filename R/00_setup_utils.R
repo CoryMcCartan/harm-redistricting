@@ -145,40 +145,13 @@ expl_vars = function(pl, labels, refs=character(0), lines_off_diag=FALSE, ...) {
           col=str_c(wa_pal("foothills", n=max(seats_vec), which=1:12)[seats_vec], "a0"))
 }
 
-# downloads data for state `abbr` to `folder/{abbr}_2020_*.csv` and returns path to file
-download_redistricting_file = function(abbr, folder) {
-    abbr = tolower(abbr)
-    url_vtd = paste0("https://raw.githubusercontent.com/alarm-redist/census-2020/",
-                     "main/census-vest-2020/", abbr, "_2020_vtd.csv")
-    url_block = paste0("https://raw.githubusercontent.com/alarm-redist/census-2020/",
-                       "main/census-vest-2020/", abbr, "_2020_block.csv")
-
-    path = paste0(folder, "/", basename(url_vtd))
-    resp = download.file(url_vtd, path)
-    if (resp != 0) {
-        path = paste0(folder, "/", basename(url_block))
-        resp = download.file(url_block, path)
-        if (resp != 0)  {
-            stop("No files available for ", abbr)
-        }
-    }
-    path
-}
-
-# adds precinct shapefile geometry to downloaded data
-join_shapefile = function(data) {
-    geom_d = PL94171::pl_get_vtd(data$state[1]) %>%
-        select(GEOID20, area_land=ALAND20, area_water=AWATER20, geometry)
-    left_join(data, geom_d, by="GEOID20") %>%
-        sf::st_as_sf()
-}
 
 # get a two-sided p-value
 pval = function(x, n_ref=redist:::get_n_ref(plans)) {
     p = numeric(length(x))
     idx = seq_len(n_ref)
     n = length(x[-idx])
-    p[-idx] = cume_dist(x[-idx]) * (n/n+1)
+    p[-idx] = cume_dist(x[-idx]) * n/(n+1)
     p[-idx] = 2*pmin(p[-idx], 1-p[-idx])
     for (i in idx) {
         p[i] = 2*(1 + sum(x[-idx] <= x[i])) / (n+1)
