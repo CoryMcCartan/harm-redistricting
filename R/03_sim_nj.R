@@ -17,6 +17,7 @@ if (!file.exists(sim_path <- here("data/nj_sims.rds"))) {
     write_rds(plans, sim_path, compress="xz")
 } else {
     plans = read_rds(sim_path)
+    attr(plans, "ndists") = 12L
 }
 
 statewide = with(nj, sum(ndv)/sum(ndv+nrv))
@@ -70,7 +71,7 @@ if (!file.exists(path <- here("paper/figures/nj_pairs.pdf"))) {
 cat("p-values:")
 pl$plan %>%
     as_tibble() %>%
-    mutate(across(n_dem:decl, pval)) %>%
+    mutate(across(n_dem:h, pval)) %>%
     print()
 
 if (FALSE) {
@@ -85,3 +86,6 @@ ggplot(pl_best, aes(score, dh, color=e_dem)) +
 
 with(pl_best, cor(score, h, method="pearson"))
 }
+
+rm(nj, plans, pl_best, pl_plot, pl_sum, p, p1, p2, p3, p4, pl,
+   m_dem, statewide, prop_setas, meas_labels)

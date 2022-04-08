@@ -257,6 +257,8 @@ These distributions can generally be characterized as maximum-entropy distributi
 For example, the algorithms of @carter2019 and @mccartan2020 sample from the maximum-entropy distribution of districting plans which are geographically contiguous, have district populations within a deviation from equality, and which have a certain average compactness value (according to a particular graph-theoretic compactness measure).
 These maximum-entropy distributions put as few conditions as possible on the districting sampling process, as long as a set of constraints imposed by the researcher are met.
 If these constraints are precisely those which are required by law or traditional redistricting criteria, then samples from this distribution provide a natural set of counterfactual districting plans, uninfluenced by superfluous partisan considerations, to use in estimating $H(q)$ and $\Delta H(q)$.
+In practice, the translation from tradition and law into mathematical formulations of constraints is not always clear or even well-defined; there is certainly an element of subjectivity in sampling a set of redistricting plans.
+Nonetheless, sampling methods are widely used in practice.
 
 ## Modeling Election Outcomes
 
@@ -264,26 +266,28 @@ Election results present a different set of modeling challenges, given the large
 As far as estimating measures like $H(q)$ and $\Delta H(q)$, we would ideally use a relatively simple model that captures the primary drivers of election outcomes.
 In the interest of fairness, the model should not make any biasing assumptions about the future (e.g., that demographic shifts will favor one party, or that past trends in election returns will continue in the same direction).
 
-Here, motivated primarily by computational convenience, we use a *proportionate uniform shift* model, which focuses on swings in the national political environment as the main determinant of election outcomes.
+We limit our discussion here to the case of estimating harm and differential partisan harm in a two-party setting.
+Estimating differential racial harm in the two-party setting can be done by first generatinc ecological inferences or survey estimates of party preference by race, and then applying methods analogous to those outlined here.
+Multiparty or primary elections pose additional modeling challenges.
+In Section \ref{sec:boston} we consider a spatial-racial model for primary elections with multiple candidates, to illustrate the application of our framework to these more complicated cases.
+
+Motivated primarily by computational convenience, we use a *proportionate uniform shift* model, which focuses on swings in the national political environment as the main determinant of election outcomes.
 Each election outcome over the period of interest (generally ten years or less) is modeled as a random deviation from a baseline outcome, and these deviations are assumed to consist of a constant fraction of voters of one party in each precinct switching to the other.
 The baseline itself can be established by averaging the results of all available statewide elections over the past decade or other suitable period.
-The proportionate uniform shift model is nearly identical to the uniform partisan swing model of @butler1951swing for most precincts and districts, but is more computationally convenient and avoids issues of vote shares exceeding 100% or falling below 0%.
-Despite their simplicity, uniform-swing--type models are highly accurate for out-of-sample prediction [@katz2020], and are intuitive and easy to implement.
+The proportionate uniform shift model is nearly identical to the uniform partisan swing model of @butler1951swing for most precincts and districts, but is more computationally convenient and avoids issues of vote shares exceeding 100% or falling below 0%. Despite their simplicity, uniform-swing--type models are highly accurate for out-of-sample prediction [@katz2020], and are intuitive and easy to implement.
 More details about our proportionate uniform shift model may be found in Appendix \ref{app:formulas}.
 
 More complicated election outcome models are certainly possible and straightforward to use with the measures proposed here.
 For example, one could model district deviations as a systematic national shift plus a local idiosyncratic effect, as is done in the Stochastic Uniform Partisan Swing model of @gelman1994unified.
 For ease and efficiency of computation, we stick to the simple proportionate uniform shift model here.
-In Section \ref{sec:boston}, however, we consider a more complicated model for primary elections.
 
 ## Calculating Harm and Differential Harm
 
 With a model for election outcomes and districting plans in hand, calculation of $H(q)$ and $\Delta H(q)$ is straightforward.
 For each sample $\tilde q$ of a counterfactual districting plan, we use the election model to come up with a probability that voters in each precinct are represented by the candidate of their choice under $\tilde q$ but not under $q$.
-This probability is a simple difference in CDF functions under our proportionate uniform shift model.
 When the groups used in $\Delta H(q)$ vary within precincts, we must repeat these computations for each group.
 Then by summing across precincts and/or groups and dividing by the appropriate totals, we arrive at values for $H(q)$ and $\Delta H(q)$.
-Appendix \ref{app:formulas} contains more details, including the specific formulas used to compute $H(q)$, and $\Delta H(q)$ from a set of past election returns and a sample of districting plans from a redistricting sampling algorithm.
+Appendix \ref{app:formulas} contains more details, including the specific formulas used to compute $H(q)$ and $\Delta H(q)$ for two-party elections from a set of past election returns and a sample of districting plans from a redistricting sampling algorithm.
 
 # Connections to Existing Partisan and Racial Gerrymandering Metrics {#sec:connections}
 
@@ -374,11 +378,12 @@ Additionally, New Jersey has 12 congressional districts, which is enough to prod
 include_graphics(here("paper/figures/nj_maps.pdf"))
 ```
 
-Figure \ref{fig:nj-maps} shows the baseline Democratic vote share by precinct, along with two hypothetical gerrymanders of the state, which were generated using the short-burst optimization approach of @cannon2020. The Democratic gerrymander has 11 Democratic seats and 1 Republican seat at baseline, while the Republican gerrymander has 6 Democratic and 6 Republican seats.
+Figure \ref{fig:nj-maps} shows the baseline Democratic vote share by precinct, along with two hypothetical gerrymanders of the state, which were generated using the short-burst optimization approach of @cannon2020.
+The Democratic gerrymander has 11 Democratic seats and 1 Republican seat at baseline, while the Republican gerrymander has 6 Democratic and 6 Republican seats.
 
 We sample 10,000 districting plans using the SMC algorithm of @mccartan2020, setting constraints to favor compact plans with district boundaries that tend to follow county lines.
 One such plan is shown in Figure \ref{fig:nj-maps}(d).
-For each of these sampled plans and the two gerrymanders, we calculate the average harm and differential partisan harm,[^2] as well as the expected number of Democratic seats, the efficiency gap, partisan bias, the mean-median score, and partisan declination.
+For each of these sampled plans and the two gerrymanders, we calculate the average harm and differential partisan harm versus the simulated baseline,[^2] as well as the expected number of Democratic seats, the efficiency gap, partisan bias, the mean-median score, and partisan declination.
 [^3] The distribution of these measures, along with their pairwise relationships, are shown in Figure \ref{fig:nj-pairs}.
 
 [^2]: As in section \ref{sec:connections}, this is $\Delta_{\dem-\rep}H(q)$, so that positive values correspond to a plan that favors Republicans.
@@ -389,7 +394,7 @@ For each of these sampled plans and the two gerrymanders, we calculate the avera
 include_graphics(here("paper/figures/nj_pairs.pdf"))
 ```
 
-The expected number of Democratic seats and the differential partisan harm measures identify each gerrymanders as an outlier in the correct direction (two-sided $p=0.0002$), and as expected from Proposition \ref{prop:fairness}, these two measures are highly correlated.
+The expected number of Democratic seats and the differential partisan harm measures identify each gerrymanders as an outlier in the correct direction (two-sided $p=0.0002$ for expected seats), and as expected from Proposition \ref{prop:fairness}, these two measures are highly correlated.
 The efficiency gap and declination measures also correctly identify the gerrymanders ($p=0.0002$), though they are much more discrete, and some nonlinearity is evident for declination.
 In contrast, the partisan bias and mean-median measures incorrectly classify the Republican gerrymander as a fair plan and a Democratic-leaning outlier, respectively ($p=0.099$ and $p=0.0022$).
 These measures are weakly correlated with the expected number of Democratic seats, and show substantial variation even for fixed values of total seats won at baseline.
@@ -397,7 +402,7 @@ There is also disagreement between the measures about the natural bias of distri
 Which is correct?
 Democrats win 8.47 seats on average across the simulations, which is more than the 6.79 seats that would be expected under a completely proportional outcome.
 
-Both gerrymanders excessively harm the average voter, with the Democratic plan doing so at a moderately higher rate ($p=0.0002$ for the Democratic plan, $p=0.0006$ for the Republican plan).
+Both gerrymanders excessively harm the average voter, with the Democratic plan doing so at a moderately higher rate ($p=0.0002$ for the Democratic plan, $p=0.0004$ for the Republican plan).
 Notably, the plans which minimize total harm are also those which have near-zero differential partisan harm.
 Thus, at least in New Jersey, overall harm reduction is consistent with a fair map on a partisan basis.
 Minimizing bias with other measures, however, could lead one astray: plans which score an efficiency gap of zero can have a large average harm, which may not be distributed fairly between parties.
@@ -429,59 +434,93 @@ Further work is needed to characterize how existing redistricting requirements a
 ```
 # Computing Harm Measures from Precinct-level Election Data {#app:formulas}
 
-```{=html}
-<!--
+In practice, districting plans are built from discrete geographic units (often precincts), and election returns are reported at this level as well.[^4]
+Throughout this appendix, let $j$ index the set of electoral precincts or other units.
+For concreteness here and without loss of generality we will use the Democratic party as the reference party, letting $s_{jv}$ denote the Democratic two-party vote share in precinct $j$ in election $v$.
+Write-in or minor third-party candidates can be safely ignored, since the overall winner will be precisely the two-party vote winner.
 
-For voter fairness, PUS means that relative share of party's voters in each precinct remains the same. Need only to apply a kernel function (composition of Laplace ICDF + model shift CDF)
+[^4]: When district boundaries split precincts, practitioners generally impute the returns in each component of the split precinct by population-weighted interpolation.
+    Population information comes from Census blocks, which are practically never split.
 
-Formulas here.
--->
-```
 ## Proportionate Uniform Shift Details
 
-The proportionate uniform shift model assumes that a constant fraction of *voters of one party* in each precinct switch to the other party.
+The proportionate uniform shift model assumes that from one election to another, a constant fraction of *voters of one party* in each precinct switch to the other party, and that per-precinct turnout is constant across elections.[^5]
 This has several advantages over the uniform swing model, where a constant fraction of *all voters* shifts parties.
 First, the proportionate shift prevents hypothetical party vote shares from exceeding 1 or falling below 0 in any precinct.
 Second, as it has the effect of scaling vote shares across precincts by a constant multiple, it preserves the relative balance of a party's voters across precincts.
-For $\Delta H(q)$, which considers voters in each party separately, this helpfully simplifies computations.
+For $\Delta_{\dem-\rep}H(q)$, which considers voters in each party separately, this helpfully simplifies computations.
+
+[^5]: Everything carries through if one allows for shifts in the overall turnout level across elections, as long as (a) the relative turnout across precincts is fixed, and (b) turnout shifts are independent of shifts in party preferences.
 
 The proportionate shift may be mathematically expressed as linear shift on a transformed scale, not unlike a generalized linear model.
 Specifically, we define $\gamma:[0,1]\to\R$, $$
 \gamma(x) = -\thalf\sgn(x-\thalf)\log(1-2\qty|x-\thalf|),
-$$ which is the inverse CDF of a Laplace distribution with rate 2.[^4]
-Then a party's vote share in precinct $k$ and election $v$, notated here as $s_{kv}$, is modeled as $$
-\gamma(s_{kv}) = \gamma(\overline s_k) + \eps_v, \qquad \eps_v \iid \Norm(0, \sigma^2_{\mathrm{hist}}),
-$$ where $\overline{s}_k$ is the party baseline, and $\sigma^2_\mathrm{hist}$ is estimated from the historical variability in nationwide popular vote shares.
+$$ which is the inverse CDF of a Laplace distribution with rate 2.[^6]
+Then the Democratic vote share in precinct $P_j$ and election $v$, notated here as $s_{jv}$, is modeled as $$
+\gamma(s_{jv}) = \gamma(\overline s_j) + \eps_v, \qquad \eps_v \iid \Norm(0, \sigma^2_{\mathrm{hist}}),
+$$ where $\overline{s}_j$ is the party baseline in the precinct, and $\sigma^2_\mathrm{hist}$ is estimated from the historical variability in nationwide popular vote shares.
 For congressional elections in the United States from 1974--2018, we have $\widehat\sigma^2_\mathrm{hist}=0.03723$, and so draw predictive deviations from $\mathrm{t}_{22}(0, \widehat\sigma^2_\mathrm{hist})$.
 
-[^4]: A rate of 2 is chosen so that the slope of the link function at $\half$ is exactly 1, meaning that transformed vote shares will be on approximately the same scale as the original shares.
+[^6]: A rate of 2 is chosen so that the slope of the link function at $\half$ is exactly 1, meaning that transformed vote shares will be on approximately the same scale as the original shares.
 
-# Districting Measures in New Jersey {#app:nj}
+It will simplify matters following to have notation for the overall Democratic vote share in a district.
+For a precinct $j$, let $q^{-1}(j)$ denote the district it belongs to. Then let \[
+    S_{q^{-1}(j), v}=\frac{\sum_{l\in q^{-1}(j)} s_{lv}\avgvote_l}{\sum_{l\in q^{-1}(j)} \avgvote_l}
+\] denote the vote share in the district, where $\avgvote_l$ counts the total number of votes in precinct $l$ at baseline.
+The baseline vote share in the district is then $\bar S_{q^{-1}(j)}$.
 
-# Misrepresentation Map
+## Estimating $H(q)$ and $\Delta H_{\dem-\rep}(q)$
 
-The intuition that drives these measures is the misrepresentation map.
-Consider a state that is partitioned into smaller geographies, typically called precincts or voter tabulation districts.
-These units act as the atoms of redistricting.
-We assume that they are not split in the redistricting process.
-Thus, districts are made of whole precincts.
-For a given precinct, we can thus calculate the expected party share of the district that a precinct is in for any given plan.
-The expected party share can take many forms, as mentioned in *Modeling Election Outcomes*.
-By combining the information about the geographic precinct, we can measure the expected party share that an individual living in that precinct would expect to experience.
+We will build up estimates of the overall $H(q)$ and $\Delta H_{\dem-\rep}(q)$ from precinct-by-group harm estimates.
+Since we assumed that elections are independent of districting plans, we can first average across elections and then across counterfactual plans.
+For a random voter $I$ in precinct $j$, we have for every plan $q$ that the probability of a Democrat winning their district is $$
+\Pr(\win_{q(I)}(V, q)=\dem\mid I\in j) 
+= \Pr(S_{q^{-1}(j),V} > \half)
+= \Phi\qty(\frac{\gamma(\bar S_{q^{-1}(j)})}{\sigma^2_\mathrm{hist}}),
+$$ where $\Phi$ is the standard Normal CDF.
+To estimate this probability, we simply replace $\Phi$ with the CDF of the $t_{22}$ distribution ($F_{t_22}$), and $\sigma^2_\mathrm{hist}$ with $\hat\sigma^2_\mathrm{hist}$.
+Extending one step further, for two plans $q$ and $\tilde q$, we have
 
-Visually, we can consider a map colored by party share of the district that each precinct is assigned to.
-Most often, we represent this in a blue to red gradient which offers the typical Democratic or Republican representative dynamic.
-Given a counterfactual, we can then take the difference of the expected party share, precinct-by-precinct.
-This offers a precinct-level coloration based on difference in expected party share at the district level.
-In the typical two-party scenario, using Democratic two-party vote share, a positive difference would indicate that the individuals in those precincts are likely to be represented by Democrats.
-A negative difference would indicate that the individuals in those precincts are likely to be represented by Republicans.
-Thus, positives would be map-matically represented by blues and negatives by reds.
+\begin{equation}\label{eq:appharm1}
+\Pr(\win_{q(I)}(V, q)=\rep\text{ and }\win_{\tilde q(I)}(V, \tilde q)=\dem\mid I\in j) 
+= \Pr\qty(S_{q^{-1}(j),V} < \half, S_{\tilde q^{-1}(j),V} > \half).
+\end{equation}
 
-Note that this takes a similar visual form as a dislocation map, though these are conceptually distinct [@defoeubarodd21].
-The dislocation map indicates within a single plan how nearby individuals are likely or unlikely to be represented by the same party.
+Because of the uniform shift, for any election $v$, $S_{q^{-1}(j),v} - S_{\tilde q^{-1}(j),v}$ is constant.
+Therefore if $S_{q^{-1}(j),v}>S_{\tilde q^{-1}(j),v}$, this probability is zero (if a Democrat wins under $\tilde q$ they will definitely win under $q$, which has a higher Democratic vote share).
+But if $S_{q^{-1}(j),v}<S_{\tilde q^{-1}(j),v}$, we can rewrite \eqref{eq:appharm1} as the probability that $\eps_{V}$ falls in a particular range.
+Specifically, we have in general that 
 
-We focus largely on the case of a misrepresentation map that is the difference between a single enacted districting plan and an ensemble of alternate, legal districting plans.
-This does not need to be the case, however.
-A misrepresentation map can indicate the difference between two singular maps, calculating the difference in expected district-level party representation.
-This would allow direct computation of utility, fairness, or other metrics based on the difference in the two maps.
-Similarly, given two sets of ensembles, likely generated under different target distributions, we can create a similar misrepresentation map that would allow us to estimate interesting measures, such as the differential harm caused by the inclusion of an additional criteria in state district drawing rules.
+\begin{equation}\label{eq:appharm2}
+\Pr(\win_{q(I)}(V, q)=\rep\text{ and }\win_{\tilde q(I)}(V, \tilde q)=\dem\mid I\in j) 
+= \qty(\Phi\qty(\frac{\gamma(\bar S_{\tilde q^{-1}(j)})}{\sigma^2_\mathrm{hist}})
+- \Phi\qty(\frac{\gamma(\bar S_{q^{-1}(j)})}{\sigma^2_\mathrm{hist}}))_+,
+\end{equation}
+
+where $(\cdot)_+\dfeq \max\{0, \cdot\}$.
+If we condition on $V(I)=\dem$, then \eqref{eq:appharm2} is exactly the expected harm to voter $I$ under plans $q$ and $\tilde q$.
+The calculation is analogous, up to sign changes, for the expected harm conditioning on $V(I)=\rep$.
+This completes the first step: averaging harm within precinct and groups and across elections.
+
+We can then estimate the average across counterfactual plans $\tilde Q$ with the usual Monte Carlo estimator: \[
+    \hat h_{j,\dem}(q) 
+    \dfeq \frac{1}{N_\text{sim}} \sum_{k=1}^{N_\text{sim}} 
+    \qty(\Phi\qty(\frac{\gamma(\bar S_{\tilde q_k^{-1}(j)})}{\sigma^2_\mathrm{hist}})
+        - \Phi\qty(\frac{\gamma(\bar S_{q^{-1}(j)})}{\sigma^2_\mathrm{hist}}))_+,
+\] where $\hat h_{j,\dem}(q)$ is our estimate of the average harm to a Democratic voter in precinct $j$, averaging across $V$ and $\tilde Q$. The corresponding $\hat h_{j,\rep}(q)$ is computed similarly.
+
+Our final estimates $\hat H(q)$ and $\Delta_{\dem-\rep}\hat H(q)$ may then be straightforwardly calculated as weighted averages:
+
+\begin{align*}
+\hat H(q) &\dfeq
+\frac{\sum_{j} (\bar s_j\hat h_{j,\dem}(q) + 
+(1-\bar s_j)\hat h_{j,\rep}(q))\avgvote_j}{\sum_{j} \avgvote_j} \qand \\
+\Delta_{\dem-\rep}\hat H(q) &\dfeq
+\frac{\sum_{j} (\hat h_{j,\dem}(q) - \hat h_{j,\rep}(q))\avgvote_j}{\sum_{j} \avgvote_j}.
+\end{align*}
+
+Here, we rely on the fact that even across election shifts, the relative balance of each party's voters across precincts is preserved.
+
+
+
+# Principal Components Ecological Inference Model for Boston Primary Elections

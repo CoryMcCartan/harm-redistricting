@@ -14,6 +14,10 @@ R/*
 !R/*.R
 !R/*.stan
 
+src/*
+!src/*.cpp
+!src/*.h
+
 # misc and  LaTeX
 out/
 *.tmp

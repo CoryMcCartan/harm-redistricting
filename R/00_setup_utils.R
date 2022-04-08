@@ -1,13 +1,13 @@
 library(rlang)
 library(tidyverse)
-library(geomander)
-library(divseg)
-library(redist)
 library(sf)
+library(geomander)
+library(redist)
 library(scales)
 library(patchwork)
 library(wacolors)
 library(here)
+library(Rcpp)
 
 theme_repr = function() theme_bw(base_family="Times", base_size=10)
 theme_repr_map = function() theme_void(base_family="Times", base_size=10)
@@ -163,6 +163,7 @@ pval = function(x, n_ref=redist:::get_n_ref(plans)) {
 }
 
 
+Rcpp::sourceCpp("src/harm.cpp", cacheDir="src")
 
 if (!exists("harm")) source(here("R/01_metrics.R"))
 if (!exists("mininois")) source(here("R/toy/00_toy_setup.R"))
