@@ -394,10 +394,17 @@ For each of these sampled plans and the two gerrymanders, we calculate the avera
 include_graphics(here("paper/figures/nj_pairs.pdf"))
 ```
 
-The expected number of Democratic seats and the differential partisan harm measures identify each gerrymanders as an outlier in the correct direction (two-sided $p=0.0002$ for expected seats), and as expected from Proposition \ref{prop:fairness}, these two measures are highly correlated.
-The efficiency gap and declination measures also correctly identify the gerrymanders ($p=0.0002$), though they are much more discrete, and some nonlinearity is evident for declination.
-In contrast, the partisan bias and mean-median measures incorrectly classify the Republican gerrymander as a fair plan and a Democratic-leaning outlier, respectively ($p=0.099$ and $p=0.0022$).
+Differential partisan harm identifies each gerrymander as such, with a large negative value for the Democratic gerrymander and a large positive value for the Republican gerrymander.
+These values are relatively directly interpretable; for example, the differential harm score of $-0.22$ means that an average Democratic voter is 22% less likely to be misrepresented than their average Republican counterpartisan.
+The efficiency gap and declination measures also correctly identify the gerrymanders, though they are much more discrete, and declination gives a much larger score in absolute value to the Democratic plan than to the Republican.
+In contrast, the partisan bias and mean-median measures incorrectly classify the Republican gerrymander as a fair plan and a Democratic-leaning outlier.
 These measures are weakly correlated with the expected number of Democratic seats, and show substantial variation even for fixed values of total seats won at baseline.
+
+Considering the distribution of these statistics across the distribution of sampled plans doesn't help much, either.
+The expected number of Democratic seats naturally identifies the gerrymanders (two-sided $p=0.0002$) and the direction of bias, and as expected from Proposition \ref{prop:fairness} this measure is highly correlated with differential partisan harm.
+The gerrymanders are also an outlier under the efficiency gap and declination measures also (both $p=0.0002$).
+While the gerrymanders are both an outlier for the mean-median score, only the Democratic plan is an outlier according to the partisan bias measure ($p=0.0022$, versus $p=0.099$ for the Republican plan).
+
 There is also disagreement between the measures about the natural bias of districting plans in New Jersey: the median sampled plan has a partisan bias of $0.047$, indicating a natural Republican bias, but the median mean-median score is just $0.0069$, and the median differential partisan harm is $-0.13$, indicating a natural Democratic bias.
 Which is correct?
 Democrats win 8.47 seats on average across the simulations, which is more than the 6.79 seats that would be expected under a completely proportional outcome.

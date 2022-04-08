@@ -100,9 +100,10 @@ plot_cds = function(map, pl, county, abbr, qty="ndv") {
         theme_void()
 }
 
-expl_vars = function(pl, labels, refs=character(0), lines_off_diag=FALSE, ...) {
+expl_vars = function(pl, labels, refs=character(0), rasterize=TRUE,...) {
     n_ref = length(refs)
     idx = if (n_ref == 0L) seq_len(nrow(pl)) else -seq_len(n_ref)
+    tmp <- tempfile()
 
     panel.hist <- function(x, ...) {
         usr <- par("usr"); on.exit(par(usr))
@@ -125,21 +126,38 @@ expl_vars = function(pl, labels, refs=character(0), lines_off_diag=FALSE, ...) {
         r <- abs(cor(x[idx], y[idx], use="complete.obs"))
         txt <- format(c(r, 0.123456789), digits = digits)[1]
         txt <- paste0(prefix, txt)
-        text(0.5, 0.5, txt, cex=2.5*sqrt(r), family="Times", offset=0, adj=c(0.5, 0.5))#cex.cor)
+        text(0.5, 0.5, txt, cex=2.5*sqrt(r), family="Times", offset=0, adj=c(0.5, 0.5))
     }
-    panel.points <- function(x, y, ...) {
-        points(x[idx], y[idx], family="Times", ...)
+    panel.points = function(x, y, ...) {
+        coords <- par("usr")
+        gx <- grconvertX(coords[1:2], "user", "inches")
+        gy <- grconvertY(coords[3:4], "user", "inches")
+        width <- max(gx) - min(gx)
+        height <- max(gy) - min(gy)
+
+        if (rasterize) {
+            ragg::agg_png(tmp, width = width, height = height, units = "in", res = 300, bg = "transparent")
+            par(mar = c(0,0,0,0))
+            plot.new()
+            plot.window(coords[1:2], coords[3:4], mar = c(0,0,0,0), xaxs = "i", yaxs = "i")
+            points(x[idx], y[idx], family="Times", ...)
+            dev.off()
+
+            panel <- png::readPNG(tmp)
+            rasterImage(panel, coords[1], coords[3], coords[2], coords[4])
+        } else {
+            points(x[idx], y[idx], family="Times", ...)
+        }
+
         abline(h=0, v=0, lty="dashed")
         for (i in seq_len(n_ref)) {
             points(x[i], y[i], col=refs[i], pch=3, cex=1.2)
-            if (isTRUE(lines_off_diag))
-                abline(h=y[i], v=x[i], col=refs[i], lwd=2.0)
         }
     }
 
     seats_vec = as.integer(as.factor(pl$n_dem))[idx]
     pairs(select(pl, -n_dem), labels=labels, oma=rep(1.75, 4),
-          cex=0.15, gap=0.5, family="Times", cex.labels=0.9, ...,
+          cex=0.10, gap=0.5, family="Times", cex.labels=0.9, ...,
           lower.panel=panel.cor, upper.panel=panel.points,
           diag.panel=panel.hist,  text.panel=panel.text,
           col=str_c(wa_pal("foothills", n=max(seats_vec), which=1:12)[seats_vec], "a0"))

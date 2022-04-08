@@ -1,8 +1,8 @@
 nj = read_rds(here("data/NJ_cd_final_vtd_20.rds")) %>%
     redist_map(pop_tol=0.01, ndists=12, adj=.$adj)
 
+N_sim = 10000
 if (!file.exists(sim_path <- here("data/nj_sims.rds"))) {
-    N_sim = 10000
     plans = redist_smc(nj, N_sim, counties=county, pop_temper=0.005, verbose=TRUE)#FALSE)
 
     # gerrymanders
@@ -25,10 +25,18 @@ prop_seats = round(attr(nj, "ndists") * statewide)
 
 pl = calc_plans_stats(plans, nj, ndv, nrv)
 
+# get 100% accurate harm for 2 gerrymanders
+hh = harm(pl$distr, dem, nj$ndv, nj$nrv, idx_1=1:2, idx_2=(2+1:N_sim), ker=k_t())
+pl$plan$h_dem[1:2] = hh[1, ]
+pl$plan$h_rep[1:2] = hh[2, ]
+pl$plan$dh[1:2] = hh[1, ] - hh[2, ]
+pl$plan$h[1:2] = hh[3, ]
+
 # Initial plots ----
 map_scale = scale_fill_party_c(name="Democratic\nshare", limits=c(0.19, 0.81))
+geom_simp = rmapshaper::ms_simplify(nj$geometry, keep_shapes=TRUE)
 p1 = ggplot(nj, aes(fill=ndv/(ndv+nrv))) +
-    geom_sf(size=0, color="#00000000") +
+    geom_sf(aes(geometry=geom_simp), size=0, color="#00000000") +
     map_scale +
     labs(title="(a) Partisan patterns") +
     theme_repr_map() +
@@ -61,10 +69,10 @@ if (!file.exists(path <- here("paper/figures/nj_pairs.pdf"))) {
     pl_plot = pl$plan %>%
         as_tibble() %>%
         select(n_dem, e_dem, dh, h, egap, pbias, mean_med, decl)
-    pdf(path, 8.5, 8.5)
-    bind_rows(head(pl_plot, 2), slice_sample(head(pl_plot, -2), n=1500)) %>%
-        expl_vars(labels=meas_labels, refs=GOP_DEM[c(2, 14)])
-    dev.off()
+    pl_plot = bind_rows(head(pl_plot, 2), slice_sample(head(pl_plot, -2), n=2000))
+
+    expl_vars(pl_plot, labels=meas_labels, refs=GOP_DEM[c(2, 14)], rasterize=TRUE)
+    dev.copy2pdf(file=path, width=8.5, height=8.5)
 }
 
 # p-values
