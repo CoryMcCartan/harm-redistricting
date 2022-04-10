@@ -9,42 +9,51 @@ tbls = make_tables(d_votes, cand_thresh=0.02)
 
 # priors for identification
 id = tribble(~cand, ~loc, ~scale,
-             "wu", c(-1, 0.8, 0.0), c(0.1, 0.2, 1),
-             "essaibi_george", c(1, 1.2, 0.0), c(0.1, 0.25, 1))
+             "wu", c(-1, 1.0, 0.0), c(0.1, 0.1, 1),
+             "essaibi_george", c(1, 1.0, 0.0), c(0.1, 0.2, 1))
 
-draws = fit_pcei(tbls, n_comp=2L, id=id, algorithm="hmc")
+fit = fit_pcei(tbls, n_comp=2L, id=id, algorithm="vb", eta=0.2, adapt_engaged=F)
+init_l = lapply(fit, median)
+fit = fit_pcei(tbls, n_comp=2L, id=id, algorithm="hmc")
 
 library(bayesplot)
-mcmc_intervals(as_draws_matrix(draws$support))
-mcmc_intervals(as_draws_matrix(draws$alpha))
-mcmc_intervals(as_draws_matrix(draws$loading[, 1]))
-mcmc_intervals(as_draws_matrix(draws$loading[, 2]))
-median(draws$L_t %**% t(draws$L_t))
-median(draws$L_p %**% t(draws$L_p))
-mcmc_trace(as_draws_matrix(draws$loading[1:2, ]))
-mcmc_trace(as_draws_matrix(draws$support[1:4]))
-mcmc_pairs(as_draws_matrix(draws$loading[1:2, ]))
+hist(unlist(lapply(fit, posterior::rhat)))
+mcmc_intervals(as_draws_matrix(fit$support))
+mcmc_intervals(as_draws_matrix(fit$alpha))
+mcmc_intervals(as_draws_matrix(fit$loading[, 1]))
+mcmc_intervals(as_draws_matrix(fit$loading[, 2]))
+median(fit$L_t %**% t(fit$L_t))
+median(fit$L_p %**% t(fit$L_p))
+mcmc_trace(as_draws_matrix(fit$loading[1:2, ]))
+mcmc_trace(as_draws_matrix(fit$support[1:4]))
+mcmc_trace(as_draws_matrix(fit$turnout_overall))
+mcmc_trace(as_draws_matrix(fit$scale))
+mcmc_pairs(as_draws_matrix(fit$turnout_overall))
+mcmc_pairs(as_draws_matrix(fit$scale))
+mcmc_pairs(as_draws_matrix(fit$loading[1:2, ]))
+mcmc_pairs(as_draws_matrix(fit$pref_z[1:2, , 1]))
 
-median(draws$loading) %>%
+median(fit$loading) %>%
     as.data.frame() %>%
     rownames_to_column("cand") %>%
 ggplot(aes(V1, V2, label=cand)) +
     geom_text()
 
-plot(map, median(draws$pref_geo[,1,"white"]))
-plot(map, 100*median(draws$turnout[, "hisp"]))
-plot(map, rowSums(median(draws$pref_geo)[,1,] * tbls$race))
+plot(map, median(fit$pref_geo[,2,"black"]))
+plot(map, 100*median(fit$turnout[, "black"]))
+plot(map, rowSums(median(fit$pref_geo)[,1,] * tbls$race))
+plot(map, rowSums(median(fit$pref_geo)[,2,] * tbls$race))
 
 
 est_total = function(race) {
     vap_race = m_race[, paste0("vap_", race)]
-    pref_race = draws$pref_geo[, , race, drop=T] * draws$turnout[, race] * vap_race
-    cand_load = draws$loading %**% (rev(draws$scale) * t(pref_race))
+    pref_race = fit$pref_geo[, , race, drop=T] * fit$turnout[, race] * vap_race
+    cand_load = fit$loading %**% (rev(fit$scale) * t(pref_race))
     #vs_est = median(t(draws$support * (1 + alpha * cand_load)) * m_race[, paste0("vap_", race)])
     #return(vs_est)
-    pr_mayor = (draws$support * (1 + alpha * cand_load))[1:6,] %**%
+    pr_mayor = (fit$support * (1 + alpha * cand_load))[1:6,] %**%
         (m_prec[, 1] * vap_race)
-    pr_pres = (draws$support * (1 + alpha * cand_load))[7:11,] %**%
+    pr_pres = (fit$support * (1 + alpha * cand_load))[7:11,] %**%
         (m_prec[, 2] * vap_race)
     #out = rbind(pr_mayor / rvar_sum(pr_mayor), pr_pres / rvar_sum(pr_pres))
     out = rbind(pr_mayor, pr_pres)

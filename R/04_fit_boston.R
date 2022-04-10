@@ -2,7 +2,7 @@ library(cmdstanr)
 library(posterior)
 
 fit_pcei = function(tbls, n_comp=2L, id=NULL, recompile=FALSE, algorithm="vb",
-                    chains=4, warmup=500, iter=250, adapt_delta=0.95, ...) {
+                    chains=4, warmup=500, iter=500, adapt_delta=0.8, init=0, ...) {
     stan_d = list(
         N = nrow(tbls$votes),
         K = length(tbls$cands),
@@ -36,7 +36,7 @@ fit_pcei = function(tbls, n_comp=2L, id=NULL, recompile=FALSE, algorithm="vb",
     if (algorithm == "hmc") {
         fit = sm$sample(data=stan_d, chains=chains,
                         iter_warmup=warmup, iter_sampling=iter,
-                        init=0, refresh=50, adapt_delta=adapt_delta, ...)
+                        init=0, refresh=100, adapt_delta=adapt_delta,...)
     } else if (algorithm == "vb") {
         fit = sm$variational(data=stan_d, algorithm="meanfield", init=0, ...)
     } else {
@@ -52,8 +52,8 @@ fit_pcei = function(tbls, n_comp=2L, id=NULL, recompile=FALSE, algorithm="vb",
     draws$alpha = c(rvar(array(1, dim=draws_dim), with_chains=TRUE), draws$alpha)
     names(draws$alpha) = tbls$cands
     names(draws$turnout_overall) = races
-    colnames(draws$turnout) = races
-    dimnames(draws$pref_geo) = list(NULL, NULL, races)
+    colnames(draws$turnout_z) = races
+    dimnames(draws$pref_z) = list(NULL, NULL, races)
     rownames(draws$L_p) = races
     rownames(draws$L_t) = races
     names(draws$sigma_p) = races
@@ -103,8 +103,8 @@ print.fit_pcei = function(x, load_len=NULL, corr=FALSE) {
 
     if (isTRUE(corr)) {
         cat("\nRace correlation:\n")
-        m_t = median(draws$L_t %**% t(draws$L_t))
-        m_p = median(draws$L_p %**% t(draws$L_p))
+        m_t = median(x$L_t %**% t(x$L_t))
+        m_p = median(x$L_p %**% t(x$L_p))
         colnames(m_t) = c("turnout", rep("", ncol(m_t)-1))
         colnames(m_p) = c("loading", rep("", ncol(m_p)-1))
         print(round(cbind(m_t, m_p), 2))

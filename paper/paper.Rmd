@@ -395,7 +395,7 @@ include_graphics(here("paper/figures/nj_pairs.pdf"))
 ```
 
 Differential partisan harm identifies each gerrymander as such, with a large negative value for the Democratic gerrymander and a large positive value for the Republican gerrymander.
-These values are relatively directly interpretable; for example, the differential harm score of $-0.22$ means that an average Democratic voter is 22% less likely to be misrepresented than their average Republican counterpartisan.
+These values are relatively directly interpretable; for example, the differential harm score of $-0.221$ means that an average Democratic voter is 22.1% less likely to be misrepresented than their average Republican counterpartisan.
 The efficiency gap and declination measures also correctly identify the gerrymanders, though they are much more discrete, and declination gives a much larger score in absolute value to the Democratic plan than to the Republican.
 In contrast, the partisan bias and mean-median measures incorrectly classify the Republican gerrymander as a fair plan and a Democratic-leaning outlier.
 These measures are weakly correlated with the expected number of Democratic seats, and show substantial variation even for fixed values of total seats won at baseline.

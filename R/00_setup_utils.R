@@ -1,7 +1,6 @@
 library(rlang)
 library(tidyverse)
 library(sf)
-library(geomander)
 library(redist)
 library(scales)
 library(patchwork)
