@@ -1,11 +1,48 @@
 library(cmdstanr)
 library(posterior)
 
+
+
 fit_pcei = function(tbls, n_comp=2L, id=NULL, recompile=FALSE, algorithm="vb",
-                    chains=4, warmup=500, iter=500, adapt_delta=0.8, init=0, ...) {
+                    chains=4, warmup=1000, iter=500, adapt_delta=0.8, init=0, ...) {
+    n_comp = as.integer(n_comp)
+    K = length(tbls$cands)
+
+    # convert ID conditions
+    loading_loc = rep(0, K*n_comp)
+    loading_cov = diag(K*n_comp)
+    get_idx = function(nm, q=seq_len(n_comp)) {
+        match(nm, tbls$cands) + (q-1)*K
+    }
+    for (i in seq_along(id$loc)) {
+        idx = get_idx(names(id$loc)[i])
+        loading_loc[idx] = id$loc[[i]]
+    }
+    for (i in seq_along(id$scale)) {
+        idx = get_idx(names(id$scale)[i])
+        diag(loading_cov)[idx] = id$scale[[i]]^2
+    }
+    for (i in seq_along(id$corr)) {
+        i1 = get_idx(id$corr[[i]][[1]])
+        i2 = get_idx(id$corr[[i]][[2]])
+        new_cor = sqrt(diag(loading_cov)[i1] * diag(loading_cov)[i2]) * id$corr[[i]][[3]]
+        for (j in seq_len(n_comp)) {
+            loading_cov[i1[j], i2[j]] = new_cor[j]
+            loading_cov[i2[j], i1[j]] = new_cor[j]
+        }
+    }
+
+    eig = eigen(loading_cov)
+    if (any(eig$values <= 0)) {
+        message("Provided identification prior is not positive semidefinite; taking nearest approximation.")
+        D = diag(pmax(eig$values, 1e-2))
+        loading_cov = eig$vectors %*% D %*% t(eig$vectors)
+    }
+
     stan_d = list(
+        Q = n_comp,
         N = nrow(tbls$votes),
-        K = length(tbls$cands),
+        K = K,
         L = ncol(tbls$votes),
         R = ncol(tbls$race),
 
@@ -15,11 +52,8 @@ fit_pcei = function(tbls, n_comp=2L, id=NULL, recompile=FALSE, algorithm="vb",
         vap_race = tbls$race,
         elec = as.integer(tbls$elecs),
 
-        Q = as.integer(n_comp),
-        n_id = nrow(id),
-        id_idx = match(id$cand, tbls$cands),
-        id_loc = do.call(rbind, id$loc)[, seq_len(nrow(id)), drop=F],
-        id_scale = do.call(rbind, id$scale)[, seq_len(nrow(id)), drop=F]
+        loading_loc = loading_loc,
+        loading_cov = loading_cov
     )
 
     path_model = here("R/pcei.stan")
@@ -43,23 +77,52 @@ fit_pcei = function(tbls, n_comp=2L, id=NULL, recompile=FALSE, algorithm="vb",
         stop("Algorithm should be `hmc` or `vb`.")
     }
 
-    draws = as_draws_rvars(fit$draws())
+    vars = c("lp__", "turnout_overall", "turnout_elec", "turnout", "L_t", "sigma_t",
+             "support", "alpha", "loading", "pref", "scale", "L_p", "sigma_p", "err_mult",
+             "post_share_prec", "post_share_race", "post_turn", "post_factor")
+    draws = as_draws_rvars(fit$draws(variables=vars))
 
-    draws_dim = dim(draws_of(draws$err_mult))
+    # fix identification issues
+    load_m = matrix(loading_loc, ncol=n_comp)
+    id_sign = rfun(function(l) {
+        agree = colSums(l * load_m) / colSums(abs(load_m))
+        sign(agree)
+    })
+    signs = id_sign(draws$loading)
+
+    draws_dim = dim(draws_of(draws$err_mult, with_chains=TRUE))
     races = colnames(tbls$race)
     names(draws$support) = tbls$cands
+
+    dim(signs) = c(1, n_comp)
+    draws$loading = draws$loading * signs
     rownames(draws$loading) = tbls$cands
+
     draws$alpha = c(rvar(array(1, dim=draws_dim), with_chains=TRUE), draws$alpha)
     names(draws$alpha) = tbls$cands
     names(draws$turnout_overall) = races
-    colnames(draws$turnout_z) = races
-    dimnames(draws$pref_z) = list(NULL, NULL, races)
+    colnames(draws$turnout) = races
+
+    dim(signs) = c(1, n_comp, 1)
+    draws$pref = draws$pref * signs
+    dimnames(draws$pref) = list(NULL, NULL, races)
+
+    dim(signs) = c(1, n_comp)
+    draws$post_factor = draws$post_factoe * signs
+
     rownames(draws$L_p) = races
     rownames(draws$L_t) = races
     names(draws$sigma_p) = races
     names(draws$sigma_t) = races
 
+    colnames(draws$post_share_race) = races
+    rownames(draws$post_share_race) = tbls$cands
+    colnames(draws$post_share_prec) = tbls$cands
+
     class(draws) = c("fit_pcei", class(draws))
+    attr(draws, "sm") = fit
+    attr(draws, "loading_loc") = loading_loc
+    attr(draws, "loading_cov") = loading_cov
     draws
 }
 
@@ -109,6 +172,16 @@ print.fit_pcei = function(x, load_len=NULL, corr=FALSE) {
         colnames(m_p) = c("loading", rep("", ncol(m_p)-1))
         print(round(cbind(m_t, m_p), 2))
     }
+}
+
+rot_mat = function(deg) {
+    deg = deg * pi/180
+    matrix(c(cos(deg), sin(deg), -sin(deg), cos(deg)), 2, 2)
+}
+
+save_fit = function(fit, path, compress="xz") {
+    attr(fit, "sm") = NULL
+    write_rds(fit, path, compress=compress)
 }
 
 
