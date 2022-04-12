@@ -95,43 +95,39 @@ First, we consider the case of Minichusetts.
 Modeled on Massachusetts, Minichusetts contains a remarkable lack of partisan segregation.
 This high level of integration, combined with Democrats receiving the majority of votes, leads to a Republican inability to win any seats under recent historical voting patterns [@duch:18].
 For existing measures, this creates a conflict: Republicans win about 40% of the vote, but zero of the nine seats.
-The Efficiency Gap would correctly identify that the enacted map favors Democrats, whereas both Partisan Bias and Mean-Median indicate a pro-Republican bias (ref planscore).
+The Efficiency Gap identifies that the enacted map favors Democrats, whereas both Partisan Bias and Mean-Median indicate a pro-Republican bias under reconstituted recent elections.^[This is according to [PlanScore](https://planscore.campaignlegal.org/massachusetts/#!2020-plan-ushouse-eg), run by the Campaign Legal Center.]
 
-This motivates the need for a counterfactual.
-How can a plan be biased towards or against a party in a case where the party is unable to do worse or to do better than the plan?
-By relying on counterfactual plans, we can then identify the cases where individuals are not represented by their preferred candidate or party.
-In places like Minichusetts, as no plan can be drawn which improves the partisan representation of Republican voters, then there can be no harm.
+Yet, these scores lack a counterfactual.
+Functionally, neither Republicans nor Democrats could do better or worse under this plan than any other plan---a counterfactual plan.
+By relying on counterfactual plans, we can then identify the cases where individuals are not represented by their preferred candidate or party, as an alternative to existing partisan bias mesaures.
+In places like Minichusetts, as no plan can be drawn which improves the partisan representation of Republican voters, under a counterfactual-driven approach, then there is no harm or bias.
 
 ## Mininois: individual harm
 
 Not all cases are as simple as those where one party wins all the seats.
 Mininois also has a Democratic majority, but the voters are no longer integrated.
 In a familiar pattern of partisan sorting, Democrats are sorted asymmetrically into a single population-dominating city whereas Republicans dominate the less ideologically segregated rural regions [@chen:rodd:13; @enos:brown:21].
-This allows for significantly greater variation in the expected partisanship of the districts drawn.
+This allows for more variation in the expected partisanship of the districts drawn.
 
 ```{r harm-mininois, fig.cap="Two potential districting plans for Mininois: a Democratic gerrymander (a) and a close-to-proportional plan (b). Panel (c) shows the total harm to voters in each precinct done by (a), using (b) as a counterfactual."}
 include_graphics(here("paper/figures/harm_mininois.pdf"))
 ```
 
-A Democratic gerrymander in Mininois effectuates Democratic control by splitting its city into with the blades of a pinwheel reaching out into the more Republican, rural remainder of the state..
-If we consider the two plans in Figure TODO, we see that the Democratic gerrymander would likely elect zero Republicans and three Democrats, whereas the fair map would likely elect two Democrats and one Republican.
-Consider the precincts $(4, 1)$ (maybe highlighted in a color).
-$(4,1)$ is placed in a Republican district in the fair map, while it is in a Democratic district in the gerrymandered map.
-This precinct has 2 Republicans who are not represented by their co-partisan in the gerrymandered plan, but would have been represented by a co-partisan in the fair plan.
-Conversely, the 1 Democrat is represented by their co-partisan in the gerrymandered plan, but not the fair plan.
-Each of these three voters can show a counterfactual where they would be better represented and thus have a claim to harm.
-Yet, if we instead consider any voter who lives in the (other color) $(1, 1)$ precinct, those voters must always be in a Democratic district given the distribution of voters.
-While the Republicans in that precinct are not represented by their co-partisan, they never would be.
-Those Republicans can't be individually harmed by redistricting.
+This pattern allows us to build out the intuition behind our proposed measure.
+Each voter belongs to a group, mostly simply a party.
+For this, we offer that a voter is harmed if they are not represented by their party of choice, but have a counterfactual where they would be represented by their party of choice.
+
+Consider the example in Figure \ref{fig:harm-mininois}.
+A Democratic gerrymander in Mininois effectuates Democratic control by splitting its city into with the blades of a pinwheel, reaching out into the more Republican and less population-dense remainder of the state.
+We see that the Democratic gerrymander would likely elect zero Republicans and three Democrats, whereas the proportional map would likely elect two Democrats and one Republican.
+Figure \ref{fig:harm-mininois}, Panel C then illustrates th total harm by district, comparing the gerrymander to the proportional plan. 
+Republican voters who are forced into a Democratic district under the gerrymander, but would not be under a proportional plan are deemed harmed.
+The Republicans who stay in Democratic districts in the proportional plan are not harmed.
 
 ## Minissouri: differential harm
 
 We can also consider a less drastic sorting, where medium cities favor Democrats, but no longer dominate the state politics, such as in Minissouri.
 This allows for additional variability, where either party can gerrymander to draw more seats for their party than a neutral process might allow.
-
--   show a fair map and a gerrymandered map
-
--   tally harm by party
 
 While we've begun with a two group case, Republicans and Democrats, this can be further extended.
 Perhaps we are interested in a third party or the interaction between White and Black with Democrats and Republicans.
