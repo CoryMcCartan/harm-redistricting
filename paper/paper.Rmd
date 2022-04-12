@@ -129,8 +129,7 @@ The Republicans who stay in Democratic districts in the proportional plan are no
 We can also consider a less drastic sorting, where medium cities favor Democrats, but no longer dominate the state politics, such as in Minissouri.
 This allows for additional variability, where either party can gerrymander to draw more seats for their party than a neutral process might allow.
 
-While we've begun with a two group case, Republicans and Democrats, this can be further extended.
-Perhaps we are interested in a third party or the interaction between White and Black with Democrats and Republicans.
+This framework easily extends to additional parties or races. For example, we can index for the interaction between White and Black with Democrats and Republicans.
 This framework allows for us to index by these groups and simply break down the interactions as components of the sum of the harms.
 
 ```{r diffharm-minissouri, fig.cap="Three potential districting plans for Minissouris: a Democratic gerrymander (a), a close-to-proportional plan (b), and a Republican gerrymander (c). Panels (d) and (f) show the total harm to voters in each precinct done by their corresponding gerrymander, using (b) as a counterfactual.  Panel (e) summarizes this harm by party and across precincts, showing the average harm done to voters of each party by each gerrymander."}
