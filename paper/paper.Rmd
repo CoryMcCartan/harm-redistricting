@@ -419,6 +419,14 @@ Plans with zero partisan bias or mean-median score actually have higher-than-ave
 
 # Application to Primary Elections in Boston {#sec:boston}
 
+```{r boston-map, fig.cap="Racial composition of the city of Boston (left), and boundaries of the 2010 city coucil districts (right). Neighborhood boundaries are overlaid in black on the left map and in white on the right map.", fig.width=6.75, fig.height=3.375}
+include_graphics(here("paper/figures/boston_map.pdf"))
+```
+
+```{r boston-factors, fig.cap="Candidate factor loadings, with approximate 80\\% credible intervals shown as ellipses (left), and geographic variation in factor values by race (right). Neighborhood boundaries overlaid in black. Factor values in the Black second-dimension map are truncated so that variation in the other maps is visible.", fig.width=7, fig.height=3.5}
+include_graphics(here("paper/figures/boston_factors.pdf"))
+```
+
 # Discussion {#sec:discussion}
 
 This paper is an attempt to bridge the quantitative gap between votes and representation.

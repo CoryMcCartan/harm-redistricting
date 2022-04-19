@@ -11,9 +11,11 @@ library(Rcpp)
 theme_repr = function() theme_bw(base_family="Times", base_size=10)
 theme_repr_map = function() theme_void(base_family="Times", base_size=10)
 
-PAL_COAST = c("#7BAEA0", "#386276", "#3A4332", "#7A7D6F", "#D9B96E", "#BED4F0")
-PAL_LARCH = c("#D2A554", "#626B5D", "#8C8F9E", "#858753", "#A4BADF", "#D3BEAF")
-PAL = PAL_COAST[c(5, 1, 2, 4, 3, 6)]
+PAL = wa_pal("coast", which=c(5, 1, 2, 4, 3, 6))
+PAL_RACE = wa_pal("skagit", which=c(1, 4, 6, 3))
+names(PAL_RACE) = c("white", "black", "hisp", "other")
+NAMES_RACE = c("White", "Black", "Hispanic", "other")
+
 GOP_DEM = c("#A0442C", "#B25D4C", "#C27568", "#D18E84", "#DFA8A0",
             "#EBC2BC",  "#F6DCD9", "#F9F9F9", "#DAE2F4", "#BDCCEA",
             "#9FB6DE", "#82A0D2", "#638BC6", "#3D77BB", "#0063B1")
@@ -26,6 +28,8 @@ scale_color_party_d = function(...) {
     scale_color_manual(..., values=c(GOP_DEM[2], GOP_DEM[14]),
                        labels=c("Rep.", "Dem."))
 }
+
+scale_fill_ideo = \(...) scale_fill_wa_c(palette="stuart", ...)
 
 # 'fixed' log that handles 0 and negative numbers
 flog = function(x) if_else(x <= 0, -1, suppressWarnings(log(x)))

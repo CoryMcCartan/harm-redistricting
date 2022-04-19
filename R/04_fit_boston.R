@@ -1,6 +1,6 @@
 library(cmdstanr)
 library(posterior)
-
+library(tidybayes)
 
 
 fit_pcei = function(tbls, n_comp=2L, id=NULL, recompile=FALSE, algorithm="vb",
@@ -70,9 +70,9 @@ fit_pcei = function(tbls, n_comp=2L, id=NULL, recompile=FALSE, algorithm="vb",
     if (algorithm == "hmc") {
         fit = sm$sample(data=stan_d, chains=chains,
                         iter_warmup=warmup, iter_sampling=iter,
-                        init=0, refresh=100, adapt_delta=adapt_delta,...)
+                        init=init, refresh=100, adapt_delta=adapt_delta,...)
     } else if (algorithm == "vb") {
-        fit = sm$variational(data=stan_d, algorithm="meanfield", init=0, ...)
+        fit = sm$variational(data=stan_d, algorithm="meanfield", init=init, ...)
     } else {
         stop("Algorithm should be `hmc` or `vb`.")
     }
@@ -108,7 +108,7 @@ fit_pcei = function(tbls, n_comp=2L, id=NULL, recompile=FALSE, algorithm="vb",
     dimnames(draws$pref) = list(NULL, NULL, races)
 
     dim(signs) = c(1, n_comp)
-    draws$post_factor = draws$post_factoe * signs
+    draws$post_factor = draws$post_factor * signs
 
     rownames(draws$L_p) = races
     rownames(draws$L_t) = races

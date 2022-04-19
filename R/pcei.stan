@@ -24,11 +24,13 @@ data {
 transformed data {
     array[N] vector<lower=0>[K] sqrt_inv_votes;
     cholesky_factor_cov[K*Q] loading_chol = cholesky_decompose(loading_cov);
+    array[N] vector[K] l_vote_share;
 
     for (i in 1:N) {
         for (k in 1:K) {
             sqrt_inv_votes[i, k] = inv_sqrt(1.0 + votes[i, elec[k]]);
         }
+        l_vote_share[i] = logit(1e-3 + vote_share[i]);
     }
 }
 
@@ -40,7 +42,8 @@ parameters {
     cholesky_factor_corr[R] L_t;
     row_vector<lower=0>[R] sigma_t;
 
-    vector<lower=0, upper=1>[K] support; // overall support for each candidate
+    // vector<lower=0, upper=1>[K] support; // overall support for each candidate
+    vector[K] support; // overall support for each candidate
     vector<lower=0>[K-1] alpha; // fudge factor
     matrix[K, Q] loading; // loading of each candidate onto principal component
     // positive_ordered[Q] scale; // scale of each component
@@ -81,19 +84,22 @@ model {
         votes[i] ~ binomial_logit(vap[i], a_turn_elec + logit(sum(turn_r[i])));
 
         // support
-        vector[K] p = support .* (1 + a_alpha .* (loading * post_factor[i]));
-        vote_share[i] ~ normal(p, err_mult * sqrt_inv_votes[i]);
+        // vector[K] p = support .* (1 + a_alpha .* (loading * post_factor[i]));
+        vector[K] p = support + a_alpha .* (loading * post_factor[i]);
+        l_vote_share[i] ~ normal(p, err_mult * sqrt_inv_votes[i]);
     }
 
     // priors ----------------------------------------------
-    support ~ beta(1.0, (1.0*K)/L);
+    // support ~ beta(1.0, (1.0*K)/L);
+    support ~ normal(0.0, 4.0);
 
     // loadings -- with soft identification priors
     to_vector(loading) ~ multi_normal_cholesky(loading_loc, loading_chol);
 
     L_p ~ lkj_corr_cholesky(20.0);
     L_t ~ lkj_corr_cholesky(4.0);
-    sigma_p ~ gamma(1.5, 1.5/0.5);
+    // sigma_p ~ gamma(1.5, 1.5/0.5);
+    sigma_p ~ gamma(1.5, 1.5/1.0);
     sigma_t ~ gamma(1.5, 1.5/0.25);
     for (i in 1:N) {
         turnout_z[i] ~ std_normal();
@@ -102,9 +108,10 @@ model {
     turnout_overall ~ beta(10, 30);
     turnout_elec ~ normal(0, 0.5);
 
-    scale ~ gamma(1.5, 1.5);
-    err_mult ~ exponential(1.0/1.00);
-    alpha ~ gamma(20.0, 20.0/1.0);
+    scale ~ gamma(1.5, 1.5/4.0);
+    err_mult ~ exponential(1.0/4.00);
+    // alpha ~ gamma(20.0, 20.0/1.0);
+    alpha ~ gamma(5.0, 5.0/1.0);
 }
 
 generated quantities {
@@ -120,12 +127,12 @@ generated quantities {
             post_turn[i] = binomial_rng(vap[i], sum(turn_r[i]));
 
             // support
-            vector[K] p = support .* (1 + a_alpha .* (loading * post_factor[i]));
-            post_share_prec[i] = normal_rng(p, err_mult * sqrt_inv_votes[i]);
+            vector[K] p = support + a_alpha .* (loading * post_factor[i]);
+            post_share_prec[i] = inv_logit(normal_rng(p, err_mult * sqrt_inv_votes[i]));
             for (r in 1:R) {
                 vector[Q] pref_r = r_scale .* pref[i, :, r];
-                vector[K] p_r = support .* (1 + a_alpha .* (loading * pref_r));
-                post_share_race[:, r] += p_r * turn_r[i, r] * vap[i];
+                vector[K] p_r = support + a_alpha .* (loading * pref_r);
+                post_share_race[:, r] += inv_logit(p_r) * turn_r[i, r] * vap[i];
             }
         }
     }
