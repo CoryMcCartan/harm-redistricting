@@ -174,6 +174,52 @@ print.fit_pcei = function(x, load_len=NULL, corr=FALSE) {
     }
 }
 
+
+predict.fit_pcei = function(object, support, loading, tbls, recompile=FALSE) {
+    n_comp = length(fit$scale)
+    stopifnot(ncol(loading) == n_comp)
+
+
+    lsupport = qlogis(support)
+
+    stan_d = list(
+        Q = n_comp,
+        N = nrow(tbls$votes),
+        K = nrow(loading),
+        R = ncol(tbls$race),
+
+        vap = tbls$vap,
+        vap_race = tbls$race,
+
+        loading = loading,
+        support = lsupport
+    )
+
+    path_model = here("R/pcei_gq.stan")
+    path_exc = here("R/pcei_gq")
+
+    sm = cmdstan_model(path_model, compile=F)
+    if (file.exists(path_exc)) {
+        if (isTRUE(recompile) || file.info(path_exc)["mtime"] < file.info(path_model)["mtime"]) {
+            file.remove(path_exc)
+        }
+    }
+    sm$compile()
+
+    draws_obj = object[c("turnout", "scale", "pref", "err_mult")]
+    colnames(draws_obj$turnout) = NULL
+    dimnames(draws_obj$pref) = list(NULL, NULL, NULL)
+
+    gqs = sm$generate_quantities(posterior::as_draws_array(draws_obj),
+                                 data=stan_d, sig_figs=4)
+
+    votes = as_draws_rvars(gqs$draws())$votes
+    dimnames(votes) = list(NULL, colnames(tbls$race), rownames(loading))
+
+    votes
+}
+
+
 rot_mat = function(deg) {
     deg = deg * pi/180
     matrix(c(cos(deg), sin(deg), -sin(deg), cos(deg)), 2, 2)

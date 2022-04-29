@@ -90,7 +90,7 @@ d_load_exp = group_by(d_load, cand, elec, vs) %>%
     mutate(load_2 = if_else(cand=="campbell", load_2-0.1, load_2))
 
 library(ggrepel)
-nice_name = function(x) str_to_title(str_replace(x, "_", "-"))
+nice_name = function(x) str_to_title(str_replace(x, "_", " "))
 nice_elec = function(x) c(mayor="Mayoral", pres="Presidential")[x]
 
 p1 = ggplot(NULL, aes(load_1, load_2)) +
@@ -148,6 +148,103 @@ p2 = ggplot(map_fact, aes(fill=value)) +
 p1 + p2
 
 ggsave(here("paper/figures/boston_factors.pdf"), height=3.5, width=7, device=cairo_pdf)
+
+
+
+# Predictions -------
+
+## Mayoral General Election -------
+wu_gen_total = with(d, sum(mayor_gen_wu)/(sum(mayor_gen_wu) + sum(mayor_gen_essaibi_george)))
+wu_gen = with(d, (mayor_gen_wu)/((mayor_gen_wu) + (mayor_gen_essaibi_george)))
+
+prior_gen = tbls$summary$vs[1:2] / sum(tbls$summary$vs[1:2])
+loading = mean(fit$loading)[1:2,]
+
+est_votes = predict(fit, prior_gen, loading, tbls)
+est_turn_r = 1e-6 + rvar_apply(est_votes, 1:2, rvar_sum)
+est_turn = rvar_apply(est_turn_r, 1, rvar_sum)
+est_vs = est_votes / est_turn_r
+est_votes_total = rvar_apply(est_votes, c(1, 3), rvar_sum)
+est_vs_total = as_tibble(est_votes_total / est_turn)
+
+act_turn = with(d, mayor_gen_wu + mayor_gen_essaibi_george)
+p1 = ggplot(d, aes(x=wu_gen, y=median(est_vs_total$wu))) +
+    geom_point(size=0.6) +
+    geom_abline(slope=1, color="red") +
+    scale_x_continuous("Actual Wu vote share", labels=percent) +
+    scale_y_continuous("Estimated Wu vote share", labels=percent) +
+    theme_repr()
+p2 = ggplot(d, aes(x=act_turn, y=median(est_turn))) +
+    geom_point(size=0.6) +
+    geom_abline(slope=1, color="red") +
+    coord_trans("sqrt", "sqrt") +
+    labs(x="Actual total votes", y="Estimated total votes") +
+    theme_repr()
+p1 + p2 & theme(plot.margin=unit(c(0, 0.2, 0, 0), "cm"))
+ggsave(here("paper/figures/boston_gen_pred.pdf"), width=6.5, height=3.25)
+
+cat("Wu vote share Spearman correlation:",
+    cor(median(est_vs_total$wu), wu_gen, method="spearman"),
+    "\nTotal votes Spearman correlation:",
+    cor(median(est_turn), act_turn, method="spearman"))
+
+
+
+support = c(0.5, 0.5)
+loading = tribble(~cand, ~f1, ~f2,
+                  "Left", -0.0, -1.0,
+                  "Right", 0.0, 1.0) %>%
+    column_to_rownames("cand") %>%
+    as.matrix()
+
+est_votes = predict(fit, support, loading, tbls)
+win_pr_total = Pr(est_votes_total / est_turn > 0.5)
+
+plot(map, median(est_vs_total$Left)) + scale_fill_wa_c("lopez")
+
+n_draws = length(draws_of(fit$err_mult))
+plans = redist_smc(map, n_draws, seq_alpha=0.75)
+plans = plans %>%
+    mutate(left = group_frac(map, median(est_votes_total[,1]), median(est_turn)))
+m_pl = as.matrix(plans)
+
+
+pr_left_e = pnorm(avg_by_prec(plans, left, draws="ccd_2010"), 0.5, 0.05)
+pr_left_s = pnorm(avg_by_prec(plans, left), 0.5, 0.05)
+plot(map, pr_left_e) + scale_fill_wa_c(name="Pr(left)", "stuart", midpoint=0.5)
+plot(map, pr_left_s - pr_left_e) +
+#plot(map, avg_by_prec(plans, left) - avg_by_prec(plans, left, draws=7)) +
+    scale_fill_wa_c(name="Ideological displacement", "stuart", midpoint=0.0)
+
+pl_e = m_pl[, 1]
+n_race = ncol(tbls$race)
+harm_prec = array(dim=c(n_draws, nrow(map), n_race),
+                  dimnames=list(NULL, NULL, colnames(tbls$race)))
+for (i in seq_len(n_draws)) {
+    votes_i = draws_of(est_votes_total)[i, , ]
+    pl_i = m_pl[, i + 1]
+    tv_i1 = tapply(votes_i[, 1], pl_i, sum)
+    tv_i2 = tapply(votes_i[, 2], pl_i, sum)
+    tv_e1 = tapply(votes_i[, 1], pl_e, sum)
+    tv_e2 = tapply(votes_i[, 2], pl_e, sum)
+    harm_1 = (tv_i1 > tv_i2)[pl_i] & (tv_e1 < tv_e2)[pl_e]
+    harm_2 = (tv_i1 < tv_i2)[pl_i] & (tv_e1 > tv_e2)[pl_e]
+
+    votes_ir = draws_of(est_votes)[i, , , ]
+    turn_i = 1e-6 + apply(votes_ir, c(1, 2), sum)
+
+    harm_prec[i,,] = rep(harm_1, n_race)*votes_ir[,,1] + rep(harm_2, n_race)*votes_ir[,,2]
+}
+harm_prec = rvar(harm_prec)
+
+#plot(map, median(harm_prec / est_turn_r)[, ""])
+plot(map, median(harm_prec)[, 1])
+plot(map, median(harm_prec/est_turn_r)[, 1] - median(harm_prec/est_turn_r)[, 2])
+harm_race = rvar_apply(harm_prec, 2, rvar_sum)/rvar_apply(est_turn_r, 2, rvar_sum)
+hist(draws_of(harm_race[2] - harm_race[1]))
+
+
+
 
 
 # VALIDATION ---------------

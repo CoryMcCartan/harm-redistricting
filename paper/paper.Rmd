@@ -419,9 +419,21 @@ Plans with zero partisan bias or mean-median score actually have higher-than-ave
 
 # Application to Primary Elections in Boston {#sec:boston}
 
-```{r boston-map, fig.cap="Racial composition of the city of Boston (left), and boundaries of the 2010 city coucil districts (right). Neighborhood boundaries are overlaid in black on the left map and in white on the right map.", fig.width=6.75, fig.height=3.375}
+The proposed harm measures are particularly easy to calculate and interpret in a partisan context, since the preferences of each kind of partisan are directly observable as partisan vote shares.
+However, the same framework can be fruitfully applied to more complex settings, providing insights that go beyond those available through traditional methods.
+
+```{r boston-map, fig.cap="Racial composition of the city of Boston (left), and 2010 city coucil districts (right). Neighborhood boundaries are overlaid in black on the left map and in white on the right map.", fig.width=6.75, fig.height=3.375}
 include_graphics(here("paper/figures/boston_map.pdf"))
 ```
+
+The city of Boston is governed by a mayor and a nonpartisan 13-member city council.
+Nine of the councillors are elected from contiguous city council districts, and the remaining four councillors are elected at-large, with all councillors serving two-year terms.
+Council district boundaries are redrawn every ten years following the decennial census, and must be equipopulous, be compact, and preserve neighborhood and community boundaries.[^5]
+This section will study the extent to which the mixed at-large and district council system harms voters in comparison to a fully district-based system (as was the case before 1909 and from 1924-1951), either overall or differentially by racial group.
+Figure \ref{fig:boston-map} shows the racial composition of the city as well as the boundaries of the 2010 city council districts and the city's official neighborhoods.
+
+[^5]: City of Boston charter.
+    Available at <https://www.boston.gov/sites/default/files/embed/b/boston-city-charter-2007.pdf>.
 
 ```{r boston-factors, fig.cap="Candidate factor loadings, with approximate 80\\% credible intervals shown as ellipses (left), and geographic variation in factor values by race (right). Neighborhood boundaries overlaid in black. Factor values in the Black second-dimension map are truncated so that variation in the other maps is visible.", fig.width=7, fig.height=3.5}
 include_graphics(here("paper/figures/boston_factors.pdf"))
@@ -451,34 +463,34 @@ Further work is needed to characterize how existing redistricting requirements a
 ```
 # Computing Harm Measures from Precinct-level Election Data {#app:formulas}
 
-In practice, districting plans are built from discrete geographic units (often precincts), and election returns are reported at this level as well.[^5]
+In practice, districting plans are built from discrete geographic units (often precincts), and election returns are reported at this level as well.[^6]
 Throughout this appendix, let $j$ index the set of electoral precincts or other units.
 For concreteness here and without loss of generality we will use the Democratic party as the reference party, letting $s_{jv}$ denote the Democratic two-party vote share in precinct $j$ in election $v$.
 Write-in or minor third-party candidates can be safely ignored, since the overall winner will be precisely the two-party vote winner.
 
-[^5]: When district boundaries split precincts, practitioners generally impute the returns in each component of the split precinct by population-weighted interpolation.
+[^6]: When district boundaries split precincts, practitioners generally impute the returns in each component of the split precinct by population-weighted interpolation.
     Population information comes from Census blocks, which are practically never split.
 
 ## Proportionate Uniform Shift Details
 
-The proportionate uniform shift model assumes that from one election to another, a constant fraction of *voters of one party* in each precinct switch to the other party, and that per-precinct turnout is constant across elections.[^6]
+The proportionate uniform shift model assumes that from one election to another, a constant fraction of *voters of one party* in each precinct switch to the other party, and that per-precinct turnout is constant across elections.[^7]
 This has several advantages over the uniform swing model, where a constant fraction of *all voters* shifts parties.
 First, the proportionate shift prevents hypothetical party vote shares from exceeding 1 or falling below 0 in any precinct.
 Second, as it has the effect of scaling vote shares across precincts by a constant multiple, it preserves the relative balance of a party's voters across precincts.
 For $\Delta_{\dem-\rep}H(q)$, which considers voters in each party separately, this helpfully simplifies computations.
 
-[^6]: Everything carries through if one allows for shifts in the overall turnout level across elections, as long as (a) the relative turnout across precincts is fixed, and (b) turnout shifts are independent of shifts in party preferences.
+[^7]: Everything carries through if one allows for shifts in the overall turnout level across elections, as long as (a) the relative turnout across precincts is fixed, and (b) turnout shifts are independent of shifts in party preferences.
 
 The proportionate shift may be mathematically expressed as linear shift on a transformed scale, not unlike a generalized linear model.
 Specifically, we define $\gamma:[0,1]\to\R$, $$
 \gamma(x) = -\thalf\sgn(x-\thalf)\log(1-2\qty|x-\thalf|),
-$$ which is the inverse CDF of a Laplace distribution with rate 2.[^7]
+$$ which is the inverse CDF of a Laplace distribution with rate 2.[^8]
 Then the Democratic vote share in precinct $P_j$ and election $v$, notated here as $s_{jv}$, is modeled as $$
 \gamma(s_{jv}) = \gamma(\overline s_j) + \eps_v, \qquad \eps_v \iid \Norm(0, \sigma^2_{\mathrm{hist}}),
 $$ where $\overline{s}_j$ is the party baseline in the precinct, and $\sigma^2_\mathrm{hist}$ is estimated from the historical variability in nationwide popular vote shares.
 For congressional elections in the United States from 1974--2018, we have $\widehat\sigma^2_\mathrm{hist}=0.03723$, and so draw predictive deviations from $\mathrm{t}_{22}(0, \widehat\sigma^2_\mathrm{hist})$.
 
-[^7]: A rate of 2 is chosen so that the slope of the link function at $\half$ is exactly 1, meaning that transformed vote shares will be on approximately the same scale as the original shares.
+[^8]: A rate of 2 is chosen so that the slope of the link function at $\half$ is exactly 1, meaning that transformed vote shares will be on approximately the same scale as the original shares.
 
 It will simplify matters following to have notation for the overall Democratic vote share in a district.
 For a precinct $j$, let $q^{-1}(j)$ denote the district it belongs to.
@@ -543,3 +555,7 @@ Our final estimates $\hat H(q)$ and $\Delta_{\dem-\rep}\hat H(q)$ may then be st
 Here, we rely on the fact that even across election shifts, the relative balance of each party's voters across precincts is preserved.
 
 # Principal Components Ecological Inference Model for Boston Primary Elections
+
+```{r boston-gen-pred, fig.cap="Model predictions of general election vote shares and turnout, compared to actual general election results. Red reference line indicates perfect agreement.", fig.width=6.5}
+include_graphics(here("paper/figures/boston_gen_pred.pdf"))
+```
