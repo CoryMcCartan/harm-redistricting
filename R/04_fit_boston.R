@@ -3,7 +3,7 @@ library(posterior)
 library(tidybayes)
 
 
-fit_pcei = function(tbls, n_comp=2L, id=NULL, recompile=FALSE, algorithm="vb",
+fit_lfei = function(tbls, n_comp=2L, id=NULL, recompile=FALSE, algorithm="vb",
                     chains=4, warmup=1000, iter=500, adapt_delta=0.8, init=0, ...) {
     n_comp = as.integer(n_comp)
     K = length(tbls$cands)
@@ -56,8 +56,8 @@ fit_pcei = function(tbls, n_comp=2L, id=NULL, recompile=FALSE, algorithm="vb",
         loading_cov = loading_cov
     )
 
-    path_model = here("R/pcei.stan")
-    path_exc = here("R/pcei")
+    path_model = here("R/lfei.stan")
+    path_exc = here("R/lfei")
 
     sm = cmdstan_model(path_model, compile=F)
     if (file.exists(path_exc)) {
@@ -119,7 +119,7 @@ fit_pcei = function(tbls, n_comp=2L, id=NULL, recompile=FALSE, algorithm="vb",
     rownames(draws$post_share_race) = tbls$cands
     colnames(draws$post_share_prec) = tbls$cands
 
-    class(draws) = c("fit_pcei", class(draws))
+    class(draws) = c("fit_lfei", class(draws))
     attr(draws, "sm") = fit
     attr(draws, "loading_loc") = loading_loc
     attr(draws, "loading_cov") = loading_cov
@@ -127,9 +127,9 @@ fit_pcei = function(tbls, n_comp=2L, id=NULL, recompile=FALSE, algorithm="vb",
 }
 
 # generics ----
-print.fit_pcei = function(x, load_len=NULL, corr=FALSE) {
+print.fit_lfei = function(x, load_len=NULL, corr=FALSE) {
     n_comp = dim(x$scale)
-    cat("A principal components ecological inference model fit with",
+    cat("A latent factor ecological inference model fit with",
         n_comp, "components.\n\n")
 
     comp_scale = rev(median(x$scale^2))
@@ -175,12 +175,11 @@ print.fit_pcei = function(x, load_len=NULL, corr=FALSE) {
 }
 
 
-predict.fit_pcei = function(object, support, loading, tbls, recompile=FALSE) {
+predict.fit_lfei = function(object, support, loading, tbls, recompile=FALSE) {
     n_comp = length(fit$scale)
     stopifnot(ncol(loading) == n_comp)
 
-
-    lsupport = qlogis(support)
+    lsupport = rdo(qlogis(support))
 
     stan_d = list(
         Q = n_comp,
@@ -191,12 +190,11 @@ predict.fit_pcei = function(object, support, loading, tbls, recompile=FALSE) {
         vap = tbls$vap,
         vap_race = tbls$race,
 
-        loading = loading,
-        support = lsupport
+        loading = loading
     )
 
-    path_model = here("R/pcei_gq.stan")
-    path_exc = here("R/pcei_gq")
+    path_model = here("R/lfei_gq.stan")
+    path_exc = here("R/lfei_gq")
 
     sm = cmdstan_model(path_model, compile=F)
     if (file.exists(path_exc)) {
@@ -206,7 +204,8 @@ predict.fit_pcei = function(object, support, loading, tbls, recompile=FALSE) {
     }
     sm$compile()
 
-    draws_obj = object[c("turnout", "scale", "pref", "err_mult")]
+    draws_obj = c(list(support=lsupport),
+                  object[c("turnout", "scale", "pref", "err_mult")])
     colnames(draws_obj$turnout) = NULL
     dimnames(draws_obj$pref) = list(NULL, NULL, NULL)
 

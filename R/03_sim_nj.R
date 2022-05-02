@@ -1,9 +1,10 @@
 nj = read_rds(here("data/NJ_cd_final_vtd_20.rds")) %>%
     redist_map(pop_tol=0.01, ndists=12, adj=.$adj)
 
-N_sim = 10000
+N_sim = 2500
 if (!file.exists(sim_path <- here("data/nj_sims.rds"))) {
-    plans = redist_smc(nj, N_sim, counties=county, pop_temper=0.005, verbose=TRUE)#FALSE)
+    plans = redist_smc(nj, N_sim, counties=county, pop_temper=0.005,
+                       runs=4, verbose=TRUE)
 
     # gerrymanders
     set.seed(5118)
@@ -17,13 +18,13 @@ if (!file.exists(sim_path <- here("data/nj_sims.rds"))) {
     write_rds(plans, sim_path, compress="xz")
 } else {
     plans = read_rds(sim_path)
-    attr(plans, "ndists") = 12L
 }
 
 statewide = with(nj, sum(ndv)/sum(ndv+nrv))
 prop_seats = round(attr(nj, "ndists") * statewide)
 
 pl = calc_plans_stats(plans, nj, ndv, nrv)
+pl$plan$chain = by_plan(plans$chain, ndists=12)
 
 # get 100% accurate harm for 2 gerrymanders
 hh = harm(pl$distr, dem, nj$ndv, nj$nrv, idx_1=1:2, idx_2=(2+1:N_sim), ker=k_t())
@@ -34,7 +35,7 @@ pl$plan$h[1:2] = hh[3, ]
 
 # Initial plots ----
 map_scale = scale_fill_party_c(name="Democratic\nshare", limits=c(0.19, 0.81))
-geom_simp = rmapshaper::ms_simplify(nj$geometry, keep_shapes=TRUE)
+geom_simp = rmapshaper::ms_simplify(nj$geometry, keep=0.03, keep_shapes=TRUE)
 p1 = ggplot(nj, aes(fill=ndv/(ndv+nrv))) +
     geom_sf(aes(geometry=geom_simp), size=0, color="#00000000") +
     map_scale +
@@ -68,7 +69,7 @@ meas_labels = c(e_dem="Expected\nDem. seats", dh="Differential harm", h="Average
 if (!file.exists(path <- here("paper/figures/nj_pairs.pdf"))) {
     pl_plot = pl$plan %>%
         as_tibble() %>%
-        select(n_dem, e_dem, dh, h, egap, pbias, mean_med, decl)
+        select(e_dem, dh, h, egap, pbias, mean_med, decl)
     pl_plot = bind_rows(head(pl_plot, 2), slice_sample(head(pl_plot, -2), n=2000))
 
     expl_vars(pl_plot, labels=meas_labels, refs=GOP_DEM[c(2, 14)], rasterize=TRUE)
@@ -95,5 +96,5 @@ ggplot(pl_best, aes(score, dh, color=e_dem)) +
 with(pl_best, cor(score, h, method="pearson"))
 }
 
-rm(nj, plans, pl_best, pl_plot, pl_sum, p, p1, p2, p3, p4, pl,
-   m_dem, statewide, prop_setas, meas_labels)
+rm(nj, plans, pl_best, pl_plot, p, p1, p2, p3, p4, pl,
+   m_dem, statewide, prop_setas, meas_labels, geom_simp)

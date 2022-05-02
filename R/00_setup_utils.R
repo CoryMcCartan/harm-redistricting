@@ -158,12 +158,10 @@ expl_vars = function(pl, labels, refs=character(0), rasterize=TRUE,...) {
         }
     }
 
-    seats_vec = as.integer(as.factor(pl$n_dem))[idx]
-    pairs(select(pl, -n_dem), labels=labels, oma=rep(1.75, 4),
+    pairs(pl, labels=labels, oma=rep(1.75, 4),
           cex=0.10, gap=0.5, family="Times", cex.labels=0.9, ...,
           lower.panel=panel.cor, upper.panel=panel.points,
-          diag.panel=panel.hist,  text.panel=panel.text,
-          col=str_c(wa_pal("foothills", n=max(seats_vec), which=1:12)[seats_vec], "a0"))
+          diag.panel=panel.hist, text.panel=panel.text, col="#22222255")
 }
 
 

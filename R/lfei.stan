@@ -1,5 +1,5 @@
 /***************************************************
-* Principal Components Ecological Inference Model *
+* Latent Factor Ecological Inference Model        *
 * (c) 2022 Cory McCartan and Christopher T. Kenny *
 ***************************************************/
 

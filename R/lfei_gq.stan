@@ -1,5 +1,5 @@
 /***************************************************
-* Principal Components Ecological Inference Model *
+* Latent Factor Ecological Inference Model        *
 * (c) 2022 Cory McCartan and Christopher T. Kenny *
 ***************************************************/
 
@@ -12,10 +12,10 @@ data {
     array[N] int<lower=0> vap; // voting-age population
     array[N] vector<lower=0, upper=1>[R] vap_race; // share of VAP for each race
     matrix[K, Q] loading; // loading of each candidate onto principal component
-    vector[K] support; // overall support for each candidate
 }
 
 parameters {
+    vector[K] support; // overall logit support for each candidate
     array[N] vector[R] turnout; // turnout by ward and race
 
     vector<lower=0>[Q] scale; // scale of each component

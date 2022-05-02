@@ -1,10 +1,10 @@
-if (!exists("fit_pcei")) source(here("R/04_fit_boston.R"))
+if (!exists("fit_lfei")) source(here("R/04_fit_boston.R"))
 
 # Load and fit -------------
 
 d = read_rds(here("data/boston_elec.rds")) %>%
     mutate(ward = as.integer(str_split(precinct, "-", n=2, simplify=T)[,1]))
-map = redist_map(d, existing_plan=ccd_2010, adj=d$adj)
+map = redist_map(d, existing_plan=ccd_2010, pop_tol=0.05, adj=d$adj)
 
 d_votes = make_votes_long(d)
 tbls = make_tables(d_votes, cand_thresh=0.02)
@@ -18,7 +18,7 @@ if (!file.exists(fit_path <- here("data-raw/boston_fit_2.rds"))) {
         )
     )
 
-    fit = fit_pcei(tbls, n_comp=2L, id=id, algorithm="hmc", step_size=0.03)
+    fit = fit_lfei(tbls, n_comp=2L, id=id, algorithm="hmc", step_size=0.03)
     save_fit(fit, fit_path)
 } else {
     fit = read_rds(fit_path)
@@ -189,8 +189,13 @@ cat("Wu vote share Spearman correlation:",
     cor(median(est_turn), act_turn, method="spearman"))
 
 
+## Counterfactual -------
 
-support = c(0.5, 0.5)
+n_draws = length(draws_of(fit$lp__))
+draws_dim = dim(draws_of(fit$lp__, with_chains=TRUE))
+
+support = rvar(array(rbeta(n_draws, 20, 20),, dim=draws_dim), with_chains=TRUE)
+support = c(support, 1 - support)
 loading = tribble(~cand, ~f1, ~f2,
                   "Left", -0.0, -1.0,
                   "Right", 0.0, 1.0) %>%
@@ -198,31 +203,40 @@ loading = tribble(~cand, ~f1, ~f2,
     as.matrix()
 
 est_votes = predict(fit, support, loading, tbls)
-win_pr_total = Pr(est_votes_total / est_turn > 0.5)
+est_turn_r = 1e-6 + rvar(rowSums(draws_of(est_votes), dims=3))
+est_turn = 4e-6 + rvar(rowSums(draws_of(est_votes), dims=2))
+est_vs = est_votes / est_turn_r
+est_votes_total = rvar(rowSums(aperm(draws_of(est_votes), c(1, 2, 4, 3)), dims=3))
+est_vs_total = as_tibble(est_votes_total / est_turn)
 
 plot(map, median(est_vs_total$Left)) + scale_fill_wa_c("lopez")
 
-n_draws = length(draws_of(fit$err_mult))
-plans = redist_smc(map, n_draws, seq_alpha=0.75)
+# Simulate
+# map13 = redist_map(d, ndists=13, pop_tol=0.05, adj=d$adj)
+
+constr = redist_constr(map) %>%
+    add_constr_grp_hinge(15.0, group_pop=vap-vap_white, total_pop=vap,
+                         tgts_group=c(0.1, 0.5))
+plans = redist_smc(map, n_draws/2, runs=2, counties=nbhd, seq_alpha=0.5)
 plans = plans %>%
     mutate(left = group_frac(map, median(est_votes_total[,1]), median(est_turn)))
 m_pl = as.matrix(plans)
 
 
-pr_left_e = pnorm(avg_by_prec(plans, left, draws="ccd_2010"), 0.5, 0.05)
-pr_left_s = pnorm(avg_by_prec(plans, left), 0.5, 0.05)
-plot(map, pr_left_e) + scale_fill_wa_c(name="Pr(left)", "stuart", midpoint=0.5)
+pr_left_e = pnorm(avg_by_prec(plans, left, draws="ccd_2010"), 0.5, 0.065)
+pr_left_s = pnorm(avg_by_prec(plans, left), 0.5, 0.065)
+plot(map, pr_left_s) + scale_fill_wa_c(name="Pr(left)", "stuart", midpoint=0.5)
 plot(map, pr_left_s - pr_left_e) +
 #plot(map, avg_by_prec(plans, left) - avg_by_prec(plans, left, draws=7)) +
     scale_fill_wa_c(name="Ideological displacement", "stuart", midpoint=0.0)
 
-pl_e = m_pl[, 1]
+pl_e = map$ccd_2010
 n_race = ncol(tbls$race)
 harm_prec = array(dim=c(n_draws, nrow(map), n_race),
                   dimnames=list(NULL, NULL, colnames(tbls$race)))
 for (i in seq_len(n_draws)) {
     votes_i = draws_of(est_votes_total)[i, , ]
-    pl_i = m_pl[, i + 1]
+    pl_i = m_pl[, i+1]
     tv_i1 = tapply(votes_i[, 1], pl_i, sum)
     tv_i2 = tapply(votes_i[, 2], pl_i, sum)
     tv_e1 = tapply(votes_i[, 1], pl_e, sum)
@@ -231,17 +245,20 @@ for (i in seq_len(n_draws)) {
     harm_2 = (tv_i1 < tv_i2)[pl_i] & (tv_e1 > tv_e2)[pl_e]
 
     votes_ir = draws_of(est_votes)[i, , , ]
-    turn_i = 1e-6 + apply(votes_ir, c(1, 2), sum)
+    # turn_i = 1e-6 + rowSums(votes_ir, dims=2)
 
     harm_prec[i,,] = rep(harm_1, n_race)*votes_ir[,,1] + rep(harm_2, n_race)*votes_ir[,,2]
 }
 harm_prec = rvar(harm_prec)
 
 #plot(map, median(harm_prec / est_turn_r)[, ""])
-plot(map, median(harm_prec)[, 1])
-plot(map, median(harm_prec/est_turn_r)[, 1] - median(harm_prec/est_turn_r)[, 2])
+plot(map, median(harm_prec/est_turn_r)[, 1])
+plot(map, median(harm_prec/est_turn_r)[, 2])
+plot(map, median(harm_prec/est_turn_r)[, 1] - median(harm_prec/est_turn_r)[, 2]) + scale_fill_wa_c("lopez", midpoint=0.0)
 harm_race = rvar_apply(harm_prec, 2, rvar_sum)/rvar_apply(est_turn_r, 2, rvar_sum)
 hist(draws_of(harm_race[2] - harm_race[1]))
+Pr(harm_race[2] < harm_race[1])
+E(harm_race[2] - harm_race[1])
 
 
 
