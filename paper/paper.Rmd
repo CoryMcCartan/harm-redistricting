@@ -45,6 +45,24 @@ opts_chunk$set(echo=FALSE, message=FALSE, warning=FALSE,
 
 # Introduction
 
+-   why counterfactuals?
+
+    -   many factors influence the performance and qualities of an electoral system
+
+    -   understanding how different components of the system contribute requires reaching in and manipulating those components
+
+    -   just like causal inference, you are inherently interested in the counterfactual where some part of the electoral system is different
+
+-   why representational harm?
+
+    -   lit cites on why districts are good
+
+    -   district-based electoral system working well if people are represented by the candidate of their choice
+
+    -   this motivates *representational harm*
+
+    -   we argue that harm is actually a great unifying framework for studying district-based electoral systems
+
 -   what makes a good redistricting plan?
 
 -   on the partisan side, lots of attention on the fairness to parties
@@ -87,7 +105,8 @@ Schematics for these examples are shown in Figure \ref{fig:mini-schematic}(a)--(
 
 ```{r mini-schematic}
 #| fig.cap: |
-#|      Schematic maps of the three running examples, showing the partisan composition of each of the 36 precincts.
+#|      Schematic maps of the three running examples, 
+#|      showing the partisan composition of each of the 36 precincts.
 #|      The total voting population for each example is 180. 
 #|      White lines delineate precincts.
 include_graphics("figures/minis_schematic.pdf")
@@ -119,7 +138,8 @@ We see that the Democratic gerrymander would elect zero Republicans and three De
 
 ```{r harm-mininois}
 #| fig.cap: |
-#|      Two potential districting plans for Mininois: a Democratic gerrymander (a) and a close-to-proportional plan (b).
+#|      Two potential districting plans for Mininois: 
+#|      a Democratic gerrymander (a) and a close-to-proportional plan (b).
 #|      Panel (c) shows the total harm to voters in each precinct done by (a), using (b) as a counterfactual.
 include_graphics("figures/harm_mininois.pdf")
 ```
@@ -149,7 +169,8 @@ As might be intuitively expected, total harm to voters is concentrated in areas 
 
 ```{r diffharm-minissouri}
 #| fig.cap: |
-#|      Three potential districting plans for Minissouris: a Democratic gerrymander (a), 
+#|      Three potential districting plans for Minissouris: 
+#|      a Democratic gerrymander (a), 
 #|      a close-to-proportional plan (b), and a Republican gerrymander (c).
 #|      Panels (d) and (f) show the total harm to voters in each precinct done 
 #|      by their corresponding gerrymander, using (b) as a counterfactual.
@@ -307,23 +328,25 @@ Appendix \ref{app:formulas} contains more details, including the specific formul
 
 # Connections to Existing Partisan and Racial Gerrymandering Metrics {#sec:connections}
 
-The canonical framework for considering partisan fairness is partisan symmetry [@king1987democratic]. Partisan symmetry implies that the seats, $s$ won by a party with voteshare $v$ would be satisfied if $s(v) = 1 - s(1 - v)$. Often, the partisan symmetry framework has been applied via partisan bias, which measures the seat deviation from symmetry [@tufte1973pb; @katz2020]. Partisan bias, denoted by $\beta(s)$ is the number of seats that would need to be reallocated to reach proportionality for a given statewide vote share $s$ (usually $\half$). To compute partisan bias, researchers have largely relied on assumptions about how the voteshares would swing to reach the alternative voteshares.
+The canonical framework for considering partisan fairness is partisan symmetry [@king1987democratic]. Partisan symmetry implies that the seats, $s$ won by a party with voteshare $v$ would be satisfied if $s(v) = 1 - s(1 - v)$. Often, the partisan symmetry framework has been applied via partisan bias, which measures the seat deviation from symmetry [@tufte1973pb; @katz2020].
+Partisan bias, denoted by $\beta(s)$ is the number of seats that would need to be reallocated to reach proportionality for a given statewide vote share $s$ (usually $\half$).
+To compute partisan bias, researchers have largely relied on assumptions about how the voteshares would swing to reach the alternative voteshares.
 
-More recently, particularly in the years since @2004vieth, researchers have developed a veritable zoo of measures to identify partisan gerrymanders. 
+More recently, particularly in the years since @2004vieth, researchers have developed a veritable zoo of measures to identify partisan gerrymanders.
 The most prominent of these new measures have attempted to offer alternative measures for partisan symmetry.
 The *mean-median* difference looks to relationship between the voteshare of the median seat in a delegation and the mean voteshare of the delegation to make claims about how a map is skewed [@mcdonald2015unfair].
 The *declination* describes the relative rate at which districts become less competitive for each party [@warrington18].
-Perhaps the new measure which has reached the most acclaim is the *efficiency gap* [@stephanopoulos2015]. Referred to by Chief Justice Roberts as "sociological gobbledygook" in Gill v. Whitford, the efficiency gap looks to measure the votes wasted by the parties and compare the net wasted votes. Notably, while the efficiency gap was intended to measure partisan symmetry, it does not do so [@katz2020].
+Perhaps the new measure which has reached the most acclaim is the *efficiency gap* [@stephanopoulos2015].
+Referred to by Chief Justice Roberts as "sociological gobbledygook" in Gill v. Whitford, the efficiency gap looks to measure the votes wasted by the parties and compare the net wasted votes.
+Notably, while the efficiency gap was intended to measure partisan symmetry, it does not do so [@katz2020].
 All of these measures may be estimated using district vote shares alone, and as we discuss next, are to varying degrees related to our proposed measures.
 
-[3] It's just different, but we also think it's better
-Partisan symmetry offers a coherent and theoretically grounded quantity of interest.
-Yet, as a collective, the approaches towards partisan symmetry suffer from a common issue: the lack of a counterfactual. 
+[3] It's just different, but we also think it's better Partisan symmetry offers a coherent and theoretically grounded quantity of interest.
+Yet, as a collective, the approaches towards partisan symmetry suffer from a common issue: the lack of a counterfactual.
 
 [4] specific issues with the key approaches and how we improve that.
 
 [5] bring the mini-examples full circle with a little table of the scores and the harms?
-
 
 ## The Efficiency Gap
 
@@ -405,7 +428,8 @@ Additionally, New Jersey has 12 congressional districts, which is enough to prod
 
 ```{r nj-maps, fig.width=6.5, fig.height=3}
 #| fig.cap: |
-#|      Baseline vote patterns, two hypothetical gerrymanders, and one randomly sampled plan.
+#|      Baseline vote patterns, two hypothetical gerrymanders, 
+#|      and one randomly sampled plan.
 #|      Census-designated places are shaded in gray and county lines in white.
 include_graphics("figures/nj_maps.pdf")
 ```
@@ -416,15 +440,15 @@ The Democratic gerrymander has 11 Democratic seats and 1 Republican seat at base
 We sample 10,000 districting plans across four independent runs of the SMC algorithm of @mccartan2020, setting constraints to favor compact plans with district boundaries that tend to follow county lines.
 One such plan is shown in Figure \ref{fig:nj-maps}(d).
 For each of these sampled plans and the two gerrymanders, we calculate the average harm and differential partisan harm versus the simulated baseline,[^3] as well as the expected number of Democratic seats, the efficiency gap, partisan bias, the mean-median score, and partisan declination.
-[^4] The distribution of these measures, along with their pairwise relationships, are shown in Figure \ref{fig:nj-pairs}.
+[\^4] The distribution of these measures, along with their pairwise relationships, are shown in Figure \ref{fig:nj-pairs}.
 
 [^3]: As in section \ref{sec:connections}, this is $\Delta_{\dem-\rep}H(q)$, so that positive values correspond to a plan that favors Republicans.
-
 
 ```{r nj-pairs, fig.width=7, fig.height=7}
 #| fig.cap: |
 #|      Scatterplots for all pairs of measures.
-#|      The Democratic and Republican gerrymanders are shown with the blue and red lines and crosses.
+#|      The Democratic and Republican gerrymanders are shown 
+#|      with the blue and red lines and crosses.
 #|      The dashed line indicates a value of zero.
 #|      Below the diagonal, numbers indicate the absolute value of the correlation between variables.
 include_graphics("figures/nj_pairs.pdf")
@@ -458,18 +482,19 @@ However, the same framework can be fruitfully applied to more complex settings, 
 
 ```{r boston-map, fig.width=6.75, fig.height=3.375}
 #| fig.cap: |
-#|      Racial composition of the city of Boston (left), and 2010 city coucil districts (right).
+#|      Racial composition of the city of Boston (left), 
+#|      and 2010 city coucil districts (right).
 #|      Neighborhood boundaries are overlaid in black on the left map and in white on the right map.
 include_graphics("figures/boston_map.pdf")
 ```
 
 The city of Boston is governed by a mayor and a nonpartisan 13-member city council.
 Nine of the councillors are elected from contiguous city council districts, and the remaining four councillors are elected at-large, with all councillors serving two-year terms.
-Council district boundaries are redrawn every ten years following the decennial census, and must be equipopulous, be compact, and preserve neighborhood and community boundaries.[^5]
+Council district boundaries are redrawn every ten years following the decennial census, and must be equipopulous, be compact, and preserve neighborhood and community boundaries.[^4]
 This section will study the extent to which the mixed at-large and district council system harms voters in comparison to a fully district-based system (as was the case before 1909 and from 1924-1951), either overall or differentially by racial group.
 Figure \ref{fig:boston-map} shows the racial composition of the city as well as the boundaries of the 2010 city council districts and the city's official neighborhoods.
 
-[^5]: City of Boston charter.
+[^4]: City of Boston charter.
     Available at <https://www.boston.gov/sites/default/files/embed/b/boston-city-charter-2007.pdf>.
 
 ## Approach
@@ -490,10 +515,10 @@ Even if we could, for instance, divide candidates into a more "liberal" and a mo
 include_graphics("figures/boston_factors.pdf")
 ```
 
-To solve both of these problems, we develop a *latent factor ecological inference model*, which simultaneously estimates (a) turnout by precinct and race, (b) candidate positions in a latent two-dimensional political space,[^6] and (c) voter preferences in this space by precinct and race, using precinct-level demographic data and vote totals from the March 2020 presidential primary and September 2021 mayoral preliminary elections.
+To solve both of these problems, we develop a *latent factor ecological inference model*, which simultaneously estimates (a) turnout by precinct and race, (b) candidate positions in a latent two-dimensional political space,[^5] and (c) voter preferences in this space by precinct and race, using precinct-level demographic data and vote totals from the March 2020 presidential primary and September 2021 mayoral preliminary elections.
 Figure \ref{fig:boston-factors} shows the key outputs from this model, and Appendix \ref{app:lfei} explains the model in detail and contains additional diagnostic plots.
 
-[^6]: Exploratory analyses found that three latent dimensions did not provide a substantially better fit to the data.
+[^5]: Exploratory analyses found that three latent dimensions did not provide a substantially better fit to the data.
 
 Like all ecological inference models, ours rests on several unverifiable assumptions.
 The latent factor component imposes additional assumptions about the structure of voting in Boston elections.
@@ -528,34 +553,34 @@ Further work is needed to characterize how existing redistricting requirements a
 ```
 # Computing Harm Measures from Precinct-level Election Data {#app:formulas}
 
-In practice, districting plans are built from discrete geographic units (often precincts), and election returns are reported at this level as well.[^7]
+In practice, districting plans are built from discrete geographic units (often precincts), and election returns are reported at this level as well.[^6]
 Throughout this appendix, let $j$ index the set of electoral precincts or other units.
 For concreteness here and without loss of generality we will use the Democratic party as the reference party, letting $s_{jv}$ denote the Democratic two-party vote share in precinct $j$ in election $v$.
 Write-in or minor third-party candidates can be safely ignored, since the overall winner will be precisely the two-party vote winner.
 
-[^7]: When district boundaries split precincts, practitioners generally impute the returns in each component of the split precinct by population-weighted interpolation.
+[^6]: When district boundaries split precincts, practitioners generally impute the returns in each component of the split precinct by population-weighted interpolation.
     Population information comes from Census blocks, which are practically never split.
 
 ## Proportionate Uniform Shift Details
 
-The proportionate uniform shift model assumes that from one election to another, a constant fraction of *voters of one party* in each precinct switch to the other party, and that per-precinct turnout is constant across elections.[^8]
+The proportionate uniform shift model assumes that from one election to another, a constant fraction of *voters of one party* in each precinct switch to the other party, and that per-precinct turnout is constant across elections.[^7]
 This has several advantages over the uniform swing model, where a constant fraction of *all voters* shifts parties.
 First, the proportionate shift prevents hypothetical party vote shares from exceeding 1 or falling below 0 in any precinct.
 Second, as it has the effect of scaling vote shares across precincts by a constant multiple, it preserves the relative balance of a party's voters across precincts.
 For $\Delta_{\dem-\rep}H(q)$, which considers voters in each party separately, this helpfully simplifies computations.
 
-[^8]: Everything carries through if one allows for shifts in the overall turnout level across elections, as long as (a) the relative turnout across precincts is fixed, and (b) turnout shifts are independent of shifts in party preferences.
+[^7]: Everything carries through if one allows for shifts in the overall turnout level across elections, as long as (a) the relative turnout across precincts is fixed, and (b) turnout shifts are independent of shifts in party preferences.
 
 The proportionate shift may be mathematically expressed as linear shift on a transformed scale, not unlike a generalized linear model.
 Specifically, we define $\gamma:[0,1]\to\R$, $$
 \gamma(x) = -\thalf\sgn(x-\thalf)\log(1-2\qty|x-\thalf|),
-$$ which is the inverse CDF of a Laplace distribution with rate 2.[^9]
+$$ which is the inverse CDF of a Laplace distribution with rate 2.[^8]
 Then the Democratic vote share in precinct $P_j$ and election $v$, notated here as $s_{jv}$, is modeled as $$
 \gamma(s_{jv}) = \gamma(\overline s_j) + \eps_v, \qquad \eps_v \iid \Norm(0, \sigma^2_{\mathrm{hist}}),
 $$ where $\overline{s}_j$ is the party baseline in the precinct, and $\sigma^2_\mathrm{hist}$ is estimated from the historical variability in nationwide popular vote shares.
 For congressional elections in the United States from 1974--2018, we have $\widehat\sigma^2_\mathrm{hist}=0.03723$, and so draw predictive deviations from $\mathrm{t}_{22}(0, \widehat\sigma^2_\mathrm{hist})$.
 
-[^9]: A rate of 2 is chosen so that the slope of the link function at $\half$ is exactly 1, meaning that transformed vote shares will be on approximately the same scale as the original shares.
+[^8]: A rate of 2 is chosen so that the slope of the link function at $\half$ is exactly 1, meaning that transformed vote shares will be on approximately the same scale as the original shares.
 
 It will simplify matters following to have notation for the overall Democratic vote share in a district.
 For a precinct $j$, let $q^{-1}(j)$ denote the district it belongs to.

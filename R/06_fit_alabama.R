@@ -77,7 +77,7 @@ make_votes_long = function(d) {
                elec = fct_inorder(elec))
 }
 
-make_tables = function(d_votes) {
+make_tables = function(d_votes, al_map) {
     m_dem = d_votes %>%
         pivot_wider(names_from=party, values_from=votes) %>%
         arrange(elec, GEOID20) %>%
@@ -92,7 +92,7 @@ make_tables = function(d_votes) {
     colnames(m_votes) = levels(d_votes$elec)
     storage.mode(m_votes) = "integer"
 
-    m_race = d %>%
+    m_race = al_map %>%
         as_tibble() %>%
         mutate(vap_other = vap - vap_white - vap_black,
                across(starts_with("vap_"), ~ . / vap)) %>%
@@ -100,7 +100,7 @@ make_tables = function(d_votes) {
         as.matrix()
     colnames(m_race) = str_sub(colnames(m_race), 5)
 
-    list(vap = as.integer(pmax(d$vap, apply(m_votes, 1, max))),
+    list(vap = as.integer(pmax(al_map$vap, apply(m_votes, 1, max))),
          votes = m_votes,
          dem_votes = m_dem,
          race = m_race,

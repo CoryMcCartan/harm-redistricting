@@ -1,4 +1,4 @@
-if (!exists("fit_ei")) source(here("R/04_fit_boston.R"))
+if (!exists("fit_ei")) source(here("R/06_fit_alabama.R"))
 
 if (!file.exists(path <- here("data/AL_cd_final_vtd_20.rds"))) {
     al_shp = geomander::get_alarm("AL", geometry=TRUE, epsg=2759)
@@ -15,7 +15,7 @@ if (!file.exists(path <- here("data/AL_cd_final_vtd_20.rds"))) {
 }
 
 d_votes = make_votes_long(al_map)
-tbls = make_tables(d_votes)
+tbls = make_tables(d_votes, al_map)
 
 fit = fit_ei(tbls, algorithm="hmc", init=0, chains=4, adapt_delta=0.99)
 fit = fit_ei(tbls, algorithm="vb", init=0, eta=0.1, adapt_engaged=F, tol_rel_obj=0.005)
@@ -40,11 +40,10 @@ al_map = select(al_map, GEOID20: adj) %>%
     st_as_sf() %>%
     as_redist_map()
 
-
 constr = redist_constr(al_map) %>%
     add_constr_grp_hinge(10.0, group_pop=vap_black, total_pop=vap,
                          tgts_group=c(0.53, 0.3, 0.15, 0.07))
-plans = redist_smc(al_map, 2000, counties=county, constraints=constr, runs=3, cores=3)
+plans = redist_smc(al_map, 2000, counties=county, constraints=constr, runs=3, ncores=3)
 
 m = mgcv::gam(I(vap_black/vap) ~ s(I(ndv/(ndv+nrv))), data=al_map)
 plot(al_map, as.numeric(resid(m))) + scale_fill_wa_c("lopez", midpoint=0.0)
@@ -60,3 +59,5 @@ summary(number_by(plans, black, desc=T))
 plot(plans, dem, geom="boxplot")
 plot(plans, black, geom="boxplot")
 plot(plans, resid, geom="boxplot")
+plot(number_by(plans, dem), resid, geom="boxplot", sort=F)
+plot(number_by(plans, black), resid, geom="boxplot", sort=F)
