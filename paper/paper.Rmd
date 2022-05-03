@@ -5,7 +5,7 @@ authors:
     thanks: |
       To whom correspondence should be addressed. 
       The authors thank participants of the Harvard American Politics 
-      Research Workshop for helpful comments and discussion.
+      Research Workshop and Imai Research Group  for helpful comments and discussion.
     department: Department of Statistics
     affiliation: Harvard University
     location: Cambridge, MA
@@ -307,10 +307,21 @@ Appendix \ref{app:formulas} contains more details, including the specific formul
 
 # Connections to Existing Partisan and Racial Gerrymandering Metrics {#sec:connections}
 
-In the years since @2004vieth, researchers have developed a veritable zoo of measures to identify partisan gerrymanders.
-Specifically, these measures aim to quantify deviations from partisan symmetry, fairness, or competitiveness.
-Some of the most commonly used are perhaps the *efficiency gap* [@stephanopoulos2015], *partisan bias* [@tufte1973pb; @king1987democratic], and the *mean-median* measure [@mcdonald2015unfair].
+The canonical framework for considering partisan fairness is partisan symmetry [@king1987democratic]. Partisan symmetry implies that the seats, $s$ won by a party with voteshare $v$ would be satisfied if $s(v) = 1 - s(1 - v)$. Often, the partisan symmetry framework has been applied via partisan bias, which measures the seat deviation from symmetry [@tufte1973pb; @katz2020]. Partisan bias, denoted by $\beta(s)$ is the number of seats that would need to be reallocated to reach proportionality for a given statewide vote share $s$ (usually $\half$). To compute partisan bias, researchers have largely relied on assumptions about how the voteshares would swing to reach the alternative voteshares.
+
+More recently, particularly in the years since @2004vieth, researchers have developed a veritable zoo of measures to identify partisan gerrymanders. 
+The most prominent of these new measures have attempted to offer alternative measures for partisan symmetry.
+The *mean-median* difference looks to relationship between the voteshare of the median seat in a delegation and the mean voteshare of the delegation to make claims about how a map is skewed [@mcdonald2015unfair].
+The *declination* describes the relative rate at which districts become less competitive for each party [@warrington18].
+Perhaps the new measure which has reached the most acclaim is the *efficiency gap* [@stephanopoulos2015]. Referred to by Chief Justice Roberts as "sociological gobbledygook" in Gill v. Whitford, the efficiency gap looks to measure the votes wasted by the parties and compare the net wasted votes. Notably, while the efficiency gap was intended to measure partisan symmetry, it does not do so [@katz2020].
 All of these measures may be estimated using district vote shares alone, and as we discuss next, are to varying degrees related to our proposed measures.
+
+[3] It's just different, but we also think it's better
+Partisan symmetry offers a coherent and theoretically grounded quantity of interest.
+Yet, as a collective, the approaches towards partisan symmetry suffer from a common issue: the lack of a counterfactual. 
+
+[4] specific issues with the key approaches and how we improve that.
+
 
 ## The Efficiency Gap
 
