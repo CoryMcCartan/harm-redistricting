@@ -316,74 +316,40 @@ The *declination* describes the relative rate at which districts become less com
 Perhaps the new measure which has reached the most acclaim is the *efficiency gap* [@stephanopoulos2015]. Referred to by Chief Justice Roberts as "sociological gobbledygook" in Gill v. Whitford, the efficiency gap looks to measure the votes wasted by the parties and compare the net wasted votes. Notably, while the efficiency gap was intended to measure partisan symmetry, it does not do so [@katz2020].
 All of these measures may be estimated using district vote shares alone, and as we discuss next, are to varying degrees related to our proposed measures.
 
-[3] It's just different, but we also think it's better
 Partisan symmetry offers a coherent and theoretically grounded quantity of interest.
-Yet, as a collective, the approaches towards partisan symmetry suffer from a common issue: the lack of a counterfactual. 
+The idea of partisan symmetry is rooted in assessing how parties would have performed under counterfactual voteshares.
+Yet, this suffers from a core inflexibility: it does not allow for variation in districting.
+Districting is the fundamental question of district-based democracies. 
+*For whom can you vote? Who do you vote with?*
+Our proposed framework rectifies this inflexibility, by shifting to a focus on individual representation. 
+The natural measurement approach to this directly incorporates alternatives under the logic of a counterfactual.
 
-[4] specific issues with the key approaches and how we improve that.
-
-[5] bring the mini-examples full circle with a little table of the scores and the harms?
-
-
-## The Efficiency Gap
-
-The efficiency gap ($EG$) interrogates how a party's votes are wasted under a districting plan.
-By subtracting the wasted votes for Democrats from those for Republicans, and normalizing by the total votes cast, it offers a signed measure that is simple to interpret: $EG=0.05$, for example, indicates that 5% more Democratic votes are wasted than Republican ones.
-The general recommendation is that an efficiency gap larger than two Congressional seats (i.e., 2 divided by the number of districts), or 0.08 for state legislative plans, indicates a partisan gerrymander.
-
+Consider the major issues that have been raised over existing measures.
+Partisan bias ($\beta(\half)$) can give unintuitive results in more lopsided states, which, if not interpreted carefully, can lead practitioners to make incorrect conclusions about the presence and direction of a partisan gerrymander.
+This has been called by some the Utah paradox [@deford2020symmetry], though the paradoxical nature is contested as a mistake of using it for description, rather than inference [@katz2022].
 A number of scholars have criticized the efficiency gap for (1) penalizing proportionality, (2) rewarding 3-to-1 districts and switching sign for more lopsided districts, and (3) being discrete and therefore sensitive to small changes in district vote shares [@bernstein2017egap; @tamcho2017egap; @deford2020symmetry].
-These concerns to not apply to our proposed measures.
+These stem from the omission of the alternatives.
 
-First, $U^{(G)}, U^{(L)}, H$, and $\Delta H(q)$ are all averaged over possible election outcomes, and so do not suffer from discreteness.
-And as discussed above, $U^{(G)}$ and $U^{(L)}$ both reward proportionality.
-Of course, proportionality is not always possible, given a state's political geography.
-The harm measures $H$ and $\Delta H(q)$ both reflect this by comparing to a set of counterfactual districting plans.
-This addresses one inherent shortcoming of the efficiency gap, illustrated best by the state of Massachusetts.
-According to the efficiency gap, Massachusetts' congressional districting plan is a Democratic gerrymander ($EG=-0.14$).
-But it is impossible to draw a single Republican congressional district in the state.
-Consequently $H$ and $\Delta H(q)$ are everywhere 0.
+By looking to alternatives, we ground the idea of zero in a balance of the harms, rather than a purely theoretical way.
+This resolves the directionality problem common to other measures.
+The use of a counterfactual in measuring the quantity of interest grounds the bias in the rules of what districts can be drawn.
+This allows us to draw key strength from the impetus of the redistricting simulation literature.
+Yet, the simplicity of the framework does not restrict only to the use of simulation methods.
+Further, this framework does not need to rely on ideas of proportionality, which has no legal role in American democracy.
+Nor does it suffer from discreteness in ensembles, as now both voteshares and districts lines shift.
 
-Finally, the fact that the efficiency gap is minimized for districts with 75%--25% vote shares is a direct consequence of comparing the raw number of wasted votes, rather than the share within each party.
-In contrast, $\Delta H(q)$ is calculated by comparing harm averaged first within each party, avoiding this deficiency.
+Despite these differences, there are also key empirical similarities in many cases.
+The efficiency gap and $\Delta H(q)$ are often quite well correlated under competitive states, as wasted votes and partisan harm are rooted in similar logics.
+Similarly, in competitive states, where the baseline election has a statewide vote share near 50%, $\beta(\half)$ is highly correlated with $\E[\seats(\dem, V, Q)\mid Q=q]$ and thus $\Delta H(q)$ as well. 
+Where our framework rises above these though is especially in non-competitive states, where insurmountable advantages are rendered as zeroes and do not contribute to harm.
 
-As we will see in the application below, often there is substantial correlation between the efficiency gap and $\Delta H(q)$.
-Yet in more unusual or tricky cases, the efficiency gap may point to a partisan gerrymander while $\Delta H(q)$ indicates a fair outcome or an unfair advantage for the opposite party.
 
-## Partisan Bias
+<!-- ## Simulation Methods -->
 
-Partisan bias is probably the most widely-used measure of partisan symmetry.
-The bias, denoted by $\beta(s)$ is the number of seats that would need to be reallocated to reach proportionality for a given statewide vote share $s$ (usually $\half$).
-Like our proposed measures, this quantity is defined independent of electoral data and can be estimated using a uniform swing model.
-Each value of $s$ yields information about a different point on the seats-votes curve.
-
-In competitive states, where the baseline election has a statewide vote share near 50%, $\beta(\half)$ is highly correlated with $\E[\seats(\dem, V, Q)\mid Q=q]$ and thus $\Delta H(q)$ as well.
-But in more lopsided states, $\beta(\half)$ can give unintuitive results, which, if not interpreted carefully, can lead practitioners to make incorrect conclusions about the presence and direction of a partisan gerrymander.
-
-Fundamentally, however, $\beta(s)$ measures partisan symmetry, and not partisan harm or utility.
-It should not be surprising, then, that it can and does "disagree" about the partisan effects of a particular plan.
-These "disagreements" are really just differences in the target quantity of interest.
-
-```{=html}
-<!--
-1.  Integrating yields a related measure of @nagle2015measures, which has also been criticized by @deford2020symmetry.
-2.  Focuses on only one part of S-V curve, which may not be relevant
-
-Notably, as the quantity of interest is not partisan symmetry, our measures do not require the existence of a seats-votes curve. This is consequential for the study of congressional redistricting. As a seats-votes curve is defined for a legislature, rather than a delegation, to understand the impact of single state's congressional map, you would be forced to consider how every other state drew their maps [@katz:king:rose:21a]. Thus, if this taken as the definition of a seats-votes curve, then measures of partisan symmetry lack diagnostic power to identify gerrymanders for the delegations that academics, legal scholars, and the general public are often focused on. The individualized focus of our measures are, however, portable to congressional, state legislative, or any other form of districting and elections.
--->
-```
-## Mean-Median Difference
-
-The mean-median difference straightforwardly measures the difference between the mean and median district vote shares.
-In practice, the mean-median differences is moderately correlated with other partisan redistricting measures.
-However, considerations of the mean and median district are only related to individuals insofar as they describe the general propensity to be harmed or benefited by a particular map.
-As [@katz2020] discuss, the mean-median difference can be interpreted as an estimator of *votes-denominated bias*, another value derived from the seats-votes curve.
-
-## Simulation Methods
-
-Despite being derived from individual harm, differential partisan harm is in fact closely related to the overall number of seats won by each party, as Proposition \ref{prop:fairness} describes below.
-Yet unlike a simple measure of seats, differential harm is shifted to an interpretable scale, where a value of zero corresponds to fairness.
-In other words, differential harm provides a connection between fairness and seats, establishing a normative guide to overall election outcomes.
-This connection further supports the use of total seats won by each party as a summary statistic in partisan redistricting simulation methods, as advocated by @deford2020symmetry.
+<!-- Despite being derived from individual harm, differential partisan harm is in fact closely related to the overall number of seats won by each party, as Proposition \ref{prop:fairness} describes below. -->
+<!-- Yet unlike a simple measure of seats, differential harm is shifted to an interpretable scale, where a value of zero corresponds to fairness. -->
+<!-- In other words, differential harm provides a connection between fairness and seats, establishing a normative guide to overall election outcomes. -->
+<!-- This connection further supports the use of total seats won by each party as a summary statistic in partisan redistricting simulation methods, as advocated by @deford2020symmetry. -->
 
 ```{=tex}
 \begin{proprep} \label{prop:fairness}
@@ -506,6 +472,7 @@ We stress that the latent factor ecological inference model is not necessary for
 
 # Discussion {#sec:discussion}
 
+For the menagerie, we proffer a new beast. *can we make the whole discussion a zoo metaphor*
 This paper is an attempt to bridge the quantitative gap between votes and representation.
 We break from existing redistricting literature and focus on the relationship between votes and representation by copartisans, rather than the relationship between votes and seats.
 This focus naturally leads to a new normative standard of partisan fairness, which is achieved when the necessary harms of a districting plan are distributed evenly across voters of each party.
