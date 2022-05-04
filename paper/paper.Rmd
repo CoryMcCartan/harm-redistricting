@@ -170,7 +170,7 @@ As might be intuitively expected, total harm to voters is concentrated in areas 
 
 ```{r diffharm-minissouri}
 #| fig.cap: |
-#|      Three potential districting plans for Minissouris: 
+#|      Three potential districting plans for Minissouri: 
 #|      a Democratic gerrymander (a), 
 #|      a close-to-proportional plan (b), and a Republican gerrymander (c).
 #|      Panels (d) and (f) show the total harm to voters in each precinct done 
