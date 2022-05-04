@@ -61,7 +61,7 @@ e_approx = function(a, b) {
 
 plot_cds = function(map, pl, county, abbr, qty="ndv") {
     plan = as.factor(redist:::color_graph(get_adj(map), as.integer(pl)))
-    places = suppressMessages(tigris::places(abbr, cb=TRUE))
+    # places = suppressMessages(tigris::places(abbr, cb=TRUE))
 
     if (qty == "dem") {
         dvote = map$dem
@@ -96,9 +96,9 @@ plot_cds = function(map, pl, county, abbr, qty="ndv") {
                   is_coverage=TRUE) %>%
         ggplot(aes(fill={{ qty }})) +
         geom_sf(size=0.0) +
-        geom_sf(data=places, inherit.aes=FALSE, fill="#0000003A", color=NA) +
+        # geom_sf(data=places, inherit.aes=FALSE, fill="#0000003A", color=NA) +
         geom_sf(fill=NA, size=0.4, color="black") +
-        geom_sf(data=counties, inherit.aes=FALSE, fill=NA, size=0.4, color="#ffffff3A") +
+        geom_sf(data=counties, inherit.aes=FALSE, fill=NA, size=0.4, color="#ffffff33") +
         scale +
         theme_void()
 }

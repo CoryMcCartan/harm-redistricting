@@ -2,6 +2,31 @@ library(cmdstanr)
 library(posterior)
 library(tidybayes)
 
+load_538_al = function(pl) {
+    url = str_glue("https://projects.fivethirtyeight.com/redistricting-2022-maps/alabama/plaintiffs_plan_{pl}-districts.json")
+    x = suppressWarnings(read_sf(url)$geometry)
+    # MAGIC NUMBERS determined after much painful analysis
+    x = x * matrix(c(39746.27033, 3498.95882, 3477.34807, -39993.28232), nrow=2) + c(-19134951.8329, 9134711.70241)
+    st_crs(x) = 5070
+    st_sf(geometry=st_transform(x, 2759))
+}
+
+make_al_map = function() {
+    al_shp = geomander::get_alarm("AL", geometry=TRUE, epsg=2759)
+    al_shp$geometry = rmapshaper::ms_simplify(al_shp$geometry, keep=0.005, keep_shapes=TRUE)
+    al_cd = read_sf(here("data-raw/al_2020_congress_2021-11-04_2031-06-30/al_2020_congress_2021-11-04_2031-06-30.shp")) %>%
+        st_transform(4269)
+    # add plans
+    al_shp$cd_2020 = geomander::geo_match(al_shp, al_cd, method="area", epsg=2759)
+    al_shp$cd_pet_a = geomander::geo_match(al_shp, load_538_al("a"), method="area")
+    al_shp$cd_pet_b = geomander::geo_match(al_shp, load_538_al("b"), method="area")
+    al_shp$cd_pet_c = geomander::geo_match(al_shp, load_538_al("c"), method="area")
+    al_shp$cd_pet_d = geomander::geo_match(al_shp, load_538_al("d"), method="area")
+
+    al_shp = relocate(al_shp, starts_with("cd_"), .after=vtd)
+    redist_map(al_shp, existing_plan=cd_2020, pop_tol=0.005)
+}
+
 
 fit_ei = function(tbls, recompile=FALSE, algorithm="vb",
                   chains=4, warmup=1000, iter=500, adapt_delta=0.8, init=0, ...) {

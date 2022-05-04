@@ -34,8 +34,8 @@ pl$plan$dh[1:2] = hh[1, ] - hh[2, ]
 pl$plan$h[1:2] = hh[3, ]
 
 # Initial plots ----
-map_scale = scale_fill_party_c(name="Democratic\nshare", limits=c(0.19, 0.81))
-geom_simp = rmapshaper::ms_simplify(nj$geometry, keep=0.03, keep_shapes=TRUE)
+map_scale = scale_fill_party_c(name="Democratic\nshare", limits=c(0.25, 0.75))
+geom_simp = rmapshaper::ms_simplify(nj$geometry, keep=0.025, keep_shapes=TRUE)
 p1 = ggplot(nj, aes(fill=ndv/(ndv+nrv))) +
     geom_sf(aes(geometry=geom_simp), size=0, color="#00000000") +
     map_scale +
@@ -57,9 +57,10 @@ p4 = plot_cds(nj, as.matrix(plans)[,425], county, "NJ") +
     map_scale +
     theme_repr_map() +
     theme(plot.title = element_text(hjust = 0.5))
-p = p1 + p2 + p3 + p4 + plot_layout(guides="collect", nrow=1)
+p = p1 + p2 + p3 + p4 + plot_layout(guides="collect", nrow=1) &
+    theme(plot.margin = unit(rep(0, 4), "cm"))
 if (!file.exists(path <- here("paper/figures/nj_maps.pdf")))
-    ggsave(path, plot=p, width=8, height=3.75)
+    ggsave(path, plot=p, width=7.5, height=3.5)
 
 
 # variables pairs plot -----

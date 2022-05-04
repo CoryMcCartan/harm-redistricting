@@ -1,63 +1,117 @@
 if (!exists("fit_ei")) source(here("R/06_fit_alabama.R"))
 
 if (!file.exists(path <- here("data/AL_cd_final_vtd_20.rds"))) {
-    al_shp = geomander::get_alarm("AL", geometry=TRUE, epsg=2759)
-    al_shp$geometry = rmapshaper::ms_simplify(al_shp$geometry, keep=0.03, keep_shapes=TRUE)
-    al_cd = read_sf(here("data-raw/al_2020_congress_2021-11-04_2031-06-30/al_2020_congress_2021-11-04_2031-06-30.shp")) %>%
-        st_transform(4269)
-    al_shp$cd_2020 = geomander::geo_match(al_shp, al_cd, method="area", epsg=2759)
-    al_shp = relocate(al_shp, cd_2020, .after=vtd)
-    al_map = redist_map(al_shp, existing_plan=cd_2020, pop_tol=0.005)
-
+    al_map = make_al_map()
     write_rds(al_map, path, compress="xz")
 } else {
     al_map = read_rds(path)
 }
 
+
 d_votes = make_votes_long(al_map)
 tbls = make_tables(d_votes, al_map)
 
-fit = fit_ei(tbls, algorithm="hmc", init=0, chains=4, adapt_delta=0.99)
-fit = fit_ei(tbls, algorithm="vb", init=0, eta=0.1, adapt_engaged=F, tol_rel_obj=0.005)
+fit = fit_ei(tbls, algorithm="vb", init=0, eta=0.1, adapt_engaged=F, tol_rel_obj=0.002)
 
-median(fit$L_t %**% t(fit$L_t))
-median(fit$L_s %**% t(fit$L_s))
+#  EI outputs--------
+cat("Turnout correlation matrix:\n")
+print(median(fit$L_t %**% t(fit$L_t)))
+cat("Support correlation matrix:\n")
+print(median(fit$L_s %**% t(fit$L_s)))
 
+## Turnout and support maps by race ------
 p1 = plot(al_map, median(fit$turnout)[, "white"]) + scale_fill_wa_c(name="Turnout", labels=percent, limits=c(0, 1)) + labs(title="White turnout")
 p2 = plot(al_map, median(fit$turnout)[, "black"]) + scale_fill_wa_c(name="Turnout", labels=percent, limits=c(0, 1)) + labs(title="Black turnout")
 p3 = plot(al_map, median(fit$support)[, "white"]) + scale_fill_party_c() + labs(title="White Dem. support")
 p4 = plot(al_map, median(fit$support)[, "black"]) + scale_fill_party_c() + labs(title="Black Dem. support")
 p1 + p2 + p3 + p4 + plot_layout(nrow=1, guides="collect") & theme_repr_map() & theme(legend.position="bottom")
 
-
+## Partisan votes by race -----
 est_ndv = median(fit$support * fit$turnout) * with(al_map, cbind(vap_white, vap_black, vap_other))
 colnames(est_ndv) = paste0("ndv_", colnames(est_ndv))
 est_nrv = median((1 - fit$support) * fit$turnout) * with(al_map, cbind(vap_white, vap_black, vap_other))
 colnames(est_nrv) = paste0("nrv_", colnames(est_nrv))
 
-al_map = select(al_map, GEOID20: adj) %>%
+al_map = select(al_map, GEOID20:adj) %>%
     bind_cols(est_ndv, est_nrv) %>%
     st_as_sf() %>%
-    as_redist_map()
+    as_redist_map() %>%
+    mutate(ndv = ndv_black + ndv_white + ndv_other,
+           nrv = nrv_black + nrv_white + nrv_other)
 
-constr = redist_constr(al_map) %>%
-    add_constr_grp_hinge(10.0, group_pop=vap_black, total_pop=vap,
-                         tgts_group=c(0.53, 0.3, 0.15, 0.07))
-plans = redist_smc(al_map, 2000, counties=county, constraints=constr, runs=3, ncores=3)
 
-m = mgcv::gam(I(vap_black/vap) ~ s(I(ndv/(ndv+nrv))), data=al_map)
-plot(al_map, as.numeric(resid(m))) + scale_fill_wa_c("lopez", midpoint=0.0)
+# Analysis --------
 
-plans = plans %>%
-    mutate(black = group_frac(al_map, vap_black, vap),
+m_plans = as_tibble(al_map) %>%
+    select(starts_with("cd_pet")) %>%
+    as.matrix() %>%
+    `colnames<-`(NULL)
+
+plans = redist_plans(m_plans, al_map, algorithm="none", wgt=NULL) %>%
+    add_reference(al_map$cd_2020) %>%
+    mutate(total_vap = tally_var(al_map, vap),
+           vap_white = tally_var(al_map, vap_white),
+           vap_black = tally_var(al_map, vap_black),
            dem = group_frac(al_map, ndv, ndv + nrv),
-           resid = group_frac(al_map, resid(m)*vap, vap),
-           comp = distr_compactness(al_map),
-           splits = county_splits(al_map, county))
+           pr_dem = k_t()(dem))
 
-summary(number_by(plans, black, desc=T))
-plot(plans, dem, geom="boxplot")
-plot(plans, black, geom="boxplot")
-plot(plans, resid, geom="boxplot")
-plot(number_by(plans, dem), resid, geom="boxplot", sort=F)
-plot(number_by(plans, black), resid, geom="boxplot", sort=F)
+m_pr = district_group(plans, pr_dem)
+h_prec_dem = rowMeans(pos_part(m_pr[, -1] - m_pr[, 1]))
+h_prec_rep = rowMeans(pos_part(-m_pr[, -1] + m_pr[, 1]))
+
+h_black = with(al_map, sum(h_prec_dem*ndv_black + h_prec_rep*nrv_black) / sum(ndv_black + nrv_black))
+h_white = with(al_map, sum(h_prec_dem*ndv_white + h_prec_rep*nrv_white) / sum(ndv_white + nrv_white))
+h_other = with(al_map, sum(h_prec_dem*ndv_other + h_prec_rep*nrv_other) / sum(ndv_other + nrv_other))
+h_dem = with(al_map, weighted.mean(h_prec_dem, ndv))
+h_rep = with(al_map, weighted.mean(h_prec_rep, nrv))
+
+{
+cat("Differential racial harm:", h_black - h_white, "\n")
+cat("Differential partisan harm:", h_dem - h_rep, "\n")
+cat("Total harm:", with(al_map, sum(h_prec_dem*ndv + h_prec_rep*nrv) / sum(ndv + nrv)), "\n")
+cat("Average total harmed:", with(al_map, sum(h_prec_dem*ndv + h_prec_rep*nrv)), "\n")
+
+cat("Average total harmed by group:\n")
+with(al_map, matrix(c(
+    sum(h_prec_dem * ndv_white),
+    sum(h_prec_dem * ndv_black),
+    sum(h_prec_dem * ndv_other),
+    sum(h_prec_rep * nrv_white),
+    sum(h_prec_rep * nrv_black),
+    sum(h_prec_rep * nrv_other)
+), nrow=3)) %>%
+    round(1) %>%
+    `rownames<-`(c("White", "Black", "Other")) %>%
+    `colnames<-`(c("Dem.", "Rep.")) %>%
+    print()
+}
+
+# plots out
+al_sum = al_map %>%
+    group_by(cd_2020) %>%
+    summarize(is_coverage=TRUE) %>%
+    mutate(dem = plans$dem[1:7])
+p1 = plot(al_map, ndv / (ndv + nrv)) +
+    geom_sf(data=al_sum, fill=NA, color="black", size=0.2, inherit.aes=F) +
+    scale_fill_party_c("Democratic\nshare", limits=c(0.3, 0.7)) +
+    theme_repr_map() +
+    labs(title="(a) Partisan patterns")
+p2 = plot(al_map, vap_black / vap) +
+    geom_sf(data=al_sum, fill=NA, color="white", size=0.15, inherit.aes=F) +
+    scale_fill_wa_c("sea", name="BVAP", labels=percent, limits=c(0, 1)) +
+    theme_repr_map() +
+    labs(title="(b) Racial demographics")
+p3 = plot(al_map, (h_prec_dem*ndv + h_prec_rep*nrv) / (ndv + nrv)) +
+    geom_sf(data=al_sum, fill=NA, color="white", size=0.15, inherit.aes=F) +
+    scale_fill_wa_c("forest_fire", name="Fraction of\nvoters harmed",
+                    labels=percent, limits=c(0, 1)) +
+    theme_repr_map() +
+    theme(legend.title=element_text(vjust=1)) +
+    labs(title="(c) Distribution of harm")
+p = p1 + p2 + p3 + plot_layout(nrow=1) &
+    theme(plot.title = element_text(hjust = 0.5),
+          plot.margin = unit(rep(0, 4), "cm"))
+
+if (!file.exists(path <- here("paper/figures/al_maps.pdf"))) {
+    ggsave(path, plot=p, width=8, height=3.5)
+}

@@ -146,7 +146,7 @@ include_graphics("figures/harm_mininois.pdf")
 
 Suppose now that plan (a) is enacted into law.
 Who does this decision harm, if anyone?
-We offer that a voter is harmed if they are not represented by their party of choice, but have a counterfactual where they would be represented by their party of choice.
+We offer that a voter is harmed if they are not represented by their chosen party, but would have been so counterfactually.
 Using plan (b) as a counterfactual, we can see that rural Republicans in the eastern half of Mininois are harmed by plan (a), since under plan (b) they would be represented by a Republican.
 Republicans in the city and in the southwest are unharmed, as are all Democratic voters,, since they are represented by the same party under both plans.
 Figure \ref{fig:harm-mininois}, Panel C illustrates this by plotting the number of voters harmed in each precinct.
@@ -426,10 +426,10 @@ As discussed above, many gerrymandering measures function well in highly competi
 New Jersey, with an average Democratic two-party vote share of 56.6% across our two baseline elections (2016 presidential and 2018 senatorial), will demonstrate that this is not a problem unique to lopsided states.
 Additionally, New Jersey has 12 congressional districts, which is enough to produce some variability in seats outcomes across counterfactual plans, but not so many as to render trivial the challenges of discreteness.
 
-```{r nj-maps, fig.width=6.5, fig.height=3}
+```{r nj-maps, fig.width=6.5}
 #| fig.cap: |
-#|      Baseline vote patterns, two hypothetical gerrymanders, 
-#|      and one randomly sampled plan.
+#|      Baseline vote patterns (a), two hypothetical gerrymanders (b) and (c), 
+#|      and one randomly sampled plan (d).
 #|      Census-designated places are shaded in gray and county lines in white.
 include_graphics("figures/nj_maps.pdf")
 ```
@@ -475,6 +475,39 @@ Thus, at least in New Jersey, overall harm reduction is consistent with a fair m
 Minimizing bias with other measures, however, could lead one astray: plans which score an efficiency gap of zero can have a large average harm, which may not be distributed fairly between parties.
 Plans with zero partisan bias or mean-median score actually have higher-than-average harm and tend to differentially harm Republicans.
 
+# Application to Voting Rights Litigation in Alabama {#sec:alabama}
+
+```{r al-maps, fig.width=6.5}
+#| fig.cap: |
+#|      Baseline vote patterns (a), 
+#|      fraction of the voting-age population which is Black (b),
+#|      and fraction of voters in each precinct which are harmed by the 2020
+#|      enacted congressional districts versus the set of four remedial plans (c).
+#|      2020 enacted district boundaries are overlaid 
+#|      in black on the left map and in white on the right maps.
+include_graphics("figures/al_maps.pdf")
+```
+
+Differential racial harm: 0.23708
+
+Differential partisan harm: 0.20939
+
+Total harm: 0.089009
+
+Average total harmed: 162390
+
+Average total harmed by group:
+
+| Average total harmed | Democratic | Republican |
+|----------------------|------------|------------|
+| **White**            | 28,476     | 7,867      |
+| **Black**            | 125,635    | 147        |
+| **Other**            | 257        | 7.4        |
+
+: This table is just a placeholder to store the numbers.
+
+[More text after the table.]
+
 # Application to Primary Elections in Boston {#sec:boston}
 
 The proposed harm measures are particularly easy to calculate and interpret in a partisan context, since the preferences of each kind of partisan are directly observable as partisan vote shares.
@@ -484,7 +517,8 @@ However, the same framework can be fruitfully applied to more complex settings, 
 #| fig.cap: |
 #|      Racial composition of the city of Boston (left), 
 #|      and 2010 city coucil districts (right).
-#|      Neighborhood boundaries are overlaid in black on the left map and in white on the right map.
+#|      Neighborhood boundaries are overlaid in black on the 
+#|      left map and in white on the right map.
 include_graphics("figures/boston_map.pdf")
 ```
 
