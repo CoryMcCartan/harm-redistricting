@@ -313,7 +313,7 @@ Each election outcome over the period of interest (generally ten years or less) 
 The baseline itself can be established by averaging the results of all available statewide elections over the past decade or other suitable period.
 The proportionate uniform shift model is nearly identical to the uniform partisan swing model of @butler1951swing for most precincts and districts, but is more computationally convenient and avoids issues of vote shares exceeding 100% or falling below 0%.
 Despite their simplicity, uniform-swing--type models are highly accurate for out-of-sample prediction [@katz2020], and are intuitive and easy to implement.
-More details about our proportionate uniform shift model may be found in Appendix \ref{app:formulas}.
+More details about our proportionate uniform shift model and how it may be used to efficiently estimate the harm measures may be found in Appendix \ref{app:formulas}.
 
 More complicated election outcome models are certainly possible and straightforward to use with the measures proposed here.
 For example, one could model district deviations as a systematic national shift plus a local idiosyncratic effect, as is done in the Stochastic Uniform Partisan Swing model of @gelman1994unified.
