@@ -16,11 +16,12 @@ authors:
     location: Cambridge, MA
     email: christopherkenny@fas.harvard.edu
 abstract: |
-  We propose a unified framework for evaluating the impact of a districting plan on voters overall and in different groups. By aggregating the harm done to individual voters by their inability to elect a candiate of choice, and taking into account the space of counterfactual possibilities, we derive at a set of measures that flexibly adapts to local geographic constraints, different types of elections, and different groups of study.  The measures have connections to, and distinct advantages over, common redistricting metrics.  We provide recommendations for estimating these measures from historical election returns, and apply these methods to study partisan gerrymandering of New Jersey congressional districts and the racial impacts of district boundaries for primary elections for the Boston city council.
+  We propose a unified framework for evaluating the impact of a districting plan on voters overall and in different groups. By aggregating the harm done to individual voters by their inability to elect a candiate of choice, and taking into account the space of counterfactual possibilities, we derive at a set of measures that flexibly adapts to local geographic constraints, different types of elections, and different groups of study. We provide recommendations for estimating these measures from historical election returns and discuss connections to commonly used redistricting metrics. Finally, we apply our framework to study partisan gerrymandering in New Jersey, voting rights litigation in Alabama, and the racial impacts of city council district boundaries in Boston.
 keywords:
   - representation
-  - redistricting simulation
-  - individual standing
+  - redistricting
+  - voting rights
+  - individual harm
 bibliography: references.bib
 biblio-style: apalike
 output:
@@ -481,8 +482,8 @@ Plans with zero partisan bias or mean-median score actually have higher-than-ave
 #| fig.cap: |
 #|      Baseline vote patterns (a), 
 #|      fraction of the voting-age population which is Black (b),
-#|      and fraction of voters in each precinct which are harmed by the 2020
-#|      enacted congressional districts versus the set of four remedial plans (c).
+#|      and the expected fraction of voters in each precinct which are harmed by the 
+#|      2020 enacted congressional districts versus the set of four remedial plans (c).
 #|      2020 enacted district boundaries are overlaid 
 #|      in black on the left map and in white on the right maps.
 include_graphics("figures/al_maps.pdf")
