@@ -30,7 +30,7 @@ transformed data {
         for (k in 1:K) {
             sqrt_inv_votes[i, k] = inv_sqrt(1.0 + votes[i, elec[k]]);
         }
-        l_vote_share[i] = logit(1e-3 + vote_share[i]);
+        l_vote_share[i] = logit(1e-4 + 0.9998*vote_share[i]);
     }
 }
 

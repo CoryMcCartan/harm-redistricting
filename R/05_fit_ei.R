@@ -2,6 +2,63 @@ library(cmdstanr)
 library(posterior)
 library(tidybayes)
 
+fit_ei = function(tbls, recompile=FALSE, algorithm="vb",
+                  chains=4, warmup=1000, iter=500, adapt_delta=0.8, init=0, ...) {
+    stan_d = list(
+        N = nrow(tbls$votes),
+        L = ncol(tbls$votes),
+        R = ncol(tbls$race),
+
+        vap = tbls$vap,
+        votes = tbls$votes,
+        dem_votes = tbls$dem_votes,
+        vap_race = tbls$race
+    )
+
+    path_model = here("R/ei.stan")
+    path_exc = here("R/ei")
+
+    sm = cmdstan_model(path_model, compile=F)
+    if (file.exists(path_exc)) {
+        if (isTRUE(recompile) || file.info(path_exc)["mtime"] < file.info(path_model)["mtime"]) {
+            file.remove(path_exc)
+        }
+    }
+    sm$compile()
+
+    if (algorithm == "hmc") {
+        fit = sm$sample(data=stan_d, chains=chains,
+                        iter_warmup=warmup, iter_sampling=iter,
+                        init=init, refresh=100, adapt_delta=adapt_delta,...)
+    } else if (algorithm == "vb") {
+        fit = sm$variational(data=stan_d, algorithm="meanfield", init=init, ...)
+    } else {
+        stop("Algorithm should be `hmc` or `vb`.")
+    }
+
+    vars = c("lp__", "turnout_overall", "turnout_elec", "turnout", "L_t", "sigma_t",
+             "support_overall", "support_elec", "support", "L_s", "sigma_s")
+    draws = as_draws_rvars(fit$draws(variables=vars))
+
+    draws_dim = dim(draws_of(draws$lp__, with_chains=TRUE))
+    races = colnames(tbls$race)
+
+    names(draws$turnout_overall) = races
+    colnames(draws$turnout) = races
+    names(draws$turnout_elec) = tbls$elecs
+    rownames(draws$L_t) = races
+    names(draws$sigma_t) = races
+
+    names(draws$support_overall) = races
+    colnames(draws$support) = races
+    names(draws$support_elec) = tbls$elecs
+    rownames(draws$L_s) = races
+    names(draws$sigma_s) = races
+
+    attr(draws, "sm") = fit
+    draws
+}
+
 
 fit_lfei = function(tbls, n_comp=2L, id=NULL, recompile=FALSE, algorithm="vb",
                     chains=4, warmup=1000, iter=500, adapt_delta=0.8, init=0, ...) {
@@ -170,7 +227,7 @@ print.fit_lfei = function(x, load_len=NULL, corr=FALSE) {
         m_p = median(x$L_p %**% t(x$L_p))
         colnames(m_t) = c("turnout", rep("", ncol(m_t)-1))
         colnames(m_p) = c("loading", rep("", ncol(m_p)-1))
-        print(round(cbind(m_t, m_p), 2))
+        print(round(cbind(m_t, m_p), n_comp))
     }
 }
 
@@ -219,10 +276,6 @@ predict.fit_lfei = function(object, support, loading, tbls, recompile=FALSE) {
 }
 
 
-rot_mat = function(deg) {
-    deg = deg * pi/180
-    matrix(c(cos(deg), sin(deg), -sin(deg), cos(deg)), 2, 2)
-}
 
 save_fit = function(fit, path, compress="xz") {
     attr(fit, "sm") = NULL
@@ -230,59 +283,4 @@ save_fit = function(fit, path, compress="xz") {
 }
 
 
-# Data prep functions ----
 
-make_votes_long = function(d) {
-    d %>%
-        as_tibble() %>%
-        mutate(vap_other = vap - vap_white - vap_black - vap_hisp) %>%
-        select(precinct, mayor_gen_wu:pres_prelim_castro) %>%
-        pivot_longer(mayor_gen_wu:pres_prelim_castro, names_to="cand", values_to="votes") %>%
-        separate(cand, c("elec", "stage", "candidate"), sep="_", extra="merge") %>%
-        filter(stage == "prelim", candidate != "other") %>%
-        select(-stage) %>%
-        mutate(precinct = fct_inorder(precinct),
-               elec = fct_inorder(elec),
-               candidate = fct_inorder(candidate))
-}
-
-make_tables = function(d_votes, cand_thresh=0.01) {
-    m_votes = d_votes %>%
-        arrange(precinct, candidate) %>%
-        group_by(precinct, elec) %>%
-        mutate(vs = votes / sum(1e-6 + votes)) %>%
-        ungroup() %>%
-        with(., matrix(vs, nrow=n_distinct(precinct), byrow=T)) %>%
-        `colnames<-`(levels(d_votes$candidate))
-    d_sum = d_votes %>%
-        group_by(elec, candidate) %>%
-        summarize(votes = sum(votes)) %>%
-        group_by(elec) %>%
-        mutate(vs = round(votes / sum(votes), 3)) %>%
-        ungroup() %>%
-        mutate(elec = as.factor(elec))
-
-    m_prec = d_votes %>%
-        group_by(precinct, elec) %>%
-        summarize(votes = sum(votes), .groups="drop") %>%
-        with(., matrix(votes, nrow=n_distinct(precinct), byrow=T))
-    colnames(m_prec) = levels(d_votes$elec)
-
-    m_race = d %>%
-        as_tibble() %>%
-        mutate(vap_other = vap - vap_white - vap_black - vap_hisp,
-               across(starts_with("vap_"), ~ . / vap)) %>%
-        select(vap_white:vap_hisp, vap_other) %>%
-        as.matrix()
-    colnames(m_race) = str_sub(colnames(m_race), 5)
-
-    big_cands = which(d_sum$vs > 0.01)
-
-    list(vap = d$vap,
-         votes = m_prec,
-         vote_share = m_votes[, big_cands],
-         race = m_race,
-         summary = d_sum[big_cands, ],
-         cands = colnames(m_votes)[big_cands],
-         elecs = d_sum$elec[big_cands])
-}

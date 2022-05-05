@@ -93,7 +93,7 @@ Section \ref{sec:motivation} motivates our framework for measuring harm and illu
 Section \ref{sec:indiv-harm} formalizes the intuition of Section \ref{sec:motivation} and defines a general measure of individual and differential harm.
 Section \ref{sec:estimating} discusses estimating these measures from observed election results.
 Section \ref{sec:connections} connects our proposed measures to existing symmetry and fairness measures.
-Sections \ref{sec:nj} and \ref{sec:boston} apply the proposed measures to partisan gerrymandering of New Jersey congressional districts and racial impacts of district boundaries on Boston City Council primary elections.
+Sections \ref{sec:nj}, \ref{sec:alabama}, and \ref{sec:boston} apply the proposed measures to partisan gerrymandering of New Jersey congressional districts, voting rights litigation for Alabama congressional districts, and racial impacts of district boundaries on Boston City Council primary elections.
 Section \ref{sec:discussion} concludes.
 
 # Motivation {#sec:motivation}
@@ -346,14 +346,12 @@ Partisan symmetry offers a coherent and theoretically grounded quantity of inter
 The idea of partisan symmetry is rooted in assessing how parties would have performed under counterfactual voteshares.
 Yet, this suffers from a core inflexibility: it does not allow for variation in districting.
 Districting is the fundamental question of district-based democracies.
-*For whom can you vote? Who do you vote with?*
-Our proposed framework rectifies this inflexibility, by shifting to a focus on individual representation.
+*For whom can you vote? Who do you vote with?* Our proposed framework rectifies this inflexibility, by shifting to a focus on individual representation.
 The natural measurement approach to this directly incorporates alternatives under the logic of a counterfactual.
 
 Consider the major issues that have been raised over existing measures.
 Partisan bias ($\beta(\half)$) can give unintuitive results in more lopsided states, which, if not interpreted carefully, can lead practitioners to make incorrect conclusions about the presence and direction of a partisan gerrymander.
-This has been called by some the Utah paradox [@deford2020symmetry], though the paradoxical nature is contested as a mistake of using it for description, rather than inference [@katz2022].
-A number of scholars have criticized the efficiency gap for (1) penalizing proportionality, (2) rewarding 3-to-1 districts and switching sign for more lopsided districts, and (3) being discrete and therefore sensitive to small changes in district vote shares [@bernstein2017egap; @tamcho2017egap; @deford2020symmetry].
+This has been called by some the Utah paradox [@deford2020symmetry], though the paradoxical nature is contested as a mistake of using it for description, rather than inference [@katz2022]. A number of scholars have criticized the efficiency gap for (1) penalizing proportionality, (2) rewarding 3-to-1 districts and switching sign for more lopsided districts, and (3) being discrete and therefore sensitive to small changes in district vote shares [@bernstein2017egap; @tamcho2017egap; @deford2020symmetry].
 These stem from the omission of the alternatives.
 
 By looking to alternatives, we ground the idea of zero in a balance of the harms, rather than a purely theoretical way.
@@ -369,12 +367,14 @@ The efficiency gap and $\Delta H(q)$ are often quite well correlated under compe
 Similarly, in competitive states, where the baseline election has a statewide vote share near 50%, $\beta(\half)$ is highly correlated with $\E[\seats(\dem, V, Q)\mid Q=q]$ and thus $\Delta H(q)$ as well.
 Where our framework rises above these though is especially in non-competitive states, where insurmountable advantages are rendered as zeroes and do not contribute to harm.
 
-
 <!-- ## Simulation Methods -->
 
 <!-- Despite being derived from individual harm, differential partisan harm is in fact closely related to the overall number of seats won by each party, as Proposition \ref{prop:fairness} describes below. -->
+
 <!-- Yet unlike a simple measure of seats, differential harm is shifted to an interpretable scale, where a value of zero corresponds to fairness. -->
+
 <!-- In other words, differential harm provides a connection between fairness and seats, establishing a normative guide to overall election outcomes. -->
+
 <!-- This connection further supports the use of total seats won by each party as a summary statistic in partisan redistricting simulation methods, as advocated by @deford2020symmetry. -->
 
 ```{=tex}
@@ -534,8 +534,8 @@ We stress that the latent factor ecological inference model is not necessary for
 
 # Discussion {#sec:discussion}
 
-For the menagerie, we proffer a new beast. *can we make the whole discussion a zoo metaphor*
-This paper is an attempt to bridge the quantitative gap between votes and representation.
+For the menagerie, we proffer a new beast.
+*can we make the whole discussion a zoo metaphor* This paper is an attempt to bridge the quantitative gap between votes and representation.
 We break from existing redistricting literature and focus on the relationship between votes and representation by copartisans, rather than the relationship between votes and seats.
 This focus naturally leads to a new normative standard of partisan fairness, which is achieved when the necessary harms of a districting plan are distributed evenly across voters of each party.
 This may occur regardless of whether the districting plan achieves partisan symmetry.

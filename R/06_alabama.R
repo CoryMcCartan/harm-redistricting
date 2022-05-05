@@ -1,4 +1,4 @@
-if (!exists("fit_ei")) source(here("R/06_fit_alabama.R"))
+if (!exists("fit_ei")) source(here("R/05_fit_ei.R"))
 
 if (!file.exists(path <- here("data/AL_cd_final_vtd_20.rds"))) {
     al_map = make_al_map()
@@ -8,8 +8,17 @@ if (!file.exists(path <- here("data/AL_cd_final_vtd_20.rds"))) {
 }
 
 
-d_votes = make_votes_long(al_map)
-tbls = make_tables(d_votes, al_map)
+d_votes = d %>%
+    as_tibble() %>%
+    mutate(vap_other = vap - vap_white - vap_black) %>%
+    select(GEOID20, pre_16_rep_tru:uss_20_dem_jon) %>%
+    pivot_longer(pre_16_rep_tru:uss_20_dem_jon, names_to="cand", values_to="votes") %>%
+    separate(cand, c("elec", "year", "party", "candidate"), sep="_", extra="merge") %>%
+    mutate(elec = str_c(elec, "_", year)) %>%
+    select(-candidate, -year) %>%
+    mutate(GEOID20 = fct_inorder(GEOID20),
+           elec = fct_inorder(elec))
+tbls = make_tables_alabama(d_votes, al_map)
 
 fit = fit_ei(tbls, algorithm="vb", init=0, eta=0.1, adapt_engaged=F, tol_rel_obj=0.002)
 

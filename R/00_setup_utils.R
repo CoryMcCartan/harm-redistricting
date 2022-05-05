@@ -58,6 +58,11 @@ e_approx = function(a, b) {
                     if_else(is.finite(b), 0.5*(a+b), a), b))
 }
 
+rot_mat = function(deg) {
+    deg = deg * pi/180
+    matrix(c(cos(deg), sin(deg), -sin(deg), cos(deg)), 2, 2)
+}
+
 
 plot_cds = function(map, pl, county, abbr, qty="ndv") {
     plan = as.factor(redist:::color_graph(get_adj(map), as.integer(pl)))
@@ -186,3 +191,4 @@ Rcpp::sourceCpp("src/harm.cpp", cacheDir="src")
 
 if (!exists("harm")) source(here("R/01_metrics.R"))
 if (!exists("mininois")) source(here("R/toy/00_toy_setup.R"))
+source(here("R/04_appl_data.R"))

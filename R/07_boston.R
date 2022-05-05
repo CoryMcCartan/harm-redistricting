@@ -1,4 +1,4 @@
-if (!exists("fit_lfei")) source(here("R/04_fit_boston.R"))
+if (!exists("fit_lfei")) source(here("R/05_fit_ei.R"))
 
 # Load and fit -------------
 
@@ -6,8 +6,18 @@ d = read_rds(here("data/boston_elec.rds")) %>%
     mutate(ward = as.integer(str_split(precinct, "-", n=2, simplify=T)[,1]))
 map = redist_map(d, existing_plan=ccd_2010, pop_tol=0.05, adj=d$adj)
 
-d_votes = make_votes_long(d)
-tbls = make_tables(d_votes, cand_thresh=0.02)
+d_votes =  d %>%
+    as_tibble() %>%
+    mutate(vap_other = vap - vap_white - vap_black - vap_hisp) %>%
+    select(precinct, mayor_gen_wu:pres_prelim_castro) %>%
+    pivot_longer(mayor_gen_wu:pres_prelim_castro, names_to="cand", values_to="votes") %>%
+    separate(cand, c("elec", "stage", "candidate"), sep="_", extra="merge") %>%
+    filter(stage == "prelim", candidate != "other") %>%
+    select(-stage) %>%
+    mutate(precinct = fct_inorder(precinct),
+           elec = fct_inorder(elec),
+           candidate = fct_inorder(candidate))
+tbls = make_tables_boston(d_votes, cand_thresh=0.02)
 
 if (!file.exists(fit_path <- here("data-raw/boston_fit_2.rds"))) {
     id = list(
