@@ -218,7 +218,7 @@ $$that is, a voter is harmed only if they are not represented by the candidate o
 This definition of harm is limited in two key regards.
 First, it considers only individuals who vote; if a person abstains from voting then their calculated harm is zero.
 A natural extension of this definition would be to separate an individual's candidate preference from their vote choice; the latter would be used in calculating election winners, but the former could provide a more broadly-based harm measure.
-Naturally, this approach requires auxiliary data to implement (such as a large-scale survey), since candidate preferences for nonvoters cannot be inferred from election returns.
+Naturally, this approach requires auxiliary data to implement (such as a large-scale survey), since candidate preferences for nonvoters cannot be directly inferred from election returns.
 
 A second limitation is that $h_i(v,q,\tilde q)$ ignores any preferences a voter may have between candidates he or she did not vote for.
 For example, a voter may consider candidates A and B nearly exchangeable, but may strongly dislike candidate C.
@@ -272,9 +272,26 @@ It is this measure of differential harm that we propose as a unified framework f
 It is derived from an individual-level measure of representation and it accounts for the space of counterfactual possibilities.
 Importantly, it separates *vote choice* from *group membership*, allowing one to discuss how partisan election outcomes under a specific districting plan create harm for specific groups or their interactions, simply by conditioning $H(q)$ on a set of individuals.
 
-Estimating these quantities from available data is another matter, of course, and requires additional assumptions, as we describe next.
+Estimating these quantities from available data is another matter, of course, and requires additional assumptions, as we describe in the next section.
+First, however, we note two interesting consequences of our definition of differential harm.
 
-# Estimating the Harm Measures {#sec:estimating}
+In the partisan case, with $\Groups=\{\dem,\rep\}$, differential harm is in fact closely related to the overall number of seats won by each party, as Proposition \ref{prop:fairness} describes below.
+Yet unlike a simple measure of seats, differential harm is shifted to an interpretable scale where a value of zero corresponds to fairness.
+In other words, differential harm provides a connection between fairness and seats, establishing a normative guide to overall election outcomes.
+This connection further supports the use of total seats won by each party as a summary statistic in partisan redistricting simulation methods, as advocated by @deford2020symmetry.
+
+```{=tex}
+\begin{proprep} \label{prop:fairness}
+Suppose $\Groups=\{\dem,\rep\}$. If turnout is equal across districts, then for a specific districting plan $q\in\Plans$,
+\begin{align*}
+    \Delta_{\rep-\dem} H(q) = \E[\seats(\dem, V, \tilde Q)] - \E[\seats(\dem, V, q)].
+\end{align*}
+\textbf{CM note: define $\seats$ or replace with sum.}
+\end{proprep}
+\begin{proof}
+\end{proof}
+```
+# Estimating the Harm Measures
 
 The measures $H(q)$ and $\Delta H(q)$ defined above require specification of a probability distribution on elections and districting plans.
 Depending on one's viewpoint, this is either a theoretical fiction which must be specified by a model, or an actual data-generating process we must aim to estimate.
@@ -367,28 +384,7 @@ The efficiency gap and $\Delta H(q)$ are often quite well correlated under compe
 Similarly, in competitive states, where the baseline election has a statewide vote share near 50%, $\beta(\half)$ is highly correlated with $\E[\seats(\dem, V, Q)\mid Q=q]$ and thus $\Delta H(q)$ as well.
 Where our framework rises above these though is especially in non-competitive states, where insurmountable advantages are rendered as zeroes and do not contribute to harm.
 
-<!-- ## Simulation Methods -->
-
-<!-- Despite being derived from individual harm, differential partisan harm is in fact closely related to the overall number of seats won by each party, as Proposition \ref{prop:fairness} describes below. -->
-
-<!-- Yet unlike a simple measure of seats, differential harm is shifted to an interpretable scale, where a value of zero corresponds to fairness. -->
-
-<!-- In other words, differential harm provides a connection between fairness and seats, establishing a normative guide to overall election outcomes. -->
-
-<!-- This connection further supports the use of total seats won by each party as a summary statistic in partisan redistricting simulation methods, as advocated by @deford2020symmetry. -->
-
-```{=tex}
-\begin{proprep} \label{prop:fairness}
-Suppose $\Groups=\{\dem,\rep\}$. If turnout is equal across districts, then for a specific districting plan $q\in\Plans$,
-\begin{align*}
-    \Delta_{\rep-\dem} H(q) = \E[\seats(\dem, V, \tilde Q)] - \E[\seats(\dem, V, q)].
-\end{align*}
-\textbf{CM note: define $\seats$ or replace with sum.}
-\end{proprep}
-\begin{proof}
-\end{proof}
-```
-# Application to Partisan Gerrymandering in New Jersey {#sec:nj}
+# Application to Partisan Gerrymandering in New Jersey
 
 To illustrate the connections in the preceding section and to demonstrate the value of the proposed measures in a real-world setting, we provide a brief analysis of congressional districting in the state of New Jersey.
 As discussed above, many gerrymandering measures function well in highly competitive states, but may produce more counterintuitive results in other states.
