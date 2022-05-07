@@ -442,6 +442,15 @@ Plans with zero partisan bias or mean-median score actually have higher-than-ave
 
 # Application to Voting Rights Litigation in Alabama {#sec:alabama}
 
+We next turn to litigation in Alabama, Merill v. Milligan, where civil rights groups sued Alabama arguing that a second Black opportunity-to-elect district should have been drawn. For litigation under Section 2 of the Voting Rights Act of 1965 (VRA), plaintiffs submit one or more remedial maps in order to meet the preconditions set under Thornburg v. Gingles (478 US 30) in 1986. Remedial maps demonstrate that a new plan could be drawn to comply with the VRA. We use four remedial plans submitted by plaintiff's expert, Moon Duchin, which each create a moderately compact, second Black opportunity district while complying with other state redistricting criteria. We opt to use remedial plans, as they offer a relevant alternative set of plans ($\tilde{Q}$) to which courts already look when establishing liability.
+
+Figure \ref{fig:al-maps} displays the results of this process. 
+Panels (a) and (b) of \ref{fig:al-maps} display the partisanship and Black voting age percentages of Alabama.
+Unsuprisingly, Black population and Democratic voteshare are highly correlated.
+The remedial plans create a Black opportunity district by connecting Mobile to Montgomery, via the Black Belt region.
+Panel (c) of \ref{fig:al-maps} highlights the total harm from the enacted Alabama plan against the remedial plans.
+As we would expect, the harm largely follows the Black belt, where the Black opportunity district was drawn in each of the remedial plans.
+
 ```{r al-maps, fig.width=6.5}
 #| fig.cap: |
 #|      Baseline vote patterns (a),
@@ -453,25 +462,26 @@ Plans with zero partisan bias or mean-median score actually have higher-than-ave
 include_graphics("figures/al_maps.pdf")
 ```
 
-Differential racial harm: 0.23708
+First, this gives us that the average total harmed is 162,390 people.
+This is equivalent to a total harm of 8.9%.
+Geographically, we can see where voters are harmed.
+For example, in the north of Alabama, near Huntville, despite a larger number of Democratic voters in a Republican district, none of them are harmed here.
+That is, they are also in Republican districts in the remedy plans.
+Along the entirety of the Black Belt, there is substantial harm, most of which comes from Black Democrats.
+There is also a pocket of harmed voters in Tuskaloosa, above the left shoulder of district 7.
 
-Differential partisan harm: 0.20939
+We can then break down the harm into components by party.
+We find that an average of 154,368 Democrats are harmed by the enacted plan.
+Yet, on average, only 8,022 Republicans are harmed by the enacted plan.
+After normalizing by group sizes, this gives a substantial  differential harm of 20.9%.
+Thus, compared to the remedy plans, the enacted plan is much more likely to harm Democrats than Republicans.
 
-Total harm: 0.089009
-
-Average total harmed: 162390
-
-Average total harmed by group:
-
-| Average total harmed | Democratic | Republican |
-|----------------------|------------|------------|
-| **White**            | 28,476     | 7,867      |
-| **Black**            | 125,635    | 147        |
-| **Other**            | 257        | 7.4        |
-
-: This table is just a placeholder to store the numbers.
-
-[More text after the table.]
+Taking this further, we can estimate the harm by race as well.
+To do so, we fit an ecological inference model to estimate party-by-race counts for each precinct.
+Using the estimates, we can see that the harm to Democrats is carried largely by Black Democrats over non-Black Democrats.
+Specifically, 125,635 Black Democrats are harmed, compared to 28,476 white Democrats and 257 other race Democrats.
+In comparison, only 147 Black Republicans, 7,867 white Republicans, and 7 (8?) other race Republicans are harmed on average.
+Thus, once normalized by group size, the differential racial harm is 23.7%, indicating that Black voters are harmed substantially more than white voters.
 
 # Application to Primary Elections in Boston {#sec:boston}
 
