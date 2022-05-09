@@ -16,7 +16,7 @@ authors:
     location: Cambridge, MA
     email: christopherkenny@fas.harvard.edu
 abstract: |
-  We propose a unified framework for evaluating the impact of a districting plan on voters overall and in different groups. By aggregating the harm done to individual voters by their inability to elect a candiate of choice, and taking into account the space of counterfactual possibilities, we derive at a set of measures that flexibly adapts to local geographic constraints, different types of elections, and different groups of study. We provide recommendations for estimating these measures from historical election returns and discuss connections to commonly used redistricting metrics. Finally, we apply our framework to study partisan gerrymandering in New Jersey, voting rights litigation in Alabama, and the racial impacts of city council district boundaries in Boston.
+  We propose a unified framework for evaluating the impact of a districting plan on voters overall and in different groups. Considering the harm done to individual voters by their inability to elect their chosen candiate, and taking into account the space of counterfactual possibilities, we derive a set of measures that flexibly adapts to local geographic constraints, different types of elections, and different groups of study. We provide recommendations for estimating these measures from historical election returns and discuss connections to commonly used redistricting metrics. Finally, we apply our framework to study partisan gerrymandering in New Jersey, voting rights litigation in Alabama, and the racial impacts of city council district boundaries in Boston.
 keywords:
   - representation
   - redistricting
@@ -87,12 +87,18 @@ opts_chunk$set(echo=FALSE, message=FALSE, warning=FALSE,
 
     -   by analyzing how harms fall differentially along party, race, ideological, etc. lines, we can connect individual harm to more global measures based on parties, etc.
 
+```{=html}
+<!-- Yet, this suffers from a core inflexibility: it does not allow for variation in districting.
+Districting is the fundamental question of district-based democracies.
+*For whom can you vote? Who do you vote with?* Our proposed framework rectifies this inflexibility, by shifting to a focus on individual representation.
+The natural measurement approach to this directly incorporates alternatives under the logic of a counterfactual. -->
+```
 ## Outline of the Paper
 
 Section \ref{sec:motivation} motivates our framework for measuring harm and illustrates the key concepts in the context of partisan gerrymandering for three simple examples.
 Section \ref{sec:indiv-harm} formalizes the intuition of Section \ref{sec:motivation} and defines a general measure of individual and differential harm.
-Section \ref{sec:estimating} discusses estimating these measures from observed election results.
-Section \ref{sec:connections} connects our proposed measures to existing symmetry and fairness measures.
+Section \ref{sec:estimating} discusses estimating these measures from observed election results, and provides what we believe is a sensible and efficient way to calculate the measures in the special case of studying partisan gerrymandering.
+Section \ref{sec:connections} connects our proposed measure to existing practices for analyzing racial and partisan gerrymandering.
 Sections \ref{sec:nj}, \ref{sec:alabama}, and \ref{sec:boston} apply the proposed measures to partisan gerrymandering of New Jersey congressional districts, voting rights litigation for Alabama congressional districts, and racial impacts of district boundaries on Boston City Council primary elections.
 Section \ref{sec:discussion} concludes.
 
@@ -106,10 +112,9 @@ Schematics for these examples are shown in Figure \ref{fig:mini-schematic}(a)--(
 
 ```{r mini-schematic}
 #| fig.cap: |
-#|      Schematic maps of the three running examples,
+#|      Schematic maps of the example states,
 #|      showing the partisan composition of each of the 36 precincts.
 #|      The total voting population for each example is 180.
-#|      White lines delineate precincts.
 include_graphics("figures/minis_schematic.pdf")
 ```
 
@@ -272,26 +277,9 @@ It is this measure of differential harm that we propose as a unified framework f
 It is derived from an individual-level measure of representation and it accounts for the space of counterfactual possibilities.
 Importantly, it separates *vote choice* from *group membership*, allowing one to discuss how partisan election outcomes under a specific districting plan create harm for specific groups or their interactions, simply by conditioning $H(q)$ on a set of individuals.
 
-Estimating these quantities from available data is another matter, of course, and requires additional assumptions, as we describe in the next section.
-First, however, we note two interesting consequences of our definition of differential harm.
+Estimating these quantities from available data is another matter, of course, and requires additional assumptions, as we describe next.
 
-In the partisan case, with $\Groups=\{\dem,\rep\}$, differential harm is in fact closely related to the overall number of seats won by each party, as Proposition \ref{prop:fairness} describes below.
-Yet unlike a simple measure of seats, differential harm is shifted to an interpretable scale where a value of zero corresponds to fairness.
-In other words, differential harm provides a connection between fairness and seats, establishing a normative guide to overall election outcomes.
-This connection further supports the use of total seats won by each party as a summary statistic in partisan redistricting simulation methods, as advocated by @deford2020symmetry.
-
-```{=tex}
-\begin{proprep} \label{prop:fairness}
-Suppose $\Groups=\{\dem,\rep\}$. If turnout is equal across districts, then for a specific districting plan $q\in\Plans$,
-\begin{align*}
-    \Delta_{\rep-\dem} H(q) = \E[\seats(\dem, V, \tilde Q)] - \E[\seats(\dem, V, q)].
-\end{align*}
-\textbf{CM note: define $\seats$ or replace with sum.}
-\end{proprep}
-\begin{proof}
-\end{proof}
-```
-# Estimating the Harm Measures
+# Estimating the Harm Measures {#sec:estimating}
 
 The measures $H(q)$ and $\Delta H(q)$ defined above require specification of a probability distribution on elections and districting plans.
 Depending on one's viewpoint, this is either a theoretical fiction which must be specified by a model, or an actual data-generating process we must aim to estimate.
@@ -321,7 +309,7 @@ As far as estimating measures like $H(q)$ and $\Delta H(q)$, we would ideally us
 In the interest of fairness, the model should not make any biasing assumptions about the future (e.g., that demographic shifts will favor one party, or that past trends in election returns will continue in the same direction).
 
 We limit our discussion here to the case of estimating harm and differential partisan harm in a two-party setting.
-Estimating differential racial harm in the two-party setting can be done by first generatinc ecological inferences or survey estimates of party preference by race, and then applying methods analogous to those outlined here.
+Estimating differential racial harm in the two-party setting can be done by first generating ecological inferences or survey estimates of party preference by race, and then applying methods analogous to those outlined here.
 Multiparty or primary elections pose additional modeling challenges.
 In Section \ref{sec:boston} we consider a spatial-racial model for primary elections with multiple candidates, to illustrate the application of our framework to these more complicated cases.
 
@@ -344,47 +332,94 @@ When the groups used in $\Delta H(q)$ vary within precincts, we must repeat thes
 Then by summing across precincts and/or groups and dividing by the appropriate totals, we arrive at values for $H(q)$ and $\Delta H(q)$.
 Appendix \ref{app:formulas} contains more details, including the specific formulas used to compute $H(q)$ and $\Delta H(q)$ for two-party elections from a set of past election returns and a sample of districting plans from a redistricting sampling algorithm.
 
-# Connections to Existing Partisan and Racial Gerrymandering Metrics {#sec:connections}
+# Connections to Current Practice for Analyzing Partisan and Racial Gerrymandering {#sec:connections}
 
-The canonical framework for considering partisan fairness is partisan symmetry [@king1987democratic]. Partisan symmetry implies that the seats, $s$ won by a party with voteshare $v$ would be satisfied if $s(v) = 1 - s(1 - v)$. Often, the partisan symmetry framework has been applied via partisan bias, which measures the seat deviation from symmetry [@tufte1973pb; @katz2020].
-Partisan bias, denoted by $\beta(s)$ is the number of seats that would need to be reallocated to reach proportionality for a given statewide vote share $s$ (usually $\half$).
-To compute partisan bias, researchers have largely relied on assumptions about how the voteshares would swing to reach the alternative voteshares.
+While applicable to the study of redistricting beyond racial and partisan gerrymandering, the proposed harm measures provide an improvement over existing analytic approaches in both of these important contexts.
+
+## Partisan Gerrymandering
+
+The canonical framework for considering partisan fairness is partisan symmetry [@king1987democratic]. Partisan symmetry implies that the seats, $s$ won by a party with vote share $v$ would be satisfied if $s(v) = 1 - s(1 - v)$. In practice, the partisan symmetry framework is applied via the partisan bias metric $\beta(s)$, which measures the seat deviation from symmetry [@tufte1973pb; @katz2020], i.e., the number of seats that would need to be reallocated to reach proportionality for a given statewide vote share $s$ (usually $\half$).
 
 More recently, particularly in the years since @2004vieth, researchers have developed a veritable zoo of measures to identify partisan gerrymanders.
-The most prominent of these new measures have attempted to offer alternative measures for partisan symmetry.
-The *mean-median* difference looks to relationship between the voteshare of the median seat in a delegation and the mean voteshare of the delegation to make claims about how a map is skewed [@mcdonald2015unfair].
+The *mean-median* difference looks to relationship between the vote share of the median seat in a delegation and the mean vote share of the delegation to make claims about how a map is skewed [@mcdonald2015unfair].
 The *declination* describes the relative rate at which districts become less competitive for each party [@warrington18].
-Perhaps the new measure which has reached the most acclaim is the *efficiency gap* [@stephanopoulos2015].
-Referred to by Chief Justice Roberts as "sociological gobbledygook" in Gill v. Whitford, the efficiency gap looks to measure the votes wasted by the parties and compare the net wasted votes.
-Notably, while the efficiency gap was intended to measure partisan symmetry, it does not do so [@katz2020].
-All of these measures may be estimated using district vote shares alone, and as we discuss next, are to varying degrees related to our proposed measures.
+Perhaps the new measure which has reached the most acclaim is the *efficiency gap* [@stephanopoulos2015], which measures the difference in the number of the votes wasted by each party.[^3]
 
-Partisan symmetry offers a coherent and theoretically grounded quantity of interest.
-The idea of partisan symmetry is rooted in assessing how parties would have performed under counterfactual voteshares.
-Yet, this suffers from a core inflexibility: it does not allow for variation in districting.
-Districting is the fundamental question of district-based democracies.
-*For whom can you vote? Who do you vote with?* Our proposed framework rectifies this inflexibility, by shifting to a focus on individual representation.
-The natural measurement approach to this directly incorporates alternatives under the logic of a counterfactual.
+[^3]: Wasted votes are those cast for a losing candidate, as well as those cast for a winning candidate beyond the required 50% to win the election.
 
-Consider the major issues that have been raised over existing measures.
-Partisan bias ($\beta(\half)$) can give unintuitive results in more lopsided states, which, if not interpreted carefully, can lead practitioners to make incorrect conclusions about the presence and direction of a partisan gerrymander.
-This has been called by some the Utah paradox [@deford2020symmetry], though the paradoxical nature is contested as a mistake of using it for description, rather than inference [@katz2022]. A number of scholars have criticized the efficiency gap for (1) penalizing proportionality, (2) rewarding 3-to-1 districts and switching sign for more lopsided districts, and (3) being discrete and therefore sensitive to small changes in district vote shares [@bernstein2017egap; @tamcho2017egap; @deford2020symmetry].
-These stem from the omission of the alternatives.
+The latter four metrics are grounded in intuition over how to reliably identify a partisan gerrymander, and not in a larger theoretical framework or normative standard (in particular, they do not measure partisan symmetry [@katz2020]).
+As such, they make no distinction between the quantity they are trying to estimate and a particular estimator or formula used in calculations.
+This is in contrast to partisan symmetry as well as the proposed harm measures, which require practitioners to take the additional step of linking observed election data to the theoretical construct by way of an election model, as discussed in Section \ref{sec:estimating}.[^4]
+One advantage of the simpler metrics such as the efficiency gap is that they may quickly calculated using district vote shares alone.
 
-By looking to alternatives, we ground the idea of zero in a balance of the harms, rather than a purely theoretical way.
-This resolves the directionality problem common to other measures.
-The use of a counterfactual in measuring the quantity of interest grounds the bias in the rules of what districts can be drawn.
-This allows us to draw key strength from the impetus of the redistricting simulation literature.
-Yet, the simplicity of the framework does not restrict only to the use of simulation methods.
-Further, this framework does not need to rely on ideas of proportionality, which has no legal role in American democracy.
-Nor does it suffer from discreteness in ensembles, as now both voteshares and districts lines shift.
+[^4]: For partisan bias, both researchers and practitioners have largely relied on simple uniform-shift models similar to the one we use in this work.
+
+All of these existing measures are constructed so that a value of zero indicates no bias, and a value of zero is at least implicitly held up as a normative standard for districting plans.
+This poses a challenge for the measures which do not estimate a theoretical quantity, because it is unclear what the implicit standard is. For partisan symmetry this is more explicit; @katz2020 write that "[o]bviously, a process designed to be 'fair' that turns out to be substantially asymmetric, if there is a fairer alternative, would not normally be regarded as a legitimate outcome."
+
+But as those authors recognize, in evaluating a districting plan, it is critical to consider "if there is a fairer alternative." The inability of partisan bias and other existing measures to account for the space of counterfactual redistricting plans means that none of them may be interpreted in a vacuum.
+No particular value can be used as a threshold past which a plan becomes a gerrymander, because the measures confound the map-drawer's bias with the bias inherent to the district-based electoral system.
+
+It is this confounding which explains many of the concerns that have been raised over the existing measures.
+The standard calculation of partisan bias, $\beta(\half)$, can give unintuitive results in more lopsided states, which, if not interpreted carefully, can lead practitioners to make incorrect conclusions about the presence and direction of a partisan gerrymander.[^5]
+And none of the measures take into account any aspect of political geography, and therefore suffer in states like Massachusetts, where, for example, the efficiency gap takes a value generally indicating an extreme Democratic gerrymander.
+
+[^5]: This has been called by some the "Utah paradox" [@deford2020symmetry], though the paradoxical nature is contested as a mistake of using it for description, rather than inference [@katz2022].
 
 Despite these differences, there are also key empirical similarities in many cases.
-The efficiency gap and $\Delta H(q)$ are often quite well correlated under competitive states, as wasted votes and partisan harm are rooted in similar logics.
-Similarly, in competitive states, where the baseline election has a statewide vote share near 50%, $\beta(\half)$ is highly correlated with $\E[\seats(\dem, V, Q)\mid Q=q]$ and thus $\Delta H(q)$ as well.
-Where our framework rises above these though is especially in non-competitive states, where insurmountable advantages are rendered as zeroes and do not contribute to harm.
+The efficiency gap and differential partisan harm are often highly correlated (though the efficiency gap is much more discrete), as wasted votes and partisan harm are rooted in similar logic.[^6]
+Similarly, in competitive states, where the baseline election has a statewide vote share near 50%, $\beta(\half)$ is highly correlated with the average number of seats won by each party and with differential partisan harm as well.
+Correlations, of course, are not everything: it is the universal scale and centering of our harm measure which makes it more useful in evaluating partisan gerrymanders, as we demonstrate in Section \ref{sec:nj}.
 
-# Application to Partisan Gerrymandering in New Jersey
+[^6]: The differences stem from the efficiency gap considering a vote to be wasted if it is in excess of the 50% threshold needed to win, while the harm framework does not penalize such votes, since every such voter is happily represented by their candidate of choice.
+    This definition of wasted votes is also at the root of other criticisms of the efficiency gap, which note its tendency to penalize proportionality and reward 3-to-1 districts [@bernstein2017egap; @tamcho2017egap; @deford2020symmetry].
+
+Finally, it is worth comparing the proposed measures to the increasingly common application redistricting simulation techniques to cases of partisan gerrymandering.
+Standard practice in such litigation, for example, is to calculate a battery of gerrymandering metrics on the simulated plans, and show that the challenged plan is an outlier on all or most of the metrics.
+While this can help contextualize the challenged plan, it is not foolproof---if the underlying metric is misleading, it will still be misleading when applied to thousands of simulated plans.
+In the worst cases, this can lead to directionally wrong conclusions, as we will see in Section \ref{sec:nj}.
+
+These problems have led @deford2020symmetry, among others, to recommend evaluating the presence of a gerrymander simply by comparing the expected number of seats won under the plan versus the simulations We agree with this recommendation, as it turns out that in the partisan case, with $\Groups=\{\dem,\rep\}$, differential harm is in fact closely related to the overall number of seats won by each party.
+Proposition \ref{prop:fairness} records this formally below.
+However, unlike a simple measure of seats, differential harm is shifted a value of zero corresponds to fairness and rescaled to be directly interpretable as a rate of harm.
+In other words, differential harm provides a connection between fairness and seats, establishing a normative guide to overall election outcomes.
+
+```{=tex}
+\begin{proprep} \label{prop:fairness}
+Suppose $\Groups=\{\dem,\rep\}$. If turnout is equal across districts, then for a specific districting plan $q\in\Plans$,
+\begin{align*}
+    \Delta_{\rep-\dem} H(q) = \E[\seats(\dem, V, \tilde Q)] - \E[\seats(\dem, V, q)].
+\end{align*}
+\textbf{CM note: define $\seats$ or replace with sum.}
+\end{proprep}
+\begin{proof}
+\end{proof}
+```
+## Racial Gerrymandering
+
+**CHRIS: review please.**
+
+The study of racial gerrymandering is considerably more complicated than that of partisan gerrymandering, due to the difficulty of understanding racial voting preferences when individual votes are secret, and as such no simple formulas exist to measure the racial impacts of a districting plan.
+Indeed, much of the academic literature has focused on the statistical challenge of estimating vote preferences and turnout by race [@king1997solution; @greiner2006ecological; @imai2016improving].
+
+The modern analysis of racial gerrymandering is inseparable from the Voting Rights Act of 1965 (VRA).
+The VRA enables citizens to challenge districting plans in court for diluting the voting power of racial minorities.
+Under the current framework established by @1986gingles, to do so, plaintiffs must prove that (a) the minority group is large and geographically compact enough to form a majority in some hypothetical district, (b) the minority group is "politically cohesive," and (c) the majority group can and does vote to deny the minority group its choice of candidate [@hood2018legal] (the so-called *Gingles* criteria).
+Criteria (a) is generally proven through a single example districting plan, while criteria (b) and (c) are shown using the statistical estimates of vote preferences and turnout by race.
+
+While the specific legal requirements for a vote dilution claim will obviously remain front-and-center for court challenges of racial gerrymanders, it is notable that the proposed harm measures unify all three *Gingles* criteria.
+Criteria (b) and (c) captures the misrepresentation of minority voters by a candidate they do not support, while (a) requires the existence of a counterfactual where this would not be the case; together, (a) and (c) establish that minority voters are harmed.
+But the proposed measures can also tackle trickier situations where the *Gingles* criteria may not be clearly met.
+
+One such case arises when there are several distinct minority racial groups with similar preferences.
+In these cases, some courts have found that (a) may be weakened to consider "coalition" districts that still allow minority voters overall to elect candidates of their choice, but there is no clear rule [@stephanopoulos2014south].
+Or when urban White voters have similar partisan preferences to minority voters, (b) and (c) may not be strictly satisfied, especially for two-party general elections.
+Some argue, however, that courts should still rely on the VRA in these cases to protect minority voters, especially in light of differing racial preferences in primary elections [@becker2021computational].
+
+In both these cases, the proposed measures will quantify the extent to which a challenged districting plan differentially harms minority voters, taking into account their geographic and political cohesion, and the individual preferences of every voter.
+Sections \ref{sec:alabama} and \ref{sec:boston} demonstrate this approach in practice.
+
+# Application to Partisan Gerrymandering in New Jersey {#sec:nj}
 
 To illustrate the connections in the preceding section and to demonstrate the value of the proposed measures in a real-world setting, we provide a brief analysis of congressional districting in the state of New Jersey.
 As discussed above, many gerrymandering measures function well in highly competitive states, but may produce more counterintuitive results in other states.
@@ -404,10 +439,10 @@ The Democratic gerrymander has 11 Democratic seats and 1 Republican seat at base
 
 We sample 10,000 districting plans across four independent runs of the SMC algorithm of @mccartan2020, setting constraints to favor compact plans with district boundaries that tend to follow county lines.
 One such plan is shown in Figure \ref{fig:nj-maps}(d).
-For each of these sampled plans and the two gerrymanders, we calculate the average harm and differential partisan harm versus the simulated baseline,[^3] as well as the expected number of Democratic seats, the efficiency gap, partisan bias, the mean-median score, and partisan declination.
+For each of these sampled plans and the two gerrymanders, we calculate the average harm and differential partisan harm versus the simulated baseline,[^7] as well as the expected number of Democratic seats, the efficiency gap, partisan bias, the mean-median score, and partisan declination.
 The distribution of these measures, along with their pairwise relationships, are shown in Figure \ref{fig:nj-pairs}.
 
-[^3]: As in section \ref{sec:connections}, this is $\Delta_{\dem-\rep}H(q)$, so that positive values correspond to a plan that favors Republicans.
+[^7]: As in section \ref{sec:connections}, this is $\Delta_{\dem-\rep}H(q)$, so that positive values correspond to a plan that favors Republicans.
 
 ```{r nj-pairs, fig.width=7, fig.height=7}
 #| fig.cap: |
@@ -420,7 +455,7 @@ include_graphics("figures/nj_pairs.pdf")
 ```
 
 Differential partisan harm identifies each gerrymander as such, with a large negative value for the Democratic gerrymander and a large positive value for the Republican gerrymander.
-These values are relatively directly interpretable; for example, the differential harm score of $-0.221$ means that an average Democratic voter is 22.1% less likely to be misrepresented than their average Republican counterpartisan.
+These values are relatively directly interpretable; for example, the differential harm score of $-0.221$ means that an average Democratic voter is 22.1% less likely to be misrepresented than their average Republican counter-partisan.
 The efficiency gap and declination measures also correctly identify the gerrymanders, though they are much more discrete, and declination gives a much larger score in absolute value to the Democratic plan than to the Republican.
 In contrast, the partisan bias and mean-median measures incorrectly classify the Republican gerrymander as a fair plan and a Democratic-leaning outlier.
 These measures are weakly correlated with the expected number of Democratic seats, and show substantial variation even for fixed values of total seats won at baseline.
@@ -442,13 +477,17 @@ Plans with zero partisan bias or mean-median score actually have higher-than-ave
 
 # Application to Voting Rights Litigation in Alabama {#sec:alabama}
 
-We next turn to litigation in Alabama, Merill v. Milligan, where civil rights groups sued Alabama arguing that a second Black opportunity-to-elect district should have been drawn. For litigation under Section 2 of the Voting Rights Act of 1965 (VRA), plaintiffs submit one or more remedial maps in order to meet the preconditions set under Thornburg v. Gingles (478 US 30) in 1986. Remedial maps demonstrate that a new plan could be drawn to comply with the VRA. We use four remedial plans submitted by plaintiff's expert, Moon Duchin, which each create a moderately compact, second Black opportunity district while complying with other state redistricting criteria. We opt to use remedial plans, as they offer a relevant alternative set of plans ($\tilde{Q}$) to which courts already look when establishing liability.
+We next turn to litigation in Alabama, @2022merrill, where civil rights groups sued Alabama arguing that a second Black opportunity-to-elect district should have been drawn.
+For litigation under Section 2 of the Voting Rights Act of 1965 (VRA), plaintiffs submit one or more remedial maps in order to meet the preconditions set under @1986gingles.
+Remedial maps demonstrate that a new plan could be drawn to comply with the VRA.
+We use four remedial plans submitted by plaintiff's expert, Moon Duchin, which each create a moderately compact, second Black opportunity district while complying with other state redistricting criteria.
+We opt to use remedial plans, as they offer a relevant alternative set of plans ($\tilde{Q}$) to which courts already look when establishing liability.
 
-Figure \ref{fig:al-maps} displays the results of this process. 
-Panels (a) and (b) of \ref{fig:al-maps} display the partisanship and Black voting age percentages of Alabama.
-Unsuprisingly, Black population and Democratic voteshare are highly correlated.
+Figure \ref{fig:al-maps} displays the results of this process.
+Figures \ref{fig:al-maps}(a) and (b) display the partisanship and Black voting age percentages of Alabama.
+Unsurprisingly, Black population and Democratic vote share are highly correlated.
 The remedial plans create a Black opportunity district by connecting Mobile to Montgomery, via the Black Belt region.
-Panel (c) of \ref{fig:al-maps} highlights the total harm from the enacted Alabama plan against the remedial plans.
+Figure \ref{fig:al-maps}(c) highlights the total harm from the enacted Alabama plan against the remedial plans.
 As we would expect, the harm largely follows the Black belt, where the Black opportunity district was drawn in each of the remedial plans.
 
 ```{r al-maps, fig.width=6.5}
@@ -465,15 +504,15 @@ include_graphics("figures/al_maps.pdf")
 First, this gives us that the average total harmed is 162,390 people.
 This is equivalent to a total harm of 8.9%.
 Geographically, we can see where voters are harmed.
-For example, in the north of Alabama, near Huntville, despite a larger number of Democratic voters in a Republican district, none of them are harmed here.
+For example, in the north of Alabama, near Huntsville, despite a larger number of Democratic voters in a Republican district, none of them are harmed here.
 That is, they are also in Republican districts in the remedy plans.
 Along the entirety of the Black Belt, there is substantial harm, most of which comes from Black Democrats.
-There is also a pocket of harmed voters in Tuskaloosa, above the left shoulder of district 7.
+There is also a pocket of harmed voters in Tuscaloosa, above the left shoulder of district 7.
 
 We can then break down the harm into components by party.
 We find that an average of 154,368 Democrats are harmed by the enacted plan.
 Yet, on average, only 8,022 Republicans are harmed by the enacted plan.
-After normalizing by group sizes, this gives a substantial  differential harm of 20.9%.
+After normalizing by group sizes, this gives a substantial differential harm of 0.209.
 Thus, compared to the remedy plans, the enacted plan is much more likely to harm Democrats than Republicans.
 
 Taking this further, we can estimate the harm by race as well.
@@ -481,7 +520,7 @@ To do so, we fit an ecological inference model to estimate party-by-race counts 
 Using the estimates, we can see that the harm to Democrats is carried largely by Black Democrats over non-Black Democrats.
 Specifically, 125,635 Black Democrats are harmed, compared to 28,476 white Democrats and 257 other race Democrats.
 In comparison, only 147 Black Republicans, 7,867 white Republicans, and 7 (8?) other race Republicans are harmed on average.
-Thus, once normalized by group size, the differential racial harm is 23.7%, indicating that Black voters are harmed substantially more than white voters.
+Thus, once normalized by group size, the differential racial harm is 0.237, indicating that Black voters are harmed at a substantially higher rate than white voters.
 
 # Application to Primary Elections in Boston {#sec:boston}
 
@@ -499,11 +538,11 @@ include_graphics("figures/boston_map.pdf")
 
 The city of Boston is governed by a mayor and a nonpartisan 13-member city council.
 Nine of the councillors are elected from contiguous city council districts, and the remaining four councillors are elected at-large, with all councillors serving two-year terms.
-Council district boundaries are redrawn every ten years following the decennial census, and must be equipopulous, be compact, and preserve neighborhood and community boundaries.[^4]
+Council district boundaries are redrawn every ten years following the decennial census, and must be equipopulous, be compact, and preserve neighborhood and community boundaries.[^8]
 This section will study the extent to which the mixed at-large and district council system harms voters in comparison to a fully district-based system (as was the case before 1909 and from 1924-1951), either overall or differentially by racial group.
 Figure \ref{fig:boston-map} shows the racial composition of the city as well as the boundaries of the 2010 city council districts and the city's official neighborhoods.
 
-[^4]: City of Boston charter.
+[^8]: City of Boston charter.
     Available at <https://www.boston.gov/sites/default/files/embed/b/boston-city-charter-2007.pdf>.
 
 ## Approach
@@ -517,17 +556,17 @@ Even if we could, for instance, divide candidates into a more "liberal" and a mo
 
 ```{r boston-factors, fig.cap="", fig.width=7, fig.height=3.5}
 #| fig.cap: |
-#|      Candidate factor loadings, with approximate 80% credible intervals shown as ellipses (left),
-#|      and geographic variation in factor values by race (right).
+#|      Candidate factor loadings, with approximate 80\% credible intervals shown as
+#|      ellipses (left), and geographic variation in factor values by race (right).
 #|      Neighborhood boundaries overlaid in black.
 #|      Factor values in the Black second-dimension map are truncated so that variation in the other maps is visible.
 include_graphics("figures/boston_factors.pdf")
 ```
 
-To solve both of these problems, we develop a *latent factor ecological inference model*, which simultaneously estimates (a) turnout by precinct and race, (b) candidate positions in a latent two-dimensional political space,[^5] and (c) voter preferences in this space by precinct and race, using precinct-level demographic data and vote totals from the March 2020 presidential primary and September 2021 mayoral preliminary elections.
+To solve both of these problems, we develop a *latent factor ecological inference model*, which simultaneously estimates (a) turnout by precinct and race, (b) candidate positions in a latent two-dimensional political space,[^9] and (c) voter preferences in this space by precinct and race, using precinct-level demographic data and vote totals from the March 2020 presidential primary and September 2021 mayoral preliminary elections.
 Figure \ref{fig:boston-factors} shows the key outputs from this model, and Appendix \ref{app:lfei} explains the model in detail and contains additional diagnostic plots.
 
-[^5]: Exploratory analyses found that three latent dimensions did not provide a substantially better fit to the data.
+[^9]: Exploratory analyses found that three latent dimensions did not provide a substantially better fit to the data.
 
 Like all ecological inference models, ours rests on several unverifiable assumptions.
 The latent factor component imposes additional assumptions about the structure of voting in Boston elections.
@@ -563,34 +602,34 @@ Further work is needed to characterize how existing redistricting requirements a
 ```
 # Computing Harm Measures from Precinct-level Election Data {#app:formulas}
 
-In practice, districting plans are built from discrete geographic units (often precincts), and election returns are reported at this level as well.[^6]
+In practice, districting plans are built from discrete geographic units (often precincts), and election returns are reported at this level as well.[^10]
 Throughout this appendix, let $j$ index the set of electoral precincts or other units.
 For concreteness here and without loss of generality we will use the Democratic party as the reference party, letting $s_{jv}$ denote the Democratic two-party vote share in precinct $j$ in election $v$.
 Write-in or minor third-party candidates can be safely ignored, since the overall winner will be precisely the two-party vote winner.
 
-[^6]: When district boundaries split precincts, practitioners generally impute the returns in each component of the split precinct by population-weighted interpolation.
+[^10]: When district boundaries split precincts, practitioners generally impute the returns in each component of the split precinct by population-weighted interpolation.
     Population information comes from Census blocks, which are practically never split.
 
 ## Proportionate Uniform Shift Details
 
-The proportionate uniform shift model assumes that from one election to another, a constant fraction of *voters of one party* in each precinct switch to the other party, and that per-precinct turnout is constant across elections.[^7]
+The proportionate uniform shift model assumes that from one election to another, a constant fraction of *voters of one party* in each precinct switch to the other party, and that per-precinct turnout is constant across elections.[^11]
 This has several advantages over the uniform swing model, where a constant fraction of *all voters* shifts parties.
 First, the proportionate shift prevents hypothetical party vote shares from exceeding 1 or falling below 0 in any precinct.
 Second, as it has the effect of scaling vote shares across precincts by a constant multiple, it preserves the relative balance of a party's voters across precincts.
 For $\Delta_{\dem-\rep}H(q)$, which considers voters in each party separately, this helpfully simplifies computations.
 
-[^7]: Everything carries through if one allows for shifts in the overall turnout level across elections, as long as (a) the relative turnout across precincts is fixed, and (b) turnout shifts are independent of shifts in party preferences.
+[^11]: Everything carries through if one allows for shifts in the overall turnout level across elections, as long as (a) the relative turnout across precincts is fixed, and (b) turnout shifts are independent of shifts in party preferences.
 
 The proportionate shift may be mathematically expressed as linear shift on a transformed scale, not unlike a generalized linear model.
 Specifically, we define $\gamma:[0,1]\to\R$, $$
 \gamma(x) = -\thalf\sgn(x-\thalf)\log(1-2\qty|x-\thalf|),
-$$ which is the inverse CDF of a Laplace distribution with rate 2.[^8]
+$$ which is the inverse CDF of a Laplace distribution with rate 2.[^12]
 Then the Democratic vote share in precinct $P_j$ and election $v$, notated here as $s_{jv}$, is modeled as $$
 \gamma(s_{jv}) = \gamma(\overline s_j) + \eps_v, \qquad \eps_v \iid \Norm(0, \sigma^2_{\mathrm{hist}}),
 $$ where $\overline{s}_j$ is the party baseline in the precinct, and $\sigma^2_\mathrm{hist}$ is estimated from the historical variability in nationwide popular vote shares.
 For congressional elections in the United States from 1974--2018, we have $\widehat\sigma^2_\mathrm{hist}=0.03723$, and so draw predictive deviations from $\mathrm{t}_{22}(0, \widehat\sigma^2_\mathrm{hist})$.
 
-[^8]: A rate of 2 is chosen so that the slope of the link function at $\half$ is exactly 1, meaning that transformed vote shares will be on approximately the same scale as the original shares.
+[^12]: A rate of 2 is chosen so that the slope of the link function at $\half$ is exactly 1, meaning that transformed vote shares will be on approximately the same scale as the original shares.
 
 It will simplify matters following to have notation for the overall Democratic vote share in a district.
 For a precinct $j$, let $q^{-1}(j)$ denote the district it belongs to.
