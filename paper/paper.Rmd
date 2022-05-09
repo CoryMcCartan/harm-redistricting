@@ -381,8 +381,7 @@ In the worst cases, this can lead to directionally wrong conclusions, as we will
 
 These problems have led @deford2020symmetry, among others, to recommend evaluating the presence of a gerrymander simply by comparing the expected number of seats won under the plan versus the simulations We agree with this recommendation, as it turns out that in the partisan case, differential harm is in fact closely related to the overall number of seats won by each party.
 Proposition \ref{prop:fairness} records this formally below.
-However, unlike a simple measure of seats, differential harm is shifted a value of zero corresponds to fairness and rescaled to be directly interpretable as a rate of harm.
-In other words, differential harm provides a connection between fairness and seats, establishing a normative guide to overall election outcomes.
+However, unlike a simple measure of seats, differential harm is shifted so that a value of zero corresponds to fairness, and rescaled to be directly interpretable as a fraction of voters harmed.
 
 ```{=tex}
 \begin{proprep} \label{prop:fairness}
