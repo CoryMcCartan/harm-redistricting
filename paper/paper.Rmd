@@ -77,10 +77,10 @@ opts_chunk$set(echo=FALSE, message=FALSE, warning=FALSE,
 
 -   courts, on the other hand, have focused on individual standing [@1964reynolds; @1962baker]
 
--   **we argue that individual standing/harm is an excellent lens to unify the study and measurement of redistricting plans**
+-   **we argue that individual standing/harm is an excellent lens to unify the study and measurement of districting plans**
 
 -   core idea: counterfactuals + voter choice.
-    Is a voter more likely to be represented by the candidate of their choice under a different redistricting plan?
+    Is a voter more likely to be represented by the candidate of their choice under a different districting plan?
     If so, they've been harmed.
 
     -   modern simulation methods allow us to produce realistic counterfactuals
@@ -299,7 +299,7 @@ These distributions can generally be characterized as maximum-entropy distributi
 For example, the algorithms of @carter2019 and @mccartan2020 sample from the maximum-entropy distribution of districting plans which are geographically contiguous, have district populations within a deviation from equality, and which have a certain average compactness value (according to a particular graph-theoretic compactness measure).
 These maximum-entropy distributions put as few conditions as possible on the districting sampling process, as long as a set of constraints imposed by the researcher are met.
 If these constraints are precisely those which are required by law or traditional redistricting criteria, then samples from this distribution provide a natural set of counterfactual districting plans, uninfluenced by superfluous partisan considerations, to use in estimating $H(q)$ and $\Delta H(q)$.
-In practice, the translation from tradition and law into mathematical formulations of constraints is not always clear or even well-defined; there is certainly an element of subjectivity in sampling a set of redistricting plans.
+In practice, the translation from tradition and law into mathematical formulations of constraints is not always clear or even well-defined; there is certainly an element of subjectivity in sampling a set of districting plans.
 Nonetheless, sampling methods are widely used in practice.
 
 ## Modeling Election Outcomes
@@ -357,7 +357,7 @@ One advantage of the simpler metrics such as the efficiency gap is that they may
 All of these existing measures are constructed so that a value of zero indicates no bias, and a value of zero is at least implicitly held up as a normative standard for districting plans.
 This poses a challenge for the measures which do not estimate a theoretical quantity, because it is unclear what the implicit standard is. For partisan symmetry this is more explicit; @katz2020 write that "[o]bviously, a process designed to be 'fair' that turns out to be substantially asymmetric, if there is a fairer alternative, would not normally be regarded as a legitimate outcome."
 
-But as those authors recognize, in evaluating a districting plan, it is critical to consider "if there is a fairer alternative." The inability of partisan bias and other existing measures to account for the space of counterfactual redistricting plans means that none of them may be interpreted in a vacuum.
+But as those authors recognize, in evaluating a districting plan, it is critical to consider "if there is a fairer alternative." The inability of partisan bias and other existing measures to account for the space of counterfactual districting plans means that none of them may be interpreted in a vacuum.
 No particular value can be used as a threshold past which a plan becomes a gerrymander, because the measures confound the map-drawer's bias with the bias inherent to the district-based electoral system.
 
 It is this confounding which explains many of the concerns that have been raised over the existing measures.
