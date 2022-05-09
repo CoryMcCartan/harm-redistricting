@@ -379,7 +379,7 @@ Standard practice in such litigation, for example, is to calculate a battery of 
 While this can help contextualize the challenged plan, it is not foolproof---if the underlying metric is misleading, it will still be misleading when applied to thousands of simulated plans.
 In the worst cases, this can lead to directionally wrong conclusions, as we will see in Section \ref{sec:nj}.
 
-These problems have led @deford2020symmetry, among others, to recommend evaluating the presence of a gerrymander simply by comparing the expected number of seats won under the plan versus the simulations We agree with this recommendation, as it turns out that in the partisan case, with $\Groups=\{\dem,\rep\}$, differential harm is in fact closely related to the overall number of seats won by each party.
+These problems have led @deford2020symmetry, among others, to recommend evaluating the presence of a gerrymander simply by comparing the expected number of seats won under the plan versus the simulations We agree with this recommendation, as it turns out that in the partisan case, differential harm is in fact closely related to the overall number of seats won by each party.
 Proposition \ref{prop:fairness} records this formally below.
 However, unlike a simple measure of seats, differential harm is shifted a value of zero corresponds to fairness and rescaled to be directly interpretable as a rate of harm.
 In other words, differential harm provides a connection between fairness and seats, establishing a normative guide to overall election outcomes.
