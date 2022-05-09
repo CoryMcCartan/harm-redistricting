@@ -78,6 +78,12 @@ plot_cds = function(map, pl, county, abbr, qty="ndv") {
         rvote = map$nrv
         qty = expr(dem)
         scale = scale_fill_party_c(limits=c(0.3, 0.7))
+    } else if (qty == "bvap") {
+        dvote = map$vap_black
+        rvote = map$vap - map$vap_black
+        qty = expr(dem)
+        scale = scale_fill_wa_b("sea", name="BVAP", labels=percent,
+                                limits=c(0.1, 0.6), breaks=c(0.2, 0.3, 0.4, 0.5))
     } else {
         qty = expr(.plan)
         scale = scale_fill_manual(values=PAL, guide="none")
@@ -97,6 +103,7 @@ plot_cds = function(map, pl, county, abbr, qty="ndv") {
         st_as_sf() %>%
         group_by(.distr) %>%
         summarize(.plan = .plan[1],
+                  dem = 1 / (1 + sum(rvote) / sum(dvote)),
                   dem = 1 / (1 + sum(rvote) / sum(dvote)),
                   is_coverage=TRUE) %>%
         ggplot(aes(fill={{ qty }})) +
@@ -121,6 +128,7 @@ expl_vars = function(pl, labels, refs=character(0), rasterize=TRUE,...) {
         y <- h$counts; y <- y/max(y)
         rect(breaks[-nB], 0, breaks[-1], y, family="Times",
              col="#888888", border="#88888800", lwd=0)
+        abline(v=0, lty="dashed")
         for (i in seq_len(n_ref)) {
             abline(v=x[i], col=refs[i], lwd=3.0)
         }

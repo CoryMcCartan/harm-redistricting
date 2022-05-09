@@ -28,7 +28,7 @@ transformed data {
 }
 
 parameters {
-    vector<lower=0, upper=1>[R] turnout_overall; // overall turnout by race
+    vector<lower=-5, upper=5>[R] turnout_overall; // overall turnout by race
     vector[L] turnout_elec; // election shift
     array[N] vector[R] turnout_z; // turnout by precinct and race
     // Cholesky parametrization of turnout correlation between races within precinct
@@ -36,7 +36,7 @@ parameters {
     row_vector<lower=0>[R] sigma_t;
 
     vector[L] support_elec; // election shift
-    vector<lower=0, upper=1>[R] support_overall; // overall turnout by race
+    vector<lower=-5, upper=5>[R] support_overall; // overall turnout by race
     array[N] vector[R] support_z; // dem. support by race for each election
     // Cholesky parametrization of turnout correlation between races within precinct
     cholesky_factor_corr[R] L_s;
@@ -53,18 +53,16 @@ transformed parameters {
         matrix[R, R] Sigma_t = diag_pre_multiply(sigma_t, L_t);
         matrix[R, R] Sigma_s = diag_pre_multiply(sigma_s, L_s);
         // matrix[R, R] Sigma_s = diag_post_multiply(L_s', sigma_s);
-        vector[R] l_turn_over = logit(turnout_overall);
-        vector[R] l_supp_over = logit(support_overall);
         for (i in 1:N) {
-            turnout[i] = inv_logit(l_turn_over + Sigma_t * turnout_z[i]);
-            support[i] = inv_logit(l_supp_over + Sigma_s * support_z[i]);
+            turnout[i] = inv_logit(turnout_overall + Sigma_t * turnout_z[i]);
+            support[i] = inv_logit(support_overall + Sigma_s * support_z[i]);
             // turnout[i, 1] = inv_logit(
             //     (l_turn_share[i] - logit(1e-3 + 0.998 * dot_product(turnout[i, 2:R], vap_race[i, 2:R])))
             //     / (1e-4 + vap_race[i, 1])
             //     + Sigma_t[1, 1:R] * turnout_z[i]);
 
             turn_r[i] = turnout[i] .* vap_race[i];
-            supp_r[i] = support[i] .* vap_race[i];
+            supp_r[i] = support[i] .* turn_r[i] / sum(turn_r[i]);
         }
     }
 }
@@ -80,16 +78,17 @@ model {
     }
 
     // priors ----------------------------------------------
-    L_s ~ lkj_corr_cholesky(5.0);
-    L_t ~ lkj_corr_cholesky(5.0);
-    sigma_s ~ gamma(1.5, 1.5/1.0);
+    // implied priors are uniform
+    // L_s ~ lkj_corr_cholesky(1.0);
+    // L_t ~ lkj_corr_cholesky(1.0);
+    sigma_s ~ gamma(1.5, 1.5/0.5);
     sigma_t ~ gamma(1.5, 1.5/0.25);
     for (i in 1:N) {
         turnout_z[i] ~ std_normal();
         support_z[i] ~ std_normal();
     }
-    turnout_overall ~ beta(20, 20);
+    turnout_overall ~ normal(0, 1.5);
     turnout_elec ~ normal(0, 0.6);
-    support_overall ~ beta(20, 20);
+    support_overall ~ normal(0, 1.0);
     support_elec ~ normal(0, 0.4);
 }

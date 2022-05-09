@@ -71,7 +71,7 @@ calc_plans_stats = function(plans, map, dem, gop, ker=k_t(), max_harm=200L) {
                comp = distr_compactness(map),
                dem = group_frac(map, dvote, dvote+rvote),
                decl = part_decl(., map, dvote, rvote),
-               egap = part_egap(., map, rvote, dvote))
+               egap = part_egap(., map, dvote, rvote))
 
     ker_t = k_t()
     pl_sum = plans %>%
