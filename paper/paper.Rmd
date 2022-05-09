@@ -694,12 +694,53 @@ Here, we rely on the fact that even across election shifts, the relative balance
 
 # Ecological Inference Model for Alabama {#app:alei}
 
+To estimate voter preferences by race and precinct in Alabama, we use 2020 U.S.
+Census demographic data and election returns from seven recent statewide elections: the 2016 races for president and U.S. senator, the 2018 races for governor, attorney general, and secretary of state, and the 2020 races for president and U.S. senator.
+Our ecological inference model used to produce the estimates is broadly similar to that of @king1997solution. However, it jointly estimates both turnout and Democratic support across all seven elections, rather than estimating each quantity separately for each election.
+
+Adapting the notation from the previous appendix, for precinct $j$ in election $v$, let $\vap_j$ denote the voting-age population, $\votes_{jv}$ denote the total number of votes cast for major-party candidates, $s_{jv}$ denote the Democratic vote share, and $p_{jr}$ denote the fraction of the voting-age population belonging to racial group $r$, where here $r\in\{\text{White},\text{Black},\text{Other}\}$.
+Our main parameters of interest are $\turn_{jr}$ and $\supp_{jr}$, the baseline turnout and Democratic support rate by race in the precinct.
+
+```{r alabama-ei, fig.width=6.5}
+#| fig.cap: |
+#|      EI model estimates of precinct-level turnout by race (a) 
+#|      and Democratic support by race (b).
+#|      Points are sized in proportion to their voting-age population, 
+#|      and colored according to their Black share of the voting-age population.
+#|      All axes are transformed to a logit scale.
+include_graphics("figures/al_ei.pdf")
+```
+
+We model the observed vote counts as
+\begin{align*}
+    \votes_{jv} \mid \turn_{jr}, \beta^{(t)}_v
+        &\sim \Binlog\qty(\vap_j, \logit(\turn_j^\top\vb p_j) + \beta^{(t)}_v) \\
+    \logit(\turn_j) \mid \mu^{(t)}, \Sigma^{(t)}
+        &\sim \Norm(\mu^{(t)}, \Sigma^{(t)}) \\
+    s_{jv}\votes_{jv} \mid \supp_{jr}, \turn_{jr}, \beta^{(s)}_v
+        &\sim \Binlog\qty(\votes_{jv}, \logit\qty(
+        \supp_j^\top \frac{\turn_j\circ\vb p_j}{\turn_j^\top\vb p_j}) + \beta^{(s)}_v) \\
+    \logit(\supp_j) \mid \mu^{(s)}, \Sigma^{(s)}
+        &\sim \Norm(\mu^{(s)}, \Sigma^{(t)}),
+\end{align*}
+where the $\vb*\beta^{(t)}$ and $\vb*\beta^{(s)}$ model election-specific logit shifts, $\Binlog$ indicates the Binomial distribution with the probability paramter specified on the logit scale, and $\circ$ indicates the elementwise (Hadamard) product.
+We give $\beta^{(t)}$ an i.i.d. $\Norm(0, 0.6^2)$ prior,and $\beta^{(s)}$ an i.i.d. $\Norm(0, 0.4^2)$ prior,
+and $\mu^{(t)}$ an i.i.d. $\Norm(0, 1.5^2)$ prior, and $\mu^{(s)}$ an i.i.d. $\Norm(0, 1.0^2)$ prior.
+We set priors independently on the variance and correlation components of $\Sigma^{(t)}$ and $\Sigma^{(s)}$; the former received $\Gam(1.5, 1.5/0.5)$ and $\Gam(1.5, 1.5/0.25)$ priors for turnout and support, while the latter received uniform priors (i.e., LKJ priors with shape parameter 1).
+Several reparametrizations were made for computational efficiency; the full Stan code for the model is available as part of the replication code.
+
+The model was fitted with a mean-field variational approximation for computational efficiency.
+Posterior medians of $\turn_{jr}$ and $\supp_{jr}$ are plotted in Figure \ref{fig:alabama-ei}.
+These estimates broadly track with the findings of the voting rights expert retained in *Merrill*.
+
 # Latent Factor Ecological Inference Model for Boston Primary Elections {#app:lfei}
 
 ```{r boston-gen-pred, fig.width=6.5}
 #| fig.cap: |
-#|      Model predictions of general election vote shares and turnout, compared to actual general election results.
+#|      Model predictions of general election vote shares and turnout, 
+#|      compared to actual general election results.
 #|      Red reference line indicates perfect agreement.
-#|      Actual and estimated results have Spearman correlations of 0.87 (vote share) and 0.84 (turnout rate).
+#|      Actual and estimated results have Spearman correlations of 
+#|      0.87 (vote share) and 0.84 (turnout rate).
 include_graphics("figures/boston_gen_pred.pdf")
 ```
