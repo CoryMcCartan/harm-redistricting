@@ -3,7 +3,7 @@ library(posterior)
 library(tidybayes)
 
 fit_ei = function(tbls, recompile=FALSE, algorithm="vb",
-                  chains=4, warmup=1000, iter=500, adapt_delta=0.8, init=0, ...) {
+                  chains=4, warmup=1000, iter=500, adapt_delta=0.8, init=0, refresh=100, ...) {
     stan_d = list(
         N = nrow(tbls$votes),
         L = ncol(tbls$votes),
@@ -29,7 +29,7 @@ fit_ei = function(tbls, recompile=FALSE, algorithm="vb",
     if (algorithm == "hmc") {
         fit = sm$sample(data=stan_d, chains=chains,
                         iter_warmup=warmup, iter_sampling=iter,
-                        init=init, refresh=100, adapt_delta=adapt_delta,...)
+                        init=init, refresh=refresh, adapt_delta=adapt_delta,...)
     } else if (algorithm == "vb") {
         fit = sm$variational(data=stan_d, algorithm="meanfield", init=init, ...)
     } else {

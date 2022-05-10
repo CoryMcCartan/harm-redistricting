@@ -703,7 +703,7 @@ Our main parameters of interest are $\turn_{jr}$ and $\supp_{jr}$, the baseline 
 
 ```{r alabama-ei, fig.width=6.5}
 #| fig.cap: |
-#|      EI model estimates of precinct-level turnout by race (a) 
+#|      Model estimates of precinct-level turnout by race (a) 
 #|      and Democratic support by race (b).
 #|      Points are sized in proportion to their voting-age population, 
 #|      and colored according to their Black share of the voting-age population.
