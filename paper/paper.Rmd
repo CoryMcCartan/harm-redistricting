@@ -517,7 +517,7 @@ Normalizing by group sizes, the expected harm for a Black Democrat is 0.23, for 
 Thus while the challenged plan differentially harms both Black voters and Democratic voters, it *especially* harms Black Democrats, who have a differential harm of 0.149 versus White Democrats and a differential harm of 0.207 versus Black Republicans.
 
 These calculations are made by aggregating harm within racial groups at the precinct level, and so they automatically take into account individual voter preferences.
-Unlike in a traditional EI/*Gingles* analysis, there is no need to identify a particular party as the statewide "choice" of the minority racial group, nor is there any cause for concern because of lower racial voting polarization in urban areas.
+Unlike in a traditional ecological/*Gingles* analysis, there is no need to identify a particular party as the statewide "choice" of the minority racial group, nor is there any cause for concern because of lower racial voting polarization in urban areas.
 The harm measure treats voters of every race and location equally, recording just their inability to elect their preferred candidate.
 Only once we have aggregated these individual harms does it become apparent that the challenged plan concentrates the harm among certain groups of voters.
 
@@ -528,7 +528,7 @@ However, the same framework can be fruitfully applied to more complex settings, 
 
 ```{r boston-map, fig.width=6.75, fig.height=3.375}
 #| fig.cap: |
-#|      Racial composition of the city of Boston (left),
+#|      Racial composition of the city of Boston (left)
 #|      and 2010 city coucil districts (right).
 #|      Neighborhood boundaries are overlaid in black on the
 #|      left map and in white on the right map.
@@ -696,7 +696,8 @@ Here, we rely on the fact that even across election shifts, the relative balance
 
 To estimate voter preferences by race and precinct in Alabama, we use 2020 U.S.
 Census demographic data and election returns from seven recent statewide elections: the 2016 races for president and U.S. senator, the 2018 races for governor, attorney general, and secretary of state, and the 2020 races for president and U.S. senator.
-Our ecological inference model used to produce the estimates is broadly similar to that of @king1997solution. However, it jointly estimates both turnout and Democratic support across all seven elections, rather than estimating each quantity separately for each election.
+Our ecological inference model used to produce the estimates is broadly similar to that of @king1997solution.
+However, it jointly estimates both turnout and Democratic support across all seven elections, rather than estimating each quantity separately for each election.
 
 Adapting the notation from the previous appendix, for precinct $j$ in election $v$, let $\vap_j$ denote the voting-age population, $\votes_{jv}$ denote the total number of votes cast for major-party candidates, $s_{jv}$ denote the Democratic vote share, and $p_{jr}$ denote the fraction of the voting-age population belonging to racial group $r$, where here $r\in\{\text{White},\text{Black},\text{Other}\}$.
 Our main parameters of interest are $\turn_{jr}$ and $\supp_{jr}$, the baseline turnout and Democratic support rate by race in the precinct.
@@ -711,8 +712,7 @@ Our main parameters of interest are $\turn_{jr}$ and $\supp_{jr}$, the baseline 
 include_graphics("figures/al_ei.pdf")
 ```
 
-We model the observed vote counts as
-\begin{align*}
+We model the observed vote counts as \begin{align*}
     \votes_{jv} \mid \turn_{jr}, \beta^{(t)}_v
         &\sim \Binlog\qty(\vap_j, \logit(\turn_j^\top\vb p_j) + \beta^{(t)}_v) \\
     \logit(\turn_j) \mid \mu^{(t)}, \Sigma^{(t)}
@@ -722,10 +722,8 @@ We model the observed vote counts as
         \supp_j^\top \frac{\turn_j\circ\vb p_j}{\turn_j^\top\vb p_j}) + \beta^{(s)}_v) \\
     \logit(\supp_j) \mid \mu^{(s)}, \Sigma^{(s)}
         &\sim \Norm(\mu^{(s)}, \Sigma^{(t)}),
-\end{align*}
-where the $\vb*\beta^{(t)}$ and $\vb*\beta^{(s)}$ model election-specific logit shifts, $\Binlog$ indicates the Binomial distribution with the probability paramter specified on the logit scale, and $\circ$ indicates the elementwise (Hadamard) product.
-We give $\beta^{(t)}$ an i.i.d. $\Norm(0, 0.6^2)$ prior,and $\beta^{(s)}$ an i.i.d. $\Norm(0, 0.4^2)$ prior,
-and $\mu^{(t)}$ an i.i.d. $\Norm(0, 1.5^2)$ prior, and $\mu^{(s)}$ an i.i.d. $\Norm(0, 1.0^2)$ prior.
+\end{align*} where the $\vb*\beta^{(t)}$ and $\vb*\beta^{(s)}$ model election-specific logit shifts, $\Binlog$ indicates the Binomial distribution with the probability paramter specified on the logit scale, and $\circ$ indicates the elementwise (Hadamard) product.
+We give $\beta^{(t)}$ an i.i.d. $\Norm(0, 0.6^2)$ prior,and $\beta^{(s)}$ an i.i.d. $\Norm(0, 0.4^2)$ prior, and $\mu^{(t)}$ an i.i.d. $\Norm(0, 1.5^2)$ prior, and $\mu^{(s)}$ an i.i.d. $\Norm(0, 1.0^2)$ prior.
 We set priors independently on the variance and correlation components of $\Sigma^{(t)}$ and $\Sigma^{(s)}$; the former received $\Gam(1.5, 1.5/0.5)$ and $\Gam(1.5, 1.5/0.25)$ priors for turnout and support, while the latter received uniform priors (i.e., LKJ priors with shape parameter 1).
 Several reparametrizations were made for computational efficiency; the full Stan code for the model is available as part of the replication code.
 
