@@ -483,8 +483,8 @@ These plans form a natural counterfactual $\tilde Q$ to use in analyzing the cha
 [^8]: Relevant court filings are available at <https://redistricting.lls.edu/case/milligan-v-merrill/>.
 
 This analysis is slightly more complicated than in New Jersey, since in order to understand the racial distribution of harm we need to estimate voting preferences by race.
-To do so, we use an ecological inference model which jointly estimates turnout and vote choice by race and precinct.
-The model and its outputs are detailed in Appendix \ref{app:alei}.
+As is custom in VRA analyses, we use an ecological inference model.
+The model, detailed in Appendix \ref{app:alei}, jointly estimates turnout and vote choice by race and precinct across seven statewide elections.
 Unsurprisingly, voting is highly racially polarized outside of the cities of Birmingham and Montgomery.
 
 With these estimates in hand, we can calculate the average number of voters harmed in each precinct and racial group.
@@ -538,7 +538,7 @@ include_graphics("figures/boston_map.pdf")
 The city of Boston is governed by a mayor and a nonpartisan 13-member city council.
 Nine of the councillors are elected from contiguous city council districts, and the remaining four councillors are elected at-large, with all councillors serving two-year terms.
 Council district boundaries are redrawn every ten years following the decennial census, and must be equipopulous, be compact, and preserve neighborhood and community boundaries.[^9]
-This section will study the extent to which the mixed at-large and district council system harms voters in comparison to a fully district-based system (as was the case before 1909 and from 1924-1951), either overall or differentially by racial group.
+This section will study the extent to which the current district boundaries differentially harm voters of different racial groups, in comparison to a completely race-neutral districting process.
 Figure \ref{fig:boston-map} shows the racial composition of the city as well as the boundaries of the 2010 city council districts and the city's official neighborhoods.
 
 [^9]: City of Boston charter.
@@ -546,11 +546,11 @@ Figure \ref{fig:boston-map} shows the racial composition of the city as well as 
 
 ## Approach
 
-To apply our proposed framework to study the council system and and its district boundaries, we need to be able to predict individual voting preferences under counterfactual districting plans and systems.
-This is more difficult than in our study of New Jersey, for two reasons.
+To apply our proposed framework to study the council district boundaries, we need to be able to predict individual voting preferences under counterfactual districting plans.
+This is more difficult than in both New Jersey and Alabama, for two reasons.
 First, the city council is officially nonpartisan and city politics are dominated by the Democratic Party, so voting preferences are more complex than a simple partisan preference.
 To estimate election outcomes, we will need some way of mapping observed support for particular candidates in one election onto counterfactual support for a hypothetical candidate in another election.
-Second, we aim to examine the racial impact of the district system, and thus need to estimate these voting preferences by race.
+Second, as in Alabama, we aim to examine the racial impact of the district system, and thus need to estimate these voting preferences by race.
 Even if we could, for instance, divide candidates into a more "liberal" and a more "conservative" group, the vote counts for each group by precinct will not alone tell us how different racial groups voted.
 
 ```{r boston-factors, fig.cap="", fig.width=7, fig.height=3.5}
@@ -571,10 +571,32 @@ Like all ecological inference models, ours rests on several unverifiable assumpt
 The latent factor component imposes additional assumptions about the structure of voting in Boston elections.
 As Appendix \ref{app:lfei} discusses, these assumptions are almost certainly not strictly met.
 Yet we believe that the model is a useful simplification of reality that captures the major electoral dynamics that are relevant to our question of interest.
-For example, using the estimated latent positions and support levels for Michelle Wu and Annissa Essaibi-George, the two mayoral candidates that advanced to the general election, we were able to predict the precinct-level general election turnout and vote shares with considerable accuracy (see Figure \ref{fig:boston-gen-pred} in Appendix \ref{app:lfei}).
+For example, using the estimated latent positions and support levels for Michelle Wu and Annissa Essaibi-George, the two mayoral candidates that advanced to the general election, we were able to predict the precinct-level general election turnout and vote shares with considerable accuracy (Spearman correlation $\approx 0.85$, see Figure \ref{fig:boston-gen-pred} in Appendix \ref{app:lfei}).
 We stress that the latent factor ecological inference model is not necessary for this kind of analysis; local survey data that collected ideological preferences and racial information would also suffice.
 
 ## Results
+
+As Figure \ref{fig:boston-factors} shows, primary voting preferences in Boston are polarized by race, especially for the second latent dimension.
+But there is significant variation within racial groups as well, such as the split between more conservative White voters in South Boston and more liberal White voters in Jamaica Plain (the first latent dimension appears to capture a progressive-moderate divide).
+It is certainly possible, then that the particular way districts are drawn will have an effect on the ability of different racial groups to elect their candidate of choice.
+
+We consider two different scenarios: one in which all of the council races are contested along the first latent dimension, and one in which the races are contested along the second.
+Specifically, we draw voter choices from the posterior predictive distribution of our model, setting the candidates' loadings to --1 and 1 on the chosen dimension and 0 on the other dimension.
+We draw the overall level of support from a $\Beta(15, 15)$ distribution, which means that we will study election scenarios where the overall vote share for each bloc of candidates ranges from roughly 30 to 70 percent.
+The posterior predictive draws yield counts of voters for each candidate in each precinct by race, from which we can calculate winners at the district level, under any configuration of districts.
+
+We sample 2,000 redistricting plans across two independent runs of the SMC algorithm of @mccartan2020, setting constraints to favor compact plans that respect neighborhood boundaries.
+Since we do not provide any racial information to the algorithm, this set of plans forms a good approximation of a race-neutral districting process.
+
+For the first scenario, where council races are contested along the ideological axis, we find that the enacted plan is quite fair, differentially harming White voters at a rate of only 0.0079 compared to the race-neutral baseline.
+For the second scenario, where the contests are oriented along the racial dimension, we estimate that the enacted plan differentially harms White voters at a rate of 0.041, compared to the race-neutral baseline.
+
+We can also flip the setup and compute harm by averaging over the simulated plans and using the enacted plan as a counterfactual.
+This will produce a different answer, since harm is not symmetric between the study plan and the counterfactual.
+Along the first dimension, a race-neutral baseline would differentially harm Black voters at a rate of 0.031 compared to the enacted plan, while along the second dimension, the differential harm would be 0.018.
+
+Taken together, these findings suggest that despite the dominance of the Democratic party in city politics, and the shared preferences between certain groups of Black and White voters, race-aware districting still serves an important role in empowering Black voters across the city to elect their chosen candidates.
+Further study could focus on the racial impact of the four at-large members in comparison to a system with 13 districts and no at-large members.
 
 # Discussion {#sec:discussion}
 
