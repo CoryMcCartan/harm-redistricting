@@ -19,7 +19,10 @@ d_votes = al_map %>%
            elec = fct_inorder(elec))
 tbls = make_tables_alabama(d_votes, al_map)
 
-fit = fit_ei(tbls, algorithm="vb", init=0, eta=0.1, adapt_engaged=F, tol_rel_obj=0.0002)
+prior = list(loc=qlogis(c(0.18, 0.90, 0.35)), # Kuriwaki et al. RPV estimates
+             scale=c(0.04, 0.04, 0.2))
+fit = fit_ei(tbls, algorithm="vb", prior=prior,
+             init=0, eta=0.15, adapt_engaged=F, tol_rel_obj=0.0002)
 
 #  EI outputs--------
 cat("Turnout correlation matrix:\n")

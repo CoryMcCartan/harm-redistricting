@@ -12,6 +12,9 @@ data {
     array[N, L] int<lower=0> votes; // total votes
     array[N, L] int<lower=0> dem_votes; // dem votes by prec.
     array[N] vector<lower=0, upper=1>[R] vap_race; // share of VAP for each race
+
+    vector[R] prior_supp_loc;
+    vector<lower=0>[R] prior_supp_scale;
 }
 
 transformed data {
@@ -36,7 +39,7 @@ parameters {
     row_vector<lower=0>[R] sigma_t;
 
     vector[L] support_elec; // election shift
-    vector<lower=-5, upper=5>[R] support_overall; // overall turnout by race
+    vector<lower=-5, upper=5>[R] support_overall; // overall dem. support by race
     array[N] vector[R] support_z; // dem. support by race for each election
     // Cholesky parametrization of turnout correlation between races within precinct
     cholesky_factor_corr[R] L_s;
@@ -79,8 +82,8 @@ model {
 
     // priors ----------------------------------------------
     // implied priors are uniform
-    // L_s ~ lkj_corr_cholesky(1.0);
     // L_t ~ lkj_corr_cholesky(1.0);
+    // L_s ~ lkj_corr_cholesky(1.0);
     sigma_s ~ gamma(1.5, 1.5/0.5);
     sigma_t ~ gamma(1.5, 1.5/0.25);
     for (i in 1:N) {
@@ -89,6 +92,6 @@ model {
     }
     turnout_overall ~ normal(0, 1.5);
     turnout_elec ~ normal(0, 0.6);
-    support_overall ~ normal(0, 1.0);
+    support_overall ~ normal(prior_supp_loc, prior_supp_scale);
     support_elec ~ normal(0, 0.4);
 }

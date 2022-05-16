@@ -2,17 +2,25 @@ library(cmdstanr)
 library(posterior)
 library(tidybayes)
 
-fit_ei = function(tbls, recompile=FALSE, algorithm="vb",
+fit_ei = function(tbls, recompile=FALSE, algorithm="vb", prior=NULL,
                   chains=4, warmup=1000, iter=500, adapt_delta=0.8, init=0, refresh=100, ...) {
+    n_race =  ncol(tbls$race)
+    if (is.null(prior)) {
+        prior = list(loc = rep(0, n_race), scale = rep(1, n_race))
+    }
+
     stan_d = list(
         N = nrow(tbls$votes),
         L = ncol(tbls$votes),
-        R = ncol(tbls$race),
+        R = n_race,
 
         vap = tbls$vap,
         votes = tbls$votes,
         dem_votes = tbls$dem_votes,
-        vap_race = tbls$race
+        vap_race = tbls$race,
+
+        prior_supp_loc=prior$loc,
+        prior_supp_scale=prior$scale
     )
 
     path_model = here("R/ei.stan")
@@ -32,6 +40,8 @@ fit_ei = function(tbls, recompile=FALSE, algorithm="vb",
                         init=init, refresh=refresh, adapt_delta=adapt_delta,...)
     } else if (algorithm == "vb") {
         fit = sm$variational(data=stan_d, algorithm="meanfield", init=init, ...)
+    } else if (algorithm == "optim") {
+        fit = sm$optimize(data=stan_d, init=init, ...)
     } else {
         stop("Algorithm should be `hmc` or `vb`.")
     }
