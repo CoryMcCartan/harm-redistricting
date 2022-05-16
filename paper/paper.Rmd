@@ -755,12 +755,65 @@ These estimates broadly track with the findings of the voting rights expert reta
 
 # Latent Factor Ecological Inference Model for Boston Primary Elections {#app:lfei}
 
+To estimate voter preferences by race and precinct in Boston, we use 2020 U.S.
+Census demographic data and election returns from the March 2020 presidential primary and the September 2021 mayoral preliminary elections.
+Our ecological inference model used to produce the estimates expands on the model in Appendix \ref{app:alei}, jointly estimating both turnout and vote choice in the two elections.
+However, it estimates voter preferences in a two-dimensional latent space and also estimates candidates' positions in this space.
+
+Continuing the notation from above, for precinct $j$ in election $v$, let $\vap_j$ denote the voting-age population, $\votes_{jv}$ denote the total number of votes cast for major-party candidates, $s_{jk}$ denote the vote share for candidate $k$ (who implicitly belongs to a particular election $v_k$), and $p_{jr}$ denote the fraction of the voting-age population belonging to racial group $r$, where here $r\in\{\text{White},\text{Black},\text{Hispanic},\text{Other}\}$ ("Other" consisting primarily of Asian voters in Boston).
+Our main parameters of interest are $\turn_{jr}$, the baseline turnout by race and precinct, $\pref_{jqr}$, the preferences in latent dimension $q$ by race and precinct, and $L_{kq}$, the loading of each candidate on latent dimension $q$.
+Here $q\in\{1,2\}$, since preliminary analyses found no improved fit when expanding to three dimensions.
+
 ```{r boston-gen-pred, fig.width=6.5}
 #| fig.cap: |
 #|      Model predictions of general election vote shares and turnout, 
 #|      compared to actual general election results.
 #|      Red reference line indicates perfect agreement.
-#|      Actual and estimated results have Spearman correlations of 
-#|      0.87 (vote share) and 0.84 (turnout rate).
 include_graphics("figures/boston_gen_pred.pdf")
 ```
+
+We model the observed vote counts as \begin{align*}
+    \votes_{jv} \mid \turn_{jr}, \beta^{(t)}_v
+        &\sim \Binlog\qty(\vap_j, \logit(\turn_j^\top\vb p_j) + \beta^{(t)}_v) \\
+    \logit(\turn_j) \mid \mu^{(t)}, \Sigma^{(t)}
+        &\sim \Norm(\mu^{(t)}, \Sigma^{(t)}) \\
+    \logit(s_{jk}) \mid p_{jk}, \eps &\sim \Norm(p_{jk}, \frac{\eps}{1+\votes_{jv_k}}) \\ 
+    p_{jk} &= \beta^{(s)}_k + \alpha_k
+        \pref_{j}^\top(\turn_j\circ \vb p_j)\mathrm{diag}(\vb*\gamma)\vb L_k  \\
+    \pref_{jq} \mid \Sigma^{(p)} &\sim \Norm(0, \Sigma^{(p)}).
+\end{align*} Note that $\pref_j$ is a $q\times r$ matrix of preferences by race and dimension within precinct $j$, and $\turn_j\circ \vb p_j$ is a vector of the percentages of the total VAP in the precinct that belongs to voters of each race, so $\pref_{j}^\top(\turn_j\circ \vb p_j)$ is a vector with $q$ elements containing the preferences by dimension of the precinct's voters, after marginalizing out race.
+The matrix $\mathrm{diag}(\vb*\gamma)$ captures the relative scale or importance of each dimension to the overall outcomes.
+
+Because of the latent factor model, we do not require that vote shares by race and precinct, when tallied by race, necessary equal the observed vote share in the precinct.
+As a result we choose to model the vote shares directly, which is more computationally efficient.
+Since these vote shares come from Binomial observations, they have variance inversely proportional to the total number of votes in the precinct (the additional 1 is to avoid divide-by-zero errors).
+The multiplicative factor $\eps$ captures the additional variance that isn't accounted for by the latent factors.
+The $\vb*\alpha$ parameters are "fudge factors" that adjust the scale of the deviations from each candidate's average support.
+
+We give $\beta^{(t)}$ an i.i.d. $\Norm(0, 0.5^2)$ prior,and $\beta^{(s)}$ an i.i.d. $\Norm(0, 4.0^2)$ prior, and $\logit(\mu^{(t)})$ an i.i.d. $\Beta(10, 30)$ prior.
+We set priors independently on the variance and correlation components of $\Sigma^{(t)}$ and $\Sigma^{(p)}$; the former has $\Gam(1.5, 1.5/0.25)$ and $\Gam(1.5, 1.5/1.0)$ priors for turnout and support, while the latter have LKJ priors with shape parameters 4.0 and 20.0.
+A larger LKJ shape parameter places more weight on correlation matrices closer to diagonal, i.e., it regularizes away from high correlations.
+The scale parameters $\vb*\gamma$ have i.i.d. $\Gam(1.5, 1.5/4.0)$ priors, the fudge factors $\vb*\alpha$ have i.i.d. $\Gam(5.0, 5.0)$ priors, and $\eps$ has an $\Expo(1/4.0)$ prior.
+Overall, these priors weakly identify the location and scale of the parameters.
+Several reparametrizations were made for computational efficiency; the full Stan code for the model is available as part of the replication code.
+
+Like all probabilistic factor models, ours is unidentifiable due to the rotation, location, and scale invariance of the factors in the likelihood.
+To identify the location and scale, we place $\Norm(0,1)$ priors on most components of $\vb L$.
+To identify the rotation, we place more informative priors on the loadings of certain candidates.
+This was accomplished through somewhat of an interactive process, where a preliminary principal components decomposition of the precinct vote shares helped suggest the latent factors that might be found by the model.
+We chose to make align the first dimension with the Sanders-Biden axis, and chose to make the second dimension roughly orthogonal along the Janey-Buttigieg axis.
+This translated to a prior of $\Norm((-1, 0), (0.1^2, 0.25^2))$ for Sanders,
+$\Norm((1, 0), (1.0^2, 0.5^2))$ for Biden, and $\Norm((-0.25, -1), (0.5^2, 2^2))$ for Janey.
+We additionally set the prior correlation between Sanders' and Biden's loadings to be $(-0.5, 0.8)$.
+
+The estimated loading matrix $\vb L$ is visualized on the left of Figure \ref{fig:boston-factors}, and $\pref$ is visualized for Black and White voters on the right.
+
+To test the suitability of the model for representing the outcomes of hypothetical future elections, we use the model fitted to the primary elections to predict the outcome of the mayoral general election in November 2021.
+Michelle Wu and Annissa Essaibi-George advanced to the general from the preliminary election.
+We fix the model's loading matrix $\vb L$ to the the posterior mean of their estimated loadings.
+We draw $s_{jk}$ from a $\Beta(20\bar s, 20(1-\bar s))$ distribution, where $\bar s$ is each candidate's share of the two-candidate vote from the preliminary election (59.7% Wu -- 40.3 Essaibi George).
+
+The model's predictions (posterior medians) for the turnout and vote share in each precinct are shown in Figure \ref{fig:boston-gen-pred}.
+Considering the differences between a primary and general election, and the additional campaign time elapsed between the elections, the predictions are remarkably accurate.
+The predicted turnout has a Spearman correlation of 0.84 with the actual turnout, and the predicted and actual vote shares have a correlation 0.87.
+The turnout and support levels are also in relatively close agreement. 
