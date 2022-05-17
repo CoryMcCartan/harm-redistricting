@@ -139,7 +139,7 @@ m_grps = with(al_map, matrix(c(
     `rownames<-`(c("White", "Black", "Other")) %>%
     `colnames<-`(c("Dem.", "Rep."))
 print(round(m_harm, 1))
-print(round(m_harm/m_grps, 3))
+print(round(m_harm/m_grps, 4))
 }
 
 # plots out
