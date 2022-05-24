@@ -47,12 +47,13 @@ opts_chunk$set(echo=FALSE, message=FALSE, warning=FALSE,
 # Introduction
 
 For as long as there have been district-based electoral systems, groups, individuals, and parties have manipulated them for political gain.
-Partisan gerrymandering, whether in the form of rotten boroughs or Elbridge Gerry's salamander-shaped district [cite], is perhaps the most consistently visible manifestation of this tendency.
-The academic study of partisan gerrymandering has largely centered on how electoral systems treat political parties, as captured in the *seats-votes curve* or notions of *partisan symmetry* [@katz2020, need more].
-In the United States, many states have historically used racial gerrymandering to maintain White political supremacy [cite].
-The Voting Rights Act of 1965 (VRA) provided a framework for legal challenges to racial gerrymanders that has also shaped the academic literature, which is characterized by a focus on identifying the voting preferences of racial groups and observing the extent to which these are realized or frustrated through district boundaries and other features of the electoral system [cites].
-At the local level, where most redistricting occurs, partisan dynamics are not always as salient, and the manipulation of the electoral system may be more subtle or may favor a narrower or less well-defined group [cite].
-Local redistricting has been less extensively studied, in part for this reason and in part because of data limitations [but see \_\_\_\_].
+Partisan gerrymandering, whether in the form of rotten boroughs or Elbridge Gerry's salamander-shaped district [@griffith1907rise, pp. 72--73], is perhaps the most consistently visible manifestation of this tendency.
+The academic study of partisan gerrymandering has largely centered on how electoral systems treat political parties, as captured in the *seats-votes curve* or notions of *partisan symmetry* [@tufte1973pb; @grofman1983measures; @king1987democratic; @king1989representation; @gelman1994unified; @thomas2013estimating; @katz2020].
+Other types of gerrymandering exist as well.
+In the United States, many states have historically used racial gerrymandering to maintain White political supremacy [@gilliland1969racial].
+The Voting Rights Act of 1965 (VRA) provided a framework for legal challenges to racial gerrymanders that has also shaped the academic literature, which is characterized by a focus on identifying the voting preferences of racial groups and observing the extent to which these are realized or frustrated through district boundaries and other features of the electoral system [@oloughlin1982id; @grofman1991identifying; @king1997solution; @greiner2006ecological].
+At the local level, where most redistricting occurs, partisan dynamics are not always as salient, and the manipulation of the electoral system may be more subtle or may favor a narrower or less well-defined group [@cain2002mapmaking; @halberstam2012process].
+Local redistricting has been less extensively studied, in part for this reason and in part because of data limitations [but see @siegel2013educational; @vargas2021racial].
 
 No matter the source or context, all of these cases involve the concentration or dilution of voting power to favor or disfavor a particular group.
 This paper proposes a new framework of *individual and differential harm* for the unified study of all forms of gerrymandering by way of measuring this concentration and dilution.
@@ -72,7 +73,7 @@ Section \ref{sec:motivation} illustrates this with three simple examples, and th
 In Section \ref{sec:estimating}, we discuss how to estimate these measures from observed election results.
 
 This framework has important similarities with the common-law approach to voting rights litigation.
-To proceed with a legal challenge to an alleged gerrymander, a voter must demonstrate that their individual right to vote has been harmed by the enacted district boundaries [@1964reynolds; @1962baker]. This requires proof that *but for* the alleged gerrymander, the voter would have been more likely to elect their chosen candidates [@2004vieth; @2018league; @2019lewis].
+To proceed with a legal challenge to an alleged gerrymander, a voter must demonstrate that their individual right to vote has been harmed by the enacted district boundaries [@1964reynolds; @1962baker]. This requires proof that *but for* the alleged gerrymander, the voter would have been more likely to elect their chosen candidate [@2004vieth; @2018league; @2019lewis].
 A more detailed discussion of the connections between the proposed framework existing practices for analyzing racial and partisan gerrymandering may be found in Section \ref{sec:connections}.
 
 Harm and differential harm are more than a useful conceptual unification---they are practically useful in a wide variety of redistricting analyses, including partisan gerrymandering of New Jersey congressional districts (Section \ref{sec:nj}), voting rights litigation for Alabama congressional districts (Section \ref{sec:alabama}), and racial impacts of district boundaries on Boston City Council primary elections (Section \ref{sec:boston}).
@@ -447,7 +448,6 @@ The most consistent correlation is that between our estimate of differential par
 We next apply our proposed framework to @2022merrill, ongoing VRA litigation in which civil rights groups have argued that the existing Black majority district packs Black voters, and so a second Black opportunity-to-elect district should be drawn.[^8]
 
 [^8]: Relevant court filings are available at <https://redistricting.lls.edu/case/milligan-v-merrill/>.
-    One of the authors (Kenny) provided research support to an expert witness for the plaintiffs.
 
 As discussed in Section \ref{subsec:racial}, plaintiffs had to satisfy the first *Gingles* criterion by submitting one or more remedial maps demonstrating that a new Black opportunity-to-elect district could be drawn while meeting all other redistricting requirements.
 In *Merrill,* the plaintiff's expert, Moon Duchin, submitted four such remedial plans, one of which is shown in Figure \ref{fig:al-maps}(e).
@@ -720,7 +720,7 @@ Here, we rely on the fact that even across election shifts, the relative balance
 # Correlation Between Partisan Gerrymandering Metrics Across Multiple States {#app:corr}
 
 The table below reports the correlation between differential harm and the partisan gerrymandering metrics used in Section \ref{sec:nj} for \_\_ states which cover a wide range of partisan leans and number of seats.
-The simulations come from [alarm cite].
+The simulations are provided by the 50-State Simulation Project [@mccartan2022fiftystates].
 
 # Ecological Inference Model for Alabama {#app:alei}
 
