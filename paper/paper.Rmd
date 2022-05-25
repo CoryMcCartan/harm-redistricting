@@ -73,7 +73,7 @@ Section \ref{sec:motivation} illustrates this with three simple examples, and th
 In Section \ref{sec:estimating}, we discuss how to estimate these measures from observed election results.
 
 This framework has important similarities with the common-law approach to voting rights litigation.
-To proceed with a legal challenge to an alleged gerrymander, a voter must demonstrate that their individual right to vote has been harmed by the enacted district boundaries [@1964reynolds; @1962baker]. This requires proof that *but for* the alleged gerrymander, the voter would have been more likely to elect their chosen candidate [@2004vieth; @2018league; @2019lewis].
+To proceed with a legal challenge to an alleged gerrymander, a voter must demonstrate that their individual right to vote has been harmed by the enacted district boundaries [@1964reynolds; @1962baker; @issakarl98]. This requires proof that *but for* the alleged gerrymander, the voter would have been more likely to elect their chosen candidate [@2004vieth; @2018league; @2019lewis].
 A more detailed discussion of the connections between the proposed framework existing practices for analyzing racial and partisan gerrymandering may be found in Section \ref{sec:connections}.
 
 Harm and differential harm are more than a useful conceptual unification---they are practically useful in a wide variety of redistricting analyses, including partisan gerrymandering of New Jersey congressional districts (Section \ref{sec:nj}), voting rights litigation for Alabama congressional districts (Section \ref{sec:alabama}), and racial impacts of district boundaries on Boston City Council primary elections (Section \ref{sec:boston}).
@@ -135,7 +135,7 @@ Using plan (b) as a counterfactual, we can see that rural Republicans in the eas
 Republicans in the city and in the southwest are unharmed, as are all Democratic voters, since they are represented by the same party under both plans.
 Figure \ref{fig:harm-mininois}, Panel C plots the number of voters harmed in each precinct.
 
-Measuring the harm of the Democratic gerrymander required comparing it to a fair counterfactual plan.
+Measuring the harm of the Democratic gerrymander required comparing it to a *fair* counterfactual plan. *ck: either delete or italicize fair?*
 The choice of counterfactual might seem hopelessly subjective.
 We discuss in Section \ref{sec:estimating} principled ways to define counterfactuals, but for now we hope the value in measuring harm through counterfactuals is clear even if the operationalization is not.
 
@@ -172,7 +172,7 @@ In other words, under the Democratic gerrymander, the average Republican voter i
 
 # Individual and Differential Harm {#sec:indiv-harm}
 
-This section will formalize and generalize the concepts in Section \ref{sec:motivation}, beginning with some notation.
+We formalize and generalize the concepts in Section \ref{sec:motivation}, beginning with some notation.
 Let $\Voters$ be the set of individuals, or voters, in the region and time period under consideration, who vote to select a candidate to represent each of a set of districts, indexed by $\Distrs$.
 
 Voters vote in elections, each of which produces a specific outcome $v$ from the set $\Elecs$ of all possible election outcomes.
@@ -360,13 +360,12 @@ However, unlike a direct measure of seats, differential harm is shifted so that 
 
 ## Racial Gerrymandering {#subsec:racial}
 
-**CHRIS: review please.**
-
-The study of racial gerrymandering is considerably more complicated than that of partisan gerrymandering, due to the difficulty of understanding racial voting preferences when individual votes are secret, and as such no simple formulas exist to measure the racial impacts of a districting plan.
+The study of racial gerrymandering and vote dilution is considerably more complicated than that of partisan gerrymandering, due to the difficulty of understanding racial voting preferences when individual votes are secret.
+As such, no simple formulas exist to measure the precise racial impacts of a districting plan.
 Indeed, much of the academic literature has focused on the statistical challenge of estimating vote preferences and turnout by race [@king1997solution; @greiner2006ecological; @imai2016improving].
 
-The modern analysis of racial gerrymandering is inseparable from the Voting Rights Act of 1965 (VRA).
-The VRA enables citizens to challenge districting plans in court for diluting the voting power of racial minorities.
+The modern analysis of racial gerrymandering and vote diluation are inseparable from the Voting Rights Act of 1965 (VRA) and the 14th Amendment.
+Section 2 of the VRA enables citizens to challenge districting plans in court for diluting the voting power of racial minorities.
 Under the current framework established by @1986gingles, to do so, plaintiffs must prove that (a) the minority group is large and geographically compact enough to form a majority in some hypothetical district, (b) the minority group is "politically cohesive," and (c) the majority group can and does vote to deny the minority group its choice of candidate [@hood2018legal] (the so-called *Gingles* criteria).
 Criteria (a) is generally proven through a single example districting plan, while criteria (b) and (c) are shown using the statistical estimates of vote preferences and turnout by race.
 
@@ -432,6 +431,7 @@ There is also disagreement between the measures about the natural bias of distri
 Which is correct?
 It depends on what one means by "natural bias," though we submit that differential harm is one good way to measure it.
 Democrats do win 8.47 seats on average across the simulations, which is more than the 6.79 seats that would be expected under a completely proportional outcome.
+The key benefit here is that differential harm does not push for localized gerrymanders to overcome the geographic imbalance in partisanship.
 
 Both gerrymanders excessively harm the average voter, with the Democratic plan doing so at a moderately higher rate ($p=0.0002$ for the Democratic plan, $p=0.0004$ for the Republican plan).
 Notably, the plans which minimize total harm are also those which have near-zero differential partisan harm.
