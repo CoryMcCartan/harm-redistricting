@@ -6,7 +6,7 @@ authors:
       To whom correspondence should be addressed.
       The authors thank participants of the Harvard American Politics
       Research Workshop and Imai Research Group  for helpful comments and discussion.
-      Replication code and data are available at <https://github.com/CoryMcCartan/representation>.
+      Replication code and data are available at <https://github.com/CoryMcCartan/harm-redistricting>.
     department: Department of Statistics
     affiliation: Harvard University
     location: Cambridge, MA
