@@ -135,7 +135,7 @@ Using plan (b) as a counterfactual, we can see that rural Republicans in the eas
 Republicans in the city and in the southwest are unharmed, as are all Democratic voters, since they are represented by the same party under both plans.
 Figure \ref{fig:harm-mininois}, Panel C plots the number of voters harmed in each precinct.
 
-Measuring the harm of the Democratic gerrymander required comparing it to a *fair* counterfactual plan. *ck: either delete or italicize fair?*
+Measuring the harm of the Democratic gerrymander required comparing it to a neutral counterfactual plan.
 The choice of counterfactual might seem hopelessly subjective.
 We discuss in Section \ref{sec:estimating} principled ways to define counterfactuals, but for now we hope the value in measuring harm through counterfactuals is clear even if the operationalization is not.
 
@@ -575,6 +575,38 @@ Further study could focus on the racial impact of the four at-large members in c
 
 # Discussion {#sec:discussion}
 
+
+We offer a new framework which unifies varied strains of thoughts from common law standing to the logic of counterfactuals for causal inference.
+By using counterfactual redistricting plans, we reset the focus on voters who could be better represented.
+This imbues the long-standing understandings of standing into the quantity of interest.
+Once measured, this appreciably increases the accuracy in identifying partisan gerrymanders---both in sign and in existence.
+It goes beyond partisanship, too, allowing us to identify differential harms in other groups, such as by race.
+Yet, by centering the framework on voters and vote choice, we can calculate the harm to individuals beyond their group memberships.
+For any estimated relationship between the voters and their vote choice, such as their within-party ideology, we can estimate the harm to each individual.
+
+This flexibility stems from the development of a novel standard of fairness in redistricting.
+Moving away from partisan symmetry, we look to the rate at which voters are deprived of their ability to elect their chosen candidate.
+We offer measurement strategies for this quantity, building largely out of advances in simulation methodologies.
+Taken together, this gives one unified and feasible framework for studying redistricting.
+
+Yet, this is surely not the end of the menagerie.
+Flexibility comes at a cost, the largest being the specification of a counterfactual.
+While a representative sample of legally feasible plans may be a reasonable starting point, full inclusion of discretionary choices can be subjective.
+When subjective choices are not represented consistently, the analysis may differ.
+Further, modelling future elections is simply hard.
+While incorporating model free estimates based on past results is common, there is no assurance in future validity.
+When we do write a model, we often rely on very powerful simplifying assumptions, such as uniform swing models.
+Computationally, bringing all of these parts together remains difficult, as you need the ability to compute everything for each counterfactual plan.
+Each of these limitations present opportunities for future study.
+
+Redistricting is difficult to study.
+At its core, it is a high dimensional problem that must balance normative, legal, and administrative concerns to allow citizens to exercise their rights.
+We don't believe that this framework fixes the dimensionality problem.
+But, we do offer a modular and flexible framework to allow researchers to study more dimensions together.
+This framework allows people to tinker with their basic assumptions and decompose how various pieces contribute to observed patterns and impacts.
+Researchers can and should push our framework further to apply it better to multi-candidate elections, more realistic models, and beyond district-based electoral systems.
+
+
 Discussion outline suggestion:
 
 -   Recap goal and advantages.
@@ -587,13 +619,14 @@ Discussion outline suggestion:
     Separation of target and estimation.
     Flexible framework.
     Application to local elections and places without strong parties.
-
+    
 -   Discuss limitations.
 
     -   Definition of counterfactual subjective & has a big impact.
         Some kind of bounds analysis where we look at best/worst case counterfactuals?
 
     -   Limited for multi-candidate settings where voters have ordinal preferences
+    Even given a model for two candidates, extending this approach to more complex elections, say multi-candidate election with ordinal preferences, is not yet done.
 
     -   Election models limited
 
