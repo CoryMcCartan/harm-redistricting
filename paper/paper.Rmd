@@ -435,8 +435,8 @@ Minimizing bias with other measures, however, could lead one astray: plans which
 Plans with zero partisan bias or mean-median score actually have higher-than-average harm and tend to differentially harm Republicans.
 
 New Jersey is just one state, and while some of the correlations between measures here are found in other states, some are not.
-Appendix \ref{app:corr} calculates these correlations across eight states.
-The most consistent correlation is that between our estimate of differential partisan harm and the expected number of seats won by each party, which is usually around 0.98, and always above 0.66 in the eight states we study.
+Appendix \ref{app:corr} shows these correlations across simulated plans in eight states.
+The most consistent correlation is between estimated differential partisan harm and the expected number of seats won by each party, which is usually around 0.98, and always above 0.66 in the eight states we study.
 
 # Application to Voting Rights Litigation in Alabama {#sec:alabama}
 
