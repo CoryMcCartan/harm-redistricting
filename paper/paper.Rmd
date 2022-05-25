@@ -668,7 +668,7 @@ For concreteness here and without loss of generality we will use the Democratic 
 Write-in or minor third-party candidates can be safely ignored, since the overall winner will be precisely the two-party vote winner.
 
 [^11]: When district boundaries split precincts, practitioners generally impute the returns in each component of the split precinct by population-weighted interpolation.
-    Population information comes from Census blocks, which are practically never split.
+    Population information comes from Census blocks, which when populated, are practically never split.
 
 ## Proportionate Uniform Shift Details
 
