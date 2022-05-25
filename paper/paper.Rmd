@@ -60,7 +60,7 @@ This paper proposes a new framework of *individual and differential harm* for th
 
 The harm framework combines two key ideas, which are motivated at greater length in Section \ref{sec:motivation}.
 First, we operate at the level of the individual voter, and examine whether each voter is represented by the candidate of their choice.
-Doing so both unifies our approach to gerrymandering across contexts and also reflects a core goal of representative democracy: that elected officials represent the preferences of the voting public [cites on why districts are good].
+Doing so both unifies our approach to gerrymandering across contexts and also reflects a core goal of representative democracy: that elected officials represent the preferences of the voting public to the greatest extent possible [@brunell2010; other cites on why districts are good. Federalist No. 52?].
 
 Second, the proposed framework moves beyond a single electoral system under study to also consider *counterfactual* electoral systems.
 Many factors influence the performance and qualities of an electoral system.
@@ -440,8 +440,8 @@ Minimizing bias with other measures, however, could lead one astray: plans which
 Plans with zero partisan bias or mean-median score actually have higher-than-average harm and tend to differentially harm Republicans.
 
 New Jersey is just one state, and while some of the correlations between measures here are found in other states, some are not.
-Appendix \ref{app:corr} calculates these correlations across a number of states.
-The most consistent correlation is that between our estimate of differential partisan harm and the expected number of seats won by each party, which is always above \_\_ in the states we study.
+Appendix \ref{app:corr} calculates these correlations across eight states.
+The most consistent correlation is that between our estimate of differential partisan harm and the expected number of seats won by each party, which is usually around 0.98, and always above 0.66 in the eight states we study.
 
 # Application to Voting Rights Litigation in Alabama {#sec:alabama}
 
@@ -623,7 +623,9 @@ Further work is needed to characterize how existing redistricting requirements a
 \vspace{1in}
 \appendix
 \renewcommand\thefigure{\thesection.\arabic{figure}}
+\renewcommand\thetable{\thesection.\arabic{table}}
 \setcounter{figure}{0}
+\setcounter{table}{0}
 ```
 # Computing Harm Measures from Precinct-level Election Data {#app:formulas}
 
@@ -719,8 +721,28 @@ Here, we rely on the fact that even across election shifts, the relative balance
 
 # Correlation Between Partisan Gerrymandering Metrics Across Multiple States {#app:corr}
 
-The table below reports the correlation between differential harm and the partisan gerrymandering metrics used in Section \ref{sec:nj} for \_\_ states which cover a wide range of partisan leans and number of seats.
+Table \ref{tab:corr} below reports the correlation between differential harm and the partisan gerrymandering metrics used in Section \ref{sec:nj} for eight states which cover a wide range of partisan leans and number of seats:
+
+- Utah, with 4 districts and a Democratic vote share baseline of 33%
+- Mississippi, with 4 districts and a Democratic vote share baseline of 43%
+- Iowa, with 4 districts and a Democratic vote share baseline of 46%
+- North Carolina, with 14 districts and a Democratic vote share baseline of 50%
+- Wisconsin, with 8 districts and a Democratic vote share baseline of 51%
+- New Jersey, with 12 districts and a Democratic vote share baseline of 57%
+- Massachusetts, with 9 districts and a Democratic vote share baseline of 61%
+- California, with 52 districts and a Democratic vote share baseline of 65%
+
+The correlations are calculated across 5,000 simulated plans for each state.
 The simulations are provided by the 50-State Simulation Project [@mccartan2022fiftystates].
+In particular, the New Jersey simulations are not the same as those used in Section \ref{sec:nj}.
+
+\begin{table}[h!]
+\centering
+\input{figures/corr_table.tex}
+\vspace{0.1in}
+\caption{Correlations between five gerrymandering metrics and partisan differential harm, for simulated districting plans from eight states. Declination is NA for Massachusetts since there are no Republican-leaning districts at baseline under any simulated plan.}
+\label{tab:corr}
+\end{table}
 
 # Ecological Inference Model for Alabama {#app:alei}
 
@@ -775,14 +797,6 @@ Continuing the notation from above, for precinct $j$ in election $v$, let $\vap_
 Our main parameters of interest are $\turn_{jr}$, the baseline turnout by race and precinct, $\pref_{jqr}$, the preferences in latent dimension $q$ by race and precinct, and $L_{kq}$, the loading of each candidate on latent dimension $q$.
 Here $q\in\{1,2\}$, since preliminary analyses found no improved fit when expanding to three dimensions.
 
-```{r boston-gen-pred, fig.width=6.5}
-#| fig.cap: |
-#|      Model predictions of general election vote shares and turnout, 
-#|      compared to actual general election results.
-#|      Red reference line indicates perfect agreement.
-include_graphics("figures/boston_gen_pred.pdf")
-```
-
 We model the observed turnout $\votes_{jv}$ and vote shares $s_{jk}$ as \begin{align*}
     \votes_{jv} \mid \turn_{jr}, \beta^{(t)}_v
         &\sim \Binlog\qty(\vap_j, \logit(\turn_j^\top\vb p_j) + \beta^{(t)}_v) \\
@@ -817,6 +831,14 @@ This translated to a prior of $\Norm((-1, 0), (0.1^2, 0.25^2))$ for Sanders, $\N
 We additionally set the prior correlation between Sanders' and Biden's loadings to be $(-0.5, 0.8)$.
 
 The estimated loading matrix $\vb L$ is visualized on the left of Figure \ref{fig:boston-factors}, and $\pref$ is visualized for Black and White voters on the right.
+
+```{r boston-gen-pred, fig.width=6.5}
+#| fig.cap: |
+#|      Model predictions of general election vote shares and turnout, 
+#|      compared to actual general election results.
+#|      Red reference line indicates perfect agreement.
+include_graphics("figures/boston_gen_pred.pdf")
+```
 
 Like all ecological inference models, this one makes several assumptions, verifiable and unverifiable.
 We assume no spatial correlation in residuals, when some is almost certainly present.
