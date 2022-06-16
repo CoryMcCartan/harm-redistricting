@@ -1,0 +1,13 @@
+- separate informal and formal definitions/explanation
+- it's a relative measure. often there is value in absolute measures. but have convinced him of the value of a standalone relative measure. Make this distinction clearer [note to self: discuss/explore absolute measure version which just looks at total # which are represented]. Need to convey disadvantage: can't say whether a plan is good by itself
+- could connect voter behavior/opinion literature to redistricting, but need to ground in individuals. This is good.
+- he is really not a fan of the other measures. compares our paper more to his partisan symmetry paper. 
+- need to be clearer in the notation/presentation in the distinction between QoI and estimator
+- do your predictions add up to a consistent aggregate estimator? look @ individual vote misclassification. it won't be diagonal.  can subtract off aggregating bias. Doing this helps highlight the statistical framework / advantage
+- for other metrics, either evaluate or dismiss. Can't give an inch on the QoI/estimator separation.
+- end of § 2.1 "no gerrymander ..."  too strong
+- use of word "counterfactual" -- very statistical. Maybe start with a plan A and a plan B (two 'factuals')
+- make clear the asymmetry. Can we dig into this & make it intuitive? Is there a good reason for the asymmetry?  If A >= B and B >= A , can we use that to show that that an absolute measure is impossible?
+- can you look at diff harm with all possible sets of groups?
+- "individual voters would make the same candidate choice..." not literally true, clarify
+- proportional vs %age point partisan swing -- need appendix to show it doesn't make a big difference
