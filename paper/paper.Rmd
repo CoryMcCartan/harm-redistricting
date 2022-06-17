@@ -17,7 +17,7 @@ authors:
     location: Cambridge, MA
     email: christopherkenny@fas.harvard.edu
 abstract: |
-  We propose a unified framework for evaluating the impact of a districting plan on voters overall and in different groups. Considering the harm done to individual voters by their inability to elect their chosen candidate, and taking into account the range of counterfactual possibilities, we derive a set of measures that flexibly adapts to local geography and constraints, different types of elections, and different groups of study. We provide recommendations for estimating these measures from historical election returns and discuss connections to commonly used redistricting metrics. Finally, we apply our framework to study partisan gerrymandering in New Jersey, voting rights litigation in Alabama, and the racial impacts of city council district boundaries in Boston.
+  Social scientists have developed dozens of measures for assessing partisan bias in redistricting. But these measures cannot be easily adapted to other groups, including those defined by race, class, or geography. Nor are they applicable to single- or no-party contexts such as local redistricting. To overcome these limitations, we propose a unified framework of harm for evaluating the impacts of a districting plan on individual voters and the groups to which they belong. We consider a voter harmed if their chosen candidate is not elected under the current plan, but would be under a different plan. Harm improves on existing measures by both focusing on the choices of individual voters and directly incorporating counterfactual plans. We discuss strategies for estimating harm, and demonstrate the utility of our framework through analyses of partisan gerrymandering in New Jersey, voting rights litigation in Alabama, and racial dynamics of Boston City Council elections.
 keywords:
   - representation
   - redistricting
@@ -178,7 +178,7 @@ Every voter resides in some legislative district; this assignment is referred to
 The set of all possible districting plans is $\Plans$.
 
 For an election $v$, we can tally the votes for each candidate; the candidate with the most votes wins.
-We denote the winner in district $d$ of districting plan $q$ as $\win_d(v,q)$.
+Using potential outcomes notation, we denote the winner of voter $i$'s district under districting plan $q$ and election $v$ as $\win_i(v,q)$.
 
 This notation obscures the complex relationships and feedback effects between individuals, elections, and districting plans.
 For example, different districting plans may lead to different candidates running, depending on district partisanship and incumbent residency.
@@ -189,8 +189,8 @@ The assumptions we make on these relationships will be made more explicit in Sec
 The key intuition from Section \ref{sec:motivation} was that to be harmed by a decision a voter must have a better outcome in the counterfactual world where another decision was made.
 To operationalize this, we need to have a counterfactual districting plan $\tilde q$.
 Then we may define the *harm* to an individual $i$ in election $v$ held under districting plan $q$ as $$
-h_i(v,q,\tilde q) = \ind\{v(i) \neq \win_{q(i)}(v, q)\}
-        \ind\{v(i) = \win_{\tilde q(i)}(v, \tilde q)\},
+h_i(v,q,\tilde q) = \ind\{v(i) \neq \win_i(v, q)\}
+        \ind\{v(i) = \win_i(v, \tilde q)\},
 $$that is, a voter is harmed only if they are not represented by the candidate of their choice under $q$ and they would have been represented by their chosen candidate under the counterfactual plan $\tilde q$.
 
 This definition of harm is limited in two key regards.
@@ -221,8 +221,8 @@ Finally, we will also replace $i$ with an individual $I$ taken uniformly at rand
 
 Then we may define the harm for a (randomly selected) individual under plan $q$ as $H(q) \dfeq h_I(V, q, \tilde Q)$.
 Thus, for example, the harm for a single individual $i$ becomes $H(q)\mid I=i$; and the electorate's average harm in election $v$ becomes$$
-\E[H(q)\mid V=v] = \Pr[v(I)\neq\win_{q(I)}(v, q)
-    \text{ and }v(I)=\win_{\tilde Q(I)}(v, \tilde Q)],
+\E[H(q)\mid V=v] = \Pr[v(I)\neq\win_I(v, q)
+    \text{ and }v(I)=\win_I(v, \tilde Q)],
 $$that is, the probability that a randomly selected voter in this election is misrepresented under the adopted plan but would not have been under a randomly selected counterfactual.
 
 ## Differential Harm and Fairness {#subsec:diff-harm}
@@ -652,7 +652,7 @@ The baseline vote share in the district is then $\bar S_{q^{-1}(j)}$.
 We will build up estimates of the overall $H(q)$ and $\Delta H_{\dem-\rep}(q)$ from precinct-by-group harm estimates.
 Since we assumed that elections are independent of districting plans, we can first average across elections and then across counterfactual plans.
 For a random voter $I$ in precinct $j$, we have for every plan $q$ that the probability of a Democrat winning their district is $$
-\Pr(\win_{q(I)}(V, q)=\dem\mid I\in j)
+\Pr(\win_I(V, q)=\dem\mid I\in j)
 = \Pr\qty(S_{q^{-1}(j),V} > \half)
 = \Phi\qty(\frac{\gamma(\bar S_{q^{-1}(j)})}{\sigma^2_\mathrm{hist}}),
 $$ where $\Phi$ is the standard Normal CDF. To estimate this probability, we simply replace $\Phi$ with the CDF of the $t_{22}$ distribution ($F_{t_{22}}$), and $\sigma^2_\mathrm{hist}$ with $\hat\sigma^2_\mathrm{hist}$.
@@ -660,7 +660,7 @@ Extending one step further, for two plans $q$ and $\tilde q$, we have
 
 ```{=tex}
 \begin{equation}\label{eq:appharm1}
-\Pr(\win_{q(I)}(V, q)=\rep\text{ and }\win_{\tilde q(I)}(V, \tilde q)=\dem\mid I\in j)
+\Pr(\win_I(V, q)=\rep\text{ and }\win_I(V, \tilde q)=\dem\mid I\in j)
 = \Pr\qty(S_{q^{-1}(j),V} < \half, S_{\tilde q^{-1}(j),V} > \half).
 \end{equation}
 ```
@@ -671,7 +671,7 @@ Specifically, we have in general that
 
 ```{=tex}
 \begin{equation}\label{eq:appharm2}
-\Pr(\win_{q(I)}(V, q)=\rep\text{ and }\win_{\tilde q(I)}(V, \tilde q)=\dem\mid I\in j)
+\Pr(\win_I(V, q)=\rep\text{ and }\win_I(V, \tilde q)=\dem\mid I\in j)
 = \max\qty{\Phi\qty(\frac{\gamma(\bar S_{\tilde q^{-1}(j)})}{\sigma^2_\mathrm{hist}})
 - \Phi\qty(\frac{\gamma(\bar S_{q^{-1}(j)})}{\sigma^2_\mathrm{hist}}), 0}.
 \end{equation}

@@ -14,7 +14,7 @@ INTRO:
 1st ¶: gerrymandering is more than 2-party squabbling in the US.
 eg. Alabama and Boston
 
-2nd ¶: Despite the breadth of the problem, academics have completely ignored (shame!!!!) these other instances. Why? 
+2nd ¶: Despite the breadth of the problem, academics have completely ignored (shame!!!!) these other instances. Why?c 
 - quant people have been limited in estimation strategies
 - US case + legal context have skewed academic research toward legally-revelant qs. I.e. EI models, Gingles criteria
 - many partisan measures. All two parties
