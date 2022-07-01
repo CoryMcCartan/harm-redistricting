@@ -52,13 +52,20 @@ minissouri_people = minissouri %>%
 # functions and helpers -------
 plot_state = function(map, people, plan=NULL, qty=NULL, ppl_size=1.75, ...) {
     if (is.null(people$harm)) people$harm = FALSE
+    people_noharm = filter(people, harm == 0)
+    people_harm_dem = filter(people, harm == 1, dem)
+    people_harm_gop = filter(people, harm == 1, !dem)
+
     p = redist.plot.map(map, fill=qty, ...) +
         scale_fill_party_c(name="Democratic\nshare") +
         geom_sf(data=map, size=0.6, fill=NA, color="white") +
         geom_sf(aes(color=dem, shape=factor(circle+2*harm, levels=0:3)),
-                    data=people, size=ppl_size) +
+                    data=people_noharm, size=ppl_size) +
+        geom_sf(aes(shape=factor(circle+2*harm, levels=0:3)),
+                    data=people_harm_dem, fill=DEM, size=ppl_size) +
+        geom_sf(aes(shape=factor(circle+2*harm, levels=0:3)),
+                    data=people_harm_gop, fill=GOP, size=ppl_size) +
         scale_color_manual(values=c(GOP, DEM), guide="none") +
-        # scale_fill_manual(values=c(GOP, DEM), guide="none") +
         scale_shape_manual(values=c(15, 19, 22, 21), guide="none") +
         theme_repr_map() +
         theme(plot.title = element_text(hjust = 0.5))
