@@ -460,16 +460,6 @@ As discussed in Section \ref{subsec:racial}, plaintiffs had to satisfy the first
 In *Merrill,* the plaintiff's expert, Moon Duchin, submitted four such remedial plans, one of which is shown in Figure \ref{fig:al-maps}(e).
 These plans form a natural counterfactual $\tilde Q$ to use in analyzing the challenged districting plan (Figure \ref{fig:al-maps}(d)), especially since the federal district court ruled in favor of the plaintiffs and found that their remedial plans satisfied the first *Gingles* criterion.
 
-This analysis is slightly more complicated than in New Jersey, since in order to understand the racial distribution of harm we need to estimate voting preferences by race.
-As is custom in VRA analyses, we use an ecological inference model.
-The model, detailed in Appendix \ref{app:alei}, jointly estimates turnout and vote choice by race and precinct across seven statewide elections.
-Voting is highly polarized by race outside of the cities of Birmingham and Montgomery.
-
-With these estimates in hand, we can estimate the average number of voters harmed in each precinct and racial group.
-Figure \ref{fig:al-maps}(c) shows the estimated geographic distribution of harm.
-Even without the ecological estimates, it is immediately clear, with reference to the partisan and racial patterns shown in Figures \ref{fig:al-maps}(a) and (b), that harm is concentrated among Black and Democratic voters in Birmingham, Montgomery, and the southern end of the Black Belt region.
-These areas are excluded from the Black-majority district under the challenged plan, but are included in a Black-majority district in the average remedial plan.
-
 ```{r al-maps, fig.width=6.75}
 #| fig.cap: |
 #|      Top row: baseline vote patterns (a),
@@ -486,13 +476,23 @@ These areas are excluded from the Black-majority district under the challenged p
 include_graphics("figures/al_maps.pdf")
 ```
 
+This analysis is slightly more complicated than in New Jersey, since in order to understand the racial distribution of harm we need to estimate voting preferences by race.
+As is custom in VRA analyses, we use an ecological inference model.
+The model, detailed in Appendix \ref{app:alei}, jointly estimates turnout and vote choice by race and precinct across seven statewide elections.
+Voting is highly polarized by race outside of the cities of Birmingham and Montgomery.
+
+With these estimates in hand, we can estimate the average number of voters harmed in each precinct and racial group.
+Figure \ref{fig:al-maps}(c) shows the estimated geographic distribution of harm.
+Even without the ecological estimates, it is immediately clear, with reference to the partisan and racial patterns shown in Figures \ref{fig:al-maps}(a) and (b), that harm is concentrated among Black and Democratic voters in Birmingham, Montgomery, and the southern end of the Black Belt region.
+These areas are excluded from the Black-majority district under the challenged plan, but are included in a Black-majority district in the average remedial plan.
+
 This intuition is confirmed by a closer analysis, summarized in Figure \ref{fig:al-maps}(f).
-Across the state, the estimated average harm is 0.082, which translates to around 161,000 voters.
-Of these harmed voters, around 136,000 are Black, while 25,000 are White.
-Similarly, 151,000 are Democratic, while only 10,000 are Republican.
+Across the state, the estimated average harm is 0.079, which translates to around 159,000 voters.
+Of these harmed voters, around 123,000 are Black, while 36,000 are White.
+Similarly, 137,000 are Democratic, while only 22,000 are Republican.
 Of course, the total number of each of these groups of voters is very different.
-Normalizing by group sizes, the expected harm for a Black Democrat is 0.25, for a Black Republican is 0.015, for a White Democrat is 0.091, and for a White Republican is 0.0073.
-Thus while the challenged plan differentially harms both Black voters and Democratic voters, it *especially* harms Black Democrats, who have a differential harm of 0.158 versus White Democrats and a differential harm of 0.235 versus Black Republicans.
+Normalizing by group sizes, the expected harm for a Black Democrat is 0.22, for a Black Republican is 0.037, for a White Democrat is 0.083, and for a White Republican is 0.017.
+Thus while the challenged plan differentially harms both Black voters and Democratic voters, it *especially* harms Black Democrats, who have a differential harm of 0.138 versus White Democrats and a differential harm of 0.183 versus Black Republicans.
 
 These calculations are made by aggregating harm within racial groups at the precinct level, and so they automatically take into account individual voter preferences.
 Unlike in a traditional ecological/*Gingles* analysis, there is no need to identify a particular party as the statewide "choice" of the minority racial group, nor is there any cause for concern because of lower racial voting polarization in urban areas.
@@ -720,7 +720,7 @@ Several reparametrizations were made for computational efficiency; the full Stan
 include_graphics("figures/al_ei.pdf")
 ```
 
-The mean support $\mu^{(s)}$ receives an informative prior based on the racially polarized voting estimates of @kuriwaki2021geography, with $\mu^{(s)}\sim\Norm(\logit((0.18, 0.90, 0.35)), (0.04^2, 0.04^2, 0.2^2))$.
+The mean support $\mu^{(s)}$ receives an informative prior based on the racially polarized voting estimates of @kuriwaki2021geography, with $\mu^{(s)}\sim\Norm(\logit((0.18, 0.90, 0.35)), (0.03^2, 0.03^2, 0.2^2))$.
 These estimates were derived through multilevel regression and poststratification from survey data, calibrated to actual election results.
 
 The model was fitted with a mean-field variational approximation for computational efficiency.

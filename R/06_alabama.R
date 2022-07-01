@@ -20,7 +20,7 @@ d_votes = al_map %>%
 tbls = make_tables_alabama(d_votes, al_map)
 
 prior = list(loc=qlogis(c(0.18, 0.90, 0.35)), # Kuriwaki et al. RPV estimates
-             scale=c(0.04, 0.04, 0.2))
+             scale=c(0.03, 0.03, 0.2))
 fit = fit_ei(tbls, algorithm="vb", prior=prior,
              init=0, eta=0.15, adapt_engaged=F, tol_rel_obj=0.0002)
 
@@ -88,44 +88,32 @@ al_map = select(al_map, GEOID20:adj) %>%
 
 # Analysis --------
 
+N_sim = 2000
+
 m_plans = as_tibble(al_map) %>%
     select(starts_with("cd_pet")) %>%
     as.matrix() %>%
     `colnames<-`(NULL)
+idx = rep(1:4, each=N_sim/4)
+m_plans = m_plans[, idx]
 
+ker_t = k_t(sd=with(elec_model_spec, sqrt(year^2 + resid^2)))
 plans = redist_plans(m_plans, al_map, algorithm="none", wgt=NULL) %>%
     add_reference(al_map$cd_2020) %>%
     mutate(total_vap = tally_var(al_map, vap),
            vap_white = tally_var(al_map, vap_white),
            vap_black = tally_var(al_map, vap_black),
            dem = group_frac(al_map, ndv, ndv + nrv),
-           pr_dem = k_t()(dem))
+           pr_dem = ker_t(dem))
 
-m_pr = district_group(plans, pr_dem)
-h_prec_dem = rowMeans(pos_part(m_pr[, -1] - m_pr[, 1]))
-h_prec_rep = rowMeans(pos_part(-m_pr[, -1] + m_pr[, 1]))
+hh_white = partisan_harm(plans, dem, al_map$ndv_white, al_map$nrv_white,
+                         elec_model_spec, idx_1=1, idx_2=1+seq_len(N_sim))
+hh_black = partisan_harm(plans, dem, al_map$ndv_black, al_map$nrv_black,
+                         elec_model_spec, idx_1=1, idx_2=1+seq_len(N_sim))
+hh_other = partisan_harm(plans, dem, al_map$ndv_other, al_map$nrv_other,
+                         elec_model_spec, idx_1=1, idx_2=1+seq_len(N_sim))
 
-h_black = with(al_map, sum(h_prec_dem*ndv_black + h_prec_rep*nrv_black) / sum(ndv_black + nrv_black))
-h_white = with(al_map, sum(h_prec_dem*ndv_white + h_prec_rep*nrv_white) / sum(ndv_white + nrv_white))
-h_other = with(al_map, sum(h_prec_dem*ndv_other + h_prec_rep*nrv_other) / sum(ndv_other + nrv_other))
-h_dem = with(al_map, weighted.mean(h_prec_dem, ndv))
-h_rep = with(al_map, weighted.mean(h_prec_rep, nrv))
-
-{
-cat("Differential racial harm:", h_black - h_white, "\n")
-cat("Differential partisan harm:", h_dem - h_rep, "\n")
-cat("Total harm:", with(al_map, sum(h_prec_dem*ndv + h_prec_rep*nrv) / sum(ndv + nrv)), "\n")
-cat("Average total harmed:", with(al_map, sum(h_prec_dem*ndv + h_prec_rep*nrv)), "\n")
-
-cat("Average total harmed by group:\n")
-m_harm = with(al_map, matrix(c(
-    sum(h_prec_dem * ndv_white),
-    sum(h_prec_dem * ndv_black),
-    sum(h_prec_dem * ndv_other),
-    sum(h_prec_rep * nrv_white),
-    sum(h_prec_rep * nrv_black),
-    sum(h_prec_rep * nrv_other)
-), nrow=3)) %>%
+m_harm = t(cbind(hh_white, hh_black, hh_other)[-3, ]) %>%
     `rownames<-`(c("White", "Black", "Other")) %>%
     `colnames<-`(c("Dem.", "Rep."))
 m_grps = with(al_map, matrix(c(
@@ -138,9 +126,30 @@ m_grps = with(al_map, matrix(c(
 ), nrow=3)) %>%
     `rownames<-`(c("White", "Black", "Other")) %>%
     `colnames<-`(c("Dem.", "Rep."))
-print(round(m_harm, 1))
-print(round(m_harm/m_grps, 4))
+
+{
+cat("Average total harmed by group:\n")
+print(round(m_harm*m_grps, 1))
+print(round(m_harm, 4))
+
+cat("\nDifferential racial harm:", diff((rowSums(m_harm*m_grps)/rowSums(m_grps))[-3]), "\n")
+cat("Differential partisan harm:", diff(colSums(m_harm*m_grps)/colSums(m_grps)), "\n")
+cat("Total harm:", sum(m_harm*m_grps), "\n")
+cat("Average total harmed:", sum(m_harm*m_grps) / sum(m_grps), "\n")
 }
+
+m_pr = district_group(plans, pr_dem)
+h_prec_dem = rowMeans(pos_part(m_pr[, -1] - m_pr[, 1]))
+h_prec_rep = rowMeans(pos_part(-m_pr[, -1] + m_pr[, 1]))
+rm(m_pr)
+
+h_black = with(al_map, sum(h_prec_dem*ndv_black + h_prec_rep*nrv_black) / sum(ndv_black + nrv_black))
+h_white = with(al_map, sum(h_prec_dem*ndv_white + h_prec_rep*nrv_white) / sum(ndv_white + nrv_white))
+h_other = with(al_map, sum(h_prec_dem*ndv_other + h_prec_rep*nrv_other) / sum(ndv_other + nrv_other))
+h_dem = with(al_map, weighted.mean(h_prec_dem, ndv))
+h_rep = with(al_map, weighted.mean(h_prec_rep, nrv))
+
+
 
 # plots out
 al_sum = al_map %>%
@@ -149,7 +158,7 @@ al_sum = al_map %>%
     mutate(dem = plans$dem[1:7])
 d_harm = tibble(race = rep(rownames(m_harm), 2),
                 party = rep(colnames(m_harm), each=3),
-                Harmed = as.numeric(m_harm),
+                Harmed = as.numeric(m_harm*m_grps),
                 Total = as.numeric(m_grps))
 
 p1 = plot(al_map, ndv / (ndv + nrv)) +
