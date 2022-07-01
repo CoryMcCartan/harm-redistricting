@@ -1,5 +1,10 @@
-#include <Rcpp.h>
+#include <RcppArmadillo.h>
+#include <RcppThread.h>
 using namespace Rcpp;
+
+// [[Rcpp::plugins(cpp11)]]
+// [[Rcpp::depends(RcppThread)]]
+// [[Rcpp::depends(RcppArmadillo)]]
 
 // [[Rcpp::export(rng = false)]]
 NumericMatrix mat_by_prec(IntegerMatrix pl, NumericMatrix x) {
@@ -17,39 +22,52 @@ NumericMatrix mat_by_prec(IntegerMatrix pl, NumericMatrix x) {
 }
 
 // [[Rcpp::export(rng = false)]]
-NumericMatrix harm_helper(IntegerMatrix pl, NumericMatrix pr,
-                          NumericVector wt_a, NumericVector wt_b,
-                          IntegerVector idx_1, IntegerVector idx_2) {
-    int n1 = idx_1.size();
-    int n2 = idx_2.size();
-    int prec = pl.nrow();
-    NumericMatrix out(3, n1);
+arma::mat harm_helper(const arma::imat pl, const arma::mat vs,
+                      const arma::vec wt_a, const arma::vec wt_b,
+                      const arma::vec shift_elec,
+                      const arma::mat shift_distr_1,
+                      const arma::mat shift_distr_2,
+                      const arma::ivec idx_1, const arma::ivec idx_2) {
+    int n1 = idx_1.n_elem;
+    int n2 = idx_2.n_elem;
+    int prec = pl.n_rows;
+
+    arma::mat out(3, n1);
 
     double tot_a = sum(wt_a);
     double tot_b = sum(wt_b);
-    for (int i = 0; i < n1; i++) {
+
+    RcppThread::ProgressBar bar(n1, 1);
+    RcppThread::parallelFor(0, n1, [&] (int i) {
         int i1 = idx_1(i) - 1;
-        double pos_accuml = 0.0;
-        double neg_accuml = 0.0;
+        double accuml_a = 0.0;
+        double accuml_b = 0.0;
         for (int k = 0; k < prec; k++) {
-            double pr_ik = pr(pl(k, i1) - 1, i1);
+            int pl_ki = pl(k, i1) - 1;
+            double vs_base_ik = vs(pl_ki, i1);
             double wt_a_k = wt_a(k);
             double wt_b_k = wt_b(k);
             for (int j = 0; j < n2; j++) {
                 int j2 = idx_2(j) - 1;
-                double harm_benefit = pr(pl(k, j2) - 1, j2) - pr_ik;
-                if (harm_benefit >= 0.0) {
-                    pos_accuml += harm_benefit * wt_a_k;
-                } else {
-                    neg_accuml -= harm_benefit * wt_b_k;
+                int pl_kj = pl(k, j2) - 1;
+                double vs_ik = vs_base_ik + shift_elec(j) + shift_distr_1(pl_ki, j);
+                double vs_jk = vs(pl_kj, j2) + shift_elec(j) + shift_distr_2(pl_kj, j);
+                if (vs_jk > 0.5) {
+                    if (vs_ik <= 0.5) { // A win under counterfactual but not original
+                        accuml_a += wt_a_k;
+                    }
+                } else if (vs_ik > 0.5) { // B win under counterfactual but not original
+                    accuml_b += wt_b_k;
                 }
             }
         }
-        out(0, i) = pos_accuml / tot_a / n2;
-        out(1, i) = neg_accuml / tot_b / n2;
-        out(2, i) = (pos_accuml + neg_accuml) / (tot_a + tot_b) / n2;
-        Rcpp::checkUserInterrupt();
-    }
+        out(0, i) = accuml_a / tot_a / n2;
+        out(1, i) = accuml_b / tot_b / n2;
+        out(2, i) = (accuml_a + accuml_b) / (tot_a + tot_b) / n2;
+
+        RcppThread::checkUserInterrupt();
+        bar++;
+    });
 
     return out;
 }

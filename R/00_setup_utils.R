@@ -19,14 +19,15 @@ NAMES_RACE = c("White", "Black", "Hispanic", "other")
 GOP_DEM = c("#A0442C", "#B25D4C", "#C27568", "#D18E84", "#DFA8A0",
             "#EBC2BC",  "#F6DCD9", "#F9F9F9", "#DAE2F4", "#BDCCEA",
             "#9FB6DE", "#82A0D2", "#638BC6", "#3D77BB", "#0063B1")
+GOP = "#CA685C"
+DEM = "#166AB0"
 scale_fill_party_c = function(name="Democratic share", midpoint=0.5, limits=0:1,
                               labels=percent, oob=squish, ...) {
     scale_fill_gradient2(name=name, ..., low = GOP_DEM[1], high = GOP_DEM[15],
                          midpoint=midpoint, limits=limits, labels=labels, oob=oob)
 }
 scale_color_party_d = function(...) {
-    scale_color_manual(..., values=c(GOP_DEM[2], GOP_DEM[14]),
-                       labels=c("Rep.", "Dem."))
+    scale_color_manual(..., values=c(GOP, DEM), labels=c("Rep.", "Dem."))
 }
 
 scale_fill_ideo = \(...) scale_fill_wa_c(palette="stuart", ...)
@@ -40,6 +41,7 @@ pos_part = function(x) {
     x[x < 0] = 0
     x
 }
+
 # historical congressional national shifts
 d_hist = local({
     dem_hist = c(0.575, 0.559, 0.537, 0.505, 0.552, 0.521, 0.543, 0.533, 0.521, 0.501, 0.447, 0.482, 0.473, 0.471, 0.452, 0.468, 0.523, 0.532, 0.449, 0.488, 0.455, 0.48, 0.534)
@@ -48,8 +50,8 @@ d_hist = local({
     list(sd=sd(dem_tpp), df=length(dem_hist)-1)
 })
 sd_app = d_hist$sd * sd(rt(1e5, df=d_hist$df))
-k_t = function(sd=d_hist$sd) {
-    function(x) pt(qlapl(x)/sd, df=d_hist$df)
+k_t = function(sd=d_hist$sd, df=d_hist$df) {
+    function(x) pt(qlapl(x)/sd, df=df)
 }
 e_approx = function(a, b) {
     y = sd_app * (dnorm(a/sd_app) - dnorm(b/sd_app)) / (pnorm(b/sd_app) - pnorm(a/sd_app))
@@ -57,6 +59,37 @@ e_approx = function(a, b) {
             if_else(is.finite(a),
                     if_else(is.finite(b), 0.5*(a+b), a), b))
 }
+
+# historical election model
+if (!file.exists(path <- here("data/us_house_aov.rds"))) {
+    library(lme4)
+
+    d_house = read_csv(here("data-raw/1976-2020-house.csv"), show_col_types=FALSE) |>
+        group_by(year, state, district) |>
+        filter(sum(str_starts(party, "DEMOCRAT")) == 1,
+               sum(str_starts(party, "REPUBLICAN")) == 1) %>%
+        ungroup() %>%
+        filter(str_starts(party, "(DEMOCRAT|REPUBLICAN)")) %>%
+        transmute(year = year,
+                  state = state_po,
+                  state_yr = str_c(state, "-", year),
+                  district = str_c(state, "-", district, "-", floor((year-1)/10)*10),
+                  party = str_to_lower(str_sub(party, 1, 3)),
+                  votes = candidatevotes) |>
+        pivot_wider(names_from=party, values_from=votes) %>%
+        mutate(dshare = dem / (dem + rep))
+
+    m_distr = lmer(dshare ~ (1 | district) + (1 | year), data=d_house)
+
+    est_var = as.data.frame(VarCorr(m_distr))
+    elec_model_spec = list(distr = est_var$sdcor[1],
+                           year = est_var$sdcor[2],
+                           resid = est_var$sdcor[3])
+    write_rds(elec_model_spec, path)
+} else {
+    elec_model_spec = read_rds(path)
+}
+
 
 rot_mat = function(deg) {
     deg = deg * pi/180
@@ -186,11 +219,12 @@ pval = function(x, n_ref=redist:::get_n_ref(plans)) {
     p[-idx] = cume_dist(x[-idx]) * n/(n+1)
     p[-idx] = 2*pmin(p[-idx], 1-p[-idx])
     for (i in idx) {
-        p[i] = 2*(1 + sum(x[-idx] <= x[i])) / (n+1)
+        p[i] = 2*(1 + sum(x[-idx] <= x[i], na.rm=TRUE)) / (n+1)
         if (p[i] > 1) {
-            p[i] = 2*(1 + sum(x[-idx] >= x[i])) / (n+1)
+            p[i] = 2*(1 + sum(x[-idx] >= x[i], na.rm=TRUE)) / (n+1)
         }
     }
+    p[is.na(x)] = NA
     p
 }
 

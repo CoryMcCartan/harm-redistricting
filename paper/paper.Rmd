@@ -26,7 +26,7 @@ keywords:
   - voting rights
   - individual harm
 bibliography: references.bib
-biblio-style: chicago
+biblio-style: apsr
 output:
   rticles::arxiv_article:
     keep_tex: true
@@ -381,7 +381,7 @@ Sections \ref{sec:alabama} and \ref{sec:boston} demonstrate this approach in pra
 # Application to Partisan Gerrymandering in New Jersey {#sec:nj}
 
 To illustrate the connections in the preceding section and to demonstrate the value of the proposed measures in a real-world setting, we provide a brief analysis of congressional districting in the state of New Jersey.
-As discussed above, many gerrymandering measures function well in highly competitive states, but may produce more counterintuitive results in other states.
+As discussed above, many gerrymandering measures often function well in highly competitive states, but may produce more counterintuitive results in other states.
 New Jersey, with an average Democratic two-party vote share of 56.6% across our two baseline elections (2016 presidential and 2018 senatorial), will demonstrate that this is not a problem unique to lopsided states.
 
 ```{r nj-maps, fig.width=6.5}
@@ -398,47 +398,49 @@ The Democratic gerrymander has 11 Democratic seats and 1 Republican seat at base
 We sample 10,000 districting plans across four independent runs of the SMC algorithm of @mccartan2020, setting constraints to favor compact plans with district boundaries that tend to follow county lines.
 One such plan is shown in Figure \ref{fig:nj-maps}(d).
 For each of these sampled plans and the two gerrymanders, we calculate the average harm and differential partisan harm versus the simulated baseline,[^7] as well as the expected number of Democratic seats, the efficiency gap, partisan bias, the mean-median score, and partisan declination.
-The distribution of these measures, along with their pairwise relationships, are shown in Figure \ref{fig:nj-pairs}.
+The distribution of these measures is shown in Figure \ref{fig:nj-meas}.
 
 [^7]: We choose to calculate $\Delta_{\dem-\rep}H(q)$, so that positive values correspond to a plan that favors Republicans.
 
-```{r nj-pairs, fig.width=7, fig.height=7}
+```{r nj-meas, fig.width=7}
 #| fig.cap: |
-#|      Scatterplots for all pairs of measures.
-#|      The Democratic and Republican gerrymanders are shown
-#|      with the blue and red lines and crosses.
+#|      The distribution of the existing and proposed measures across a sample of plans,
+#|      with the values for two gerrymanders overlaid as vertical lines.
 #|      The dashed line indicates a value of zero.
-#|      Below the diagonal, numbers indicate the absolute value of the correlation between variables.
-include_graphics("figures/nj_pairs.pdf")
+include_graphics("figures/nj_meas.pdf")
 ```
 
 We first examine the values of each metric on the two example plans alone.
-Differential partisan harm correctly identifies each gerrymander as such, with a large negative value for the Democratic gerrymander and a large positive value for the Republican gerrymander.
-These values are relatively directly interpretable; for example, the differential harm score of $-0.221$ means that an average Democratic voter is 22.1% less likely to be misrepresented than their average Republican counter-partisan.
-The efficiency gap and declination measures also correctly identify the gerrymanders, though they are much more discrete, and declination gives a much larger score in absolute value to the Democratic plan than to the Republican.
-In contrast, the partisan bias and mean-median measures incorrectly classify the Republican gerrymander as a fair plan and a Democratic-leaning outlier, respectively.
+The estimate of differential partisan harm correctly identifies the partisan skew of each gerrymander, with a large negative value for the Democratic gerrymander and a small positive value for the Republican gerrymander.
+These values are relatively directly interpretable; for example, the differential harm score of $-0.109$ means that an average Democratic voter is 10.9% less likely to be misrepresented than their average Republican counter-partisan.
+The efficiency gap and declination measures also correctly identify the gerrymanders, though they are much more discrete, and the efficiency gap gives roughly equal scores in absolute value to the Democratic and Republican plans, in comparison to differential harm and declination, which identify the Democratic gerrymander as more extreme.
+In contrast, the usual partisan bias estimator classifies the Republican gerrymander as favoring Democrats and vice versa.
+While the mean-median measure identifies the Democratic gerrymander, it classifies the Republican gerrymander as a an even more extreme Democratic-leaning outlier.
 
-Next, we consider the distribution of these statistics across the sampled plans, but this doesn't help much, either.
-The expected number of Democratic seats naturally identifies the gerrymanders (two-sided $p=0.0002$) and the direction of bias, and as discussed above this measure is extremely correlated with differential partisan harm.
-The gerrymanders are also an outlier under the efficiency gap and declination measures also (both $p=0.0002$).
-While the gerrymanders are both an outlier for the mean-median score, only the Democratic plan is an outlier according to the partisan bias measure ($p=0.0022$, versus $p=0.099$ for the Republican plan).
-These measures are weakly correlated with the expected number of Democratic seats, and show substantial variation even for fixed values of total seats won at baseline.
+Considering the distribution of these statistics across the sampled plans doesn't help much, either.
+The expected number of Democratic seats naturally identifies the gerrymanders (two-sided $p=0.0002$) and the direction of bias.
+The gerrymanders are also an outlier under the efficiency gap and declination measures also (both $p=0.0002$), and in the correct direction.
+While the Republican gerrymander is an outlier for the partisan bias and mean-median score ($p=0.0224$ and $p=0.0004$), the Democratic gerrymander is only an outlier for the mean-median score($p=0.0004$ compared to $p=0.349$ for partisan bias).
+All of the plans identified as outliers under these two metrics are identified in the wrong direction.
 
-There is also disagreement between the measures about the natural bias of districting plans in New Jersey: the median sampled plan has a partisan bias of $0.047$, indicating a natural Republican bias, but the median mean-median score is just $0.0069$, and the median differential partisan harm is $-0.13$, indicating a natural Democratic bias.
+There is also disagreement between the measures about the natural bias of districting plans in New Jersey: the median sampled plan has a partisan bias of $0.020$, indicating a natural Republican bias, but the median mean-median score is just $0.0040$, and the median differential partisan harm is $-0.032$, indicating a natural Democratic bias.
 Which is correct?
 It depends on what one means by "natural bias," though we submit that differential harm is one good way to measure it.
-Democrats do win 8.47 seats on average across the simulations, which is more than the 6.79 seats that would be expected under a completely proportional outcome.
-The key benefit here is that differential harm does not push for localized gerrymanders to overcome the geographic imbalance in partisanship.
+Democrats do win 8.4 seats on average across the simulations, which is more than the 6.8 seats that would be expected under a completely proportional outcome.
+It is important to note that a value of zero estimated differential harm does not necessarily correspond to proportionality; the simulated plan with an estimated differential harm closest to zero yieled 8.1 expected Democratic seats.
 
-Both gerrymanders excessively harm the average voter, with the Democratic plan doing so at a moderately higher rate ($p=0.0002$ for the Democratic plan, $p=0.0004$ for the Republican plan).
+Both gerrymanders excessively harm the average voter, with the Democratic plan doing so at a moderately higher rate ($p=0.0004$ for the Democratic plan, $p=0.0008$ for the Republican plan).
 Notably, the plans which minimize total harm are also those which have near-zero differential partisan harm.
 Thus, at least in New Jersey, overall harm reduction is consistent with a fair map on a partisan basis.
 Minimizing bias with other measures, however, could lead one astray: plans which score an efficiency gap of zero can have a large average harm, which may not be distributed fairly between parties.
 Plans with zero partisan bias or mean-median score actually have higher-than-average harm and tend to differentially harm Republicans.
 
+Figure \ref{fig:nj-pairs} in the appendix expands on Figure \ref{fig:nj-meas} to also show the correlations between these various measures.
+Expected Democratic seats, the differential harm estimates, the efficiency gap, and declination are all moderately correlated with each other.
+Similarly, partisan bias and the mean-median score are moderately correlated, but very weakly correlated with the expected number of Democratic seats. 
 New Jersey is just one state, and while some of the correlations between measures here are found in other states, some are not.
 Appendix \ref{app:corr} shows these correlations across simulated plans in eight states.
-The most consistent correlation is between estimated differential partisan harm and the expected number of seats won by each party, which is usually around 0.98, and always above 0.66 in the eight states we study.
+The most consistent correlation is between estimated differential partisan harm and the expected number of seats won by each party, which is usually around 0.82, and always above 0.66 in the eight states we study.
 
 # Application to Voting Rights Litigation in Alabama {#sec:alabama}
 
@@ -704,6 +706,18 @@ Our final estimates $\hat H(q)$ and $\Delta_{\dem-\rep}\hat H(q)$ may then be st
 Here, we rely on the fact that even across election shifts, the relative balance of each party's voters across precincts is preserved.
 
 # Correlation Between Partisan Gerrymandering Metrics Across Multiple States {#app:corr}
+
+Figure \ref{fig:nj-pairs} expands on Figure \ref{fig:nj-meas} in the main text with pairwise scatterplots and correlation summaries. 
+
+```{r nj-pairs, fig.width=7, fig.height=7}
+#| fig.cap: |
+#|      Scatterplots for all pairs of measures.
+#|      The Democratic and Republican gerrymanders are shown
+#|      with the blue and red lines and crosses.
+#|      The dashed line indicates a value of zero.
+#|      Below the diagonal, numbers indicate the absolute value of the correlation between variables.
+include_graphics("figures/nj_pairs.pdf")
+```
 
 Table \ref{tab:corr} below reports the correlation between differential harm and the partisan gerrymandering metrics used in Section \ref{sec:nj} for eight states which cover a wide range of partisan leans and number of seats:
 

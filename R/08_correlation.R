@@ -6,7 +6,7 @@ library(kableExtra)
 
 states = c("IA", "NC", "WI", "MA", "UT", "NJ", "MS", "CA")
 
-ker_t = k_t()
+ker_t = k_t(sd=with(elec_model_spec, sqrt(year^2 + resid^2)))
 corr_state = function(abbr) {
     st_map = alarm_50state_map(abbr)
     dvote = st_map$ndv
@@ -18,8 +18,8 @@ corr_state = function(abbr) {
     attr(st_plans, "ndists") = nd
     cat("Downloaded", abbr, "\n")
 
-    idx_2 = sample(seq_len(ncol(as.matrix(st_plans)))[-1], 200)
-    hh = harm(st_plans, ndshare, st_map$ndv, st_map$nrv, idx_2=idx_2, ker=ker_t)
+    idx_2 = sample(seq_len(ncol(as.matrix(st_plans)))[-1], 250)
+    hh = partisan_harm(st_plans, ndshare, st_map$ndv, st_map$nrv, elec_model_spec, idx_2=idx_2)
 
     pl_corr = st_plans %>%
         subset_sampled() %>%
