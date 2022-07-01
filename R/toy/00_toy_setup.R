@@ -3,15 +3,6 @@ bb <- st_sfc(st_polygon(list(rbind(c(0,0), c(1,0), c(1,1), c(0,0)))))
 grid <- st_as_sf(st_make_grid(bb, n = 6, crs = 3857)) %>%
     rename(geometry=x)
 
-# add votes ----
-minichusetts <- grid %>%
-    mutate(row = rep(6:1, each=6),
-           col = rep(1:6, 6),
-           pop = 5,
-           dem = 3,
-           rep = 2) %>%
-    relocate(geometry, .after=rep) %>%
-    redist_map(ndists=3, pop_tol=0.1)
 
 minissouri <- grid %>%
     mutate(row = rep(6:1, each=6),
@@ -26,29 +17,23 @@ minissouri <- grid %>%
            dem = if_else(city2, 5, dem),
            rep = 3,
            rep = if_else(city1, 2, rep),
-           rep = if_else(city2, 2, rep)) %>%
-    relocate(geometry, .after=rep) %>%
+           rep = if_else(city2, 2, rep),
+           circle = round((col + row + city1) / 15 * pop)) %>%
+    relocate(geometry, .after=everything()) %>%
     redist_map(ndists=3, pop_tol=0.1)
 
-mininois = grid %>%
-    mutate(row = rep(6:1, each=6),
-           col = rep(1:6, 6),
-           city = row <= 3 & col <= 3,
-           pop = if_else(city, 11, 3),
-           dem = if_else(city, 8, 1),
-           rep = if_else(city, 3, 2)) %>%
-    relocate(geometry, .after=rep) %>%
-    redist_map(ndists=3, pop_tol=0.1)
 
 # people for plotting -------
 
-make_people = function(pop, dem, geometry, row, col, ...) {
+make_people = function(pop, dem, circle, geometry, row, col, ...) {
     if (!file.exists(path <- str_glue("data-raw/csq{pop}.txt"))) {
         url = str_glue("http://hydra.nat.uni-magdeburg.de/packing/csq/txt/csq{pop}.txt")
         download.file(url, path)
     }
     offset = as.numeric(st_centroid(geometry))
     dem_vec = c(rep(TRUE, dem), rep(FALSE, pop-dem))
+    circ_vec = c(rep(TRUE, circle), rep(FALSE, pop-circle))
+    idx = sample(pop)
     read_table(path, col_names=F, col_types=cols(.default="d")) %>%
         select(-X1) %>%
         as.matrix() %>%
@@ -57,24 +42,24 @@ make_people = function(pop, dem, geometry, row, col, ...) {
         st_as_sf() %>%
         rename(geometry=x) %>%
         mutate(row = row, col = col,
-               dem = sample(dem_vec))
+               dem = dem_vec[idx],
+               circle = circ_vec[idx])
 }
 
-mininois_people = mininois %>%
-    pmap_dfr(make_people)
-minichusetts_people = minichusetts %>%
-    pmap_dfr(make_people)
 minissouri_people = minissouri %>%
     pmap_dfr(make_people)
 
 # functions and helpers -------
 plot_state = function(map, people, plan=NULL, qty=NULL, ppl_size=1.75, ...) {
+    if (is.null(people$harm)) people$harm = FALSE
     p = redist.plot.map(map, fill=qty, ...) +
         scale_fill_party_c(name="Democratic\nshare") +
-        geom_sf(data=map, size=0.8, fill=NA, color="white") +
-        geom_sf(aes(color=dem, shape=dem), data=people, size=ppl_size) +
-        scale_color_party_d(guide="none") +
-        scale_shape_manual(values=c(15, 19), guide="none") +
+        geom_sf(data=map, size=0.6, fill=NA, color="white") +
+        geom_sf(aes(color=dem, shape=factor(circle+2*harm, levels=0:3)),
+                    data=people, size=ppl_size) +
+        scale_color_manual(values=c(GOP, DEM), guide="none") +
+        # scale_fill_manual(values=c(GOP, DEM), guide="none") +
+        scale_shape_manual(values=c(15, 19, 22, 21), guide="none") +
         theme_repr_map() +
         theme(plot.title = element_text(hjust = 0.5))
     if (!is.null(plan)) {
@@ -96,13 +81,4 @@ fmt_lean = function(x) {
         paste0("D+", round(200*(x - 0.5)), "%")
     else
         paste0("R+", round(200*(0.5 - x)), "%")
-}
-
-# initial plots -------
-if (!file.exists(fig_path <- here("paper/figures/minis_schematic.pdf"))) {
-    list(plot_state(mininois, mininois_people) + labs(title="(a) Mininois"),
-         plot_state(minissouri, minissouri_people) + labs(title="(b) Minissouri"),
-         plot_state(minichusetts, minichusetts_people) + labs(title="(c) Minichusetts")) %>%
-        wrap_plots(nrow=1)
-    ggsave(fig_path, width=7, height=2.75)
 }

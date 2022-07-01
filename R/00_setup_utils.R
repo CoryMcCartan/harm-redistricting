@@ -232,5 +232,5 @@ pval = function(x, n_ref=redist:::get_n_ref(plans)) {
 Rcpp::sourceCpp("src/harm.cpp", cacheDir="src")
 
 if (!exists("harm")) source(here("R/01_metrics.R"))
-if (!exists("mininois")) source(here("R/toy/00_toy_setup.R"))
+# if (!exists("mininois")) source(here("R/toy/00_toy_setup.R"))
 source(here("R/04_appl_data.R"))
