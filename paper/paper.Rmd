@@ -6,7 +6,7 @@ authors:
       To whom correspondence should be addressed.
       The authors thank Kosuke Imai, Gary King, Shiro Kuriwaki, 
       Tyler Simko, Nick Stephanopolous, and 
-      participants of the Harvard American Politics Research Workshop 
+      participants of the Fall 2021 Harvard American Politics Research Workshop 
       and Imai Research Group for helpful comments and discussion.
       Replication code and data are available at <https://github.com/CoryMcCartan/harm-redistricting>.
     department: Department of Statistics
@@ -355,7 +355,7 @@ In the worst cases, this can lead to directionally wrong conclusions, as we will
 These problems have led @deford2020symmetry, among others, to recommend evaluating the presence of a gerrymander simply by comparing the expected number of seats won under the plan versus the simulations We agree with this recommendation, as it turns out that in the partisan case, differential harm is in practice tightly related to the overall number of seats won by each party, as Section \ref{sec:nj} and Appendix \ref{app:corr} demonstrate.
 However, unlike a direct measure of seats, differential harm is shifted so that a value of zero corresponds to fairness, and rescaled to be directly interpretable as a fraction of voters harmed.
 
-## Racial Gerrymandering {#subsec:racial}
+## Vote Dilution {#subsec:racial}
 
 The study of racial gerrymandering and vote dilution is considerably more complicated than that of partisan gerrymandering, due to the difficulty of understanding racial voting preferences when individual votes are secret.
 As such, no simple formulas exist to measure the precise racial impacts of a districting plan.
