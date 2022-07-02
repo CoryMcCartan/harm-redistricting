@@ -1,10 +1,12 @@
 nj = read_rds(here("data/NJ_cd_final_vtd_20.rds")) %>%
     redist_map(pop_tol=0.01, ndists=12, adj=.$adj)
 
-nj_enacted <- read_sf('https://redistricting.lls.edu/wp-content/uploads/nj_2020_congress_2021-12-22_2031-06-30.json')
-nj_rep_comm <- read_sf('data-raw/NJ CD 2021 GOP submission/NJ CD 2021 GOP V5_Hospital_shoreline.shp')
-nj$dem_comm <- as.integer(nj_enacted$District[geomander::geo_match(from = nj, to = nj_enacted, method = 'area')])
-nj$rep_comm <- as.integer(nj_rep_comm$DISTRICT[geomander::geo_match(from = nj, to = nj_rep_comm, method = 'area')])
+if (!'dem_comm' %in% names(nj)) {
+    nj_enacted <- read_sf('https://redistricting.lls.edu/wp-content/uploads/nj_2020_congress_2021-12-22_2031-06-30.json')
+    nj_rep_comm <- read_sf('data-raw/NJ CD 2021 GOP submission/NJ CD 2021 GOP V5_Hospital_shoreline.shp')
+    nj$dem_comm <- as.integer(nj_enacted$District[geomander::geo_match(from = nj, to = nj_enacted, method = 'area')])
+    nj$rep_comm <- as.integer(nj_rep_comm$DISTRICT[geomander::geo_match(from = nj, to = nj_rep_comm, method = 'area')])
+}
 
 N_sim = 10e3
 n_runs = 4
