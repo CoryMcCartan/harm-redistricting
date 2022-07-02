@@ -54,7 +54,7 @@ minissouri_people = minissouri %>%
 ## functions and helpers -------
 plot_state = function(map, people, plan=NULL, qty=NULL, ppl_size=1.75, grey_out = FALSE,
                       ...) {
-    if (is.null(people$harm)) people$harm = FALSE
+    if (is.null(people$harm)) people$harm = 0
     people_noharm = filter(people, harm == 0)
     people_harm_dem = filter(people, harm == 1, dem)
     people_harm_gop = filter(people, harm == 1, !dem)
@@ -62,14 +62,14 @@ plot_state = function(map, people, plan=NULL, qty=NULL, ppl_size=1.75, grey_out 
     p = redist.plot.map(map, fill=qty, ...) +
         scale_fill_party_c(name="Democratic\nshare") +
         geom_sf(data=map, size=0.6, fill=NA, color="white") +
-        geom_sf(aes(color=dem, shape=factor(circle+2*harm, levels=0:3)),
+        geom_sf(aes(color=dem, shape=circle),
                 data=people_noharm, size=ppl_size, alpha = ifelse(grey_out, 0.2, 1)) +
-        geom_sf(aes(shape=factor(circle+2*harm, levels=0:3)),
-                data=people_harm_dem, fill=DEM, size=ppl_size) +
-        geom_sf(aes(shape=factor(circle+2*harm, levels=0:3)),
-                data=people_harm_gop, fill=GOP, size=ppl_size) +
+        geom_sf(aes(shape=circle, color = dem),
+                data=people_harm_dem, size=ppl_size, alpha = 1) +
+        geom_sf(aes(shape=circle, color = dem),
+                data=people_harm_gop, size=ppl_size, alpha = 1) +
         scale_color_manual(values=c(GOP, DEM), guide="none") +
-        scale_shape_manual(values=c(15, 19, 22, 21), guide="none") +
+        scale_shape_manual(values=c(15, 19), guide="none") +
         theme_repr_map() +
         theme(plot.title = element_text(hjust = 0.5))
     if (!is.null(plan)) {
@@ -157,7 +157,7 @@ suppressMessages({
 
     p3 <- plot_state(map = minissouri,
                      people = add_voter_harm(minissouri_people, minissouri, dem_harm_gerry_dem, rep_harm_gerry_dem),
-                     plan = pl_gerry_dem, qty = dem_gerry_dem, grey_out = TRUE) +
+                     plan = pl_gerry_dem, grey_out = TRUE) +
         labs(title = '(c) Individual Harm')
 
 })
@@ -188,4 +188,4 @@ p4 = ggplot(d_harm, aes(x=paste(gerry, "gerrymander"), y=harm, fill=party)) +
 p1 + p2 + p3 + p4 +
     plot_layout(guides="collect" , nrow = 2)
 
-ggsave(here("paper/figures/diffharm_minissouri.pdf"), width=8, height=5.1)
+ggsave(here("paper/figures/diffharm_minissouri.pdf"), width=6.5, height=6)
