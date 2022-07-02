@@ -56,13 +56,13 @@ p1 = ggplot(nj, aes(fill=ndv/(ndv+nrv))) +
     labs(title="(a) Partisan patterns") +
     theme_repr_map() +
     theme(plot.title = element_text(hjust = 0.5))
-p2 = plot_cds(nj, as.matrix(plans)[,"dem_gerry"], county, "NJ") +
-    labs(title="(b) Democratic\ngerrymander") +
+p2 = plot_cds(nj, as.matrix(plans)[,"dem_comm"], county, "NJ") +
+    labs(title="(b) Democratic\nproposal") +
     map_scale +
     theme_repr_map() +
     theme(plot.title = element_text(hjust = 0.5))
-p3 = plot_cds(nj, as.matrix(plans)[,"rep_gerry"], county, "NJ") +
-    labs(title="(c) Republican\ngerrymander") +
+p3 = plot_cds(nj, as.matrix(plans)[,"rep_comm"], county, "NJ") +
+    labs(title="(c) Republican\nproposal") +
     map_scale +
     theme_repr_map() +
     theme(plot.title = element_text(hjust = 0.5))
