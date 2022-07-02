@@ -1,6 +1,11 @@
 nj = read_rds(here("data/NJ_cd_final_vtd_20.rds")) %>%
     redist_map(pop_tol=0.01, ndists=12, adj=.$adj)
 
+nj_enacted <- read_sf('https://redistricting.lls.edu/wp-content/uploads/nj_2020_congress_2021-12-22_2031-06-30.json')
+nj_rep_comm <- read_sf('data-raw/NJ CD 2021 GOP submission/NJ CD 2021 GOP V5_Hospital_shoreline.shp')
+nj$dem_comm <- as.integer(nj_enacted$District[geomander::geo_match(from = nj, to = nj_enacted, method = 'area')])
+nj$rep_comm <- as.integer(nj_rep_comm$DISTRICT[geomander::geo_match(from = nj, to = nj_rep_comm, method = 'area')])
+
 N_sim = 10e3
 n_runs = 4
 if (!file.exists(sim_path <- here("data/nj_sims.rds"))) {
@@ -23,6 +28,11 @@ if (!file.exists(sim_path <- here("data/nj_sims.rds"))) {
 } else {
     plans = read_rds(sim_path)
 }
+
+plans <- plans %>%
+    subset_sampled() %>%
+    add_reference(ref_plan = nj$dem_comm, name = 'dem_comm') %>%
+    add_reference(ref_plan = nj$rep_comm, name = 'rep_comm')
 
 statewide = with(nj, sum(ndv)/sum(ndv+nrv))
 prop_seats = round(attr(nj, "ndists") * statewide)
@@ -74,7 +84,7 @@ meas_labels = c(e_dem="Expected\nDem. seats", dh="Differential harm", h="Average
 if (!file.exists(path <- here("paper/figures/nj_pairs.pdf"))) {
     pl_plot = pl$plan %>%
         as_tibble() %>%
-        select(e_dem, dh, h, egap, pbias, mean_med, decl)
+        select(draw, e_dem, dh, h, egap, pbias, mean_med, decl)
     pl_plot = bind_rows(head(pl_plot, 2), slice_sample(head(pl_plot, -2), n=2000))
 
     expl_vars(pl_plot, labels=meas_labels, refs=c(GOP, DEM), rasterize=TRUE)
@@ -90,7 +100,8 @@ if (!file.exists(path <- here("paper/figures/nj_meas.pdf"))) {
     }
     d_hist_samp = make_d_hist(subset_sampled(pl$plan))
     d_hist_ref = make_d_hist(subset_ref(pl$plan)) %>%
-        drop_na()
+        drop_na() %>%
+        filter(draw != 'cd_2020')
     d_refline = tibble(var=d_hist_ref$var[c(2, 4:7)], value=0)
 
     p = ggplot(d_hist_samp, aes(value)) +
@@ -98,9 +109,10 @@ if (!file.exists(path <- here("paper/figures/nj_meas.pdf"))) {
         geom_histogram(fill="#888888", bins=48) +
         geom_vline(aes(xintercept=value), data=d_refline, lty="dashed", lwd=0.45) +
         geom_vline(aes(xintercept=value, color=draw), data=d_hist_ref, lwd=1.25) +
-        scale_color_manual(values=c(rep_gerry=GOP, dem_gerry=DEM),
-                           labels=c(rep_gerry="Republican gerrymander",
-                                    dem_gerry="Democratic gerrymander")) +
+        scale_color_manual(values=c(rep_comm=GOP, dem_comm=DEM),
+                           labels=c(
+                           rep_comm = 'Republican proposal',
+                           dem_comm = 'Democratic proposal')) +
         scale_x_continuous(NULL, labels=function(x) number(x, 0.01)) +
         scale_y_continuous("Number of plans", expand=expansion(mult=c(0, 0.05))) +
         labs(x=NULL, color="Plan") +
