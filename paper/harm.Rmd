@@ -437,7 +437,7 @@ Similarly, partisan bias and the mean-median score are moderately correlated, bu
 Thus there exist many plans which give Democrats a higher-than-average share of the seats, but which have partisan bias and mean-median score favoring Republicans.
 New Jersey is just one state, and while some of the correlations between measures here are found in other states, some are not.
 Appendix \ref{app:corr} shows these correlations across simulated plans in eight states.
-The most consistent correlation is between estimated differential partisan harm and the expected number of seats won by each party, which is usually around 0.82, and always above 0.66 in the eight states we study.
+The most consistent correlation is between estimated differential partisan harm and the expected number of seats won by each party, which averages 0.79 in the eight states we study.
 
 # Application to Voting Rights Litigation in Alabama {#sec:alabama}
 

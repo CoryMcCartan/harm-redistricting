@@ -21,6 +21,9 @@ corr_state = function(abbr) {
     idx_2 = sample(seq_len(ncol(as.matrix(st_plans)))[-1], 250)
     hh = partisan_harm(st_plans, ndshare, st_map$ndv, st_map$nrv, elec_model_spec, idx_2=idx_2)
 
+    cat("Statewide = ", round(100*statewide, 1),
+        "%, E[∆H] = ", mean(hh[1, -1] - hh[2, -1]), "\n", sep="")
+
     pl_corr = st_plans %>%
         subset_sampled() %>%
         mutate(decl = part_decl(., st_map, dvote, rvote)) %>%
@@ -29,7 +32,7 @@ corr_state = function(abbr) {
                   pbias = pbias[1],
                   egap = egap[1],
                   decl = decl[1],
-                  mean_med = median(ndshare) - mean(ndshare)) %>%
+                  mean_med = mean(ndshare) - median(ndshare)) %>%
         mutate(h_dem = hh[1, -1],
                h_rep = hh[2, -1],
                dh = h_dem - h_rep,
