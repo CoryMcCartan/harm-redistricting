@@ -138,17 +138,14 @@ cat("Total harm:", sum(m_harm*m_grps), "\n")
 cat("Average total harmed:", sum(m_harm*m_grps) / sum(m_grps), "\n")
 }
 
-m_pr = district_group(plans, pr_dem)
-h_prec_dem = rowMeans(pos_part(m_pr[, -1] - m_pr[, 1]))
-h_prec_rep = rowMeans(pos_part(-m_pr[, -1] + m_pr[, 1]))
-rm(m_pr)
-
-h_black = with(al_map, sum(h_prec_dem*ndv_black + h_prec_rep*nrv_black) / sum(ndv_black + nrv_black))
-h_white = with(al_map, sum(h_prec_dem*ndv_white + h_prec_rep*nrv_white) / sum(ndv_white + nrv_white))
-h_other = with(al_map, sum(h_prec_dem*ndv_other + h_prec_rep*nrv_other) / sum(ndv_other + nrv_other))
-h_dem = with(al_map, weighted.mean(h_prec_dem, ndv))
-h_rep = with(al_map, weighted.mean(h_prec_rep, nrv))
-
+hh_prec_white = prec_harm(plans, dem, al_map$ndv_white, al_map$nrv_white,
+                          elec_model_spec, idx_1=1, idx_2=1+seq_len(N_sim))
+hh_prec_black = prec_harm(plans, dem, al_map$ndv_black, al_map$nrv_black,
+                          elec_model_spec, idx_1=1, idx_2=1+seq_len(N_sim))
+hh_prec_other = prec_harm(plans, dem, al_map$ndv_other, al_map$nrv_other,
+                          elec_model_spec, idx_1=1, idx_2=1+seq_len(N_sim))
+harm_prec = (hh_prec_white[, 1] + hh_prec_black[, 1] + hh_prec_other[, 1]) /
+    (al_map$ndv + al_map$nrv)
 
 
 # plots out
@@ -171,7 +168,7 @@ p2 = plot(al_map, vap_black / vap) +
     scale_fill_wa_c("sea", name="BVAP", labels=percent, limits=c(0, 1)) +
     theme_repr_map() +
     labs(title="(b) Racial demographics")
-p3 = plot(al_map, (h_prec_dem*ndv + h_prec_rep*nrv) / (ndv + nrv)) +
+p3 = plot(al_map, harm_prec) +
     geom_sf(data=al_sum, fill=NA, color="white", size=0.15, inherit.aes=F) +
     scale_fill_wa_c("forest_fire", name="Fraction of\nvoters harmed",
                     labels=percent, limits=c(0, 1)) +

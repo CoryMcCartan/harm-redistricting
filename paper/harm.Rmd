@@ -76,27 +76,19 @@ A more detailed discussion of the connections between the proposed framework and
 Harm and differential harm are more than a useful conceptual unification---they are practically useful in a wide variety of redistricting analyses, including partisan gerrymandering of New Jersey congressional districts (Section \ref{sec:nj}), voting rights litigation for Alabama congressional districts (Section \ref{sec:alabama}), and racial impacts of district boundaries on Boston City Council primary elections (Section \ref{sec:boston}).
 Section \ref{sec:discussion} concludes.
 
-# Minivation {#sec:motivation}
+# Motivation {#sec:motivation}
 
 To introduce and motivate the concepts of individual and differential harm, we will make use of Minissouri, a stylized representations of Missouri.
 Minissouri has two medium-sized cities which are not large enough to deliver a statewide Democratic majority.
 Minissouri has a population of 180 and should be divided into 3 districts with population between 54 and 66.
 Voters' preferences are assumed to be stable across elections, and turnout is 100%.
-A schematic for this example is shown in Figure \ref{fig:mini-schematic}.
+A schematic for this example is shown in Figure \ref{fig:minissouri}.
 
 ## Minichusetts: counterfactuals matter
 
 Every precinct in Minichusetts has a Democratic majority.
 As a result, it is impossible to draw a districting plan built from precincts that creates even a single Republican district.
 This mirrors the situation in the actual state of Massachusetts, where a high level of partisan integration and a solid statewide Democratic majority leads to Republican inability to win any congressional seats under recent historical voting patterns [@duch:18].
-
-```{r mini-schematic}
-#| fig.cap: |
-#|      Schematic maps of the example states,
-#|      showing the partisan composition of each of the 36 precincts.
-#|      The total voting population for each example is 180.
-include_graphics("figures/minis_schematic.pdf")
-```
 
 This Democratic dominance poses a problem for existing measures of partisan gerrymandering.
 One of the most common measures, the efficiency gap of @stephanopoulos2015, takes a value of $-0.311$ or $-0.317$ for Minichusetts, depending on the configuration of the districts.
@@ -113,24 +105,16 @@ There can be no gerrymander, and no harm to individual voters, if no improvement
 
 To explore how to properly integrate counterfactual districting plans into the analysis of a potential gerrymander, we turn to the more interesting state of Mininois, where, in a familiar pattern of partisan sorting, Democrats are sorted asymmetrically into a single population-dominating city whereas Republicans dominate the less ideologically segregated rural regions [@chen:rodd:13; @enos:brown:21].
 
-Consider the two plans in Figure \ref{fig:harm-mininois}(a)-(b).
+Consider the two plans in Figure XX(a)-(b).
 A Democratic gerrymander (a) effectuates Democratic control by splitting its city, pinwheel-like, into three districts reaching out into the more Republican and sparsely populated remainder of the state.
 This gerrymander would elect zero Republicans and three Democrats, whereas the proportional map (b) would elect two Democrats and one Republican.
-
-```{r harm-mininois}
-#| fig.cap: |
-#|      Two potential districting plans for Mininois:
-#|      a Democratic gerrymander (a) and a close-to-proportional plan (b).
-#|      Panel (c) shows the total harm to voters in each precinct done by (a), using (b) as a counterfactual.
-include_graphics("figures/harm_mininois.pdf")
-```
 
 Suppose now that plan (a) is enacted into law.
 Who does this decision harm, if anyone?
 Precisely those voters who are not represented by their chosen party, but would have been counterfactually.
 Using plan (b) as a counterfactual, we can see that rural Republicans in the eastern half of Mininois are harmed by plan (a), since under plan (b) they would be represented by a Republican.
 Republicans in the city and in the southwest are unharmed, as are all Democratic voters, since they are represented by the same party under both plans.
-Figure \ref{fig:harm-mininois}, Panel C plots the number of voters harmed in each precinct.
+Figure XX, Panel C plots the number of voters harmed in each precinct.
 
 Measuring the harm of the Democratic gerrymander required comparing it to a neutral counterfactual plan.
 The choice of counterfactual might seem hopelessly subjective.
@@ -144,20 +128,19 @@ While it is apparent that the Democratic gerrymander indeed benefits Democrats, 
 
 However, we can partition voters into groups, and compare how the harm done by a plan falls across those groups.
 If a plan disproportionately harms voters of one group, then we might conclude that that group was the target of a gerrymander.
-Figure \ref{fig:diffharm-minissouri} illustrates this idea for two hypothetical gerrymanders ((a) and (c)) of Minissouri.
+Figure \ref{fig:minissouri} illustrates this idea for two hypothetical gerrymanders ((a) and (c)) of Minissouri.
 As in Mininois, we can tally the total number of voters harmed in each precinct ((d) and (f)) in comparison to a proportional counterfactual plan (b).
 In both cases, total harm to voters is concentrated in areas whose party representation flips from the gerrymander to the counterfactual plan.
 
-```{r diffharm-minissouri}
+```{r minissouri, fig.width=6.75}
 #| fig.cap: |
-#|      Three potential districting plans for Minissouri:
-#|      a Democratic gerrymander (a),
-#|      a close-to-proportional plan (b), and a Republican gerrymander (c).
-#|      Panels (d) and (f) show the total harm to voters in each precinct done
-#|      by their corresponding gerrymander, using (b) as a counterfactual.
-#|      Panel (e) summarizes this harm by party and across precincts, showing
-#|      the average harm done to voters of each party by each gerrymander.
-include_graphics("figures/diffharm_minissouri.pdf")
+#|      Two potential districting plans for Minissouri,
+#|      a Democratic gerrymander (a), and a close-to-proportional plan (b).
+#|      Panel (c) shows which voters are harmed by the Democratic gerrymander,
+#|      using the proportional plan (b) as a counterfactual.
+#|      Panel (d) summarizes this across precincts, showing
+#|      the average harm done to voters of each partisan and racial group.
+include_graphics("figures/minissouri.pdf")
 ```
 
 Panel (e) then splits the voters by party, and computes, for each party, the share of its voters which are harmed.
@@ -165,7 +148,7 @@ The Democratic gerrymander (a) harms Republicans at a much higher rate than Demo
 We call the gap between these two rates the *differential harm,* and propose it as a general way to account for the impact of a districting plan on particular groups.
 
 The differential harm of the Democratic gerrymander of Minissouri is $-0.415$, and the differential harm of the Republican gerrymander is $0.450$, where positive values indicate Republican bias.
-In other words, under the Democratic gerrymander, the average Republican voter in Mininois is 41.5% more likely to be represented by a Democrat than an average Democrat is to be represented by a Republican, compared to the proportional plan in Figure \ref{fig:diffharm-minissouri}(b).
+In other words, under the Democratic gerrymander, the average Republican voter in Mininois is 41.5% more likely to be represented by a Democrat than an average Democrat is to be represented by a Republican, compared to the proportional plan in Figure \ref{fig:minissouri}(b).
 
 # Individual and Differential Harm {#sec:indiv-harm}
 
@@ -389,10 +372,13 @@ Sections \ref{sec:alabama} and \ref{sec:boston} demonstrate this approach in pra
 # Application to Partisan Gerrymandering in New Jersey {#sec:nj}
 
 To illustrate the connections in the preceding section and to demonstrate the value of the proposed measures in a real-world setting, we provide a brief analysis of congressional districting in the state of New Jersey.
-As discussed above, many gerrymandering measures often function well in highly competitive states, but may produce more counterintuitive results in other states.
-New Jersey, with an average Democratic two-party vote share of 56.6% across our two baseline elections (2016 presidential and 2018 senatorial), will demonstrate that this is not a problem unique to lopsided states.
+Since 1995, New Jersey congressional redistricting has been handled by a 13-member commisison, with 6 political appointees from each party and one independent chair with *de facto* tiebreaking authority.
+For the 2020 redistricting cycle, each party submitted a proposed plan to the chair, John Wallace Jr. Wallace ultimately selected the Democratic plan for enactment, "simply because in the last redistricting, the map was drawn by Republicans."[^8] Here, in contrast, we evaluate the two plans on the basis of existing gerrymandering metrics as well as through the proposed harm framework.
 
-```{r nj-maps, fig.width=6.5}
+[^8]: See Matt Friedman, "Democrats prevail in New Jersey redistricting with map that could sacrifice Malinowski," *Politico,* December 22, 2021.
+    <https://www.politico.com/news/2021/12/22/new-jersey-redistricting-map-malinowski-525983> (accessed July 3, 2022).
+
+```{r nj-maps, fig.width=6.25}
 #| fig.cap: |
 #|      Baseline vote patterns (a), two hypothetical gerrymanders (b) and (c),
 #|      and one randomly sampled plan (d).
@@ -400,61 +386,64 @@ New Jersey, with an average Democratic two-party vote share of 56.6% across our 
 include_graphics("figures/nj_maps.pdf")
 ```
 
-Figure \ref{fig:nj-maps} shows the baseline Democratic vote share by precinct, along with two hypothetical gerrymanders of the state, which were generated using the short-burst optimization approach of @cannon2020.
-The Democratic gerrymander has 11 Democratic seats and 1 Republican seat at baseline, while the Republican gerrymander has 6 Democratic and 6 Republican seats.
+Figure \ref{fig:nj-maps} shows the baseline Democratic vote share by precinct, along with the Democratic and Republican proposals.[^9]
+Using an average of the 2016 presidential and 2018 senatorial elections as a baseline, the Democratic proposal yields 9 Democratic seats and 3 Republican seats, while the Republican proposal has 7 Democratic and 5 Republican seats.
 
-We sample 10,000 districting plans across four independent runs of the SMC algorithm of @mccartan2020, setting constraints to favor compact plans with district boundaries that tend to follow county lines.
+[^9]: The enacted plan is sourced from [All About Redistricting](https://redistricting.lls.edu/state/new-jersey/?cycle=2020&level=Congress&startdate=2021-12-22), and the GOP plan was provided by Harrison Neely, executive director for the GOP delegation to the New Jersey Congressional Redistricting Committe, following an Open Public Records Act request.
+
+We sample 10,000 districting plans across four independent runs of the SMC algorithm of @mccartan2020, as implemented in the R package `redist` [@redist], setting constraints to favor compact plans with district boundaries that tend to follow county lines.
 One such plan is shown in Figure \ref{fig:nj-maps}(d).
-For each of these sampled plans and the two gerrymanders, we calculate the average harm and differential partisan harm versus the simulated baseline,[^8] as well as the expected number of Democratic seats, the efficiency gap, partisan bias, the mean-median score, and partisan declination.
+For each of these sampled plans and the two gerrymanders, we calculate the average harm and differential partisan harm versus the simulated baseline,[^10] as well as the expected number of Democratic seats, the efficiency gap, partisan bias, the mean-median score, and partisan declination.
 The distribution of these measures is shown in Figure \ref{fig:nj-meas}.
 
-[^8]: We choose to calculate $\Delta_{\dem-\rep}H(q)$, so that positive values correspond to a plan that favors Republicans.
+[^10]: We choose to calculate $\Delta_{\dem-\rep}H(q)$, so that positive values correspond to a plan that favors Republicans.
+
+We first examine the values of each metric on the two proposals alone.
+The estimate of differential partisan harm aligns with the expected partisan skew of each plan, with a value of $-0.036$ for the Democratic proposal and $0.020$ for the Republican proposal.
+These values are relatively directly interpretable; for example, the differential harm score of $-0.036$ means that an average Democratic voter is 3.6% less likely to be misrepresented than their average Republican counter-partisan.
+The efficiency gap, declination, and partisan bias measures agree with the differential harm estimates in this regard, though the former two are much more discrete.
+The efficiency gap and partisan bias estimate give roughly equal scores in absolute value to the Democratic and Republican plans, in comparison to differential harm and declination, which identify the Democratic proposal as slightly more extreme.
+While the mean-median measure identifies the Republican proposal as favoring Republicans, it also scores the Democratic proposal as favoring the Republicans, albeit by less.
 
 ```{r nj-meas, fig.width=7}
 #| fig.cap: |
-#|      The distribution of the existing and proposed measures across a sample of plans,
+#|      The distribution of the existing and proposed measures across 
+#|      a sample of 10,000 plans,
 #|      with the values for two gerrymanders overlaid as vertical lines.
 #|      The dashed line indicates a value of zero.
 include_graphics("figures/nj_meas.pdf")
 ```
 
-We first examine the values of each metric on the two example plans alone.
-The estimate of differential partisan harm correctly identifies the partisan skew of each gerrymander, with a large negative value for the Democratic gerrymander and a small positive value for the Republican gerrymander.
-These values are relatively directly interpretable; for example, the differential harm score of $-0.109$ means that an average Democratic voter is 10.9% less likely to be misrepresented than their average Republican counter-partisan.
-The efficiency gap and declination measures also correctly identify the gerrymanders, though they are much more discrete, and the efficiency gap gives roughly equal scores in absolute value to the Democratic and Republican plans, in comparison to differential harm and declination, which identify the Democratic gerrymander as more extreme.
-In contrast, the usual partisan bias estimator classifies the Republican gerrymander as favoring Democrats and vice versa.
-While the mean-median measure identifies the Democratic gerrymander, it classifies the Republican gerrymander as a an even more extreme Democratic-leaning outlier.
+These values can be better contextualized in comparison the distribution across the sampled plans.
+The Democratic proposal is expected to produce an average of 8.55 Democratic seats under our election model, more than 79% of all sample plans.
+The Republican proposal is an outlier, yielding fewer seats on average than every single sampled plan.
+This pattern is repeated for all of the four common gerrymandering measures, where the Republican plan is a clear outlier (all $p=0.0002$, except $p=0.002$ for partisan bias) while the Democratic plan is not ( $p=0.34$ for the efficiency gap, $0.50$ for declination, $0.88$ for partisan bias, and $0.17$ for the mean-median score).
+However, both the partisan bias estimate and the mean-median score again misidentify the direction of the bias of the Republican plan, classifying it as an extreme Democratic outlier.
 
-Considering the distribution of these statistics across the sampled plans doesn't help much, either.
-The expected number of Democratic seats naturally identifies the gerrymanders (two-sided $p=0.0002$) and the direction of bias.
-The gerrymanders are also an outlier under the efficiency gap and declination measures also (both $p=0.0002$), and in the correct direction.
-While the Republican gerrymander is an outlier for the partisan bias and mean-median score ($p=0.0224$ and $p=0.0004$), the Democratic gerrymander is only an outlier for the mean-median score($p=0.0004$ compared to $p=0.349$ for partisan bias).
-All of the plans identified as outliers under these two metrics are identified in the wrong direction.
+The estimate of differential harm already uses the simulation output, and so comparing the proposals to the sampling distribution is not strictly required.
+However, it is notable that while the Democratic proposal has a more extreme estimate of differential partisan harm (1.6 percentage points higher), its value of $-0.037$ is not an outlier with respect to the distribution of differential harm for a randomly sampled plan ($p=0.43$, using the same set of samples as a counterfactual), while the Republican plan is ($p=0.0002$).
+In other words, a *typical* nonpartisan districting plan is not necessarily a *fair* one, even in comparison to other similarly generated districting plans.
+The sampled plan which minimizes differential harm yields 8.18 expected Democratic seats, compared to a sample average of 8.41 seats, and the 6.8 seats that would be required for an outcome completely proportional to the parties' statewide vote share.
 
-There is also disagreement between the measures about the natural bias of districting plans in New Jersey: the median sampled plan has a partisan bias of $0.020$, indicating a natural Republican bias, but the median mean-median score is just $0.0040$, and the median differential partisan harm is $-0.032$, indicating a natural Democratic bias.
-Which is correct?
-It depends on what one means by "natural bias," though we submit that differential harm is one good way to measure it.
-Democrats do win 8.4 seats on average across the simulations, which is more than the 6.8 seats that would be expected under a completely proportional outcome.
-It is important to note that a value of zero estimated differential harm does not necessarily correspond to proportionality; the simulated plan with an estimated differential harm closest to zero yieled 8.1 expected Democratic seats.
-
-Both gerrymanders excessively harm the average voter, with the Democratic plan doing so at a moderately higher rate ($p=0.0004$ for the Democratic plan, $p=0.0008$ for the Republican plan).
+Both proposals harm the average voter at a higher rate than most of the sampled plans, with the Republican plan again more extreme in this regard ($p=0.0008$ versus $p=0.061$ for the Democratic plan).
 Notably, the plans which minimize total harm are also those which have near-zero differential partisan harm.
 Thus, at least in New Jersey, overall harm reduction is consistent with a fair map on a partisan basis.
-Minimizing bias with other measures, however, could lead one astray: plans which score an efficiency gap of zero can have a large average harm, which may not be distributed fairly between parties.
-Plans with zero partisan bias or mean-median score actually have higher-than-average harm and tend to differentially harm Republicans.
+Minimizing bias with other measures, however, could lead one astray: plans which score an efficiency gap of zero can have average harm as high as 0.172 and differential harm as extreme as $-0.061$, nearly twice the value of the Democratic proposal.
+Plans with zero partisan bias or mean-median score likewise have higher-than-average harm and tend to differentially harm Republicans.
 
 Figure \ref{fig:nj-pairs} in the appendix expands on Figure \ref{fig:nj-meas} to also show the correlations between these various measures.
 Expected Democratic seats, the differential harm estimates, the efficiency gap, and declination are all moderately correlated with each other.
 Similarly, partisan bias and the mean-median score are moderately correlated, but very weakly correlated with the expected number of Democratic seats.
+Thus there exist many plans which give Democrats a higher-than-average share of the seats, but which have partisan bias and mean-median score favoring Republicans.
 New Jersey is just one state, and while some of the correlations between measures here are found in other states, some are not.
 Appendix \ref{app:corr} shows these correlations across simulated plans in eight states.
 The most consistent correlation is between estimated differential partisan harm and the expected number of seats won by each party, which is usually around 0.82, and always above 0.66 in the eight states we study.
 
 # Application to Voting Rights Litigation in Alabama {#sec:alabama}
 
-We next apply our proposed framework to @2022merrill, ongoing VRA litigation in which civil rights groups have argued that the existing Black majority district packs Black voters, and so a second Black opportunity-to-elect district should be drawn.[^9]
+We next apply our proposed framework to @2022merrill, ongoing VRA litigation in which civil rights groups have argued that the existing Black majority district packs Black voters, and so a second Black opportunity-to-elect district should be drawn.[^11]
 
-[^9]: Relevant court filings are available at <https://redistricting.lls.edu/case/milligan-v-merrill/>.
+[^11]: Relevant court filings are available at <https://redistricting.lls.edu/case/milligan-v-merrill/>.
 
 As discussed in Section \ref{subsec:racial}, plaintiffs had to satisfy the first *Gingles* criterion by submitting one or more remedial maps demonstrating that a new Black opportunity-to-elect district could be drawn while meeting all other redistricting requirements.
 In *Merrill,* the plaintiff's expert, Moon Duchin, submitted four such remedial plans, one of which is shown in Figure \ref{fig:al-maps}(e).
@@ -515,11 +504,11 @@ include_graphics("figures/boston_map.pdf")
 
 The city of Boston is governed by a mayor and a nonpartisan 13-member city council.
 Nine of the councilors are elected from contiguous city council districts, and the remaining four councilors are elected at-large, with all councilors serving two-year terms.
-Council district boundaries are redrawn every ten years following the decennial census, and must be equipopulous, be compact, and preserve neighborhood and community boundaries.[^10]
+Council district boundaries are redrawn every ten years following the decennial census, and must be equipopulous, be compact, and preserve neighborhood and community boundaries.[^12]
 This section will study the extent to which the current district boundaries differentially harm voters of different racial groups, in comparison to a completely race-neutral districting process.
 Figure \ref{fig:boston-map} shows the racial composition of the city as well as the boundaries of the 2010 city council districts and the city's official neighborhoods.
 
-[^10]: City of Boston charter.
+[^12]: City of Boston charter.
     Available at <https://www.boston.gov/sites/default/files/embed/b/boston-city-charter-2007.pdf>.
 
 ## Approach
@@ -540,10 +529,10 @@ Even if we could, for instance, divide candidates into a more "liberal" and a mo
 include_graphics("figures/boston_factors.pdf")
 ```
 
-To solve both of these problems, we develop a *latent factor ecological inference model*, which simultaneously estimates (a) turnout by precinct and race, (b) candidate positions in a latent two-dimensional political space,[^11] and (c) voter preferences in this space by precinct and race, using precinct-level demographic data and vote totals from the March 2020 presidential primary and September 2021 mayoral preliminary elections.
+To solve both of these problems, we develop a *latent factor ecological inference model*, which simultaneously estimates (a) turnout by precinct and race, (b) candidate positions in a latent two-dimensional political space,[^13] and (c) voter preferences in this space by precinct and race, using precinct-level demographic data and vote totals from the March 2020 presidential primary and September 2021 mayoral preliminary elections.
 Figure \ref{fig:boston-factors} shows the key outputs from this model, and Appendix \ref{app:lfei} explains the model in detail.
 
-[^11]: Exploratory analyses found that three latent dimensions did not provide a substantially better fit to the data.
+[^13]: Exploratory analyses found that three latent dimensions did not provide a substantially better fit to the data.
 
 Like all ecological inference models, ours rests on several unverifiable assumptions.
 The latent factor component imposes additional assumptions about the structure of voting in Boston elections.
@@ -567,7 +556,7 @@ We limit our hypothetical elections to two candidates, to simplify the challenge
 However, our use of latent factors provides one way to extend our harm framework to the multiple-candidate setting.
 One could weight voter harm by the distance in latent space between each voter's preferred candidate and the elected candidate, thus dropping the implicit assumption that all candidates the voter did not vote for are interchangeable.
 
-We sample 2,000 redistricting plans across two independent runs of the SMC algorithm of @mccartan2020, setting constraints to favor compact plans that respect neighborhood boundaries.
+We sample 2,000 districting plans across two independent runs of the SMC algorithm of @mccartan2020, setting constraints to favor compact plans that respect neighborhood boundaries.
 Since we do not provide any racial information to the algorithm, this set of plans forms a good approximation of a race-neutral districting process.
 
 For the first scenario, where council races are contested along the ideological axis, we estimate that the enacted plan is quite fair, differentially harming White voters at a rate of only 0.0079 compared to the race-neutral baseline.
@@ -628,9 +617,9 @@ The election model used in estimating harm is $$
     \qquad \delta_v\sim\Norm(0, \sigma^2_\delta),
     \quad \varepsilon_{dv}\sim\Norm(0, \sigma^2_\varepsilon).
 $$ As noted in the main text, $\bar{s}_d$ is computed by averaging historical election returns.
-This is done at the precinct level, since this is the most granular level that districting plans are usually built from and election returns are reported at.[^12]
+This is done at the precinct level, since this is the most granular level that districting plans are usually built from and election returns are reported at.[^14]
 
-[^12]: When district boundaries split precincts, practitioners generally impute the returns in each component of the split precinct by population-weighted interpolation.
+[^14]: When district boundaries split precincts, practitioners generally impute the returns in each component of the split precinct by population-weighted interpolation.
     Population information comes from Census blocks, which, when populated, are practically never split.
 
 To estimate $\sigma^2_\delta$ and $\sigma^2_\varepsilon$, we use historical U.S. congressional election returns from 1976-2020, provided by the MIT Election Data Science Lab (<https://doi.org/10.7910/DVN/IG0UN2>).

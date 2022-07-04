@@ -1,40 +1,19 @@
 nj = read_rds(here("data/NJ_cd_final_vtd_20.rds")) %>%
     redist_map(pop_tol=0.01, ndists=12, adj=.$adj)
 
-if (!'dem_comm' %in% names(nj)) {
-    nj_enacted <- read_sf('https://redistricting.lls.edu/wp-content/uploads/nj_2020_congress_2021-12-22_2031-06-30.json')
-    nj_rep_comm <- read_sf('data-raw/NJ CD 2021 GOP submission/NJ CD 2021 GOP V5_Hospital_shoreline.shp')
-    nj$dem_comm <- as.integer(nj_enacted$District[geomander::geo_match(from = nj, to = nj_enacted, method = 'area')])
-    nj$rep_comm <- as.integer(nj_rep_comm$DISTRICT[geomander::geo_match(from = nj, to = nj_rep_comm, method = 'area')])
-}
-
 N_sim = 10e3
 n_runs = 4
 if (!file.exists(sim_path <- here("data/nj_sims.rds"))) {
     plans = redist_smc(nj, N_sim/n_runs, counties=county, pop_temper=0.005,
-                       runs=n_runs, verbose=TRUE)
+                       runs=n_runs, verbose=TRUE) %>%
+        add_reference(nj$dem_comm) %>%
+        add_reference(nj$rep_comm)
 
-    # gerrymanders
-    set.seed(5118)
-    opt_dem = redist_shortburst(nj, scorer_group_pct(nj, ndv, ndv+nrv, 11),
-                                max_bursts=1000, burst_size=15, return_all=FALSE)
-    set.seed(5118)
-    opt_rep = redist_shortburst(nj, scorer_group_pct(nj, nrv, ndv+nrv, 6),
-                                max_bursts=1000, burst_size=15, return_all=FALSE)
-
-    plans = plans %>%
-        subset_sampled() %>%
-        add_reference(last_plan(opt_dem), "dem_gerry") %>%
-        add_reference(last_plan(opt_rep), "rep_gerry")
     write_rds(plans, sim_path, compress="xz")
 } else {
     plans = read_rds(sim_path)
 }
 
-plans <- plans %>%
-    subset_sampled() %>%
-    add_reference(ref_plan = nj$dem_comm, name = 'dem_comm') %>%
-    add_reference(ref_plan = nj$rep_comm, name = 'rep_comm')
 
 statewide = with(nj, sum(ndv)/sum(ndv+nrv))
 prop_seats = round(attr(nj, "ndists") * statewide)
@@ -50,7 +29,7 @@ pl$plan$dh[1:2] = hh[1, ] - hh[2, ]
 pl$plan$h[1:2] = hh[3, ]
 
 # Initial plots ----
-map_scale = scale_fill_party_c(name="Democratic\nshare", limits=c(0.3, 0.7))
+map_scale = ggredist::scale_fill_party_c(name="Two-party\nvote share", limits=c(0.3, 0.7))
 geom_simp = rmapshaper::ms_simplify(nj$geometry, keep=0.02, keep_shapes=TRUE)
 p1 = ggplot(nj, aes(fill=ndv/(ndv+nrv))) +
     geom_sf(aes(geometry=geom_simp), size=0, color="#00000000") +
@@ -59,12 +38,12 @@ p1 = ggplot(nj, aes(fill=ndv/(ndv+nrv))) +
     theme_repr_map() +
     theme(plot.title = element_text(hjust = 0.5))
 p2 = plot_cds(nj, as.matrix(plans)[,"dem_comm"], county, "NJ") +
-    labs(title="(b) Democratic\nproposal") +
+    labs(title="(b) Democratic proposal\n(enacted)") +
     map_scale +
     theme_repr_map() +
     theme(plot.title = element_text(hjust = 0.5))
 p3 = plot_cds(nj, as.matrix(plans)[,"rep_comm"], county, "NJ") +
-    labs(title="(c) Republican\nproposal") +
+    labs(title="(c) Republican proposal") +
     map_scale +
     theme_repr_map() +
     theme(plot.title = element_text(hjust = 0.5))
@@ -78,6 +57,24 @@ p = p1 + p2 + p3 + p4 + plot_layout(guides="collect", nrow=1) &
 if (!file.exists(path <- here("paper/figures/nj_maps.pdf")))
     ggsave(path, plot=p, width=7.5, height=3.5)
 
+# Harm plots ----
+hh_prec_dem = prec_harm(pl$distr, dem, nj$ndv, rep(0, nrow(nj)), elec_model_spec,
+                        idx_1=1:2, idx_2=(2+1:N_sim)) / nj$ndv
+hh_prec = prec_harm(pl$distr, dem, nj$ndv, nj$nrv, elec_model_spec,
+                    idx_1=1:2, idx_2=(2+1:N_sim)) /
+    (nj$ndv + nj$nrv)
+p1 = plot(nj, hh_prec[,1]) + scale_fill_wa_c("forest_fire") + labs(title="GOP plan harm")
+p2 = plot(nj, hh_prec[,2]) + scale_fill_wa_c("forest_fire") + labs(title="Dem plan harm")
+p2 + p1
+plot(nj, hh_prec[,2] - hh_prec[,1]) + scale_fill_party_c(midpoint=0, limits=c(-0.3, 0.3))
+
+hh_prec_dem = prec_harm(pl$distr, dem, nj$ndv, 0*nj$nrv, elec_model_spec,
+                        idx_1=3:102, idx_2=103:1102) / nj$ndv
+hh_prec_rep = prec_harm(pl$distr, dem, 0*nj$ndv, nj$nrv, elec_model_spec,
+                        idx_1=3:102, idx_2=103:1102) / nj$nrv
+plot(nj, rowMeans(hh_prec_dem)) + scale_fill_wa_c("forest_fire")
+plot(nj, rowMeans(hh_prec_rep)) + scale_fill_wa_c("forest_fire")
+
 
 # variables pairs plot -----
 meas_labels = c(e_dem="Expected\nDem. seats", dh="Differential harm", h="Average harm",
@@ -86,7 +83,7 @@ meas_labels = c(e_dem="Expected\nDem. seats", dh="Differential harm", h="Average
 if (!file.exists(path <- here("paper/figures/nj_pairs.pdf"))) {
     pl_plot = pl$plan %>%
         as_tibble() %>%
-        select(draw, e_dem, dh, h, egap, pbias, mean_med, decl)
+        select(e_dem, dh, h, egap, pbias, mean_med, decl)
     pl_plot = bind_rows(head(pl_plot, 2), slice_sample(head(pl_plot, -2), n=2000))
 
     expl_vars(pl_plot, labels=meas_labels, refs=c(GOP, DEM), rasterize=TRUE)
@@ -102,8 +99,7 @@ if (!file.exists(path <- here("paper/figures/nj_meas.pdf"))) {
     }
     d_hist_samp = make_d_hist(subset_sampled(pl$plan))
     d_hist_ref = make_d_hist(subset_ref(pl$plan)) %>%
-        drop_na() %>%
-        filter(draw != 'cd_2020')
+        drop_na()
     d_refline = tibble(var=d_hist_ref$var[c(2, 4:7)], value=0)
 
     p = ggplot(d_hist_samp, aes(value)) +

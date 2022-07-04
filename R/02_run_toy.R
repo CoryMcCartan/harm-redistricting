@@ -52,22 +52,19 @@ minissouri_people = minissouri %>%
     pmap_dfr(make_people)
 
 ## functions and helpers -------
-plot_state = function(map, people, plan=NULL, qty=NULL, ppl_size=1.75, grey_out = FALSE,
+plot_state = function(map, people, plan=NULL, qty=NULL, ppl_size=1.65, grey_out = FALSE,
                       ...) {
     if (is.null(people$harm)) people$harm = 0
     people_noharm = filter(people, harm == 0)
-    people_harm_dem = filter(people, harm == 1, dem)
-    people_harm_gop = filter(people, harm == 1, !dem)
+    people_harm = filter(people, harm == 1)
 
     p = redist.plot.map(map, fill=qty, ...) +
         scale_fill_party_c(name="Democratic\nshare") +
         geom_sf(data=map, size=0.6, fill=NA, color="white") +
         geom_sf(aes(color=dem, shape=circle),
-                data=people_noharm, size=ppl_size, alpha = ifelse(grey_out, 0.2, 1)) +
+                data=people_noharm, size=ppl_size, alpha=ifelse(grey_out, 0.16, 1)) +
         geom_sf(aes(shape=circle, color = dem),
-                data=people_harm_dem, size=ppl_size, alpha = 1) +
-        geom_sf(aes(shape=circle, color = dem),
-                data=people_harm_gop, size=ppl_size, alpha = 1) +
+                data=people_harm, size=ppl_size*1.15, alpha = 1) +
         scale_color_manual(values=c(GOP, DEM), guide="none") +
         scale_shape_manual(values=c(15, 19), guide="none") +
         theme_repr_map() +
@@ -93,9 +90,17 @@ fmt_lean = function(x) {
         paste0("R+", round(200*(0.5 - x)), "%")
 }
 
-add_voter_harm <- function(people, map, dem_harm, rep_harm, .cols = c('row', 'col')) {
-    id_map <- map %>% as_tibble() %>% select(all_of(.cols)) %>% unite(id, sep = '-') %>% pull(id)
-    id_people <- people %>% as_tibble() %>% select(all_of(.cols)) %>% unite(id, sep = '-') %>% pull(id)
+add_voter_harm <- function(people, map, dem_harm, rep_harm, .cols = c("row", "col")) {
+    id_map <- map %>%
+        as_tibble() %>%
+        select(all_of(.cols)) %>%
+        unite(id, sep = "-") %>%
+        pull(id)
+    id_people <- people %>%
+        as_tibble() %>%
+        select(all_of(.cols)) %>%
+        unite(id, sep = "-") %>%
+        pull(id)
     m <- match(id_people, id_map)
 
     people %>%
@@ -127,6 +132,19 @@ dem_harm_gerry_dem = minissouri$dem * (dem_gerry_dem<0.5)*(dem_fair>0.5)
 rep_harm_gerry_dem = minissouri$rep * (dem_gerry_dem>0.5)*(dem_fair<0.5)
 
 
+mini_demcirc = st_drop_geometry(minissouri_people) %>%
+    filter(dem, circle) %>%
+    count(row, col, name="dem_circ")
+minissouri = left_join(minissouri, mini_demcirc, by=c("row", "col"))
+
+dem_circ_harm_gerry_dem = with(minissouri, dem_circ) * (dem_gerry_dem<0.5)*(dem_fair>0.5)
+dem_sqr_harm_gerry_dem = with(minissouri, dem - dem_circ) * (dem_gerry_dem<0.5)*(dem_fair>0.5)
+rep_circ_harm_gerry_dem = with(minissouri, circle - dem_circ) * (dem_gerry_dem>0.5)*(dem_fair<0.5)
+rep_sqr_harm_gerry_dem = with(minissouri, pop - circle - dem + dem_circ) * (dem_gerry_dem>0.5)*(dem_fair<0.5)
+circ_harm_gerry_dem = dem_circ_harm_gerry_dem + rep_circ_harm_gerry_dem
+sqr_harm_gerry_dem = dem_sqr_harm_gerry_dem + rep_sqr_harm_gerry_dem
+
+
 diffharm_gerry_dem = sum(dem_harm_gerry_dem)/sum(minissouri$dem) -
     sum(rep_harm_gerry_dem)/sum(minissouri$rep)
 cat("Minissouri D gerrymander diff. harm: ", round(diffharm_gerry_dem, 3), "\n")
@@ -140,7 +158,7 @@ coords_gerry_dem = list(x=c(1/2, 1/2, 1/2),
 suppressMessages({
     p1 = plot_state(minissouri, minissouri_people,
                     pl_gerry_dem, dem_gerry_dem) +
-        labs(title="(a) Democratic gerrymander")
+        labs(title="(a) Dem. gerrymander")
     for (i in 1:3) {
         p1 = add_lab(p1, fmt_lean(dem_gerry_dem[as.character(i)]),
                      coords_gerry_dem$x[i], coords_gerry_dem$y[i])
@@ -163,29 +181,37 @@ suppressMessages({
 })
 
 d_harm = tibble(
-    party=c("Dem.", "Rep."),
-    gerry=c("Dem.", "Dem."),
+    group = c("Dem.", "Rep.", "Circle", "Square"),
+    type = c("Partisan", "Partisan", "Racial", "Racial"),
     harm = c(sum(dem_harm_gerry_dem)/sum(minissouri$dem),
-             sum(rep_harm_gerry_dem)/sum(minissouri$rep))
+             sum(rep_harm_gerry_dem)/sum(minissouri$rep),
+             sum(circ_harm_gerry_dem)/sum(minissouri$circle),
+             sum(sqr_harm_gerry_dem)/sum(minissouri$pop - minissouri$circle))
 )
 
-p4 = ggplot(d_harm, aes(x=paste(gerry, "gerrymander"), y=harm, fill=party)) +
-    geom_col(position="dodge") +
-    scale_fill_manual(values=c(DEM, GOP), guide="none") +
+p4 = ggplot(d_harm, aes(x=type, y=harm, fill=group)) +
+    geom_col(position="dodge", color="#222222", size=0.2) +
+    scale_fill_manual(values=c("Dem."=DEM, "Rep."=GOP,
+                               Circle="#dfdfdf", Square="#dfdfdf"), guide="none") +
     scale_y_continuous("Average harm", expand=expansion(mult=c(0, 0.05))) +
     annotate("segment", x=0.9, xend=0.9, y=d_harm$harm[1], yend=d_harm$harm[2],
-             arrow = arrow(ends="both", angle=90, length=unit(.2, "cm")), size=1) +
-    annotate("text", x=0.9, y=0.25, angle=90, label="Differential harm",
-             vjust=-0.5, family="Times", size=3) +
-    labs(title="(d) Voter harm by party", x=NULL) +
-    coord_fixed(ratio=4.2) +
+             arrow = arrow(ends="both", angle=90, length=unit(.2, "cm")), size=0.9) +
+    annotate("text", x=0.9, y=0.23, angle=90, label="Differential harm",
+             vjust=-0.5, family="Times", size=2.8) +
+    annotate("segment", x=1.9, xend=1.9, y=d_harm$harm[3], yend=d_harm$harm[4],
+             arrow = arrow(ends="both", angle=90, length=unit(.2, "cm")), size=0.9) +
+    annotate("text", x=1.9, y=0.25, angle=90, label="Diff. harm",
+             vjust=-0.5, family="Times", size=2.8) +
+    annotate("point", x=2.225, y=d_harm$harm[4]/2, size=5, color="#555555", shape=15) +
+    annotate("point", x=1.775, y=d_harm$harm[3]/2, size=5, color="#555555", shape=19) +
+    labs(title="(d) Average harm", x=NULL) +
+    coord_fixed(ratio=5) +
     theme_repr() +
-    theme(plot.title=element_text(hjust=0.5))
+    theme(plot.title=element_text(hjust=0.5, margin=margin(0, 0, -4, 0)),
+          plot.margin=margin(0, 0, 0, 0))
 
 
+p1 + p2 + p3 + p4 + plot_layout(nrow=1, widths=c(0.26, 0.26, 0.26, 0.22)) &
+    guides(fill="none") & theme(plot.margin=margin(0, 0, 0, 0))
 
-
-p1 + p2 + p3 + p4 +
-    plot_layout(guides="collect" , nrow = 2)
-
-ggsave(here("paper/figures/diffharm_minissouri.pdf"), width=6.5, height=6)
+ggsave(here("paper/figures/minissouri.pdf"), width=7.25, height=2.25)

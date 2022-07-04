@@ -71,3 +71,48 @@ arma::mat harm_helper(const arma::imat pl, const arma::mat vs,
 
     return out;
 }
+
+
+// [[Rcpp::export(rng = false)]]
+arma::mat prec_harm_helper(const arma::imat pl, const arma::mat vs,
+                      const arma::vec wt_a, const arma::vec wt_b,
+                      const arma::vec shift_elec,
+                      const arma::mat shift_distr_1,
+                      const arma::mat shift_distr_2,
+                      const arma::ivec idx_1, const arma::ivec idx_2) {
+    int n1 = idx_1.n_elem;
+    int n2 = idx_2.n_elem;
+    int prec = pl.n_rows;
+
+    arma::mat out(prec, n1);
+
+    RcppThread::ProgressBar bar(n1, 1);
+    RcppThread::parallelFor(0, n1, [&] (int i) {
+        int i1 = idx_1(i) - 1;
+        for (int k = 0; k < prec; k++) {
+            int pl_ki = pl(k, i1) - 1;
+            double vs_base_ik = vs(pl_ki, i1);
+            double wt_a_k = wt_a(k) / n2;
+            double wt_b_k = wt_b(k) / n2;
+            out(k, i) = 0;
+            for (int j = 0; j < n2; j++) {
+                int j2 = idx_2(j) - 1;
+                int pl_kj = pl(k, j2) - 1;
+                double vs_ik = vs_base_ik + shift_elec(j) + shift_distr_1(pl_ki, j);
+                double vs_jk = vs(pl_kj, j2) + shift_elec(j) + shift_distr_2(pl_kj, j);
+                if (vs_jk > 0.5) {
+                    if (vs_ik <= 0.5) { // A win under counterfactual but not original
+                        out(k, i) += wt_a_k;
+                    }
+                } else if (vs_ik > 0.5) { // B win under counterfactual but not original
+                    out(k, i) += wt_b_k;
+                }
+            }
+        }
+
+        RcppThread::checkUserInterrupt();
+        bar++;
+    });
+
+    return out;
+}
