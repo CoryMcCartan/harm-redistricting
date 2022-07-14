@@ -1,11 +1,14 @@
 # Individual and Differential Harm in Redistricting
 
-### [Cory McCartan](https://corymccartan.github.io) and [Christopher T. Kenny](https://www.christophertkenny.com)
+### [Cory McCartan](https://corymccartan.com) and [Christopher T. Kenny](https://www.christophertkenny.com)
 
-We propose a unified framework for evaluating the impact of a districting plan on voters overall and in different groups.
-Considering the harm done to individual voters by their inability to elect their chosen candidate, and taking into account the range of counterfactual possibilities, we derive a set of measures that flexibly adapts to local geography and constraints, different types of elections, and different groups of study.
-We provide recommendations for estimating these measures from historical election returns and discuss connections to commonly used redistricting metrics.
-Finally, we apply our framework to study partisan gerrymandering in New Jersey, voting rights litigation in Alabama, and the racial impacts of city council district boundaries in Boston.
+Social scientists have developed dozens of measures for assessing partisan bias in redistricting.
+But these measures cannot be easily adapted to other groups, including those defined by race, class, or geography.
+Nor are they applicable to single- or no-party contexts such as local redistricting.
+To overcome these limitations, we propose a unified framework of harm for evaluating the impacts of a districting plan on individual voters and the groups to which they belong.
+We consider a voter harmed if their chosen candidate is not elected under the current plan, but would be under a different plan.
+Harm improves on existing measures by both focusing on the choices of individual voters and directly incorporating counterfactual plans.
+We discuss strategies for estimating harm, and demonstrate the utility of our framework through analyses of partisan gerrymandering in New Jersey, voting rights litigation in Alabama, and racial dynamics of Boston City Council elections.
 
 ## Replication
 
@@ -15,5 +18,5 @@ To replicate the figures and analyses in the paper, run the scripts in `R/` in o
 lapply(sort(Sys.glob("R/*.R")), source)
 ```
 
-Then run `rmarkdown::render("paper/paper.Rmd")` to generate the paper.
+Then run `rmarkdown::render("paper/harm.Rmd")` to generate the paper.
 
