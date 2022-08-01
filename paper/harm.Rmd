@@ -88,15 +88,14 @@ A more detailed discussion of the connections between the proposed framework and
 Harm and differential harm are more than a useful conceptual unification---they are practically useful in a wide variety of redistricting analyses, including partisan gerrymandering of New Jersey congressional districts (Section \ref{sec:nj}), voting rights litigation for Alabama congressional districts (Section \ref{sec:alabama}), and racial impacts of district boundaries on Boston City Council primary elections (Section \ref{sec:boston}).
 Section \ref{sec:discussion} concludes.
 
-# Minivation {#sec:motivation}
+# Motivation {#sec:motivation}
 
-To introduce and motivate the concepts of individual and differential harm, we will make use of Minissouri, a stylized representations of Missouri.
-Minissouri has two medium-sized cities which are not large enough to deliver a statewide Democratic majority.
-Minissouri has a population of 180 and should be divided into 3 districts with population between 54 and 66.
+To introduce and motivate the concepts of individual and differential harm, we will make use of Minissouri, a stylized representation of Missouri.
+The state's total population is 180, and it should be divided into three districts with population between 54 and 66.
+Minissouri has two medium-sized cities and a substantial rural population which an overall partisan breakdown of 55.6% R -- 44.4% D.
 Voters' preferences are assumed to be stable across elections, and turnout is 100%.
 A schematic for this example is shown in Figure \ref{fig:minissouri}.
-Each person is a square or circle, identifying some group membership or characteristic.
-Each person is then shaded red or blue to correspond to Republicans and Democrats, respectively.
+In addition to partisan affiliation indicated by red or blue coloring, each voter also belongs to a racial group indicated by squares and circles.
 
 ```{r minissouri, fig.width=6.75}
 #| fig.cap: |
@@ -109,36 +108,27 @@ Each person is then shaded red or blue to correspond to Republicans and Democrat
 include_graphics("figures/minissouri.pdf")
 ```
 
-Now, consider the two plans in Figure \ref{fig:minissouri}(a)-(b).
-Like in much of the US, in Minissouri Democrats are sorted asymmetrically into the cities while Republicans dominate the rural regions [@chen:rodd:13; @enos:brown:21].
-A Democratic gerrymander (a) effectuates Democratic control by splitting its cities, connecting them through thin regions around the boundary of the state.
-This gerrymander would elect one Republican and two Democrats, whereas the proportional map (b) would elect two Republicans and one Democrat.
+Now suppose the redistricting plan in Figure \ref{fig:minissorui}(a) has been enacted.
+Despite the statewide popular vote favoring Republicans, under this plan Democrats would win two of the three seats.
+In contrast, a more proportional plan \ref{fig:minissouri}(b) would elect two Republicans and one Democrat.
 
-If we take the Democratic gerrymander as the reference plan and the proportional plan as the counterfactual, Figure \ref{fig:minissouri}(c) highlights who is harmed.
-Most of the highlighted people are the Republicans who were placed in a Democratic district in the gerrymander, but are now in a Republican district in the proportional plan.
-Note that the Republicans in the north-east city are not harmed here.
-In both plans, those Republicans are in a Democratic district in both the reference and the counterfactual.
-There are two blue people who are harmed, as they were placed into a Republican district in the gerrymander, but now move to a Democratic district.
-We can say then that 44 Republicans and 2 Democrats are individually harmed.
+Our intuition tells us that plan (a) unfairly packs Republicans into a rural district, depriving them of one seat.
+To turn this intuition into something more solid, we can consider which voters are harmed by the enactment of plan (a) over the alternative (b).
+These voters are highlighted in Figure \ref{fig:minissouri}(c).
+For example, in the upper leftmost precinct, there are three Republican square voters who are placed into a Democratic district in plan (a) but would have been placed into a Republican district in plan (b), and thus are harmed.
+In contrast, Republican voters in the northeast city are not harmed, since they reside in a Democratic district in both the enacted and counterfactual plan.
 
-There's a second dimension here to individual harm.
-Among the people, some are circles and some are squares.
-Squares are highly correlated with the Republican choice as circles are with the Democratic choice.
-Based on their vote choice, as before, we can identify who is harmed.
-Now, there are circles harmed from both parties.
-2 blue circles, 11 red circles, 33 red squares, and no blue squares are individually harmed.
+After identifying which voters are harmed by plan (a) (with plan (b) as a counterfactual), it is natural to examine the overall composition of these harmed voters.
+Of the 46 harmed voters, 44 are Republicans and only 2 are Democrats.
+These represent 44% of all Republicans and 2.5% of all Democrats.
+We call the gap between these two rates the *differential harm*, and propose it as a general way to account for the impact of a districting plan on particular groups.
+Here, then the partisan differential harm of plan (a) is $-41.5\%$, meaning that the average Republican voter in Mininois is 41.5 percentage points more likely to be represented by a Democrat than an average Democrat is to be represented by a Republican, compared to the proportional plan.
 
-We can use these groups, to compare how the harm done by a plan falls across those groups.
-If a plan disproportionately harms voters of one group, then we might conclude that that group was the target of a gerrymander.
-
-The Democratic gerrymander (a) harms Republicans at a much higher rate than Democrats.
-We call the gap between these two rates the *differential harm,* and propose it as a general way to account for the impact of a districting plan on particular groups.
-If there is no gap, then we have *fairness*.
-
-The partisan differential harm of the Democratic gerrymander of Minissouri is $-0.415$, where positive values indicate Republican bias.
-In other words, under the Democratic gerrymander, the average Republican voter in Mininois is 41.5% more likely to be represented by a Democrat than an average Democrat is to be represented by a Republican, compared to the proportional plan.
-The shape-based differential harm of the gerrymander is $-0.2$, where positive values indicate pro-square bias.
-On account of being a square and not a circle, a square is 20% less likely to be represented by their candidate of choice.
+We need not limit our consideration to partisanship.
+We can also tally harm by race, which in Minissouri is correlated with both geography and partisanship, finding that 13 circle voters and 33 square voters are harmed.
+This corresponds to a differential racial harm of $-20\%$, where positive values indicate pro-square bias.
+Square voters are 20 percentage points more likely to be harmed than circle voters.
+While this number cannot establish whether the drawers of plan (a) intended to harm square voters, or merely aimed to maximize Democratic representation, it does quantify the impact of plan (a) on these voters versus the alternative plan (b).
 
 # Individual and Differential Harm {#sec:indiv-harm}
 
@@ -409,8 +399,8 @@ The distribution of these measures is shown in Figure \ref{fig:nj-meas}.
 [^9]: We choose to calculate $\Delta_{\dem-\rep}H(q)$, so that positive values correspond to a plan that favors Republicans.
 
 We first examine the values of each metric on the two proposals alone.
-The estimate of differential partisan harm aligns with the expected partisan skew of each plan, with a value of $-3.6%$ for the Democratic proposal and $2.0%$ for the Republican proposal.
-These values are relatively directly interpretable; for example, the estimated differential harm of $-3.6%$ means that an average Democratic voter is 3.6 percentage points less likely to be misrepresented than their average Republican counter-partisan.
+The estimate of differential partisan harm aligns with the expected partisan skew of each plan, with a value of $-3.6\%$ for the Democratic proposal and $2.0\%$ for the Republican proposal.
+These values are relatively directly interpretable; for example, the estimated differential harm of $-3.6\%$ means that an average Democratic voter is 3.6 percentage points less likely to be misrepresented than their average Republican counter-partisan.
 The efficiency gap, declination, and partisan bias measures agree with the differential harm estimates in this regard, though the former two are much more discrete.
 The efficiency gap and partisan bias estimate give roughly equal scores in absolute value to the Democratic and Republican plans, in comparison to differential harm and declination, which identify the Democratic proposal as slightly more extreme.
 While the mean-median measure identifies the Republican proposal as favoring Republicans, it also scores the Democratic proposal as favoring the Republicans, albeit by less.
@@ -431,14 +421,14 @@ This pattern is repeated for all of the four common gerrymandering measures, whe
 However, both the partisan bias estimate and the mean-median score again misidentify the direction of the bias of the Republican plan, classifying it as an extreme Democratic outlier.
 
 The estimate of differential harm already uses the simulation output, and so comparing the proposals to the sampling distribution is not strictly required.
-However, it is notable that while the Democratic proposal has a more extreme estimate of differential partisan harm (1.6 percentage points higher), its value of $-0.037$ is not an outlier with respect to the distribution of differential harm for a randomly sampled plan ($p=0.43$, using the same set of samples as a counterfactual), while the Republican plan is ($p=0.0002$).
+However, it is notable that while the Democratic proposal has a more extreme estimate of differential partisan harm (1.6 percentage points higher), its value of $-3.7\%$ is not an outlier with respect to the distribution of differential harm for a randomly sampled plan ($p=0.43$, using the same set of samples as a counterfactual), while the Republican plan is ($p=0.0002$).
 In other words, a *typical* nonpartisan districting plan is not necessarily a *fair* one, even in comparison to other similarly generated districting plans.
 The sampled plan which minimizes estimated differential harm yields 8.18 expected Democratic seats, compared to a sample average of 8.41 seats, and the 6.8 seats that would be required for an outcome completely proportional to the parties' statewide vote share.
 
 Both proposals are estimated to harm the average voter at a higher rate than most of the sampled plans, with the Republican plan again more extreme in this regard ($p=0.0008$ versus $p=0.061$ for the Democratic plan).
 Notably, the plans which minimize estimated total harm are also those which have near-zero estimated differential partisan harm.
 Thus, at least in New Jersey, overall harm reduction is consistent with a fair map on a partisan basis.
-Minimizing bias with other measures, however, could lead one astray: plans which score an efficiency gap of zero can have estimated average harm as high as 0.172 and estimated differential harm as extreme as $-0.061$, nearly twice the value of the Democratic proposal.
+Minimizing bias with other measures, however, could lead one astray: plans which score an efficiency gap of zero can have estimated average harm as high as 17.2% and estimated differential harm as extreme as $-6.1\%$, nearly twice the value of the Democratic proposal.
 Plans with zero partisan bias or mean-median score likewise are estmated to have higher-than-average harm and to tend to differentially harm Republicans.
 
 Figure \ref{fig:nj-pairs} in the appendix expands on Figure \ref{fig:nj-meas} to also show the correlations between these various measures.
