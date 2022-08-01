@@ -215,3 +215,8 @@ p1 + p2 + p3 + p4 + plot_layout(nrow=1, widths=c(0.26, 0.26, 0.26, 0.22)) &
     guides(fill="none") & theme(plot.margin=margin(0, 0, 0, 0))
 
 ggsave(here("paper/figures/minissouri.pdf"), width=7.25, height=2.25)
+
+p1 + p2 + p3 + p4 + plot_layout(nrow=2) &
+    guides(fill="none") & theme(plot.margin=margin(0, 0, 0, 0))
+ggsave(here("paper/figures/minissouri_2x2.pdf"), width=8, height=8)
+
