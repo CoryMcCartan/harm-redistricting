@@ -1,4 +1,4 @@
-# Individual and Differential Harm in Redistricting
+# [Individual and Differential Harm in Redistricting](https://osf.io/preprints/socarxiv/nc2x7/)
 
 ### [Cory McCartan](https://corymccartan.com) and [Christopher T. Kenny](https://www.christophertkenny.com)
 
