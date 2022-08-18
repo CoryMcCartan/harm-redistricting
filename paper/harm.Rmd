@@ -548,14 +548,14 @@ To solve both of these problems, we develop a *latent factor ecological inferenc
 The turnout component of the model is identical to that used for Alabama.
 The core of the voter choice model is the following specification for $\pi_{jk}$, the preference of precinct $j$ for candidate $k$ on the logit scale:[^13] \begin{align*}
     \pi_{jk} &= \underbrace{\beta^{(s)}_k}_{\substack{\text{citywide support}\\\text{for candidate}}} +
-    \pref_{j}^\top(\overbrace{P_j}^{\mathclap{\substack{\text{diagonal matrix of}\\\text{precinct racial proportions}}}}
+    F_{j}^\top(\overbrace{P_j}^{\mathclap{\substack{\text{diagonal matrix of}\\\text{precinct racial proportions}}}}
     \underbrace{\turn_j}_{\mathclap{\substack{\text{turnout rate parameter}\\\text{from turnout model}}}}
     )^\top\vb L_k.
-\end{align*} Here, $\pref_j$ is a matrix of preferences by race and latent dimension within precinct $j$, so $\pref_{j}^\top(P_j\turn_j)^\top$ is a vector with elements containing the preferences of the precinct's voters in each latent dimension, after marginalizing out race.
-The vector $\vb L_k$ contains the loading of candidate $k$ onto the latent space: When $\vb L_k$ and $\pref_{j}$ are nearby in latent space, then their product will be large, and the precinct's support for the candidate, $\pi_{jk}$, will be large.
+\end{align*} Here, $F_j$ is a matrix of preferences by race and latent dimension within precinct $j$, so $F_{j}^\top(P_j\turn_j)^\top$ is a vector with elements containing the preferences of the precinct's voters in each latent dimension, after marginalizing out race.
+The vector $\vb L_k$ contains the loading of candidate $k$ onto the latent space: When $\vb L_k$ and $F_{j}$ are nearby in latent space, then their product will be large, and the precinct's support for the candidate, $\pi_{jk}$, will be large.
 Figure \ref{fig:boston-factors} shows the key outputs from this model, and Appendix \ref{app:lfei} explains the model in more detail.
 As expected one dimension (the first) primarily aligns with a traditional liberal-conservative spectrum, with progressives like Bernie Sanders, Elizabeth Warren, and current Boston mayor Michelle Wu on the left, and centrists like Joseph R. Biden and Wu opponent Anissa Essaibi-George on the right.
-The second dimension appears primarily to capture racial differences in support---as the factor value maps in Figure \ref{fig:boston-factors} show, minority-majority and White areas of the city score opposite values on the second dimension.
+The second dimension appears primarily to capture racial differences in support---as the factor value maps in Figure \ref{fig:boston-factors} show, minority-majority and White areas of the city take opposite values on the second dimension.
 
 [^12]: Exploratory analyses found that three latent dimensions did not provide a substantially better fit to the data.
 
@@ -754,7 +754,7 @@ Our ecological inference model used to produce the estimates expands on the mode
 However, it estimates voter preferences in a two-dimensional latent space and also estimates candidates' positions in this space.
 
 Continuing the notation from above, for precinct $j$ in election $v$, let $\vap_j$ denote the voting-age population, $n_{jv}$ denote the total number of votes cast for major-party candidates, $s_{jk}$ denote the vote share for candidate $k$ (who implicitly belongs to a particular election $v_k$), and $p_{jr}$ denote the fraction of the voting-age population belonging to racial group $r$, where here $r\in\{\text{White},\text{Black},\text{Hispanic},\text{Other}\}$ ("Other" consisting primarily of Asian voters in Boston).
-Our main parameters of interest are $\turn_{jr}$, the baseline turnout by race and precinct, $\pref_{jqr}$, the preferences in latent dimension $q$ by race and precinct, and $L_{kq}$, the loading of each candidate on latent dimension $q$.
+Our main parameters of interest are $\turn_{jr}$, the baseline turnout by race and precinct, $F_{jqr}$, the preferences in latent dimension $q$ by race and precinct, and $L_{kq}$, the loading of each candidate on latent dimension $q$.
 Here $q\in\{1,2\}$, since preliminary analyses found no improved fit when expanding to three dimensions.
 
 We model the observed turnout $n_{jv}$ identically as in Alabama, above: \begin{align*}
@@ -774,9 +774,9 @@ The multiplicative factor $\eps$ captures the additional variance that isn't acc
 
 The logit candidate preference itself is modeled as \begin{align*}
     \pi_{jk} &= \beta^{(s)}_k + \alpha_k
-        \pref_{j}^\top(\turn_j\circ \vb p_j)^\top\mathrm{diag}(\vb*\rho)\vb L_k  \\
-    \pref_{jq} \mid \Sigma^{(p)} &\sim \Norm(0, \Sigma^{(p)}).
-\end{align*} Note that $\pref_j$ is a $q\times r$ matrix of preferences by race and dimension within precinct $j$, and $\turn_j\circ \vb p_j$ is a vector of the percentages of the total VAP in the precinct that belongs to voters of each race, so $\pref_{j}^\top(\turn_j\circ \vb p_j)$ is a vector with $q$ elements containing the preferences by dimension of the precinct's voters, after marginalizing out race.
+        F_{j}^\top(\turn_j\circ \vb p_j)^\top\mathrm{diag}(\vb*\rho)\vb L_k  \\
+    F_{jq} \mid \Sigma^{(p)} &\sim \Norm(0, \Sigma^{(p)}).
+\end{align*} Note that $F_j$ is a $q\times r$ matrix of preferences by race and dimension within precinct $j$, and $\turn_j\circ \vb p_j$ is a vector of the percentages of the total VAP in the precinct that belongs to voters of each race, so $F_{j}^\top(\turn_j\circ \vb p_j)$ is a vector with $q$ elements containing the preferences by dimension of the precinct's voters, after marginalizing out race.
 The matrix $\mathrm{diag}(\vb*\rho)$ captures the relative scale or importance of each dimension to the overall outcomes.
 The $\vb*\alpha$ parameters are "fudge factors" that adjust the scale of the deviations from each candidate's average support.
 
@@ -795,7 +795,7 @@ We chose to make align the first dimension with the Sanders-Biden axis, and chos
 This translated to a prior of $\Norm((-1, 0), (0.1^2, 0.25^2))$ for Sanders, $\Norm((1, 0), (1.0^2, 0.5^2))$ for Biden, and $\Norm((-0.25, -1), (0.5^2, 2^2))$ for Janey.
 We additionally set the prior correlation between Sanders' and Biden's loadings to be $(-0.5, 0.8)$.
 
-The estimated loading matrix $\vb L$ is visualized on the left of Figure \ref{fig:boston-factors}, and $\pref$ is visualized for Black and White voters on the right.
+The estimated loading matrix $\vb L$ is visualized on the left of Figure \ref{fig:boston-factors}, and $F$ is visualized for Black and White voters on the right.
 
 ```{r boston-gen-pred, fig.width=6.5}
 #| fig.cap: |
