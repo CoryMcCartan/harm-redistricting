@@ -324,15 +324,16 @@ The canonical framework for considering partisan fairness is partisan symmetry [
 
 More recently, and particularly in the years since @2004vieth, researchers have developed a veritable zoo of measures to identify partisan gerrymanders.
 The *mean-median* difference looks at the relationship between the vote share of the median seat in a delegation and the mean vote share of the delegation to make claims about how a map is skewed [@mcdonald2015unfair].
-The *declination* describes the relative rate at which districts become less competitive for each party [@warrington18].
+*Declination* describes the relative rate at which districts become less competitive for each party [@warrington18].
 Perhaps the new measure which has reached the most acclaim is the *efficiency gap* [@stephanopoulos2015], which measures the difference in the number of the votes wasted by each party.[^3]
 
 [^3]: Wasted votes are those cast for a losing candidate, as well as those cast for a winning candidate beyond the required 50% to win the election.
 
-The latter four metrics are grounded in intuition over how to reliably identify a partisan gerrymander, and not in the larger theoretical framework of partisan symmetry [@katz2020].
+The latter three metrics are grounded in intuition over how to reliably identify a partisan gerrymander, and not in the larger theoretical framework of partisan symmetry [@katz2020].
 As such, they make no distinction between the quantity they are trying to estimate and a particular estimator or formula used in calculations.
 This is in contrast to partisan symmetry as well as the proposed harm measures, which require practitioners to take the additional step of linking observed election data to the theoretical construct by way of an election model, as discussed in Section \ref{sec:estimating}.[^4]
 This is an important conceptual distinction that is often lost in day-to-day applications of various gerrymandering measures.
+Plugging in past election results without using an election model places assumes too much about the stability of electoral dynamics and consequently can significantly understate the uncertainty in how a particular districting plan will perform into the future.
 
 [^4]: For partisan bias, both researchers and practitioners have largely relied on simple uniform-shift models similar to the one we use in this work.
 
@@ -366,7 +367,7 @@ Correlations, of course, are not everything: it is the universal scale and cente
 Finally, it is worth comparing the proposed measures to the increasingly common application redistricting simulation techniques to cases of partisan gerrymandering.
 Standard practice in such litigation, for example, is to calculate a battery of gerrymandering metrics on the simulated plans, and show that the challenged plan is an outlier on all or most of the metrics.
 While this can help contextualize the challenged plan, it is not foolproof---if the underlying metric is misleading, it will still be misleading when applied to thousands of simulated plans.
-In the worst cases, this can lead to directionally wrong conclusions, as we will see in Section \ref{sec:nj}.
+In the worst cases, this can lead to directionally wrong conclusions, as we will see in the next section.
 
 # Application to Partisan Gerrymandering in New Jersey {#sec:nj}
 
@@ -504,7 +505,7 @@ Only once we have aggregated these individual harms does it become apparent that
 
 # Application to Primary Elections in Boston {#sec:boston}
 
-The proposed harm measures are particularly easy to calculate and interpret in a partisan context, since the preferences of each kind of partisan are directly observable as partisan vote shares.
+The proposed harm measures are particularly easy to calculate and interpret in two-party elections, since the preferences of each kind of partisan are directly observable as partisan vote shares.
 However, the same framework can be fruitfully applied to more complex settings, providing insights that go beyond those available through traditional methods.
 
 ```{r boston-map, fig.width=6.75, fig.height=3.375}
@@ -545,14 +546,16 @@ include_graphics("figures/boston_factors.pdf")
 
 To solve both of these problems, we develop a *latent factor ecological inference model*, which simultaneously estimates (a) turnout by precinct and race, (b) candidate positions in a latent two-dimensional political space,[^12] and (c) voter preferences in this space by precinct and race, using precinct-level demographic data and vote totals from the March 2020 presidential primary and September 2021 mayoral preliminary elections.
 The turnout component of the model is identical to that used for Alabama.
-The core of the voter choice model is the following specification for the $\pi_{jk}$, the preference of precinct $j$ for candidate $k$ on the logit scale:[^13] \begin{align*}
+The core of the voter choice model is the following specification for $\pi_{jk}$, the preference of precinct $j$ for candidate $k$ on the logit scale:[^13] \begin{align*}
     \pi_{jk} &= \underbrace{\beta^{(s)}_k}_{\substack{\text{citywide support}\\\text{for candidate}}} +
     \pref_{j}^\top(\overbrace{P_j}^{\mathclap{\substack{\text{diagonal matrix of}\\\text{precinct racial proportions}}}}
     \underbrace{\turn_j}_{\mathclap{\substack{\text{turnout rate parameter}\\\text{from turnout model}}}}
     )^\top\vb L_k.
 \end{align*} Here, $\pref_j$ is a matrix of preferences by race and latent dimension within precinct $j$, so $\pref_{j}^\top(P_j\turn_j)^\top$ is a vector with elements containing the preferences of the precinct's voters in each latent dimension, after marginalizing out race.
-The matrix $\vb L_k$ contains the loading of candidate $k$ onto the latent space: When $\vb L_k$ and $\pref_{j}$ are nearby in latent space, then their product will be large, and the precinct's support for the candidate, $\pi_{jk}$, will be large.
+The vector $\vb L_k$ contains the loading of candidate $k$ onto the latent space: When $\vb L_k$ and $\pref_{j}$ are nearby in latent space, then their product will be large, and the precinct's support for the candidate, $\pi_{jk}$, will be large.
 Figure \ref{fig:boston-factors} shows the key outputs from this model, and Appendix \ref{app:lfei} explains the model in more detail.
+As expected one dimension (the first) primarily aligns with a traditional liberal-conservative spectrum, with progressives like Bernie Sanders, Elizabeth Warren, and current Boston mayor Michelle Wu on the left, and centrists like Joseph R. Biden and Wu opponent Anissa Essaibi-George on the right.
+The second dimension appears primarily to capture racial differences in support---as the factor value maps in Figure \ref{fig:boston-factors} show, minority-majority and White areas of the city score opposite values on the second dimension.
 
 [^12]: Exploratory analyses found that three latent dimensions did not provide a substantially better fit to the data.
 
@@ -608,7 +611,8 @@ As Section \ref{sec:nj}--\ref{sec:boston} showed, this opens up space for more n
 
 The proposed framework is far from the end of the road.
 Its flexibility comes at a cost---most notably, the need to specify a set of counterfactual districting plans, the choice of which has a significant impact on conclusions.
-While modern simulation methods are a valuable starting point, these methods involve analyst discretion and interpretation of often-murky legal standards.
+Fundamentally, harm and differential harm are unable to measure plans against an absolute benchmark, the way that other measures such as partisan symmetry are able to do.
+And while modern simulation methods are a valuable starting point to defining counterfactuals, these methods involve analyst discretion and interpretation of often-murky legal standards.
 When subjective choices are not represented consistently, different analyses may arrive at different conclusions about which voters are harmed and at what rate.
 
 Modeling future elections poses another set of challenges.
@@ -692,7 +696,7 @@ The simulations are provided by the 50-State Simulation Project [@mccartan2022fi
 In particular, the New Jersey simulations are not the same as those used in Section \ref{sec:nj}.
 
 ```{=tex}
-\begin{table}[h!]
+\begin{table}[ht!]
 \centering
 \input{figures/corr_table.tex}
 \vspace{0.1in}
