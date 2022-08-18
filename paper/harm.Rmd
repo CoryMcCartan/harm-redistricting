@@ -108,7 +108,7 @@ In addition to partisan affiliation indicated by red or blue coloring, each vote
 include_graphics("figures/minissouri.pdf")
 ```
 
-Now suppose the redistricting plan in Figure \ref{fig:minissorui}(a) has been enacted.
+Now suppose the redistricting plan in Figure \ref{fig:minissouri}(a) has been enacted.
 Despite the statewide popular vote favoring Republicans, under this plan Democrats would win two of the three seats.
 In contrast, a more proportional plan \ref{fig:minissouri}(b) would elect two Republicans and one Democrat.
 
@@ -329,7 +329,7 @@ Perhaps the new measure which has reached the most acclaim is the *efficiency ga
 
 [^3]: Wasted votes are those cast for a losing candidate, as well as those cast for a winning candidate beyond the required 50% to win the election.
 
-The latter four metrics are grounded in intuition over how to reliably identify a partisan gerrymander, and not in a larger theoretical framework (in particular, they do not measure partisan symmetry [@katz2020]).
+The latter four metrics are grounded in intuition over how to reliably identify a partisan gerrymander, and not in the larger theoretical framework of partisan symmetry [@katz2020].
 As such, they make no distinction between the quantity they are trying to estimate and a particular estimator or formula used in calculations.
 This is in contrast to partisan symmetry as well as the proposed harm measures, which require practitioners to take the additional step of linking observed election data to the theoretical construct by way of an election model, as discussed in Section \ref{sec:estimating}.[^4]
 This is an important conceptual distinction that is often lost in day-to-day applications of various gerrymandering measures.
@@ -342,7 +342,7 @@ For example, differential harm can be estimated at the precinct level and then p
 All of these existing measures are constructed so that a value of zero indicates no bias, and a value of zero is at least implicitly held up as a normative standard for districting plans.
 In doing so, these measures allude to *implicit* counterfactuals.
 For example, with partisan bias, the implicit electoral counterfactual is an election in which the parties' vote shares have been reversed, and the implicit counterfactual districting plan is one which assigns equal vote shares to the parties under both the real-world and counterfactual electoral scenarios.
-Indeed, @katz2020 reference an implicit counterfactual in discussing the normative implications of partissan symmetry, writing that "[o]bviously, a process designed to be 'fair' that turns out to be substantially asymmetric [i.e., have nonzero partisan bias], if there is a fairer alternative, would not normally be regarded as a legitimate outcome." Similar implicit counterfactuals can be thought up for the other measures.
+Indeed, @katz2020 reference an implicit counterfactual in discussing the normative implications of partisan symmetry, writing that "[o]bviously, a process designed to be 'fair' that turns out to be substantially asymmetric [i.e., have nonzero partisan bias], if there is a fairer alternative, would not normally be regarded as a legitimate outcome." Similar implicit counterfactuals can be thought up for the other measures.
 
 These implicit counterfactuals differ from the explicit counterfactuals we adopt in this work in that there is no guarantee they are possible.
 @katz2020 and others recognize that a nonzero value in a measure like partisan bias can only be considered problematic "if there is a fairer alternative." The inability of partisan bias and other existing measures to explicitly account for realistic counterfactual districting plans means that none of them may be interpreted in a vacuum.
@@ -442,6 +442,7 @@ The most consistent correlation is between estimated differential partisan harm 
 # Application to Voting Rights Litigation in Alabama {#sec:alabama}
 
 We next apply our proposed framework to @2022merrill, ongoing VRA litigation in which civil rights groups have argued that the existing Black majority district packs Black voters, and so a second Black opportunity-to-elect district should be drawn.[^10]
+Measuring differential harm by both race and party will allow us to cleanly separate the racial and partisan effects of the Alabama districting plan, something existing approaches are unable to do.
 
 [^10]: Relevant court filings are available at <https://redistricting.lls.edu/case/milligan-v-merrill/>.
 
@@ -467,10 +468,23 @@ include_graphics("figures/al_maps.pdf")
 
 This analysis is slightly more complicated than in New Jersey, since in order to understand the racial distribution of harm we need to estimate voting preferences by race.
 As is custom in VRA analyses, we use an ecological inference model.
-The model, detailed in Appendix \ref{app:alei}, jointly estimates turnout and vote choice by race and precinct across seven statewide elections.
-Voting is highly polarized by race outside of the cities of Birmingham and Montgomery.
+The model detailed in Appendix \ref{app:alei}, jointly estimates two turnout and vote choice by race and precinct across seven statewide elections using a setup following @king1997solution.
+For example, we model precinct $j$'s observed turnout $n_{jv}$ in election $v$ and baseline turnout rates $\turn_{jr}$ by race $r$ as \begin{align*}
+    n_{jv} \mid \turn_{jr}, \beta^{(t)}_v
+        &\sim \Binlog\qty(
+        \overbrace{\vap_j,}^{\substack{\text{voting-age}\\\text{population}}}
+        \hspace{0.5em}
+        \logit(\turn_j^\top
+        \overbrace{\vb p_j}^{\mathclap{\substack{\text{precinct racial}\\\text{proportions}}}}) + 
+        \underbrace{\beta^{(t)}_v}_{\mathllap{\text{election-specific turnout shift}}}) \\
+    \logit(\turn_j) \mid \mu^{(t)}, \Sigma^{(t)}
+        &\sim \mathcal{N}\underbrace{\qty(\mu^{(t)}, \Sigma^{(t)})}_{\mathrlap{
+        \text{where to cluster the precinct turnout rates}}},
+\end{align*} where $\Binlog$ indicates the Binomial distribution with the probability parameter specified on the logit scale.
+We model Democratic support rates $\supp_{jr}$ by precinct and race similarly.
 
-With these estimates in hand, we can estimate the average number of voters harmed in each precinct and racial group.
+The model estimates, as expected, reveal that voting is highly polarized by race outside of the cities of Birmingham and Montgomery.
+With these estimates in hand, we can calculate the average number of voters harmed in each precinct and racial group.
 Figure \ref{fig:al-maps}(c) shows the estimated geographic distribution of harm.
 Even without the ecological estimates, it is immediately clear, with reference to the partisan and racial patterns shown in Figures \ref{fig:al-maps}(a) and (b), that harm is concentrated among Black and Democratic voters in Birmingham, Montgomery, and the southern end of the Black Belt region.
 These areas are excluded from the Black-majority district under the challenged plan, but are included in a Black-majority district in the average remedial plan.
@@ -530,9 +544,19 @@ include_graphics("figures/boston_factors.pdf")
 ```
 
 To solve both of these problems, we develop a *latent factor ecological inference model*, which simultaneously estimates (a) turnout by precinct and race, (b) candidate positions in a latent two-dimensional political space,[^12] and (c) voter preferences in this space by precinct and race, using precinct-level demographic data and vote totals from the March 2020 presidential primary and September 2021 mayoral preliminary elections.
-Figure \ref{fig:boston-factors} shows the key outputs from this model, and Appendix \ref{app:lfei} explains the model in detail.
+The turnout component of the model is identical to that used for Alabama.
+The core of the voter choice model is the following specification for the $\pi_{jk}$, the preference of precinct $j$ for candidate $k$ on the logit scale:[^13] \begin{align*}
+    \pi_{jk} &= \underbrace{\beta^{(s)}_k}_{\substack{\text{citywide support}\\\text{for candidate}}} +
+    \pref_{j}^\top(\overbrace{P_j}^{\mathclap{\substack{\text{diagonal matrix of}\\\text{precinct racial proportions}}}}
+    \underbrace{\turn_j}_{\mathclap{\substack{\text{turnout rate parameter}\\\text{from turnout model}}}}
+    )^\top\vb L_k.
+\end{align*} Here, $\pref_j$ is a matrix of preferences by race and latent dimension within precinct $j$, so $\pref_{j}^\top(P_j\turn_j)^\top$ is a vector with elements containing the preferences of the precinct's voters in each latent dimension, after marginalizing out race.
+The matrix $\vb L_k$ contains the loading of candidate $k$ onto the latent space: When $\vb L_k$ and $\pref_{j}$ are nearby in latent space, then their product will be large, and the precinct's support for the candidate, $\pi_{jk}$, will be large.
+Figure \ref{fig:boston-factors} shows the key outputs from this model, and Appendix \ref{app:lfei} explains the model in more detail.
 
 [^12]: Exploratory analyses found that three latent dimensions did not provide a substantially better fit to the data.
+
+[^13]: For simplicity of presentation, the parameterization shown here has been altered slightly from that detailed in the appendix, though the ultimate model can be made identical after an adjustment to the prior on $\vb L_k$.
 
 Like all ecological inference models, ours rests on several unverifiable assumptions.
 The latent factor component imposes additional assumptions about the structure of voting in Boston elections.
@@ -554,7 +578,7 @@ The posterior predictive draws yield counts of voters for each candidate in each
 
 We limit our hypothetical elections to two candidates, to simplify the challenges of measuring harm with many candidates, over which voters may have different ranked preferences.
 However, our use of latent factors provides one way to extend our harm framework to the multiple-candidate setting.
-One could weight voter harm by the distance in latent space between each voter's preferred candidate and the elected candidate, thus dropping the implicit assumption that all candidates the voter did not vote for are interchangeable.
+One could weight voter harm by the distance in latent space between each voter's preferred candidate and the elected candidate, thus dropping the implicit assumption in the definition of harm that all candidates the voter did not vote for are interchangeable.
 
 We sample 2,000 districting plans across two independent runs of the SMC algorithm of @mccartan2020, setting constraints to favor compact plans that respect neighborhood boundaries.
 Since we do not provide any racial information to the algorithm, this set of plans forms a good approximation of a race-neutral districting process.
@@ -618,9 +642,9 @@ The election model used in estimating harm is $$
     \qquad \delta_v\sim\Norm(0, \sigma^2_\delta),
     \quad \varepsilon_{dv}\sim\Norm(0, \sigma^2_\varepsilon).
 $$ As noted in the main text, $\bar{s}_d$ is computed by averaging historical election returns.
-This is done at the precinct level, since this is the most granular level that districting plans are usually built from and election returns are reported at.[^13]
+This is done at the precinct level, since this is the most granular level that districting plans are usually built from and election returns are reported at.[^14]
 
-[^13]: When district boundaries split precincts, practitioners generally impute the returns in each component of the split precinct by population-weighted interpolation.
+[^14]: When district boundaries split precincts, practitioners generally impute the returns in each component of the split precinct by population-weighted interpolation.
     Population information comes from Census blocks, which, when populated, are practically never split.
 
 To estimate $\sigma^2_\delta$ and $\sigma^2_\varepsilon$, we use historical U.S. congressional election returns from 1976-2020, provided by the MIT Election Data Science Lab (<https://doi.org/10.7910/DVN/IG0UN2>).
@@ -683,16 +707,16 @@ Census demographic data and election returns from seven recent statewide electio
 Our ecological inference model used to produce the estimates is broadly similar to that of @king1997solution.
 However, it jointly estimates both turnout and Democratic support across all seven elections, rather than estimating each quantity separately for each election.
 
-For precinct $j$ in election $v$, let $\vap_j$ denote the voting-age population, $\votes_{jv}$ denote the total number of votes cast for major-party candidates, $s_{jv}$ denote the Democratic vote share, and $p_{jr}$ denote the fraction of the voting-age population belonging to racial group $r$, where here $r\in\{\text{White},\text{Black},\text{Other}\}$.
+For precinct $j$ in election $v$, let $\vap_j$ denote the voting-age population, $n_{jv}$ denote the total number of votes cast for major-party candidates, $s_{jv}$ denote the Democratic vote share, and $p_{jr}$ denote the fraction of the voting-age population belonging to racial group $r$, where here $r\in\{\text{White},\text{Black},\text{Other}\}$.
 Our main parameters of interest are $\turn_{jr}$ and $\supp_{jr}$, the baseline turnout and Democratic support rate by race in the precinct.
 
-We model the observed turnout $\votes_{jv}$ and vote counts $s_{jk}\votes_{jv}$ as \begin{align*}
-    \votes_{jv} \mid \turn_{jr}, \beta^{(t)}_v
+We model the observed turnout $n_{jv}$ and vote counts $s_{jk}n_{jv}$ as \begin{align*}
+    n_{jv} \mid \turn_{jr}, \beta^{(t)}_v
         &\sim \Binlog\qty(\vap_j, \logit(\turn_j^\top\vb p_j) + \beta^{(t)}_v) \\
     \logit(\turn_j) \mid \mu^{(t)}, \Sigma^{(t)}
         &\sim \Norm(\mu^{(t)}, \Sigma^{(t)}) \\
-    s_{jv}\votes_{jv} \mid \supp_{jr}, \turn_{jr}, \beta^{(s)}_v
-        &\sim \Binlog\qty(\votes_{jv}, \logit\qty(
+    s_{jv}n_{jv} \mid \supp_{jr}, \turn_{jr}, \beta^{(s)}_v
+        &\sim \Binlog\qty(n_{jv}, \logit\qty(
         \supp_j^\top \frac{\turn_j\circ\vb p_j}{\turn_j^\top\vb p_j}) + \beta^{(s)}_v) \\
     \logit(\supp_j) \mid \mu^{(s)}, \Sigma^{(s)}
         &\sim \Norm(\mu^{(s)}, \Sigma^{(t)}),
@@ -725,26 +749,31 @@ Census demographic data and election returns from the March 2020 presidential pr
 Our ecological inference model used to produce the estimates expands on the model in Appendix \ref{app:alei}, jointly estimating both turnout and vote choice in the two elections.
 However, it estimates voter preferences in a two-dimensional latent space and also estimates candidates' positions in this space.
 
-Continuing the notation from above, for precinct $j$ in election $v$, let $\vap_j$ denote the voting-age population, $\votes_{jv}$ denote the total number of votes cast for major-party candidates, $s_{jk}$ denote the vote share for candidate $k$ (who implicitly belongs to a particular election $v_k$), and $p_{jr}$ denote the fraction of the voting-age population belonging to racial group $r$, where here $r\in\{\text{White},\text{Black},\text{Hispanic},\text{Other}\}$ ("Other" consisting primarily of Asian voters in Boston).
+Continuing the notation from above, for precinct $j$ in election $v$, let $\vap_j$ denote the voting-age population, $n_{jv}$ denote the total number of votes cast for major-party candidates, $s_{jk}$ denote the vote share for candidate $k$ (who implicitly belongs to a particular election $v_k$), and $p_{jr}$ denote the fraction of the voting-age population belonging to racial group $r$, where here $r\in\{\text{White},\text{Black},\text{Hispanic},\text{Other}\}$ ("Other" consisting primarily of Asian voters in Boston).
 Our main parameters of interest are $\turn_{jr}$, the baseline turnout by race and precinct, $\pref_{jqr}$, the preferences in latent dimension $q$ by race and precinct, and $L_{kq}$, the loading of each candidate on latent dimension $q$.
 Here $q\in\{1,2\}$, since preliminary analyses found no improved fit when expanding to three dimensions.
 
-We model the observed turnout $\votes_{jv}$ and vote shares $s_{jk}$ as \begin{align*}
-    \votes_{jv} \mid \turn_{jr}, \beta^{(t)}_v
+We model the observed turnout $n_{jv}$ identically as in Alabama, above: \begin{align*}
+    n_{jv} \mid \turn_{jr}, \beta^{(t)}_v
         &\sim \Binlog\qty(\vap_j, \logit(\turn_j^\top\vb p_j) + \beta^{(t)}_v) \\
     \logit(\turn_j) \mid \mu^{(t)}, \Sigma^{(t)}
-        &\sim \Norm(\mu^{(t)}, \Sigma^{(t)}) \\
-    \logit(s_{jk}) \mid \pi_{jk}, \eps &\sim \Norm(\pi_{jk}, \frac{\eps}{1+\votes_{jv_k}}) \\ 
+        &\sim \Norm(\mu^{(t)}, \Sigma^{(t)}).
+\end{align*}
+
+Because of the latent factor model, we do not require that vote shares by race and precinct, when tallied by race, necessarily equal the observed vote share in the precinct.
+As a result we choose to model the vote shares directly, rather than the vote counts, which is more computationally efficient.
+Because each precinct has dozens or hundreds of voters, a Normal approximation to the Binomial likelihood is appopriate, and so we model the vote shares $s_{jk}$ as \begin{align*}
+    \logit(s_{jk}) \mid \pi_{jk}, \eps &\sim \Norm(\pi_{jk}, \frac{\eps}{1+n_{jv_k}}),
+\end{align*} where $\pi_{jk}$ is the preference of precinct $j$ for candidate $k$ on the logit scale, as detailed below.
+The Normal approximation variance is inversely proportional to the total number of votes in the precinct (the additional 1 is to avoid divide-by-zero errors).
+The multiplicative factor $\eps$ captures the additional variance that isn't accounted for by the latent factors.
+
+The logit candidate preference itself is modeled as \begin{align*}
     \pi_{jk} &= \beta^{(s)}_k + \alpha_k
-        \pref_{j}^\top(\turn_j\circ \vb p_j)\mathrm{diag}(\vb*\rho)\vb L_k  \\
+        \pref_{j}^\top(\turn_j\circ \vb p_j)^\top\mathrm{diag}(\vb*\rho)\vb L_k  \\
     \pref_{jq} \mid \Sigma^{(p)} &\sim \Norm(0, \Sigma^{(p)}).
 \end{align*} Note that $\pref_j$ is a $q\times r$ matrix of preferences by race and dimension within precinct $j$, and $\turn_j\circ \vb p_j$ is a vector of the percentages of the total VAP in the precinct that belongs to voters of each race, so $\pref_{j}^\top(\turn_j\circ \vb p_j)$ is a vector with $q$ elements containing the preferences by dimension of the precinct's voters, after marginalizing out race.
 The matrix $\mathrm{diag}(\vb*\rho)$ captures the relative scale or importance of each dimension to the overall outcomes.
-
-Because of the latent factor model, we do not require that vote shares by race and precinct, when tallied by race, necessarily equal the observed vote share in the precinct.
-As a result we choose to model the vote shares directly, which is more computationally efficient.
-Since these vote shares come from Binomial observations, they have variance inversely proportional to the total number of votes in the precinct (the additional 1 is to avoid divide-by-zero errors).
-The multiplicative factor $\eps$ captures the additional variance that isn't accounted for by the latent factors.
 The $\vb*\alpha$ parameters are "fudge factors" that adjust the scale of the deviations from each candidate's average support.
 
 We give $\vb*\beta^{(t)}$ an i.i.d. $\Norm(0, 0.5^2)$ prior,and $\vb*\beta^{(s)}$ an i.i.d. $\Norm(0, 4.0^2)$ prior, and $\logit(\mu^{(t)})$ an i.i.d. $\Beta(10, 30)$ prior.
