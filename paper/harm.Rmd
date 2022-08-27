@@ -164,15 +164,17 @@ $$h_i(v,q,\tilde q) = \ind\{v(i) \neq \win_i(v, q)\} \ind\{v(i) = \win_i(v, \til
 A voter is harmed only if they are not represented by the candidate of their choice under $q$ but they would have been represented by their candidate of choice under the counterfactual plan $\tilde q$.
 Notice the fundamental asymmetry in this definition: $h_i(v,q,\tilde q)\neq h_i(v,\tilde q,q)$.
 Exchanging the role of the enacted plan and the counterfactual will not simply flip the direction of our conclusion.
-In general, $q$ will harm some individuals while $\tilde q$, and $\tilde q$ will harm a different set of individuals.
+In general, $q$ harms some individuals while $\tilde q$, and $\tilde q$ harms a distinct, though not necessarily disjoint, set of individuals.
 A symmetric version of $h_i(v,q,\tilde q)$ would need to combine both of these groups: those harmed and those who gain by electing their chosen candidate under $q$ but not under the counterfactual $\tilde q$.
 In practice, voters, courts, or politicians may find different balances in preventing harm and maximizing gains.
 
-Our definition of harm is limited in two key regards.
+Our definition of harm is limited in two notable regards.
 First, it considers only individuals who vote: people who abstain from voting have a harm of zero.
-A natural extension of this definition is to separate individual candidate preference from vote choice. 
-The latter defines election winners, but the former provides a more-broad harm measure.
-Naturally, this approach requires auxiliary data to implement, such as a large-scale survey, as candidate preferences for non-voters are not directly inferred from election returns.
+Empirically, this changes nothing, but limits the measure in a theoretical sense.
+People who do not voter express no formal preference, even if they have informal preferences.
+The natural theoretical extension of this definition is to then separate individual preferences from vote choice. 
+Naturally, extending this approach requires auxiliary data to implement, such as an absurdly large-scale survey, as candidate preferences for non-voters are not directly inferred from election returns.
+As surveys are typically benchmarked against electoral outcomes, we do not endorse this type of extension.
 
 A second limitation is that $h_i(v,q,\tilde q)$ ignores any preferences a voter may have between the candidates that he or she did not vote for.
 For example, a voter may consider candidates A and B nearly interchangeable, but may strongly dislike candidate C.
