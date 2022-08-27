@@ -159,9 +159,9 @@ The key intuition from Section \ref{sec:motivation} is that *to be harmed*, a vo
 To operationalize this, we rely on a counterfactual districting plan $\tilde q$.
 Then we define the *harm* to an individual $i$ in election $v$ held under districting plan $q$ as 
 
-$$h_i(v,q,\tilde q) = \ind\{v(i) \neq \win_i(v, q)\} \ind\{v(i) = \win_i(v, \tilde q)\},$$
+$$h_i(v,q,\tilde q) = \ind\{v(i) \neq \win_i(v, q)\} \ind\{v(i) = \win_i(v, \tilde q)\}.$$
 
-that is, a voter is harmed only if they are not represented by the candidate of their choice under $q$ but they would have been represented by their candidate of choice under the counterfactual plan $\tilde q$.
+A voter is harmed only if they are not represented by the candidate of their choice under $q$ but they would have been represented by their candidate of choice under the counterfactual plan $\tilde q$.
 Notice the fundamental asymmetry in this definition: $h_i(v,q,\tilde q)\neq h_i(v,\tilde q,q)$.
 Exchanging the role of the enacted plan and the counterfactual will not simply flip the direction of our conclusion.
 In general, $q$ will harm some individuals while $\tilde q$, and $\tilde q$ will harm a different set of individuals.
