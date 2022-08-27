@@ -170,9 +170,9 @@ In practice, voters, courts, or politicians may find different balances in preve
 
 Our definition of harm is limited in two notable regards.
 First, it considers only individuals who vote: people who abstain from voting have a harm of zero.
-Empirically, this changes nothing, but limits the measure in a theoretical sense.
-People who do not voter express no formal preference, even if they have informal preferences.
+People who do not voter express no formal preference in electoral outcomes, even if they have informal preferences.
 The natural theoretical extension of this definition is to then separate individual preferences from vote choice. 
+The latter defines election winners, but the former provides a more-broad harm measure.
 Naturally, extending this approach requires auxiliary data to implement, such as an absurdly large-scale survey, as candidate preferences for non-voters are not directly inferred from election returns.
 As surveys are typically benchmarked against electoral outcomes, we do not endorse this type of extension.
 
@@ -190,7 +190,7 @@ Section \ref{sec:boston} further discusses the implications of this particular s
 As defined above, $h_i(v,q,\tilde q)$ captures harm in a single election and relative to one counterfactual districting plan $\tilde q$.
 In general, we are interested in outcomes over multiple elections and a much larger set of counterfactual plans.
 Ideally, we would average individual harm (1) over a set of future elections under the enacted districting plan and (2) over a set of hypothetical districting plans which are consistent with districting criteria.
-We could even consider a set of individuals with some shared characteristic(s).
+We could even consider a set of individuals with some shared characteristics.
 
 To allow for this, we replace the fixed election $v$, counterfactual districting plans $\tilde q$, and individual voter $i$ with random variables $V\in\Elecs$, $\tilde Q\in\Plans$, and $I\in\Voters$.
 The random variable $V$ can be conceptualized as ranging over possible future elections---one realization could correspond to a heavily Democratic-favoring midterm year, while another could involve incumbents underperforming particularly badly.
@@ -277,7 +277,8 @@ Nonetheless, sampling methods are widely used in practice [see e.g., @2019rucho;
 ## Modeling Election Outcomes
 
 Election results present a different set of modeling challenges, given the large number of factors that influence the outcome, and the general unpredictability of future events.
-We limit our discussion here to the case of estimating harm and differential partisan harm in a two-party setting Estimating differential racial harm in the two-party setting can be done by first generating ecological inferences or survey estimates of party preference by race, and then applying methods analogous to those outlined here.
+We limit our discussion here to the case of estimating harm and differential partisan harm in a two-party setting. 
+Estimating differential racial harm in the two-party setting can be done by first generating ecological inferences or survey estimates of party preference by race, and then applying methods analogous to those outlined here.
 Multiparty or primary elections pose additional modeling challenges.
 In Section \ref{sec:boston} we consider a spatial-racial model for primary elections with multiple candidates, to illustrate the application of our framework to these more complicated cases.
 
@@ -317,7 +318,7 @@ The study of racial gerrymandering and vote dilution is considerably more compli
 As such, no simple formulas exist to measure the precise racial impacts of a districting plan.
 Indeed, much of the academic literature has focused on the statistical challenge of estimating vote preferences and turnout by race [@king1997solution; @greiner2006ecological; @imai2016improving].
 
-The modern analysis of racial gerrymandering and vote dilution are inseparable from the Voting Rights Act of 1965 (VRA) and the 14th and 15 Amendments.
+The modern analysis of vote dilution and racial gerrymandering are inseparable from the Voting Rights Act of 1965 (VRA) and the 14th and 15 Amendments.
 Section 2 of the VRA enables citizens to challenge districting plans in court for diluting the voting power of racial minorities.
 Under the current framework established by @1986gingles, to do so, plaintiffs must prove that (a) the minority group is large and geographically compact enough to form a majority in some hypothetical district, (b) the minority group is "politically cohesive," and (c) the majority group can and does vote to deny the minority group its choice of candidate [@hood2018legal] (the so-called *Gingles* criteria).
 Criteria (a) is generally proven through a single example districting plan, while criteria (b) and (c) are shown using the statistical estimates of vote preferences and turnout by race.
@@ -359,7 +360,8 @@ For example, differential harm can be estimated at the precinct level and then p
 All of these existing measures are constructed so that a value of zero indicates no bias, and a value of zero is at least implicitly held up as a normative standard for districting plans.
 In doing so, these measures allude to *implicit* counterfactuals.
 For example, with partisan bias, the implicit electoral counterfactual is an election in which the parties' vote shares have been reversed, and the implicit counterfactual districting plan is one which assigns equal vote shares to the parties under both the real-world and counterfactual electoral scenarios.
-Indeed, @katz2020 reference an implicit counterfactual in discussing the normative implications of partisan symmetry, writing that "[o]bviously, a process designed to be 'fair' that turns out to be substantially asymmetric [i.e., have nonzero partisan bias], if there is a fairer alternative, would not normally be regarded as a legitimate outcome." Similar implicit counterfactuals can be thought up for the other measures.
+Indeed, @katz2020 reference an implicit counterfactual in discussing the normative implications of partisan symmetry, writing that "[o]bviously, a process designed to be 'fair' that turns out to be substantially asymmetric [i.e., have nonzero partisan bias], if there is a fairer alternative, would not normally be regarded as a legitimate outcome." 
+Similar implicit counterfactuals can be thought up for the other measures.
 
 These implicit counterfactuals differ from the explicit counterfactuals we adopt in this work in that there is no guarantee they are possible.
 @katz2020 and others recognize that a nonzero value in a measure like partisan bias can only be considered problematic "if there is a fairer alternative." The inability of partisan bias and other existing measures to explicitly account for realistic counterfactual districting plans means that none of them may be interpreted in a vacuum.
@@ -612,7 +614,8 @@ Comparing the enacted plan to the the simulations shows who is harmed by the cur
 The reverse comparison shows who would be harmed by a race-neutral baseline in comparison to the current plan.
 For this reverse comparison, along the first dimension, we estimate that a race-neutral baseline would differentially harm Black voters at a rate of 3.1% compared to the enacted plan Along the second dimension, the differential harm to Black voters would be 1.8%.
 
-Taken together, these findings suggest that despite the dominance of the Democratic party in city politics, and the shared preferences between certain groups of Black and White voters, race-aware districting still serves an important role in empowering Black voters across the city to elect their chosen candidates, and that a switch to race-neutral boundaries would have a material impact on Black voting power.
+Taken together, these findings suggest that despite the dominance of the Democratic party in city politics, and the shared preferences between certain groups of Black and White voters, race-aware districting still serves an important role in empowering Black voters across the city to elect their chosen candidates.
+A switch to race-neutral boundaries would have a material impact on Black voting power.
 Further study could focus on the racial impact of the four at-large members in comparison to a system with 13 districts and no at-large members.
 
 # Discussion {#sec:discussion}
