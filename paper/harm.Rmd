@@ -20,8 +20,8 @@ authors:
     email: christopherkenny@fas.harvard.edu
 abstract: |
   Social scientists have developed dozens of measures for assessing partisan bias in redistricting.
-  But these measures cannot be easily adapted to other groups, 
-  including those defined by race, class, or geography.
+  But these measures are not easily adapted to other groups, 
+  including groups defined by race, class, or geography.
   Nor are they applicable to single- or no-party contexts, such as local redistricting.
   To overcome these limitations, we propose a unified framework of harm for evaluating 
   the impacts of a districting plan on individual voters and the groups to which they belong. 
@@ -132,19 +132,21 @@ While this number cannot establish whether the drawers of plan (a) intended to h
 
 # Individual and Differential Harm {#sec:indiv-harm}
 
-We formalize and generalize the concepts in Section \ref{sec:motivation}, beginning with some notation.
-Let $\Voters$ be the set of individuals, or voters, in the region and time period under consideration.
-Individuals vote to select a candidate to represent each of a set of districts, indexed by $\Distrs$.
+We formalize and generalize the concepts in Section \ref{sec:motivation}.
+Let $\Voters$ be the set of individuals, or *voters*, in the region and time period.
+Individuals vote for a candidate to represent districts.
+Districts are indexed by $\Distrs$.
 
 Voters vote in elections, each of which produces a specific outcome $v$ from the set $\Elecs$ of all possible election outcomes.
 In an election, voters either vote for a candidate running in their district, or abstain from voting.
 We write $v(i)$ to mean the candidate that individual $i$ votes for in election $v$.
 
-Every voter resides in some legislative district.,
-This assignment defines a *districting plan* and is represented here by a function $q(i)$ indicating the district that individual $i$ lives in.
+Every voter resides in a legislative district.,
+Each assignment defines a *districting plan* and is represented here by a function $q(i)$ indicating the district that individual $i$ lives in.
 The set of all possible districting plans is $\Plans$.
 
-For an election $v$, we can tally the votes for each candidate and the candidate with the most votes wins.
+For election $v$, we tally the votes for each candidate.
+The candidate with the most votes wins.
 Using potential outcomes notation, we denote the winner of voter $i$'s district under districting plan $q$ and election $v$ as $\win_i(v,q)$.
 
 This notation obscures the complex relationships and feedback effects between individuals, elections, and districting plans.
@@ -154,11 +156,12 @@ The assumptions we make on these relationships will be made more explicit in Sec
 ## Harm {#subsec:harm}
 
 The key intuition from Section \ref{sec:motivation} is that *to be harmed*, a voter must have a better outcome in the counterfactual world where a different decision was made.
-To operationalize this, we need to have a counterfactual districting plan $\tilde q$.
-Then we may define the *harm* to an individual $i$ in election $v$ held under districting plan $q$ as $$
-h_i(v,q,\tilde q) = \ind\{v(i) \neq \win_i(v, q)\}
-        \ind\{v(i) = \win_i(v, \tilde q)\},
-$$that is, a voter is harmed only if they are not represented by the candidate of their choice under $q$ but they would have been represented by their candidate of choice under the counterfactual plan $\tilde q$.
+To operationalize this, we rely on a counterfactual districting plan $\tilde q$.
+Then we define the *harm* to an individual $i$ in election $v$ held under districting plan $q$ as 
+
+$$h_i(v,q,\tilde q) = \ind\{v(i) \neq \win_i(v, q)\} \ind\{v(i) = \win_i(v, \tilde q)\},$$
+
+that is, a voter is harmed only if they are not represented by the candidate of their choice under $q$ but they would have been represented by their candidate of choice under the counterfactual plan $\tilde q$.
 Notice the fundamental asymmetry in this definition: $h_i(v,q,\tilde q)\neq h_i(v,\tilde q,q)$.
 Exchanging the role of the enacted plan and the counterfactual will not simply flip the direction of our conclusion.
 In general, $q$ will harm some individuals while $\tilde q$, and $\tilde q$ will harm a different set of individuals.
