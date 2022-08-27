@@ -22,7 +22,7 @@ abstract: |
   Social scientists have developed dozens of measures for assessing partisan bias in redistricting.
   But these measures cannot be easily adapted to other groups, 
   including those defined by race, class, or geography.
-  Nor are they applicable to single- or no-party contexts such as local redistricting.
+  Nor are they applicable to single- or no-party contexts, such as local redistricting.
   To overcome these limitations, we propose a unified framework of harm for evaluating 
   the impacts of a districting plan on individual voters and the groups to which they belong. 
   We consider a voter harmed if their chosen candidate is not elected under the current plan, 
@@ -90,7 +90,7 @@ Section \ref{sec:discussion} concludes.
 
 # Motivation {#sec:motivation}
 
-To introduce and motivate the concepts of individual and differential harm, we will make use of Minissouri, a stylized representation of Missouri.
+To motivate individual and differential harm, we use *Minissouri*, a stylized representation of Missouri.
 The state's total population is 180, and it should be divided into three districts with population between 54 and 66.
 Minissouri has two medium-sized cities and a substantial rural population which an overall partisan breakdown of 55.6% R -- 44.4% D.
 Voters' preferences are assumed to be stable across elections, and turnout is 100%.
@@ -108,24 +108,24 @@ In addition to partisan affiliation indicated by red or blue coloring, each vote
 include_graphics("figures/minissouri.pdf")
 ```
 
-Now suppose the redistricting plan in Figure \ref{fig:minissouri}(a) has been enacted.
-Despite the statewide popular vote favoring Republicans, under this plan Democrats would win two of the three seats.
-In contrast, a more proportional plan \ref{fig:minissouri}(b) would elect two Republicans and one Democrat.
+Now suppose the redistricting plan in Figure \ref{fig:minissouri}(a) is the enacted plan.
+Despite the statewide popular vote favoring Republicans, under this plan Democrats win two of the three seats.
+In contrast, a more proportional plan \ref{fig:minissouri}(b) elect two Republicans and one Democrat.
 
 Our intuition tells us that plan (a) unfairly packs Republicans into a rural district, depriving them of one seat.
-To turn this intuition into something more solid, we can consider which voters are harmed by the enactment of plan (a) over the alternative (b).
+To turn this intuition into something more concrete, we can identify which voters are harmed by the enactment of plan (a) over the alternative (b).
 These voters are highlighted in Figure \ref{fig:minissouri}(c).
 For example, in the upper leftmost precinct, there are three Republican square voters who are placed into a Democratic district in plan (a) but would have been placed into a Republican district in plan (b), and thus are harmed.
 In contrast, Republican voters in the northeast city are not harmed, since they reside in a Democratic district in both the enacted and counterfactual plan.
 
-After identifying which voters are harmed by plan (a) (with plan (b) as a counterfactual), it is natural to examine the overall composition of these harmed voters.
+After identifying which voters are harmed by plan (a) compared to counterfactual plan (b), it is natural to examine the overall composition of these harmed voters.
 Of the 46 harmed voters, 44 are Republicans and only 2 are Democrats.
 These represent 44% of all Republicans and 2.5% of all Democrats.
 We call the gap between these two rates the *differential harm*, and propose it as a general way to account for the impact of a districting plan on particular groups.
-Here, then the partisan differential harm of plan (a) is $-41.5\%$, meaning that the average Republican voter in Mininois is 41.5 percentage points more likely to be represented by a Democrat than an average Democrat is to be represented by a Republican, compared to the proportional plan.
+Here, then the partisan differential harm of plan (a) is $-41.5\%$, meaning that the average Republican voter in Mininois is 41.5 percentage points more likely to be represented by a Democrat than the average Democrat is to be represented by a Republican, compared to plan (b).
 
 We need not limit our consideration to partisanship.
-We can also tally harm by race, which in Minissouri is correlated with both geography and partisanship, finding that 13 circle voters and 33 square voters are harmed.
+We can also tally harm by *race*, which in Minissouri is correlated with both geography and partisanship, finding that 13 circle voters and 33 square voters are harmed.
 This corresponds to a differential racial harm of $-20\%$, where positive values indicate pro-square bias.
 Square voters are 20 percentage points more likely to be harmed than circle voters.
 While this number cannot establish whether the drawers of plan (a) intended to harm square voters, or merely aimed to maximize Democratic representation, it does quantify the impact of plan (a) on these voters versus the alternative plan (b).
