@@ -85,7 +85,7 @@ Many factors influence the performance and qualities of an electoral system.
 Without a well-defined comparison, it is impossible to differentiate whether certain aspects of the system, like its partisan performance, are intrinsic consequences of laws and political geography or result from improper manipulation of the system for political gain [@chen:rodd:13].
 For example, in Massachusetts, it is currently impossible to draw a set of congressional districts that produces even one reliable Republican seat, despite Republican voters making up roughly 32% of the state's voters [@duch:18].
 The 9-0 Democratic composition of the Massachusetts congressional delegation therefore reflects the homogeneity of the state's political geography and not any partisan gerrymandering.
-While many existing partisan gerrymandering metrics make use of an *implicit* counterfactual plan, it may not be of substantive interest or even an actually feasible plan at all.
+While many existing partisan gerrymandering metrics make use of an *implicit* counterfactual plan, such a plan may not be of substantive interest or even feasible at all.
 By making the comparison set explicit, we can better reflect legal and geographic realities, while making the interpretation of our measures clearer.
 
 The combination of individual voter choices and counterfactual electoral systems defines our notion of *individual harm*: informally, a voter is harmed if they are more likely to be represented by the candidate of their choice under a different electoral system.
