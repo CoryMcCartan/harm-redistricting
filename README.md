@@ -2,6 +2,8 @@
 
 ### [Cory McCartan](https://corymccartan.com) and [Christopher T. Kenny](https://www.christophertkenny.com)
 
+![Harm schematic](https://user-images.githubusercontent.com/2958471/187107731-ac78132f-479a-4c5c-bc6d-546d33f20500.png)
+
 Social scientists have developed dozens of measures for assessing partisan bias in redistricting.
 But these measures cannot be easily adapted to other groups, including those defined by race, class, or geography.
 Nor are they applicable to single- or no-party contexts such as local redistricting.
