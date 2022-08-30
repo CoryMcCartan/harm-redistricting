@@ -99,6 +99,7 @@ These algorithmically-generated sets of districting plans can provide a realisti
 
 The harm framework has important similarities with the common-law approach to voting rights litigation.
 To proceed with a legal challenge to an alleged gerrymander, a voter must demonstrate that their individual right to vote has been harmed by the enacted district boundaries [@1964reynolds; @1962baker; @issakarl98]. This requires proof that *but for* the alleged gerrymander, the voter would have been more likely to elect their chosen candidate [@2004vieth; @2018league; @2019lewis].
+Indeed, a primary factor in the Supreme Court's ruling that partisan gerrymandering is not justiciable was that existing redistricting measures are not clearly tied to individual injury [@2017gill].
 A more detailed discussion of the connections between the proposed framework and existing practices for analyzing racial and partisan gerrymandering may be found in Section \ref{sec:connections}.
 
 Harm and differential harm are more than a useful conceptual unification---they are practically useful in a wide variety of redistricting analyses.
