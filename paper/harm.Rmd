@@ -532,7 +532,7 @@ However, the same framework can be fruitfully applied to more complex settings, 
 A major question in voting rights law and research is the extent to which voting must be racially polarized before race should enter into the redistricting equation and statutory protections like the VRA should kick in [@elmendorf2016racially].
 This question is particularly acute in cities, where general elections are characterized by Democratic dominance and low levels of racial polarized voting.
 When the locus of political conflict shifts to primary elections, racial patterns are harder to observe and generalize.
-Thus there remains uncertainty about the extent that race plays a factor in primary elections, and consequently the role it should play in designing urban legislative maps.
+Thus there remains uncertainty about the extent that race is a factor in primary elections, and consequently the role it should play in designing urban legislative maps.
 
 ```{r boston-map, fig.width=6.75, fig.height=3.375}
 #| fig.cap: |
