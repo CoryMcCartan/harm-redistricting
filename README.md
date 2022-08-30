@@ -10,7 +10,7 @@ Nor are they applicable to single- or no-party contexts such as local redistrict
 To overcome these limitations, we propose a unified framework of harm for evaluating the impacts of a districting plan on individual voters and the groups to which they belong.
 We consider a voter harmed if their chosen candidate is not elected under the current plan, but would be under a different plan.
 Harm improves on existing measures by both focusing on the choices of individual voters and directly incorporating counterfactual plans.
-We discuss strategies for estimating harm, and demonstrate the utility of our framework through analyses of partisan gerrymandering in New Jersey, voting rights litigation in Alabama, and racial dynamics of Boston City Council elections.
+We discuss strategies for estimating harm, and demonstrate the utility of our framework, through analyses of partisan gerrymandering in New Jersey, voting rights litigation in Alabama, and racial dynamics of Boston City Council elections.
 
 ## Replication
 
