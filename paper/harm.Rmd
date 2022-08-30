@@ -29,7 +29,7 @@ abstract: |
   but would be under a different plan.
   Harm improves on existing measures by both focusing on the choices of individual voters 
   and directly incorporating counterfactual plans.
-  We discuss strategies for estimating harm, and demonstrate the utility of our framework 
+  We discuss strategies for estimating harm, and demonstrate the utility of our framework, 
   through analyses of partisan gerrymandering in New Jersey, voting rights 
   litigation in Alabama, and racial dynamics of Boston City Council elections.
 keywords:
@@ -112,7 +112,7 @@ Section \ref{sec:discussion} concludes.
 The core idea motivating individual and differential harm is a simple one.
 Consider *Minissouri*, a stylized representation of Missouri which is shown in Figure \ref{fig:minissouri}.
 The state's total population is 180, and it is divided into three districts with population between 54 and 66.
-Minissouri has two medium-sized cities and a substantial rural population which an overall partisan breakdown of 55.6% R to 44.4% D.
+Minissouri has two medium-sized cities and a substantial rural population with an overall partisan breakdown of 55.6% R to 44.4% D.
 Voters' preferences are assumed to be stable across elections, and turnout is 100%.
 In addition to partisan affiliation indicated by red or blue coloring, each voter also belongs to a racial group indicated by squares and circles.
 
@@ -187,7 +187,7 @@ A symmetric version of $h_i(v,q,\tilde q)$ would need to combine both of these g
 In practice, voters, courts, or politicians may differ in their views on how to balance preventing harm and maximizing gains.
 
 Our definition of harm is limited in two regards.
-First, it considers only individuals who vote: people who abstain from voting have experience zero harm.
+First, it considers only individuals who vote: people who abstain from voting have experienced zero harm.
 People who do not vote express no formal preference in electoral outcomes, even if they have informal preferences.
 The natural theoretical extension of this definition is to then separate individuals' candidate preferences from their vote choice; the latter defines election winners, but the former provides a more-broad harm measure.
 Naturally, implementing this extension in practice would require auxiliary data, such as a large-scale survey, since candidate preferences for non-voters cannot be directly inferred from election returns.
@@ -314,8 +314,7 @@ Finally, we average across all of the samples, and add or subtract across groups
 
 # Connections to Current Practice for Analyzing Partisan and Racial Gerrymandering {#sec:connections}
 
-A primary advantage of our proposed harm measures is that they our measures are defined at the individual level,
-allowing for the study of redistricting for any defined group memberships.
+A primary advantage of our proposed harm measures is that they are defined at the individual level, allowing for the study of redistricting for any defined group memberships.
 For political science, two of the most important group memberships are perhaps race and party.
 Even in these well-studied contexts, our measures provide an improvement over existing analytical approaches.
 
@@ -359,7 +358,7 @@ The latter three metrics are grounded in intuition over how to reliably identify
 As such, they make no distinction between the quantity they are trying to estimate and a particular estimator or formula used in calculations.
 This is in contrast to partisan symmetry as well as the proposed harm measures, which require practitioners to take the additional step of linking observed election data to the theoretical construct by way of an election model, as discussed in Section \ref{sec:estimating}.[^4]
 This is an important conceptual distinction that is often lost in day-to-day applications of various gerrymandering measures.
-Plugging in past election results without using an election model places assumes too much about the stability of electoral dynamics and consequently can significantly understate the uncertainty in how a particular districting plan will perform into the future.
+Plugging in past election results without using an election model assumes too much about the stability of electoral dynamics and consequently can significantly understate the uncertainty in how a particular districting plan will perform into the future.
 
 [^4]: For partisan bias, both researchers and practitioners have largely relied on simple uniform-shift models similar to the one we use in this work.
 
@@ -442,7 +441,7 @@ While the mean-median measure identifies the Republican proposal as favoring Rep
 include_graphics("figures/nj_meas.pdf")
 ```
 
-These values can be better contextualized in comparison the distribution across the sampled plans.
+These values can be better contextualized in comparison to the distribution across the sampled plans.
 The Democratic proposal is expected to produce an average of 8.55 Democratic seats under our election model, more than 79% of all sample plans.
 The Republican proposal is an outlier, yielding fewer seats on average than every single sampled plan.
 This pattern is repeated for all of the four common gerrymandering measures, where the Republican plan is a clear outlier (all $p=0.0002$, except $p=0.002$ for partisan bias) while the Democratic plan is not ($p=0.34$ for the efficiency gap, $0.50$ for declination, $0.88$ for partisan bias, and $0.17$ for the mean-median score).
@@ -561,7 +560,7 @@ Figure \ref{fig:boston-map} shows the racial composition of the city as well as 
 
 ## Approach
 
-To apply our proposed framework to study the council district boundaries, must be able to we predict individual voting preferences under counterfactual districting plans.
+To apply our proposed framework to study the council district boundaries, we must be able to predict individual voting preferences under counterfactual districting plans.
 This is more difficult than in both New Jersey and Alabama, for two reasons.
 First, the city council is officially nonpartisan, and city politics are dominated by the Democratic Party, so voting choices are more complex than a simple partisan preference.
 To estimate election outcomes, we must map observed support for particular candidates in one election onto counterfactual support for a hypothetical slate in another election.
@@ -603,7 +602,7 @@ As Appendix \ref{app:lfei} discusses, these assumptions are almost certainly not
 However, the model is a useful simplification of reality that captures the major electoral dynamics relevant to our question of interest.
 For example, using the estimated latent positions and support levels for Michelle Wu and Annissa Essaibi-George, the two mayoral candidates who advanced to the general election, we predict the precinct-level general election turnout and vote shares with considerable accuracy (Spearman correlation $\approx 0.85$, see Figure \ref{fig:boston-gen-pred} in Appendix \ref{app:lfei}).
 The accuracy of these validation predictions tracks with previous work using factor models to predict runoff outcomes after a first-stage election [@kamakura2006modeling].
-We stress that the latent factor ecological inference model is not necessary for this kind of analysis; it is one choice out of many model which could provide estimated vote choices for individuals.
+We stress that the latent factor ecological inference model is not necessary for this kind of analysis; it is one out of several approaches which could provide estimated vote choices for individuals.
 Local survey data with ideological preferences and racial information would be a sufficient alternative.
 
 ## Results
@@ -658,7 +657,7 @@ When subjective choices are not represented consistently, different analyses may
 
 Modeling future elections poses another set of challenges.
 Simple models are easy to build from commonly-available data and are computationally tractable, but are gross simplifications of reality.
-More realistic models require more analyst thought and can add significant burden to the calculation of our harm measures.
+More realistic models require more analyst thought and can add a significant burden to the calculation of our harm measures.
 And as discussed in Section \ref{subsec:harm}, multi-candidate elections where voters have strong ordinal preferences provide further challenges that the proposed framework does not fully address.
 Each of these limitations present opportunities for future study.
 
@@ -700,7 +699,7 @@ However, there are 38 states with at least 20 elections.
 For each election, we compute the two-party Democratic vote share.
 We fit a linear mixed-effects model to these vote shares, with an overall intercept fixed effect, and random effects for districts and election years.
 To account for the fact that district boundaries change every decade, the district identifiers are built as a concatenation of the state, district number, and redistricting.
-For example, the Washington's 7th congressional district receives one random effect from 2002-2010 and a different random effect from 2012-2020, since new district boundaries were enacted in the 2010-2012 period.
+For example, Washington's 7th congressional district receives one random effect from 2002-2010 and a different random effect from 2012-2020, since new district boundaries were enacted in the 2010-2012 period.
 We do not account for any mid-decade redistricting which may occur as a result of litigation.
 
 The estimated standard deviations of the random effects are $\hat{\sigma}_\delta=0.0266$ for the election-year shocks and $\hat{\sigma}_\varepsilon=0.0653$ for the election-district-specific effects.
@@ -783,7 +782,7 @@ include_graphics("figures/al_ei.pdf")
 ```
 
 The mean support $\mu^{(s)}$ receives an informative prior based on the racially polarized voting estimates of @kuriwaki2021geography, with $\mu^{(s)}\sim\Norm(\logit((0.18, 0.90, 0.35)), (0.03^2, 0.03^2, 0.2^2))$.
-These estimates were derived through multilevel regression and post-stratification from survey data, calibrated to actual election results.
+These estimates were derived through multilevel regression and poststratification from survey data, calibrated to actual election results.
 
 The model was fitted with a mean-field variational approximation for computational efficiency.
 Posterior medians of $\turn_{jr}$ and $\supp_{jr}$ are plotted in Figure \ref{fig:alabama-ei}.
@@ -836,7 +835,7 @@ Like all probabilistic factor models, ours is unidentifiable due to the rotation
 To identify the location and scale, we place $\Norm(0,1)$ priors on most components of $\vb L$.
 To identify the rotation, we place more informative priors on the loadings of certain candidates.
 This was accomplished through somewhat of an interactive process, where a preliminary principal components decomposition of the precinct vote shares helped suggest the latent factors that might be found by the model.
-We chose to make align the first dimension with the Sanders-Biden axis, and chose to make the second dimension roughly orthogonal along the Janey-Buttigieg axis.
+We chose to align the first dimension with the Sanders-Biden axis, and chose to make the second dimension roughly orthogonal along the Janey-Buttigieg axis.
 This translated to a prior of $\Norm((-1, 0), (0.1^2, 0.25^2))$ for Sanders, $\Norm((1, 0), (1.0^2, 0.5^2))$ for Biden, and $\Norm((-0.25, -1), (0.5^2, 2^2))$ for Janey.
 We additionally set the prior correlation between Sanders' and Biden's loadings to be $(-0.5, 0.8)$.
 
