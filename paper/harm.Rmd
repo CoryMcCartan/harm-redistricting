@@ -10,14 +10,14 @@ authors:
       Fall 2022 Harvard Applied Statistics Workshop, 
       and Imai Research Group for helpful comments and discussion.
       Replication code and data are available at <https://github.com/CoryMcCartan/harm-redistricting>.
-    department: Department of Statistics
+    department: Ph.D. Candidate, Department of Statistics
     affiliation: Harvard University
-    location: Cambridge, MA
+    location: 1 Oxford St, Cambridge, MA
     email: cmccartan@fas.harvard.edu
   - name: Christopher T. Kenny
-    department: Department of Government
+    department: Ph.D. Candidate, Department of Government
     affiliation: Harvard University
-    location: Cambridge, MA
+    location: 1737 Cambridge St., Cambridge, MA
     email: christopherkenny@fas.harvard.edu
 abstract: |
   Social scientists have developed dozens of measures for assessing partisan bias in redistricting.
