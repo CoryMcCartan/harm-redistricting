@@ -1,24 +1,8 @@
 ---
 title: Individual and Differential Harm in Redistricting
 authors:
-  - name: Cory McCartan
-    thanks: |
-      To whom correspondence should be addressed.
-      The authors thank Steve Ansolabehere, Matt Blackwell, Kosuke Imai, Gary King, 
-      Shiro Kuriwaki, Tyler Simko, Nick Stephanopolous, and 
-      participants of the Fall 2021 Harvard American Politics Research Workshop,
-      Fall 2022 Harvard Applied Statistics Workshop, 
-      and Imai Research Group for helpful comments and discussion.
-      Replication code and data are available at <https://github.com/CoryMcCartan/harm-redistricting>.
-    department: Ph.D. Candidate, Department of Statistics
-    affiliation: Harvard University
-    location: 1 Oxford St, Cambridge, MA
-    email: cmccartan@fas.harvard.edu
-  - name: Christopher T. Kenny
-    department: Ph.D. Candidate, Department of Government
-    affiliation: Harvard University
-    location: 1737 Cambridge St., Cambridge, MA
-    email: christopherkenny@fas.harvard.edu
+  - name: Anonymized Author(s)
+    affiliation: Anonymized Institution
 abstract: |
   Social scientists have developed dozens of measures for assessing partisan bias in redistricting.
   But these measures are not easily adapted to other groups, 
