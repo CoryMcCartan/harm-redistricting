@@ -133,7 +133,7 @@ print(round(m_harm*m_grps, 1))
 print(round(m_harm, 4))
 
 cat("\nDifferential racial harm:", diff((rowSums(m_harm*m_grps)/rowSums(m_grps))[-3]), "\n")
-cat("Differential partisan harm:", diff(colSums(m_harm*m_grps)/colSums(m_grps)), "\n")
+cat("Differential partisan harm:", abs(diff(colSums(m_harm*m_grps)/colSums(m_grps))), "\n")
 cat("Total harm:", sum(m_harm*m_grps), "\n")
 cat("Average total harmed:", sum(m_harm*m_grps) / sum(m_grps), "\n")
 }
@@ -201,4 +201,123 @@ p = p1 + p2 + p3 + p4 + p5 + p6 + plot_layout(heights=c(3, 2.2), widths=c(1, 1, 
           plot.margin = unit(rep(0, 4), "cm"))
 if (!file.exists(path <- here("paper/figures/al_maps.pdf"))) {
     ggsave(path, plot=p, width=7.5, height=4.5)
+}
+
+
+# Appendix ------
+plans = alarmdata::alarm_50state_plans("AL", stats=FALSE, year=2020) %>%
+    mutate(total_vap = tally_var(al_map, vap),
+           vap_white = tally_var(al_map, vap_white),
+           vap_black = tally_var(al_map, vap_black),
+           dem = group_frac(al_map, ndv, ndv + nrv),
+           pr_dem = ker_t(dem))
+
+hh_white = partisan_harm(plans, dem, al_map$ndv_white, al_map$nrv_white,
+                         elec_model_spec, idx_1=1, idx_2=1+seq_len(N_sim))
+hh_black = partisan_harm(plans, dem, al_map$ndv_black, al_map$nrv_black,
+                         elec_model_spec, idx_1=1, idx_2=1+seq_len(N_sim))
+hh_other = partisan_harm(plans, dem, al_map$ndv_other, al_map$nrv_other,
+                         elec_model_spec, idx_1=1, idx_2=1+seq_len(N_sim))
+
+m_harm = t(cbind(hh_white, hh_black, hh_other)[-3, ]) %>%
+    `rownames<-`(c("White", "Black", "Other")) %>%
+    `colnames<-`(c("Dem.", "Rep."))
+m_grps = with(al_map, matrix(c(
+    sum(ndv_white),
+    sum(ndv_black),
+    sum(ndv_other),
+    sum(nrv_white),
+    sum(nrv_black),
+    sum(nrv_other)
+), nrow=3)) %>%
+    `rownames<-`(c("White", "Black", "Other")) %>%
+    `colnames<-`(c("Dem.", "Rep."))
+
+{
+    cat("Average total harmed by group:\n")
+    print(round(m_harm*m_grps, 1))
+    print(round(m_harm, 4))
+
+    cat("\nDifferential racial harm:", diff((rowSums(m_harm*m_grps)/rowSums(m_grps))[-3]), "\n")
+    cat("Differential partisan harm:", abs(diff(colSums(m_harm*m_grps)/colSums(m_grps))), "\n")
+    cat("Total harm:", sum(m_harm*m_grps), "\n")
+    cat("Average total harmed:", sum(m_harm*m_grps) / sum(m_grps), "\n")
+}
+
+hh_prec_white = prec_harm(plans, dem, al_map$ndv_white, al_map$nrv_white,
+                          elec_model_spec, idx_1=1, idx_2=1+seq_len(N_sim))
+hh_prec_black = prec_harm(plans, dem, al_map$ndv_black, al_map$nrv_black,
+                          elec_model_spec, idx_1=1, idx_2=1+seq_len(N_sim))
+hh_prec_other = prec_harm(plans, dem, al_map$ndv_other, al_map$nrv_other,
+                          elec_model_spec, idx_1=1, idx_2=1+seq_len(N_sim))
+harm_prec = (hh_prec_white[, 1] + hh_prec_black[, 1] + hh_prec_other[, 1]) /
+    (al_map$ndv + al_map$nrv)
+
+
+# plots out
+al_sum = al_map %>%
+    group_by(cd_2020) %>%
+    summarize(is_coverage=TRUE) %>%
+    mutate(dem = plans$dem[1:7])
+d_harm = tibble(race = rep(rownames(m_harm), 2),
+                party = rep(colnames(m_harm), each=3),
+                Harmed = as.numeric(m_harm*m_grps),
+                Total = as.numeric(m_grps))
+
+p3 = plot(al_map, harm_prec) +
+    geom_sf(data=al_sum, fill=NA, color="white", size=0.15, inherit.aes=F) +
+    scale_fill_wa_c("forest_fire", name="Fraction of\nvoters harmed",
+                    labels=percent, limits=c(0, 1)) +
+    theme_repr_map() +
+    theme(legend.title=element_text(vjust=1)) +
+    labs(title="(a) Distribution of harm")
+p6 = d_harm %>%
+    filter(race != "Other") %>%
+    pivot_longer(Harmed:Total, names_to="grp", values_to="radius") %>%
+    arrange(desc(grp)) %>%
+    ggplot(aes(party, race, size=radius, color=grp)) +
+    geom_point()  +
+    scale_color_manual(values=wacolors$forest_fire[c(12, 1)], name=NULL) +
+    scale_size_area(max_size=36, guide="none") +
+    guides(color=guide_legend(override.aes=list(size=4))) +
+    labs(x=NULL, y=NULL, title="(b) Distribution of harm") +
+    theme_repr()
+
+p = p3 + p6 +  theme(plot.title = element_text(hjust = 0.5))
+if (!file.exists(path <- here("paper/figures/al_harm_sample.pdf"))) {
+    ggsave(path, plot=p, width=7.5, height=3.75)
+}
+
+
+# extra figure for presentation
+if (FALSE) {
+    d_harm %>%
+        filter(race != "Other") %>%
+        mutate(lab = fct_rev(paste(race, party)),
+               n = Harmed / Total) %>%
+        # pivot_longer(Harmed:Total, names_to="grp", values_to="n") %>%
+        # mutate(lab = fct_rev(paste(race, party)),
+        #        grp = fct_rev(grp)) %>%
+    ggplot(aes(lab, n)) +
+        geom_col(width=0.8, fill=wacolors$forest_fire[2]) +
+        # geom_col(position="fill", width=0.8) +
+        # scale_fill_manual(values=wacolors$forest_fire[c(1, 12)], name=NULL) +
+        scale_y_continuous("Proportion harmed", labels=percent, expand=expansion(c(0, 0.05))) +
+        # guides(fill=guide_legend(override.aes=list(size=4))) +
+        labs(x=NULL) +
+        theme_repr() +
+        # coord_cartesian(ylim=c(0, 0.25)) +
+        theme(legend.position="bottom",
+              axis.text.x=element_text(face="bold", color="black"))
+    ggsave(here("pres/AL_50statesims_harm.pdf"), width=3.25, height=3)
+
+
+    p = plot_cds(al_map, as.matrix(plans)[, 2], county, qty="bvap") +
+        plot_cds(al_map, as.matrix(plans)[, 1000], county, qty="bvap") +
+        plot_cds(al_map, as.matrix(plans)[, 2000], county, qty="bvap") +
+        plot_cds(al_map, as.matrix(plans)[, 3000], county, qty="bvap") +
+        plot_cds(al_map, as.matrix(plans)[, 4000], county, qty="bvap") +
+        plot_cds(al_map, as.matrix(plans)[, 5000], county, qty="bvap") +
+        plot_layout(nrow=2, guides="collect")
+    ggsave(here("pres/AL_50statesims.pdf"), plot=p, width=6, height=5)
 }

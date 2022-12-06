@@ -477,6 +477,7 @@ Measuring differential harm by both race and party will allow us to cleanly sepa
 As discussed in Section \ref{subsec:racial}, plaintiffs had to satisfy the first *Gingles* criterion by submitting one or more remedial maps demonstrating that a new Black opportunity-to-elect district could be drawn while meeting all other redistricting requirements.
 In *Merrill,* the plaintiff's expert, Moon Duchin, submitted four such remedial plans, one of which is shown in Figure \ref{fig:al-maps}(e).
 These plans form a natural counterfactual $\tilde Q$ to use in analyzing the challenged districting plan (Figure \ref{fig:al-maps}(d)), especially since the federal district court ruled in favor of the plaintiffs and found that their remedial plans satisfied the first *Gingles* criterion.
+In Appendix \ref{app:alsampling}, we repeat the analysis performed here on a different counterfactual consisting of plans sampled with a redistricting simulation algorithm; the results are broadly similar.
 
 ```{r al-maps, fig.width=6.75}
 #| fig.cap: |
@@ -787,6 +788,30 @@ These estimates were derived through multilevel regression and poststratificatio
 The model was fitted with a mean-field variational approximation for computational efficiency.
 Posterior medians of $\turn_{jr}$ and $\supp_{jr}$ are plotted in Figure \ref{fig:alabama-ei}.
 These estimates broadly track with the findings of the voting rights expert retained in *Merrill*.
+
+# Additional Sampling Analysis for Alabama {#app:alsampling}
+
+Here, we perform the same analysis as in Section \ref{sec:alabama}, but using a randomly sampled set of plans as a counterfactual, rather than the four plans used in litigation.
+Specifically, we use 2,000 plans provided by the 50-State Simulation Project [@mccartan2022fiftystates].
+These plans are designed to discourage packing of Black voters and maintain at least the same number of majority-opportunity districts as the enacted 2020 plan.
+
+```{r alabama-harm-sample, fig.width=6.5}
+#| fig.cap: |
+#|      On thel eft, the expected fraction of voters in each precinct which are
+#|      harmed by the 2020 enacted congressional districts versus the sampled 
+#|      counterfactual set.
+#|      On the right, the expected number of harmed voters in each race/partisan 
+#|      group, relative to the total number of such voters.
+include_graphics("figures/al_harm_sample.pdf")
+```
+
+Figure \@ref(fig:alabama-harm-sample) summarizes the results, which are mostly similar to the results in in Section \ref{sec:alabama}.
+Across the state, the estimated average harm is 6.9%, which translates to around 144,000 voters.
+Of these harmed voters, around 56,000 are Black, while 88,000 are White.
+Similarly, 73,000 are Democratic, while only 71,000 are Republican.
+Normalizing by group sizes, the expected harm for a Black Democrat is 9.6%, for a Black Republican is 16.8%, for a White Democrat is 9.7%, and for a White Republican is 5.2%.
+So the challenged plan differentially harms Democratic voters, but does not differentially harm Black Democrats versus White Democrats.
+However, it it especially harms Black Republicans, who have an estimated differential harm of 7.2% versus Black Democrats and of 11.6% versus White Republicans.
 
 # Latent Factor Ecological Inference Model for Boston Primary Elections {#app:lfei}
 
