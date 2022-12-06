@@ -183,7 +183,7 @@ A voter is harmed only if they are not represented by the candidate of their cho
 Notice the fundamental asymmetry in this definition: $h_i(v,q,\tilde q)\neq h_i(v,\tilde q,q)$, as $\ind\{v(i) \neq \win_i(v, q)\} \neq \ind\{v(i) \neq \win_i(v, \tilde q)\}$.
 Exchanging the role of the enacted plan and the counterfactual will not simply flip the direction of our conclusion.
 
-In general, $q$ harms some individuals while $\tilde q$, and $\tilde q$ harms a distinct, though not necessarily disjoint, set of individuals.
+In general, $q$ harms some individuals versus $\tilde q$, and $\tilde q$ harms a distinct, though not necessarily disjoint, set of individuals, versus $q$.
 A symmetric version of $h_i(v,q,\tilde q)$ would need to combine both of these groups: those harmed and those who gain by electing their chosen candidate under $q$ but not under the counterfactual $\tilde q$.
 In practice, voters, courts, or politicians may differ in their views on how to balance preventing harm and maximizing gains.
 
