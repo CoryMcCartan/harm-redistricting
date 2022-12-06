@@ -41,7 +41,8 @@ keywords:
 bibliography: references.bib
 biblio-style: apsr
 output:
-  rticles::arxiv_article:
+  bookdown::pdf_document2:
+    template: "apsr.tex"
     keep_tex: true
     includes:
       in_header: "header.tex"
