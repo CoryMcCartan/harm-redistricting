@@ -806,7 +806,7 @@ These plans are designed to discourage packing of Black voters and maintain at l
 include_graphics("figures/al_harm_sample.pdf")
 ```
 
-Figure \@ref(fig:alabama-harm-sample) summarizes the results, which are mostly similar to the results in in Section \ref{sec:alabama}.
+Figure \ref{fig:alabama-harm-sample} summarizes the results, which are mostly similar to the results in in Section \ref{sec:alabama}.
 Across the state, the estimated average harm is 6.9%, which translates to around 144,000 voters.
 Of these harmed voters, around 56,000 are Black, while 88,000 are White.
 Similarly, 73,000 are Democratic, while only 71,000 are Republican.
