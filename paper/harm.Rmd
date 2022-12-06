@@ -46,7 +46,6 @@ output:
     includes:
       in_header: "header.tex"
     latex_engine: pdflatex
-fontsize: 12pt
 editor_options:
   markdown:
     wrap: sentence
