@@ -798,7 +798,7 @@ These plans are designed to discourage packing of Black voters and maintain at l
 
 ```{r alabama-harm-sample, fig.width=6.5}
 #| fig.cap: |
-#|      On thel eft, the expected fraction of voters in each precinct which are
+#|      On the left, the expected fraction of voters in each precinct which are
 #|      harmed by the 2020 enacted congressional districts versus the sampled 
 #|      counterfactual set.
 #|      On the right, the expected number of harmed voters in each race/partisan 
