@@ -352,4 +352,22 @@ if (FALSE) {
     )
 
   ggsave(here('pres/al_remedial_maps.png'), width = 4, height = 5)
+
+  d_harm %>%
+   filter(race != 'Other') %>%
+   mutate(
+     lab = fct_rev(paste(race, party)),
+     n = Harmed / Total
+   ) %>%
+   ggplot(aes(lab, n)) +
+   geom_col(width = 0.8, fill = wacolors$forest_fire[2]) +
+   scale_y_continuous('Proportion harmed', labels = percent, expand = expansion(c(0, 0.05))) +
+   labs(x = NULL) +
+   theme_repr() +
+   theme(
+       text = element_text(size = 16),
+     legend.position = 'bottom',
+     axis.text.x = element_text(face = 'bold', color = 'black')
+   )
+  ggsave(here('pres/al_remedial_harm.png'), width = 5, height = 4.5)
 }
