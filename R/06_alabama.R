@@ -22,7 +22,7 @@ tbls = make_tables_alabama(d_votes, al_map)
 prior = list(loc=qlogis(c(0.18, 0.90, 0.35)), # Kuriwaki et al. RPV estimates
              scale=c(0.03, 0.03, 0.2))
 fit = fit_ei(tbls, algorithm="vb", prior=prior,
-             init=0, eta=0.15, adapt_engaged=F, tol_rel_obj=0.0002)
+             init=0, eta=0.15, adapt_engaged=FALSE, tol_rel_obj=0.0002)
 
 #  EI outputs--------
 cat("Turnout correlation matrix:\n")
@@ -159,17 +159,17 @@ d_harm = tibble(race = rep(rownames(m_harm), 2),
                 Total = as.numeric(m_grps))
 
 p1 = plot(al_map, ndv / (ndv + nrv)) +
-    geom_sf(data=al_sum, fill=NA, color="black", size=0.2, inherit.aes=F) +
+    geom_sf(data=al_sum, fill=NA, color="black", size=0.2, inherit.aes= FALSE) +
     scale_fill_party_c("Democratic\nshare", limits=c(0.3, 0.7)) +
     theme_repr_map() +
     labs(title="(a) Partisan patterns")
 p2 = plot(al_map, vap_black / vap) +
-    geom_sf(data=al_sum, fill=NA, color="white", size=0.15, inherit.aes=F) +
+    geom_sf(data=al_sum, fill=NA, color="white", size=0.15, inherit.aes= FALSE) +
     scale_fill_wa_c("sea", name="BVAP", labels=percent, limits=c(0, 1)) +
     theme_repr_map() +
     labs(title="(b) Racial demographics")
 p3 = plot(al_map, harm_prec) +
-    geom_sf(data=al_sum, fill=NA, color="white", size=0.15, inherit.aes=F) +
+    geom_sf(data=al_sum, fill=NA, color="white", size=0.15, inherit.aes= FALSE) +
     scale_fill_wa_c("forest_fire", name="Fraction of\nvoters harmed",
                     labels=percent, limits=c(0, 1)) +
     theme_repr_map() +
@@ -177,12 +177,12 @@ p3 = plot(al_map, harm_prec) +
     labs(title="(c) Distribution of harm")
 p4 = plot_cds(al_map, al_map$cd_2020, qty="bvap") +
     labs(title="(d) Challenged plan") +
-    coord_sf(expand=F) +
+    coord_sf(expand= FALSE) +
     theme_repr_map()
 p5 = plot_cds(al_map, al_map$cd_pet_a, qty="bvap") +
     labs(title="(e) Remedial plan A") +
     guides(fill="none") +
-    coord_sf(expand=F) +
+    coord_sf(expand= FALSE) +
     theme_repr_map()
 p6 = d_harm %>%
     filter(race != "Other") %>%
@@ -265,7 +265,7 @@ d_harm = tibble(race = rep(rownames(m_harm), 2),
                 Total = as.numeric(m_grps))
 
 p3 = plot(al_map, harm_prec) +
-    geom_sf(data=al_sum, fill=NA, color="white", size=0.15, inherit.aes=F) +
+    geom_sf(data=al_sum, fill=NA, color="white", size=0.15, inherit.aes= FALSE) +
     scale_fill_wa_c("forest_fire", name="Fraction of\nvoters harmed",
                     labels=percent, limits=c(0, 1)) +
     theme_repr_map() +
@@ -320,4 +320,36 @@ if (FALSE) {
         plot_cds(al_map, as.matrix(plans)[, 5000], county, qty="bvap") +
         plot_layout(nrow=2, guides="collect")
     ggsave(here("pres/AL_50statesims.pdf"), plot=p, width=6, height=5)
+}
+
+# additional extra figures for presentations ----
+if (FALSE) {
+  cd_a <- plot_cds(al_map, al_map$cd_pet_a, qty = 'bvap') +
+    labs(title = 'Remedial plan A') +
+    coord_sf(expand = FALSE) +
+    theme_repr_map()
+
+  cd_b <- plot_cds(al_map, al_map$cd_pet_b, qty = 'bvap') +
+    labs(title = 'Remedial plan B') +
+    coord_sf(expand = FALSE) +
+    theme_repr_map()
+
+  cd_c <- plot_cds(al_map, al_map$cd_pet_c, qty = 'bvap') +
+    labs(title = 'Remedial plan C') +
+    coord_sf(expand = FALSE) +
+    theme_repr_map()
+
+  cd_d <- plot_cds(al_map, al_map$cd_pet_d, qty = 'bvap') +
+    labs(title = 'Remedial plan D') +
+    coord_sf(expand = FALSE) +
+    theme_repr_map()
+
+  cd_a + cd_b + cd_c + cd_d +
+    plot_layout(heights = c(3, 3), widths = c(1.75, 1.75), guides = 'collect') &
+    theme(
+      plot.title = element_text(hjust = 0.5),
+      plot.margin = unit(rep(0, 4), 'cm')
+    )
+
+  ggsave(here('pres/al_remedial_maps.png'), width = 4, height = 5)
 }
