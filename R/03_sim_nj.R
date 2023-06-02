@@ -116,8 +116,23 @@ if (!file.exists(path <- here("paper/figures/nj_meas.pdf"))) {
         labs(x=NULL, color="Plan") +
         theme_repr() +
         theme(legend.position=c(0.875, 0.25))
-
     ggsave(path, plot=p, width=7.25, height=3)
+
+    r1 <- c('Expected Dem. seats', 'Differential harm', 'Average harm')
+    ggplot(d_hist_samp %>% mutate(row = (!var %in% r1) + 1) , aes(value)) +
+        facet_grid(row ~ var, scales="free", ) +
+        geom_histogram(fill="#888888", bins=48) +
+        geom_vline(aes(xintercept=value), data=d_refline, lty="dashed", lwd=0.45) +
+        geom_vline(aes(xintercept=value, color=draw), data=d_hist_ref, lwd=1.25) +
+        scale_color_manual(values=c(rep_comm=GOP, dem_comm=DEM),
+                           labels=c(
+                               rep_comm = 'Republican proposal',
+                               dem_comm = 'Democratic proposal')) +
+        scale_x_continuous(NULL, labels=function(x) number(x, 0.01)) +
+        scale_y_continuous("Number of plans", expand=expansion(mult=c(0, 0.05))) +
+        labs(x=NULL, color="Plan") +
+        theme_repr() +
+        theme(legend.position=c(0.875, 0.25))
 }
 
 
