@@ -473,7 +473,7 @@ Measuring differential harm by both race and party will allow us to cleanly sepa
 [^10]: Relevant court filings are available at <https://redistricting.lls.edu/case/milligan-v-merrill/>.
 
 As discussed in Section \ref{subsec:racial}, plaintiffs had to satisfy the first *Gingles* criterion by submitting one or more remedial maps demonstrating that a new Black opportunity-to-elect district could be drawn while meeting all other redistricting requirements.
-In *Merrill,* the plaintiff's expert, Moon Duchin, submitted four such remedial plans, one of which is shown in Figure \ref{fig:al-maps}(e).
+In *Allen,* the plaintiff's expert, Moon Duchin, submitted four such remedial plans, one of which is shown in Figure \ref{fig:al-maps}(e).
 These plans form a natural counterfactual $\tilde Q$ to use in analyzing the challenged districting plan (Figure \ref{fig:al-maps}(d)), especially since the federal district court ruled in favor of the plaintiffs and found that their remedial plans satisfied the first *Gingles* criterion.
 In Appendix \ref{app:alsampling}, we repeat the analysis performed here on a different counterfactual consisting of plans sampled with a redistricting simulation algorithm; the results are broadly similar.
 
@@ -679,7 +679,7 @@ These estimates were derived through multilevel regression and poststratificatio
 
 The model was fitted with a mean-field variational approximation for computational efficiency.
 Posterior medians of $\turn_{jr}$ and $\supp_{jr}$ are plotted in Figure \ref{fig:alabama-ei}.
-These estimates broadly track with the findings of the voting rights expert retained in *Merrill*.
+These estimates broadly track with the findings of the voting rights expert retained in *Allen*.
 
 # Additional Sampling Analysis for Alabama {#app:alsampling}
 
