@@ -10,10 +10,10 @@ authors:
       Fall 2022 Harvard Applied Statistics Workshop, 
       and Imai Research Group for helpful comments and discussion.
       Replication code and data are available at <https://github.com/CoryMcCartan/harm-redistricting>.
-    department: Ph.D. Candidate, Department of Statistics
-    affiliation: Harvard University
-    location: 1 Oxford St, Cambridge, MA
-    email: cmccartan@fas.harvard.edu
+    department: Faculty Fellow, Center for Data Science
+    affiliation: New York University
+    location: 60 5th Ave, New York, NY
+    email: corymccartan@nyu.edu
   - name: Christopher T. Kenny
     department: Ph.D. Candidate, Department of Government
     affiliation: Harvard University
@@ -40,6 +40,7 @@ keywords:
   - individual harm
 bibliography: references.bib
 biblio-style: apsr
+fontsize: 12pt
 output:
   rticles::arxiv_article:
     keep_tex: true
@@ -50,6 +51,10 @@ editor_options:
   markdown:
     wrap: sentence
 ---
+
+\doublespacing
+
+\begin{center}\bfseries 9,970 words\end{center}
 
 ```{r SETUP, include=FALSE}
 library(knitr)
@@ -540,7 +545,6 @@ Compared to existing alternatives, differential harm more accurately identifies 
 The exact same approach applies beyond partisanship and allows for the calculation of differential harms by race and other protected groups.
 By centering the framework on individual voters' choices, we sidestep the need to blindly associate voters' preferences with their group memberships.
 Analysts can model vote choice separately, estimate the harm to each individual, and then aggregate by any group of interest.
-As Section \ref{sec:nj} and \ref{sec:alabama} showed, this opens up space for more nuanced analyses that can extend to the local level as well.
 
 The proposed framework is far from the end of the road.
 Its flexibility comes at a cost---most notably, the need to specify a set of counterfactual districting plans, the choice of which has a significant impact on conclusions.
