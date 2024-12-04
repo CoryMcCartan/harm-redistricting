@@ -23,6 +23,7 @@ keywords:
   - individual harm
 bibliography: references.bib
 biblio-style: apsr
+citeproc: false
 fontsize: 12pt
 output:
   rticles::arxiv_article:
