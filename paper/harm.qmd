@@ -52,6 +52,8 @@ keywords:
 bibliography: references.bib
 format: 
     cmc-article-pdf:
+        journal:
+            blinded: true
         fontsize: 11pt
         biblio-style: apsr
         include-in-header: "header.tex"
@@ -676,6 +678,12 @@ At its core, redistricting is a multifaceted and high-dimensional problem that m
 A districting plan can never be boiled down to a single number.
 But we hope our approach provides a modular and flexible set of measures that can help decompose how various components of the districting plan combine to produce observed patterns and election outcomes.
 Researchers can and should tinker with our assumptions and push our framework further to better apply it to multi-candidate elections, more realistic election models, and beyond district-based electoral systems.
+
+# Data availability {.unnumbered}
+All data are publicly available and are included in the replication package for the manuscript.
+
+# Code availability {.unnumbered}
+All code is included in the replication package for the manuscript.
 
 # References {.unnumbered}
 
