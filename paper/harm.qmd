@@ -685,8 +685,6 @@ All data are publicly available and are included in the replication package for 
 # Code availability {.unnumbered}
 All code is included in the replication package for the manuscript.
 
-# References {.unnumbered}
-
 ::: {#refs}
 :::
 
