@@ -306,7 +306,7 @@ $$ where $\bar{s}_d$ is the baseline Democratic vote share in the districts, $\d
 The baseline $\bar{s}_d$ can be established by averaging the results of all available statewide elections over the past decade or other suitable period.
 Since $\bar{s}_d$ is calculated for the particular configuration of district $d$, this model takes into account the specific districting plan under consideration.
 We estimate $\sigma^2_\delta$ and $\sigma^2_\varepsilon$ by fitting a linear mixed-effects model to 5,931 contested U.S. congressional elections from 1976 to 2020.
-Appendix @app:elecmodel contains more details on how we estimate and apply this model.
+Appendix @sec-app-elecmodel contains more details on how we estimate and apply this model.
 
 More complicated election outcome models are certainly possible and are straightforward to use with the measures proposed here.
 For example, one could operate on the logit scale, model incumbency effects, or include additional data from local elections.
@@ -475,7 +475,7 @@ Expected Democratic seats, the differential harm estimates, the efficiency gap, 
 Similarly, partisan bias and the mean-median score are moderately correlated, but very weakly correlated with the expected number of Democratic seats.
 Thus there exist many plans which give Democrats a higher-than-average share of the seats, but which have partisan bias and mean-median score favoring Republicans.
 New Jersey is just one state, and while some of the correlations between measures here are found in other states, some are not.
-Appendix @app:corr records these correlations across simulated plans in eight states.
+Appendix @sec-app-corr records these correlations across simulated plans in eight states.
 The most consistent correlation is between estimated differential partisan harm and the expected number of seats won by each party, which averages 0.79 in the eight states we study.
 Seats are, of course, more discrete and cannot directly identify the local areas where gains and losses are derived.
 
@@ -489,7 +489,7 @@ Measuring differential harm by both race and party will allow us to cleanly sepa
 As discussed in Section @sec-racial, plaintiffs had to satisfy the first *Gingles* criterion by submitting one or more remedial maps demonstrating that a new Black opportunity-to-elect district could be drawn while meeting all other redistricting requirements.
 In *Merrill,* the plaintiff's expert, Moon Duchin, submitted four such remedial plans, one of which is shown in Figure @fig-al-maps(e).
 These plans form a natural counterfactual $\tilde Q$ to use in analyzing the challenged districting plan (Figure @fig-al-maps(d)), especially since the federal district court ruled in favor of the plaintiffs and found that their remedial plans satisfied the first *Gingles* criterion.
-In Appendix @app:alsampling, we repeat the analysis performed here on a different counterfactual consisting of plans sampled with a redistricting simulation algorithm; the results are broadly similar.
+In Appendix @sec-app-alsampling, we repeat the analysis performed here on a different counterfactual consisting of plans sampled with a redistricting simulation algorithm; the results are broadly similar.
 
 ```{r fig-al-maps, fig.width=6.75}
 #| fig.cap: |
@@ -509,7 +509,7 @@ include_graphics("figures/al_maps.pdf")
 
 This analysis is slightly more complicated than in New Jersey, since in order to understand the racial distribution of harm we need to estimate voting preferences by race.
 As is custom in VRA analyses, we use an ecological inference model.
-The model, detailed in Appendix @app:alei, jointly estimates two turnout and vote choice by race and precinct across seven statewide elections using a setup following @king1997solution.
+The model, detailed in Appendix @sec-app-alei, jointly estimates two turnout and vote choice by race and precinct across seven statewide elections using a setup following @king1997solution.
 For example, we model precinct $j$'s observed turnout $n_{jv}$ in election $v$ and baseline turnout rates $\turn_{jr}$ by race $r$ as \begin{align*}
     n_{jv} \mid \turn_{jr}, \beta^{(t)}_v
         &\sim \Binlog\qty(
@@ -605,15 +605,15 @@ The core of the voter choice model is the following specification for $\pi_{jk}$
 Here, $F_j$ is a matrix of preferences by race and latent dimension within precinct $j$, so $F_{j}^\top(P_j\turn_j)^\top$ is a vector with elements containing the preferences of the precinct's voters in each latent dimension, after marginalizing out race.
 The vector $\vb L_k$ contains the loading of candidate $k$ onto the latent space: When $\vb L_k$ and $F_{j}$ are nearby in latent space, then their product will be large, and the precinct's support for the candidate, $\pi_{jk}$, will be large.
 
-Figure @fig-boston-factors shows the key outputs from this model, and Appendix @app:lfei explains the model in more detail.
+Figure @fig-boston-factors shows the key outputs from this model, and Appendix @sec-app-lfei explains the model in more detail.
 As expected one dimension (the first) primarily aligns with a traditional liberal-conservative spectrum, with progressives like Bernie Sanders, Elizabeth Warren, and current Boston mayor Michelle Wu on the left, and centrists like Joseph R. Biden and Wu's opponent, Annissa Essaibi-George, on the right.
 The second dimension appears to capture racial differences in support---as the factor value maps in Figure @fig-boston-factors show, minority-majority and White areas of the city take opposite values on the second dimension.
 
 Like all ecological inference models, ours relies on several unverifiable assumptions.
 The latent factor component imposes additional assumptions about the structure of voting in Boston elections.
-As Appendix @app:lfei discusses, these assumptions are almost certainly not *strictly* met.
+As Appendix @sec-app-lfei discusses, these assumptions are almost certainly not *strictly* met.
 However, the model is a useful simplification of reality that captures the major electoral dynamics relevant to our question of interest.
-For example, using the estimated latent positions and support levels for Michelle Wu and Annissa Essaibi-George, the two mayoral candidates who advanced to the general election, we predict the precinct-level general election turnout and vote shares with considerable accuracy (Spearman correlation $\approx 0.85$, see Figure @fig-boston-gen-pred in Appendix @app:lfei).
+For example, using the estimated latent positions and support levels for Michelle Wu and Annissa Essaibi-George, the two mayoral candidates who advanced to the general election, we predict the precinct-level general election turnout and vote shares with considerable accuracy (Spearman correlation $\approx 0.85$, see Figure @fig-boston-gen-pred in Appendix @sec-app-lfei).
 The accuracy of these validation predictions tracks with previous work using factor models to predict runoff outcomes after a first-stage election [@kamakura2006modeling].
 We stress that the latent factor ecological inference model is not necessary for this kind of analysis; it is one out of several approaches which could provide estimated vote choices for individuals.
 Local survey data with ideological preferences and racial information would be a sufficient alternative.
@@ -696,7 +696,7 @@ All code is included in the replication package for the manuscript.
 \setcounter{figure}{0}
 \setcounter{table}{0}
 ```
-# Two-party Election Model {#app:elecmodel}
+# Two-party Election Model {#sec-app-elecmodel}
 
 The election model used in estimating harm is $$
     s_{dv} = \bar{s}_d + \delta_v + \varepsilon_{dv},
@@ -723,7 +723,7 @@ The estimated standard deviations of the random effects are $\hat{\sigma}_\delta
 We substitute these point estimates directly into our election model.
 While this has the advantage of simplicity, it does not account for uncertainty in the estimates.
 
-# Correlation Between Partisan Gerrymandering Metrics Across Multiple States {#app:corr}
+# Correlation Between Partisan Gerrymandering Metrics Across Multiple States {#sec-app-corr}
 
 Figure @fig-nj-pairs expands on Figure @fig-nj-meas in the main text with pairwise scatter plots and correlation summaries.
 
@@ -761,7 +761,7 @@ In particular, the New Jersey simulations are not the same as those used in Sect
 \label{tab:corr}
 \end{table}
 ```
-# Ecological Inference Model for Alabama {#app:alei}
+# Ecological Inference Model for Alabama {#sec-app-alei}
 
 To estimate voter preferences by race and precinct in Alabama, we use 2020 U.S.
 Census demographic data and election returns from seven recent statewide elections: the 2016 races for president and U.S. senator, the 2018 races for governor, attorney general, and secretary of state, and the 2020 races for president and U.S. senator.
@@ -805,7 +805,7 @@ The model was fitted with a mean-field variational approximation for computation
 Posterior medians of $\turn_{jr}$ and $\supp_{jr}$ are plotted in Figure @fig-alabama-ei.
 These estimates broadly track with the findings of the voting rights expert retained in *Merrill*.
 
-# Additional Sampling Analysis for Alabama {#app:alsampling}
+# Additional Sampling Analysis for Alabama {#sec-app-alsampling}
 
 Here, we perform the same analysis as in Section @sec-alabama, but using a randomly sampled set of plans as a counterfactual, rather than the four plans used in litigation.
 Specifically, we use 2,000 plans provided by the 50-State Simulation Project [@mccartan2022fiftystates].
@@ -829,11 +829,11 @@ Normalizing by group sizes, the expected harm for a Black Democrat is 9.6%, for 
 So the challenged plan differentially harms Democratic voters, but does not differentially harm Black Democrats versus White Democrats.
 However, it it especially harms Black Republicans, who have an estimated differential harm of 7.2% versus Black Democrats and of 11.6% versus White Republicans.
 
-# Latent Factor Ecological Inference Model for Boston Primary Elections {#app:lfei}
+# Latent Factor Ecological Inference Model for Boston Primary Elections {#sec-app-lfei}
 
 To estimate voter preferences by race and precinct in Boston, we use 2020 U.S.
 Census demographic data and election returns from the March 2020 presidential primary and the September 2021 mayoral preliminary elections.
-Our ecological inference model used to produce the estimates expands on the model in Appendix @app:alei, jointly estimating both turnout and vote choice in the two elections.
+Our ecological inference model used to produce the estimates expands on the model in Appendix @sec-app-alei, jointly estimating both turnout and vote choice in the two elections.
 However, it estimates voter preferences in a two-dimensional latent space and also estimates candidates' positions in this space.
 
 Continuing the notation from above, for precinct $j$ in election $v$, let $\vap_j$ denote the voting-age population, $n_{jv}$ denote the total number of votes cast for major-party candidates, $s_{jk}$ denote the vote share for candidate $k$ (who implicitly belongs to a particular election $v_k$), and $p_{jr}$ denote the fraction of the voting-age population belonging to racial group $r$, where here $r\in\{\text{White},\text{Black},\text{Hispanic},\text{Other}\}$ ("Other" consisting primarily of Asian voters in Boston).
