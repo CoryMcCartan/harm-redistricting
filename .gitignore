@@ -18,6 +18,9 @@ src/*
 !src/*.cpp
 !src/*.h
 
+submission/replication
+submission/*.pdf
+
 # misc and  LaTeX
 out/
 *.tmp

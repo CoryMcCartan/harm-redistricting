@@ -1,0 +1,31 @@
+Dear AJPS editors,
+
+Please find attached a pdf copy of the manuscript, entitled "Individual and
+Differential Harm in Redistricting," which my coauthor and I hope you find
+suitable for publication in AJPS.
+
+This manuscript presents a new framework for measuring individual- and
+group-based harms in district-based democracies that combines cutting-edge
+computational methodology with a new theoretical foundation. By building from the
+individual, this allows fairness to be measured relative to any group
+membership or individual characteristic.  Further, by combining geographic data
+of individuals with recent advances in redistricting simulation, we provide a
+measurement strategy which accounts for political geography directly.  The core
+idea is that an individual is harmed when their preferred candidate is not the
+winner but under a counterfactual plan, their preferred candidate would have
+likely won.
+
+Given the new framework, we then apply it to partisan gerrymandering in New
+Jersey, to allow for comparison with existing measures of partisan fairness.
+We then apply the framework to the case of Alabama, where we demonstrate that
+harm falls more along racial lines than partisan lines, via an ecological inference 
+based model of racial voting.
+
+Thanks for your consideration, and we look forward to hearing back from you.
+
+Best,
+Cory McCartan
+Faculty Fellow, Center for Data Science
+New York University
+corymccartan.com
+

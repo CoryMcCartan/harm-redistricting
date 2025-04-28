@@ -46,8 +46,32 @@
 }\noindent\keywordname\enspace\ignorespaces#1\par}}
 
 % font sizes with reduced leading
+% \renewcommand{\normalsize}{%
+%   \@setfontsize\normalsize\@xpt\@xipt
+%   \abovedisplayskip      7\p@ \@plus 2\p@ \@minus 5\p@
+%   \abovedisplayshortskip \z@ \@plus 3\p@
+%   \belowdisplayskip      \abovedisplayskip
+%   \belowdisplayshortskip 4\p@ \@plus 3\p@ \@minus 3\p@
+% }
+% \normalsize
+% \renewcommand{\small}{%
+%   \@setfontsize\small\@ixpt\@xpt
+%   \abovedisplayskip      6\p@ \@plus 1.5\p@ \@minus 4\p@
+%   \abovedisplayshortskip \z@  \@plus 2\p@
+%   \belowdisplayskip      \abovedisplayskip
+%   \belowdisplayshortskip 3\p@ \@plus 2\p@   \@minus 2\p@
+% }
+% \renewcommand{\footnotesize}{\@setfontsize\footnotesize\@ixpt\@xpt}
+% \renewcommand{\scriptsize}{\@setfontsize\scriptsize\@viipt\@viiipt}
+% \renewcommand{\tiny}{\@setfontsize\tiny\@vipt\@viipt}
+% \renewcommand{\large}{\@setfontsize\large\@xiipt{14}}
+% \renewcommand{\Large}{\@setfontsize\Large\@xivpt{16}}
+% \renewcommand{\LARGE}{\@setfontsize\LARGE\@xviipt{20}}
+% \renewcommand{\huge}{\@setfontsize\huge\@xxpt{23}}
+% \renewcommand{\Huge}{\@setfontsize\Huge\@xxvpt{28}}
+
 \renewcommand{\normalsize}{%
-  \@setfontsize\normalsize\@xpt\@xipt
+  \@setfontsize\normalsize\@xiipt\@xiipt
   \abovedisplayskip      7\p@ \@plus 2\p@ \@minus 5\p@
   \abovedisplayshortskip \z@ \@plus 3\p@
   \belowdisplayskip      \abovedisplayskip
@@ -55,19 +79,15 @@
 }
 \normalsize
 \renewcommand{\small}{%
-  \@setfontsize\small\@ixpt\@xpt
-  \abovedisplayskip      6\p@ \@plus 1.5\p@ \@minus 4\p@
-  \abovedisplayshortskip \z@  \@plus 2\p@
-  \belowdisplayskip      \abovedisplayskip
-  \belowdisplayshortskip 3\p@ \@plus 2\p@   \@minus 2\p@
+  \@setfontsize\small\@xipt\@xiipt
 }
-\renewcommand{\footnotesize}{\@setfontsize\footnotesize\@ixpt\@xpt}
-\renewcommand{\scriptsize}{\@setfontsize\scriptsize\@viipt\@viiipt}
-\renewcommand{\tiny}{\@setfontsize\tiny\@vipt\@viipt}
-\renewcommand{\large}{\@setfontsize\large\@xiipt{14}}
-\renewcommand{\Large}{\@setfontsize\Large\@xivpt{16}}
+\renewcommand{\footnotesize}{\@setfontsize\footnotesize\@xpt\@xipt}
+\renewcommand{\scriptsize}{\@setfontsize\scriptsize\@viiipt\@ixpt}
+\renewcommand{\tiny}{\@setfontsize\tiny\@viipt\@viiipt}
+\renewcommand{\large}{\@setfontsize\large\@xiipt{16}}
+\renewcommand{\Large}{\@setfontsize\Large\@xivpt{18}}
 \renewcommand{\LARGE}{\@setfontsize\LARGE\@xviipt{20}}
-\renewcommand{\huge}{\@setfontsize\huge\@xxpt{23}}
+\renewcommand{\huge}{\@setfontsize\huge\@xxpt{24}}
 \renewcommand{\Huge}{\@setfontsize\Huge\@xxvpt{28}}
 
 % sections with less space
@@ -137,7 +157,7 @@
 \setcounter{footnote}{0}
 
 % paragraph formatting
-\setlength{\parindent}{\z@}
+% \setlength{\parindent}{\z@}
 \setlength{\parskip  }{5.5\p@}
 
 % list formatting
