@@ -231,16 +231,20 @@ At times we may wish to study on a particular election or a particular counterfa
 Treating $V$ and $\tilde Q$ as random variables allows us to condition on particular values of each.
 A particular specification of the distribution of $V$ and $\tilde Q$ is required only when *estimating* our harm measures in a particular application, a topic we return to in Section @sec-estimating.
 
-With these definitions, the harm for a (randomly selected) individual under plan $q$ can be written as $$
+With these definitions, the harm for a (randomly selected) individual under plan $q$ can be written as 
+$$
 H(q) \dfeq h_I(V, q, \tilde Q).
-$$ $H(q)$ is itself a random variable, representing the harm to *some* individual in *some* election compared to *some* counterfactual plan.
+$$ 
+$H(q)$ is itself a random variable, representing the harm to *some* individual in *some* election compared to *some* counterfactual plan.
 The random variable $I$ here serves as a kind of "veil of ignorance" [@rawls2004theory]: without picking a specific individual, a districting plan $q$ which tends to produce a low $H(q)$ would be expected to be preferred over a plan which tended to produce a higher $H(q)$.
 
 Despite being only a scalar quantity, $H(q)$ actually fully captures the harm created by the plan $q$.
 We can zoom in to specific dimensions of the plan by conditioning on values of $V$, $\tilde Q$, and $I$, or by taking expectations.
-Thus, for example, the harm for a single individual $i$ becomes $H(q)\mid I=i$, and the electorate's average harm in a particular election $v$ becomes $$
+Thus, for example, the harm for a single individual $i$ becomes $H(q)\mid I=i$, and the electorate's average harm in a particular election $v$ becomes 
+$$
     \E[H(q)\mid V=v] = \Pr[v(I)\neq\win_I(v, q) \text{ and }v(I)=\win_I(v, \tilde Q)],
-$$ that is, the probability that a randomly selected voter in this election is misrepresented under the adopted plan but would not have been under a randomly selected counterfactual.
+$$ 
+that is, the probability that a randomly selected voter in this election is misrepresented under the adopted plan but would not have been under a randomly selected counterfactual.
 
 ## Differential Harm and Fairness {#sec-diff-harm}
 
@@ -261,9 +265,11 @@ Compared to the perfect predictor, the actual decision process harms individuals
 Here, there can be no perfect districting plan, and the counterfactual instead consists of a collection of plausible alternatives.
 
 Fairness is a strict condition: real-life plans are highly unlikely to be exactly fair.
-To quantify deviations from fairness, we introduce the concept of *differential harm*, defined as $$
+To quantify deviations from fairness, we introduce the concept of *differential harm*, defined as 
+$$
   \Delta_{G_k-G_l}H(q) \dfeq \E[H(q)\mid I\in G_k] - \E[H(q)\mid I\in G_l],
-$$ for two groups $G_k$ and $G_l$.
+$$ 
+for two groups $G_k$ and $G_l$.
 So $\Delta_{G_k-G_l}H(q)$ will be positive if voters in group $G_k$ are harmed at a higher rate than voters in group $G_l$, indicating that plan $q$ favors $G_l$ over $G_k$.
 Using our definition of fairness, $\Delta_{G_k-G_l}H(q)=0$ for all $G_k,G_l\in\Groups$ if and only if $q$ is fair.
 
@@ -271,58 +277,7 @@ Differential harm provides a unified framework for evaluating a districting plan
 It is derived from an individual-level measure of representation and it accounts for the space of counterfactual possibilities.
 Importantly, it separates *vote choice* from *group membership*, allowing one to discuss how partisan election outcomes under a specific districting plan create harm for specific groups or their interactions, simply by conditioning $H(q)$ on different sets of voters.
 
-Estimating these quantities from available data is another matter, of course, and requires additional assumptions, as we describe next.
-
-# Estimating the Harm Measures {#sec-estimating}
-
-Harm $H(q)$ and differential harm $\Delta H(q)$ as defined above require specification of a probability distribution on elections and districting plans.
-Depending on one's viewpoint, this is either a theoretical fiction which must be specified by a model, or an actual data-generating process we must estimate.
-Either way, past election data and an enacted districting plan alone are not enough to calculate these measures.
-
-## Modeling Districting Plans
-
-It is difficult to construct a tractable probability distribution for districting plans, since the space of plans is discrete and lacks a natural metric structure.
-Thankfully, in recent years a number of algorithms have been developed which sample districting plans from specific distributions [@fifield2020mcmc; @deford2019; @carter2019; @mccartan2020].
-These distributions can generally be characterized as maximum-entropy distributions on the space of all valid districting plans, in combination with several moment constraints.
-
-For example, the algorithms of @carter2019 and @mccartan2020 sample from the maximum-entropy distribution of districting plans that are geographically contiguous, have district populations within a specified deviation from equality, and which have a certain average compactness value (according to a particular graph-theoretic compactness measure).
-These maximum-entropy distributions put as few conditions as possible on the districting sampling process, as long as a set of constraints imposed by the researcher are met.
-If these constraints are precisely those which are required by law or traditional redistricting criteria, then samples from this distribution provide a natural set of counterfactual districting plans, uninfluenced by superfluous partisan or other considerations, to use in estimating $H(q)$ and $\Delta H(q)$.
-In practice, the translation from tradition and law into mathematical formulations of constraints is not always clear or even well-defined.
-There is certainly an element of subjectivity in sampling a set of districting plans.
-Nonetheless, sampling methods are widely used in practice [see e.g., @2019rucho; @2018league; @2022merrill; @becker2021computational; @chen:rodd:13].
-
-## Modeling Election Outcomes
-
-Election results present a different set of modeling challenges, given the large number of factors that influence election outcomes and the general unpredictability of future events.
-We limit our discussion here to the case of estimating harm and differential partisan harm in a two-party setting.
-Estimating differential racial harm in the two-party setting can be done by first generating ecological inferences or survey estimates of party preference by race, and then applying methods analogous to those outlined here.
-Multiparty or primary elections pose additional modeling challenges.
-In Section @sec-boston we consider a spatial-racial model for primary elections with multiple candidates, to illustrate the application of our framework to these more complicated cases.
-
-Motivated primarily by computational convenience and simplicity, we adopt the stochastic uniform partisan swing model of @gelman1994unified, modeling the Democratic two-party vote share in district $d$ and election $v$ as $$
-    s_{dv} = \bar{s}_d + \delta_v + \varepsilon_{dv},
-$$ where $\bar{s}_d$ is the baseline Democratic vote share in the districts, $\delta_v\sim\Norm(0, \sigma^2_\delta)$ is a election-specific uniform shift, and $\varepsilon_{dv}\sim\Norm(0, \sigma^2_\varepsilon)$ is a district-election residual error term.
-The baseline $\bar{s}_d$ can be established by averaging the results of all available statewide elections over the past decade or other suitable period.
-Since $\bar{s}_d$ is calculated for the particular configuration of district $d$, this model takes into account the specific districting plan under consideration.
-We estimate $\sigma^2_\delta$ and $\sigma^2_\varepsilon$ by fitting a linear mixed-effects model to 5,931 contested U.S. congressional elections from 1976 to 2020.
-Appendix @sec-app-elecmodel contains more details on how we estimate and apply this model.
-
-More complicated election outcome models are certainly possible and are straightforward to use with the measures proposed here.
-For example, one could operate on the logit scale, model incumbency effects, or include additional data from local elections.
-
-## Calculating Harm and Differential Harm
-
-With a model for election outcomes and districting plans in hand, calculation of $H(q)$ and $\Delta H(q)$ is straightforward.
-For each sampled counterfactual districting plan $\tilde q$, we use the election model to simulate vote shares in each district of $q$ and $\tilde q$.
-We can then identify, for each precinct, how many Democratic or Republican voters were harmed.[^2]
-We tally the total harm done to Democratic and Republican voters across the map and divide by the appropriate totals to get a single draw of $H(q)\mid I\in\dem$ and $H(q)\mid I\in\rep$.
-When other groups (such as racial groups) are used in $\Delta H(q)$, we must repeat these computations for each group.
-Finally, we average across all of the samples, and add or subtract across groups, to produce estimates of $E[H(q)]$ and $\Delta_{\dem-\rep} H(q)$.
-
-[^2]: For this, we use the baseline count of Democratic or Republican votes.
-    This is a slight simplification, since the vote share changes across random draws, and so the number of Democratic and Republican voters changes too.
-    To deal with this issue completely, one must model elections at the precinct level, which requires more data and computational costs.
+Estimating these quantities from available data is another matter, of course, and requires additional assumptions, as we describe in @sec-methods.
 
 # Connections to Current Practice for Analyzing Partisan and Racial Gerrymandering {#sec-connections}
 
@@ -679,6 +634,63 @@ A districting plan can never be boiled down to a single number.
 But we hope our approach provides a modular and flexible set of measures that can help decompose how various components of the districting plan combine to produce observed patterns and election outcomes.
 Researchers can and should tinker with our assumptions and push our framework further to better apply it to multi-candidate elections, more realistic election models, and beyond district-based electoral systems.
 
+# Methods {#sec-methods}
+
+This section discusses estimating the proposed harm measures from real data, and provides details on the analyses conducted for the three applications in the main text.
+
+## Estimating the Harm Measures {#sec-estimating}
+
+Harm $H(q)$ and differential harm $\Delta H(q)$ as defined above require specification of a probability distribution on elections and districting plans.
+Depending on one's viewpoint, this is either a theoretical fiction which must be specified by a model, or an actual data-generating process we must estimate.
+Either way, past election data and an enacted districting plan alone are not enough to calculate these measures.
+
+### Modeling Districting Plans
+
+It is difficult to construct a tractable probability distribution for districting plans, since the space of plans is discrete and lacks a natural metric structure.
+Thankfully, in recent years a number of algorithms have been developed which sample districting plans from specific distributions [@fifield2020mcmc; @deford2019; @carter2019; @mccartan2020].
+These distributions can generally be characterized as maximum-entropy distributions on the space of all valid districting plans, in combination with several moment constraints.
+
+For example, the algorithms of @carter2019 and @mccartan2020 sample from the maximum-entropy distribution of districting plans that are geographically contiguous, have district populations within a specified deviation from equality, and which have a certain average compactness value (according to a particular graph-theoretic compactness measure).
+These maximum-entropy distributions put as few conditions as possible on the districting sampling process, as long as a set of constraints imposed by the researcher are met.
+If these constraints are precisely those which are required by law or traditional redistricting criteria, then samples from this distribution provide a natural set of counterfactual districting plans, uninfluenced by superfluous partisan or other considerations, to use in estimating $H(q)$ and $\Delta H(q)$.
+In practice, the translation from tradition and law into mathematical formulations of constraints is not always clear or even well-defined.
+There is certainly an element of subjectivity in sampling a set of districting plans.
+Nonetheless, sampling methods are widely used in practice [see e.g., @2019rucho; @2018league; @2022merrill; @becker2021computational; @chen:rodd:13].
+
+### Modeling Election Outcomes
+
+Election results present a different set of modeling challenges, given the large number of factors that influence election outcomes and the general unpredictability of future events.
+We limit our discussion here to the case of estimating harm and differential partisan harm in a two-party setting.
+Estimating differential racial harm in the two-party setting can be done by first generating ecological inferences or survey estimates of party preference by race, and then applying methods analogous to those outlined here.
+Multiparty or primary elections pose additional modeling challenges.
+In Section @sec-boston we consider a spatial-racial model for primary elections with multiple candidates, to illustrate the application of our framework to these more complicated cases.
+
+Motivated primarily by computational convenience and simplicity, we adopt the stochastic uniform partisan swing model of @gelman1994unified, modeling the Democratic two-party vote share in district $d$ and election $v$ as 
+$$
+    s_{dv} = \bar{s}_d + \delta_v + \varepsilon_{dv},
+$$ 
+where $\bar{s}_d$ is the baseline Democratic vote share in the districts, $\delta_v\sim\Norm(0, \sigma^2_\delta)$ is a election-specific uniform shift, and $\varepsilon_{dv}\sim\Norm(0, \sigma^2_\varepsilon)$ is a district-election residual error term.
+The baseline $\bar{s}_d$ can be established by averaging the results of all available statewide elections over the past decade or other suitable period.
+Since $\bar{s}_d$ is calculated for the particular configuration of district $d$, this model takes into account the specific districting plan under consideration.
+We estimate $\sigma^2_\delta$ and $\sigma^2_\varepsilon$ by fitting a linear mixed-effects model to 5,931 contested U.S. congressional elections from 1976 to 2020.
+Appendix @sec-app-elecmodel contains more details on how we estimate and apply this model.
+
+More complicated election outcome models are certainly possible and are straightforward to use with the measures proposed here.
+For example, one could operate on the logit scale, model incumbency effects, or include additional data from local elections.
+
+### Calculating Harm and Differential Harm
+
+With a model for election outcomes and districting plans in hand, calculation of $H(q)$ and $\Delta H(q)$ is straightforward.
+For each sampled counterfactual districting plan $\tilde q$, we use the election model to simulate vote shares in each district of $q$ and $\tilde q$.
+We can then identify, for each precinct, how many Democratic or Republican voters were harmed.[^2]
+We tally the total harm done to Democratic and Republican voters across the map and divide by the appropriate totals to get a single draw of $H(q)\mid I\in\dem$ and $H(q)\mid I\in\rep$.
+When other groups (such as racial groups) are used in $\Delta H(q)$, we must repeat these computations for each group.
+Finally, we average across all of the samples, and add or subtract across groups, to produce estimates of $E[H(q)]$ and $\Delta_{\dem-\rep} H(q)$.
+
+[^2]: For this, we use the baseline count of Democratic or Republican votes.
+    This is a slight simplification, since the vote share changes across random draws, and so the number of Democratic and Republican voters changes too.
+    To deal with this issue completely, one must model elections at the precinct level, which requires more data and computational costs.
+
 # Data availability {.unnumbered}
 All data are publicly available and are included in the replication package for the manuscript.
 
@@ -698,11 +710,13 @@ All code is included in the replication package for the manuscript.
 ```
 # Two-party Election Model {#sec-app-elecmodel}
 
-The election model used in estimating harm is $$
+The election model used in estimating harm is 
+$$
     s_{dv} = \bar{s}_d + \delta_v + \varepsilon_{dv},
     \qquad \delta_v\sim\Norm(0, \sigma^2_\delta),
     \quad \varepsilon_{dv}\sim\Norm(0, \sigma^2_\varepsilon).
-$$ As noted in the main text, $\bar{s}_d$ is computed by averaging historical election returns.
+$$ 
+As noted in the main text, $\bar{s}_d$ is computed by averaging historical election returns.
 This is done at the precinct level, since this is the most granular level that districting plans are usually built from and election returns are reported at.[^14]
 
 [^14]: When district boundaries split precincts, practitioners generally impute the returns in each component of the split precinct by population-weighted interpolation.
@@ -771,7 +785,8 @@ However, it jointly estimates both turnout and Democratic support across all sev
 For precinct $j$ in election $v$, let $\vap_j$ denote the voting-age population, $n_{jv}$ denote the total number of votes cast for major-party candidates, $s_{jv}$ denote the Democratic vote share, and $p_{jr}$ denote the fraction of the voting-age population belonging to racial group $r$, where here $r\in\{\text{White},\text{Black},\text{Other}\}$.
 Our main parameters of interest are $\turn_{jr}$ and $\supp_{jr}$, the baseline turnout and Democratic support rate by race in the precinct.
 
-We model the observed turnout $n_{jv}$ and vote counts $s_{jk}n_{jv}$ as \begin{align*}
+We model the observed turnout $n_{jv}$ and vote counts $s_{jk}n_{jv}$ as 
+\begin{align*}
     n_{jv} \mid \turn_{jr}, \beta^{(t)}_v
         &\sim \Binlog\qty(\vap_j, \logit(\turn_j^\top\vb p_j) + \beta^{(t)}_v) \\
     \logit(\turn_j) \mid \mu^{(t)}, \Sigma^{(t)}
@@ -781,7 +796,8 @@ We model the observed turnout $n_{jv}$ and vote counts $s_{jk}n_{jv}$ as \begin{
         \supp_j^\top \frac{\turn_j\circ\vb p_j}{\turn_j^\top\vb p_j}) + \beta^{(s)}_v) \\
     \logit(\supp_j) \mid \mu^{(s)}, \Sigma^{(s)}
         &\sim \Norm(\mu^{(s)}, \Sigma^{(t)}),
-\end{align*} where the $\vb*\beta^{(t)}$ and $\vb*\beta^{(s)}$ model election-specific logit shifts, $\Binlog$ indicates the Binomial distribution with the probability parameter specified on the logit scale, and $\circ$ indicates the element-wise (Hadamard) product.
+\end{align*} 
+where the $\vb*\beta^{(t)}$ and $\vb*\beta^{(s)}$ model election-specific logit shifts, $\Binlog$ indicates the Binomial distribution with the probability parameter specified on the logit scale, and $\circ$ indicates the element-wise (Hadamard) product.
 We give $\vb*\beta^{(t)}$ an i.i.d. $\Norm(0, 0.6^2)$ prior,and $\vb*\beta^{(s)}$ an i.i.d. $\Norm(0, 0.4^2)$ prior, and $\mu^{(t)}$ an i.i.d. $\Norm(0, 1.5^2)$ prior.
 We set priors independently on the variance and correlation components of $\Sigma^{(t)}$ and $\Sigma^{(s)}$.
 The former received $\Gam(1.5, 1.5/0.5)$ and $\Gam(1.5, 1.5/0.25)$ priors for turnout and support, while the latter received uniform priors (i.e., LKJ priors with shape parameter 1).
@@ -840,7 +856,8 @@ Continuing the notation from above, for precinct $j$ in election $v$, let $\vap_
 Our main parameters of interest are $\turn_{jr}$, the baseline turnout by race and precinct, $F_{jqr}$, the preferences in latent dimension $q$ by race and precinct, and $L_{kq}$, the loading of each candidate on latent dimension $q$.
 Here $q\in\{1,2\}$, since preliminary analyses found no improved fit when expanding to three dimensions.
 
-We model the observed turnout $n_{jv}$ identically as in Alabama, above: \begin{align*}
+We model the observed turnout $n_{jv}$ identically as in Alabama, above: 
+\begin{align*}
     n_{jv} \mid \turn_{jr}, \beta^{(t)}_v
         &\sim \Binlog\qty(\vap_j, \logit(\turn_j^\top\vb p_j) + \beta^{(t)}_v) \\
     \logit(\turn_j) \mid \mu^{(t)}, \Sigma^{(t)}
@@ -849,17 +866,21 @@ We model the observed turnout $n_{jv}$ identically as in Alabama, above: \begin{
 
 Because of the latent factor model, we do not require that vote shares by race and precinct, when tallied by race, necessarily equal the observed vote share in the precinct.
 As a result we choose to model the vote shares directly, rather than the vote counts, which is more computationally efficient.
-Because each precinct has dozens or hundreds of voters, a Normal approximation to the Binomial likelihood is appropriate, and so we model the vote shares $s_{jk}$ as \begin{align*}
+Because each precinct has dozens or hundreds of voters, a Normal approximation to the Binomial likelihood is appropriate, and so we model the vote shares $s_{jk}$ as 
+\begin{align*}
     \logit(s_{jk}) \mid \pi_{jk}, \eps &\sim \Norm(\pi_{jk}, \frac{\eps}{1+n_{jv_k}}),
-\end{align*} where $\pi_{jk}$ is the preference of precinct $j$ for candidate $k$ on the logit scale, as detailed below.
+\end{align*} 
+where $\pi_{jk}$ is the preference of precinct $j$ for candidate $k$ on the logit scale, as detailed below.
 The Normal approximation variance is inversely proportional to the total number of votes in the precinct (the additional 1 is to avoid divide-by-zero errors).
 The multiplicative factor $\eps$ captures the additional variance that isn't accounted for by the latent factors.
 
-The logit candidate preference itself is modeled as \begin{align*}
+The logit candidate preference itself is modeled as 
+\begin{align*}
     \pi_{jk} &= \beta^{(s)}_k + \alpha_k
         F_{j}^\top(\turn_j\circ \vb p_j)^\top\mathrm{diag}(\vb*\rho)\vb L_k  \\
     F_{jq} \mid \Sigma^{(p)} &\sim \Norm(0, \Sigma^{(p)}).
-\end{align*} Note that $F_j$ is a $q\times r$ matrix of preferences by race and dimension within precinct $j$, and $\turn_j\circ \vb p_j$ is a vector of the percentages of the total VAP in the precinct that belongs to voters of each race, so $F_{j}^\top(\turn_j\circ \vb p_j)$ is a vector with $q$ elements containing the preferences by dimension of the precinct's voters, after marginalizing out race.
+\end{align*} 
+Note that $F_j$ is a $q\times r$ matrix of preferences by race and dimension within precinct $j$, and $\turn_j\circ \vb p_j$ is a vector of the percentages of the total VAP in the precinct that belongs to voters of each race, so $F_{j}^\top(\turn_j\circ \vb p_j)$ is a vector with $q$ elements containing the preferences by dimension of the precinct's voters, after marginalizing out race.
 The matrix $\mathrm{diag}(\vb*\rho)$ captures the relative scale or importance of each dimension to the overall outcomes.
 The $\vb*\alpha$ parameters are "fudge factors" that adjust the scale of the deviations from each candidate's average support.
 
