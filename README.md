@@ -20,5 +20,5 @@ To replicate the figures and analyses in the paper, run the scripts in `R/` in o
 lapply(sort(Sys.glob("R/*.R")), source)
 ```
 
-Then run `rmarkdown::render("paper/harm.Rmd")` to generate the paper.
+Then run `quarto::quarto_render("paper/harm.qmd")` to generate the paper.
 
