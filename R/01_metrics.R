@@ -79,20 +79,27 @@ calc_plans_stats = function(plans, map, dem, gop, elec_model_spec=elec_model_spe
     idx_2 = n_ref + seq_len(min(ncol(as.matrix(plans)) - n_ref, max_harm))
 
     plans = plans %>%
-        mutate(dev = plan_parity(map),
-               comp = distr_compactness(map),
-               dem = group_frac(map, dvote, dvote+rvote),
-               decl = part_decl(., map, dvote, rvote),
-               egap = part_egap(., map, dvote, rvote))
+        mutate(
+            dev = plan_parity(map),
+            comp = distr_compactness(map),
+            dem = group_frac(map, dvote, dvote+rvote),
+            decl = part_decl(., map, dvote, rvote),
+            egap = part_egap(., map, dvote, rvote),
+            disloc = part_dislocation(., map, dvote, rvote),
+            gi = part_rmd(., map, dvote, rvote)
+        )
 
     ker_t = k_t(sd=with(elec_model_spec, sqrt(year^2 + resid^2)))
     pl_sum = plans %>%
         group_by(draw) %>%
-        summarize(n_dem = sum(dem > 0.5),
-                  e_dem = sum(ker_t(dem)),
-                  pbias = 0.5 - mean(ker_t(dem - (statewide - 0.5))),
-                  mean_med = mean(dem) - median(dem),
-                  across(c(dev, comp, decl, egap), ~ .[1]))
+        summarize(
+            n_dem = sum(dem > 0.5),
+            e_dem = sum(ker_t(dem)),
+            pbias = 0.5 - mean(ker_t(dem - (statewide - 0.5))),
+            mean_med = mean(dem) - median(dem),
+            across(c(dev, comp, decl, egap, gi), ~ .[1]),
+            disloc = mean(disloc)
+        )
     hh = partisan_harm(plans, dem, dvote, rvote, elec_model_spec, idx_2=idx_2)
     pl_sum$h_dem = hh[1, ]
     pl_sum$h_rep = hh[2, ]

@@ -78,7 +78,7 @@ plot(nj, rowMeans(hh_prec_rep)) + scale_fill_wa_c("forest_fire")
 
 # variables pairs plot -----
 meas_labels = c(e_dem="Expected\nDem. seats", dh="Differential harm", h="Average harm",
-                egap="Efficiency gap", pbias="Partisan bias", mean_med="Mean-median", decl="Declination")
+                egap="Efficiency gap", pbias="Partisan bias", mean_med="Mean-median", decl="Declination", disloc = 'Dislocation', gi = 'Ranked Marginal\nDeviation')
 
 if (!file.exists(path <- here("paper/figures/nj_pairs.pdf"))) {
     pl_plot = pl$plan %>%
@@ -93,14 +93,15 @@ if (!file.exists(path <- here("paper/figures/nj_pairs.pdf"))) {
 if (!file.exists(path <- here("paper/figures/nj_meas.pdf"))) {
     make_d_hist = function(x) {
         as_tibble(x) %>%
-            select(draw, e_dem, dh, h, egap, pbias, mean_med, decl) %>%
+            select(draw, e_dem, dh, h, egap, pbias, mean_med, decl,
+                   disloc, gi) %>%
             pivot_longer(-draw, names_to="var") %>%
             mutate(var = fct_inorder(str_squish(meas_labels[var])))
     }
     d_hist_samp = make_d_hist(subset_sampled(pl$plan))
     d_hist_ref = make_d_hist(subset_ref(pl$plan)) %>%
         drop_na()
-    d_refline = tibble(var=d_hist_ref$var[c(2, 4:7)], value=0)
+    d_refline = tibble(var=d_hist_ref$var[c(2, 4:9)], value=0)
 
     p = ggplot(d_hist_samp, aes(value)) +
         facet_wrap(~ var, scales="free", nrow=2) +
@@ -111,12 +112,13 @@ if (!file.exists(path <- here("paper/figures/nj_meas.pdf"))) {
                            labels=c(
                            rep_comm = 'Republican proposal',
                            dem_comm = 'Democratic proposal')) +
-        scale_x_continuous(NULL, labels=function(x) number(x, 0.01)) +
+        scale_x_continuous(NULL, labels=function(x) ifelse(x > 1 | x == 0, number(x, 1), number(x, 0.01))) +
         scale_y_continuous("Number of plans", expand=expansion(mult=c(0, 0.05))) +
         labs(x=NULL, color="Plan") +
         theme_repr() +
-        theme(legend.position=c(0.875, 0.25))
-    ggsave(path, plot=p, width=7.25, height=3)
+        theme(legend.position = 'inside',
+              legend.position.inside = c(0.915, 0.25))
+    ggsave(path, plot=p, width=8.5, height=3)
 
     r1 <- c('Expected Dem. seats', 'Differential harm', 'Average harm')
     ggplot(d_hist_samp %>% mutate(row = (!var %in% r1) + 1) , aes(value)) +
