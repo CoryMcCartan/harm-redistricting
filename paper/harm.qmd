@@ -436,6 +436,7 @@ The flexibility of choosing a model for counterfactual plans and hypothetical el
 Simple election models are computationally tractable and require minimal data, but grossly simplify reality.
 More realistic models can add a significant burden to the calculation of our harm measures.
 And while modern simulation methods are a valuable starting point for defining counterfactual plans, these approaches involve analyst discretion and interpretation of often-murky legal standards.
+Incorrect or incomplete interpretation of these standards can negatively influence the validity of the counterfactual plans.
 
 One limitation of the harm definition itself is that considers only individuals who vote; abstainers experience zero harm.
 A richer framework and the use of auxiliary survey data might allow consideration of the informal preferences of the whole population, even when those preferences are not expressed at the ballot box.
@@ -473,6 +474,11 @@ If these constraints are precisely those which are required by law or traditiona
 In practice, the translation from tradition and law into mathematical formulations of constraints is not always clear or even well-defined.
 There is certainly an element of subjectivity in sampling a set of districting plans.
 Nonetheless, sampling methods are widely used in practice [see e.g., @2019rucho; @2018league; @2022merrill; @becker2021computational; @chen:rodd:13].
+
+Even when the choice of constraints maps onto legal requirements, it is important to ensure that the counterfactual plans are similar to the enacted plan on discretionary criteria as well.
+For example, a mapdrawer may weakly respect something like compactness or respecting county boundaries without being required to do so.
+In this case, if these optional constraints are not matched in the counterfactual, it will be unclear whether any estimated harm is due to *actual* biases in a plan or the mismatch in criteria.
+As such, it is important to not just ensure that any counterfactual samples use methods with known sampling properties, but also that the sampled plans are similar to the enacted plan on these discretionary criteria.
 
 ### Modeling Election Outcomes
 
