@@ -45,3 +45,5 @@ paper/*.pdf
 # needed tex files
 !paper/header.tex
 !paper/figures/corr_table.tex
+# for diffing
+paper/harm_submit.qmd
