@@ -772,7 +772,7 @@ This measure uses a $k$-nearest-neighbor approach, where $k$ is the size of a di
 This can be repeated for  voter in a state or region, demonstrating at a local level when people been placed in a district which is atypical for who their nearest neighbors are.
 When aggregated to the precinct-level, this can produce local measures of partisan gerrymandering, similar to our proposed differential partisan harm measure.
 
-Since none of the existing measures, other than partisan dislocation, are centered on individual voters, they offer far less granular insights than the proposed harm framework, even in the case of studying partisan gerrymandering.
+Since none of the existing measures, except partisan dislocation, are centered on individual voters, they offer far less granular insights than the proposed harm framework, even in the case of studying partisan gerrymandering.
 For example, differential harm can be estimated at the precinct level and then plotted on a map to show not just *which party* is harmed by a gerrymander, but *where* this harm occurs.
 
 All of these existing measures are constructed so that a value of zero indicates no bias, and a value of zero is at least implicitly held up as a normative standard for districting plans.
@@ -829,7 +829,7 @@ The partisan dislocation measure [@defoeubarodd21] shows that the Democratic pla
 We use the vote-weighted measure of the average dislocation to produce a statewide summary.
 We find that the sign is incorrect for the Democratic plan, which has a positive sign.
 As the sign is positive for the simulations as well, this difference may be related to the fact that this measure uses the $k$ nearest neighbors, which is not uniform over the voters in the state.
-Implicitly, voters in dense, urban areas will be counterd at a higher rate than those in rural areas.
+Implicitly, voters in dense, urban areas will be counted at a higher rate than those in rural areas.
 
 Note that the Ranked Marginal Deviation [@herschlag2020quantifying] is not a signed measure.
 All scores are at least zero, with low scores indicating that a plan is similar to the simulated plans.
