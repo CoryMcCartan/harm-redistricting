@@ -473,6 +473,11 @@ In practice, the translation from tradition and law into mathematical formulatio
 There is certainly an element of subjectivity in sampling a set of districting plans.
 Nonetheless, sampling methods are widely used in practice [see e.g., @2019rucho; @2018league; @2022merrill; @becker2021computational; @chen:rodd:13].
 
+Even when the choice of constraints maps onto legal requirements, it is important to ensure that the counterfactual plans are similar to the enacted plan on discretionary criteria as well.
+For example, a mapdrawer may weakly respect something like compactness or respecting county boundaries without being required to do so.
+In this case, if these optional constraints are not matched in the counterfactual, it will be unclear whether any estimated harm is due to *actual* biases in a plan or the mismatch in criteria.
+As such, it is important to not just ensure that any counterfactual samples use methods with known sampling properties, but also that the sampled plans are similar to the enacted plan on these discretionary criteria.
+
 ### Modeling Election Outcomes
 
 Election results present a different set of modeling challenges, given the large number of factors that influence election outcomes and the general unpredictability of future events.
