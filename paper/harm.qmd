@@ -216,7 +216,7 @@ To allow for this broader scope, we replace the fixed election $v$, counterfactu
 The random variable $V$ represents a statistical model for possible future elections---one realization could correspond to a heavily Democratic-favoring midterm year, while another could involve incumbents under-performing particularly badly.
 The random variable $\tilde Q$ represents a model for potential counterfactual districting plans.
 Rarely would an analyst have a single counterfactual plan in mind: different realizations of $\tilde Q$ correspond to different districting plans that are permissible under the relevant districting criteria.
-Finally, $I$ is defined to be a voter taken uniformly at random from $\Voters$, with $I\indep V,\tilde Q$.
+Finally, $I$ is defined to be a voter taken uniformly at random from $\Voters$, with $I$ independent of $V,\tilde Q$.
 
 The randomness in $V$ and $\tilde Q$ allows us to compare the enacted districting plan to many plausible counterfactual alternatives, and across a range of electoral environments.
 At times we may wish to study on a particular election or a particular counterfactual plan.
