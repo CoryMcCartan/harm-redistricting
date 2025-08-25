@@ -436,6 +436,7 @@ The flexibility of choosing a model for counterfactual plans and hypothetical el
 Simple election models are computationally tractable and require minimal data, but grossly simplify reality.
 More realistic models can add a significant burden to the calculation of our harm measures.
 And while modern simulation methods are a valuable starting point for defining counterfactual plans, these approaches involve analyst discretion and interpretation of often-murky legal standards.
+Incorrect or incomplete interpretation of these standards can negatively influence the validity of the counterfactual plans.
 
 One limitation of the harm definition itself is that considers only individuals who vote; abstainers experience zero harm.
 A richer framework and the use of auxiliary survey data might allow consideration of the informal preferences of the whole population, even when those preferences are not expressed at the ballot box.
