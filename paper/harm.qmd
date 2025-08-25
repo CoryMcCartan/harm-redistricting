@@ -218,8 +218,8 @@ We could also consider averaging over a set of individuals with some shared char
 To allow for this broader scope, we replace the fixed election $v$, counterfactual districting plan $\tilde q$, and individual voter $i$ with random variables $V\in\Elecs$, $\tilde Q\in\Plans$, and $I\in\Voters$.
 The random variable $V$ represents a statistical model for possible future elections---one realization could correspond to a heavily Democratic-favoring midterm year, while another could involve incumbents under-performing particularly badly.
 The random variable $\tilde Q$ represents a model for potential counterfactual districting plans.
-Rarely would an analyst have a single counterfactual plan in mind: different realizations of $\tilde Q$ correspond to different districting plans that are permissible under the relevant districting criteria.
-Finally, $I$ is defined to be a voter taken uniformly at random from $\Voters$, with $I$ independent of $V,\tilde Q$.
+Rarely would an analyst have a single counterfactual plan in mind: different realizations of $\tilde Q$ could correspond to different plans that respect the relevant districting criteria.
+Finally, $I$ is defined to be a voter taken uniformly at random from $\Voters$, independently of $V,\tilde Q$.
 
 The randomness in $V$ and $\tilde Q$ allows us to compare the enacted districting plan to many plausible counterfactual alternatives, and across a range of electoral environments.
 At times we may wish to study on a particular election or a particular counterfactual plan.
@@ -244,7 +244,7 @@ that is, the probability that a randomly selected voter in this election is misr
 ## Differential Harm {#sec-diff-harm}
 
 Single-member districts are often motivated by the value in representation to specific communities with shared interests.
-Preserving "communities of interest" is one of the most common statutory and constitutional requirements imposed by states on the plan-drawing process [@ncslcriteria].
+<!-- Preserving "communities of interest" is one of the most common statutory and constitutional requirements imposed by states on the plan-drawing process [@ncslcriteria]. -->
 It is therefore natural to consider not just the average harm to voters done by a plan, but also how this harm is distributed across certain groups of voters, defined by race, party, or other attributes.
 
 To that end, let $\Groups=\{G_1,G_2,\dots\}$ be a set of mutually exclusive groups of voters, so that for each voter $i$, we have $i\in G_k$ for some group $G_k$.
