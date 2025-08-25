@@ -311,7 +311,7 @@ Overall, the Democratic plan has lower average harm.
 include_graphics("figures/nj_meas.pdf")
 ```
 
-Most of the other metrics, with the notable exception of the mean-median measure, agree with differential harm that each party's proposal favors itself.
+Most of the other metrics, with the notable exceptions of the mean-median and partisan dislocation measure, agree with differential harm that each party's proposal favors itself.
 The efficiency gap and partisan bias estimate give roughly equal scores in absolute value to the Democratic and Republican plans, in comparison to differential harm and declination, which identify the Democratic proposal as slightly more extreme.
 
 The raw metrics can be better contextualized in comparison to the distribution across the sampled plans, something we discuss in [Appendix @sec-app-nj].
@@ -754,7 +754,12 @@ Plugging in past election results without using an election model assumes too mu
 
 [^4]: For partisan bias, both researchers and practitioners have largely relied on simple uniform-shift models similar to the one we use in this work.
 
-Since none of the existing measures are centered on individual voters, they offer far less granular insights than the proposed harm framework, even in the case of studying partisan gerrymandering.
+A quite different approach to measuring partisan gerrymandering is the partisan dislocation [@defoeubarodd21].
+This measure uses a $k$-nearest-neighbor approach, where $k$ is the size of a district, to identify when a voter's district is politically different from their assigned district.
+This can be repeated for  voter in a state or region, demonstrating at a local level when people been placed in a district which is atypical for who their nearest neighbors are.
+When aggregated to the precinct-level, this can produce local measures of partisan gerrymandering, similar to our proposed differential partisan harm measure.
+
+Since none of the existing measures, other than partisan dislocation, are centered on individual voters, they offer far less granular insights than the proposed harm framework, even in the case of studying partisan gerrymandering.
 For example, differential harm can be estimated at the precinct level and then plotted on a map to show not just *which party* is harmed by a gerrymander, but *where* this harm occurs.
 
 All of these existing measures are constructed so that a value of zero indicates no bias, and a value of zero is at least implicitly held up as a normative standard for districting plans.
@@ -803,9 +808,19 @@ include_graphics("figures/nj_pairs.pdf")
 ```
 
 
-The Democratic proposal is expected to produce an average of 8.55 Democratic seats under our election model, more than 79% of all sample plans.
+The Democratic proposal is expected to produce an average of 3.45 Republican seats under our election model, more than 79% of all sample plans.
 The Republican proposal is an outlier, yielding fewer seats on average than every single sampled plan.
 This pattern is repeated for all of the four common gerrymandering measures, where the Republican plan is a clear outlier (all $p=0.0002$, except $p=0.002$ for partisan bias) while the Democratic plan is not ($p=0.34$ for the efficiency gap, $0.50$ for declination, $0.88$ for partisan bias, and $0.17$ for the mean-median score).
+
+The partisan dislocation measure [@defoeubarodd21] shows that the Democratic plan is typical ($p=0.24$) while the Republican plan is an outlier ($p=0.01$).
+We use the vote-weighted measure of the average dislocation to produce a statewide summary.
+We find that the sign is incorrect for the Democratic plan, which has a positive sign.
+As the sign is positive for the simulations as well, this difference may be related to the fact that this measure uses the $k$ nearest neighbors, which is not uniform over the voters in the state.
+Implicitly, voters in dense, urban areas will be counterd at a higher rate than those in rural areas.
+
+Note that the Ranked Marginal Deviation [@herschlag2020quantifying] is not a signed measure.
+All scores are at least zero, with low scores indicating that a plan is similar to the simulated plans.
+In this analysis, the Democratic plan sits within the range of the sampled plans, while the Republican plan is an outlier ($p=0.0002$).
 
 The estimate of differential harm already uses the simulation output, and so comparing the proposals to the sampling distribution is not strictly required.
 However, it is notable that while the Democratic proposal has a more extreme estimate of differential partisan harm (1.6 percentage points higher), its value of $-3.7\%$ is not an outlier with respect to the distribution of differential harm for a randomly sampled plan ($p=0.43$, using the same set of samples as a counterfactual), while the Republican plan is ($p=0.0002$).
