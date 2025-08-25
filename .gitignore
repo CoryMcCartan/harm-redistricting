@@ -20,6 +20,7 @@ src/*
 
 submission/replication
 submission/*.pdf
+submission/replication.zip
 
 # misc and  LaTeX
 out/

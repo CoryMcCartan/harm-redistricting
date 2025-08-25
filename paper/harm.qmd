@@ -15,13 +15,9 @@ authors:
     corresponding: true
   - name: Christopher T. Kenny
     affiliations:
-    - name: Harvard University
-      department: Department of Government
-      address: 1737 Cambridge Street
-      city: Cambridge
-      region: MA
-      postal-code: "02138 "
-    email: christopherkenny@fas.harvard.edu
+    - name: Princeton University
+      department: Data-Driven Social Science
+    email: ctkenny@princeton.edu
     url: https://christophertkenny.com
 abstract: |
   Social scientists have developed dozens of measures for assessing partisan bias in redistricting.
@@ -53,7 +49,7 @@ bibliography: references.bib
 format:
     cmc-article-pdf:
         journal:
-            blinded: true
+            blinded: false
         keep-tex: true
         fontsize: 11pt
         biblio-style: apsr
