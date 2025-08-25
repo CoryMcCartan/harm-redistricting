@@ -102,7 +102,7 @@ Second, the proposed framework considers *counterfactual* districting plans, not
 Many factors influence the qualities of a districting plan, and without a well-defined comparison, it is impossible to differentiate which qualities, like its partisan performance, are consequences of laws and political geography or result from improper manipulation of the system for political gain [@chen:rodd:13].
 For example, Massachusetts' 2010 districts had an efficiency gap that would normally qualify as a Democratic gerrymander, but was in fact due to the homogeneity of the state's political geography [@duch:18].
 While consideration of counterfactual plans is now commonplace with redistricting simulation algorithms [e.g., @deford2019], our approach is different in that it incorporates them within the definition of the measure itself.
-As far as districting metrics themselves, many rely on *implicit* counterfactuals, which may be irrelevant or infeasible, as we discuss in [Appendix @sec-connections].
+Some existing districting rely on *implicit* counterfactuals, which may be irrelevant or infeasible, as we discuss in [Appendix @sec-connections].
 By making the comparison set explicit, our approach improves on existing work by better reflecting legal and geographic realities, while making the interpretation of our measures clearer.
 
 The *combination* of individual voter choices and counterfactual districting plans is the key innovation of our framework of *individual harm*: informally, a voter is harmed if they would be represented by their candidate of choice under a counterfactual plan.
@@ -444,6 +444,7 @@ A second limitation is that the harm definition ignores any preferences a voter 
 For example, a voter may consider candidates A and B nearly interchangeable, but may strongly dislike candidate C.
 The simple cost function implicitly assumed in our proposed measure does not differentiate between candidates B or C winning the district.
 The problem could be remedied by replacing the indicator functions in the measure with other cost functions that consider ordinal preferences.
+For example, in our Boston example, the distance in latent space between a voter's ideal point and the winning candidate's position could be used.
 
 At its core, redistricting is a multifaceted and high-dimensional problem that must balance political, legal, and administrative constraints to allow citizens to exercise their rights.
 A districting plan can never be boiled down to a single number.
@@ -510,11 +511,17 @@ The estimated standard deviations of the random effects are $\hat{\sigma}_\delta
 We substitute these point estimates directly into our election model.
 While this has the advantage of simplicity, it does not account for uncertainty in the estimates.
 
+One implication of the model presented here is that it rules out any mechanism whereby voters reward or punish the parties based on the plan enacted: $q$ itself does not show up in the model.
+Indirect effects, such as $q$ affecting the type of candidates who run, and therefore the vote share each party wins, are also ruled out, or at least on average: the residual $\varepsilon_{dv}$ captures candidate effects broadly, but it is assumed to be drawn independently of $q$.
+To the extent that a particular $q$ affects voter turnout or vote choice in these ways, the simple model presented here will not capture those effects.
+
 More complicated election outcome models are certainly possible and are straightforward to use with the measures proposed here.
 For example, one could operate on the logit scale, model incumbency effects, or include additional data from local elections.
 
 However, the simple model presented here does a reasonable job of capturing the distribution in future elections.
 @kenny2023widespread (Appendix D) validated the model in a similar redistricting context and found it to perform well.
+
+
 
 ### Calculating Harm and Differential Harm
 
