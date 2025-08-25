@@ -247,7 +247,7 @@ Single-member districts are often motivated by the value in representation to sp
 <!-- Preserving "communities of interest" is one of the most common statutory and constitutional requirements imposed by states on the plan-drawing process [@ncslcriteria]. -->
 It is therefore natural to consider not just the average harm to voters done by a plan, but also how this harm is distributed across certain groups of voters, defined by race, party, or other attributes.
 
-To that end, let $\Groups=\{G_1,G_2,\dots\}$ be a set of mutually exclusive groups of voters, so that for each voter $i$, we have $i\in G_k$ for some group $G_k$.
+To that end, let $\Groups=\{G_1,G_2,\dots\}$ be a (random) partition of the set of voters.
 In general we will not require the group identities to be fixed with respect to elections.[^1]
 This is because some group identities, like partisan preference, may themselves change election-to-election.
 
@@ -260,9 +260,9 @@ $$
 $$
 So $\Delta_{G_k-G_l}H(q)$ will be positive if voters in group $G_k$ are harmed at a higher rate than voters in group $G_l$, indicating that plan $q$ favors $G_l$ over $G_k$.
 
-Zero differential harm between groups is analogous to the notion of *error rate balance* in the algorithmic fairness literature, which seeks to equalize false positive and false negative rates across protected classes [@zafar2017fairness; @chouldechova2017fair].
+Zero differential harm between groups is analogous to the notion of *error rate balance* in the algorithmic fairness literature, which seeks to equalize false positive and negative rates across groups [@zafar2017fairness; @chouldechova2017fair].
 There, the implicit counterfactual is a perfect predictor.
-Compared to the perfect predictor, the actual decision process harms individuals whenever it makes a false positive or false negative error.
+Compared to the perfect predictor, the actual process harms individuals whenever it makes a false positive or negative error.
 Here, there can be no perfect districting plan, and the counterfactual instead consists of a collection of plausible alternatives.
 
 Differential harm provides a unified framework for evaluating a districting plan across a variety of dimensions.
@@ -295,14 +295,14 @@ include_graphics("figures/nj_maps.pdf")
 For differential harm to measure gerrymandering, a counterfactual $\tilde Q$ drawn without partisan intent is needed.
 To do so, we generate 10,000 districting plans without any partisan data, using the SMC algorithm of [@mccartan2020; implemented in @redist] setting constraints to favor compact plans that respect county lines.
 @fig-nj-maps(d) shows one such plan.
-For each of these sampled plans and the two proposals, we estimate the average harm and differential partisan harm versus the simulated baseline,[^9] and calculate the expected number of Democratic seats and several common partisan metrics.
+For each of these sampled plans and the two proposals, we estimate the average harm and differential partisan harm versus the simulated baseline,[^9] and calculate the expected number of Democratic seats and several common partisan metrics, including partisan dislocation.
 These measures, and their distribution in the basline, are shown in @fig-nj-meas.
 
 [^9]: We choose to calculate $\Delta_{\dem-\rep}H(q)$, so positive values correspond to a Republican-favoring plan.
 
 The estimate of differential partisan harm aligns with the expected partisan skew of each plan, with a value of $-3.6\%$ for the Democratic proposal and $2.0\%$ for the Republican proposal.
 This means that, for example, an average Democratic voter is $3.6$pp less likely to be misrepresented than their average Republican counter-partisan.
-Overall, the Democratic plan has lower average harm.
+Overall, the Democratic plan has lower average harm, and a lower ranked marginal deviation [@herschlag2020quantifying].
 
 ```{r fig-nj-meas, fig.width=7}
 #| fig.cap: |
@@ -313,10 +313,11 @@ Overall, the Democratic plan has lower average harm.
 include_graphics("figures/nj_meas.pdf")
 ```
 
-Most of the other metrics, with the notable exceptions of the mean-median and partisan dislocation measure, agree with differential harm that each party's proposal favors itself.
-The efficiency gap and partisan bias estimate give roughly equal scores in absolute value to the Democratic and Republican plans, in comparison to differential harm and declination, which identify the Democratic proposal as slightly more extreme.
+Most of the other metrics agree with differential harm that each party's proposal favors itself.
+The efficiency gap and partisan bias score both plans almost equally in absolute value, in comparison to declination, which identifies the Republican proposal as slightly more extreme.
+However, the mean-median and partisan dislocation measures both classify the Democratic proposal as favoring Republicans, even though it produces more Democratic seats than the typical simulated plan.
 
-The raw metrics can be better contextualized in comparison to the distribution across the sampled plans, something we discuss in [Appendix @sec-app-nj].
+The raw metrics, and these two counterintuitive results, can be better contextualized in comparison to the distribution across the sampled plans, something we discuss in [Appendix @sec-app-nj].
 That appendix also compares the correlations between the various metrics in the simulated sample.
 We find strong correlations of differential harm with the number of seats won by each party, while several common metrics like the mean-median gap and partisan bias are very weakly correlated with seats won.
 
