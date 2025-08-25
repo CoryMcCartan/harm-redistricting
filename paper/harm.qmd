@@ -211,7 +211,7 @@ In practice, voters, courts, or politicians may differ in their views on how to 
 ## Multiple Elections or Districting Plans
 
 As defined above, $h_i(v,q,\tilde q)$ captures harm in a single election and relative to one counterfactual districting plan $\tilde q$.
-Researchers are generally interested in outcomes over multiple elections and a much larger set of counterfactual plans.
+Researchers are generally interested in outcomes over multiple elections and a larger set of counterfactual plans.
 <!-- Ideally, we would average individual harm over a set of future elections under the enacted districting plan and over a set of hypothetical districting plans that are consistent with districting criteria.
 We could also consider averaging over a set of individuals with some shared characteristics. -->
 
@@ -222,7 +222,7 @@ Rarely would an analyst have a single counterfactual plan in mind: different rea
 Finally, $I$ is defined to be a voter taken uniformly at random from $\Voters$, independently of $V,\tilde Q$.
 
 The randomness in $V$ and $\tilde Q$ allows us to compare the enacted districting plan to many plausible counterfactual alternatives, and across a range of electoral environments.
-At times we may wish to study on a particular election or a particular counterfactual plan.
+We may also wish to study a particular election or counterfactual plan.
 Treating $V$ and $\tilde Q$ as random variables allows us to condition on particular values of each.
 A particular specification of the distribution of $V$ and $\tilde Q$ is required only when *estimating* our harm measures in a particular application, a topic we return to in the methods section.
 
@@ -248,8 +248,9 @@ Single-member districts are often motivated by the value in representation to sp
 It is therefore natural to consider not just the average harm to voters done by a plan, but also how this harm is distributed across certain groups of voters, defined by race, party, or other attributes.
 
 To that end, let $\Groups=\{G_1,G_2,\dots\}$ be a (random) partition of the set of voters.
-In general we will not require the group identities to be fixed with respect to elections.[^1]
+In general we do require the group identities to be fixed with respect to elections.[^1]
 This is because some group identities, like partisan preference, may themselves change election-to-election.
+Groups may need to be estimated with methods such as ecological inference [@king1997solution], as discussed in @sec-estimating.
 
 [^1]: Formally, we have random indicator variables $\ind\{i\in G_k\}$ for all $i$ and $k$, subject to the constraint that $\sum_k \ind\{i\in G_k\}=1$ for all $i$.
     These indicator variables may be correlated with $V$ and/or $\tilde Q$, in general.
@@ -261,8 +262,7 @@ $$
 So $\Delta_{G_k-G_l}H(q)$ will be positive if voters in group $G_k$ are harmed at a higher rate than voters in group $G_l$, indicating that plan $q$ favors $G_l$ over $G_k$.
 
 Zero differential harm between groups is analogous to the notion of *error rate balance* in the algorithmic fairness literature, which seeks to equalize false positive and negative rates across groups [@zafar2017fairness; @chouldechova2017fair].
-There, the implicit counterfactual is a perfect predictor.
-Compared to the perfect predictor, the actual process harms individuals whenever it makes a false positive or negative error.
+There, the implicit counterfactual is a perfect predictor and the actual process harms individuals whenever it makes an incorrect prediction.
 Here, there can be no perfect districting plan, and the counterfactual instead consists of a collection of plausible alternatives.
 
 Differential harm provides a unified framework for evaluating a districting plan across a variety of dimensions.
