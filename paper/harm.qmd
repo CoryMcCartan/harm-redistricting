@@ -111,7 +111,7 @@ The *combination* of individual voter choices and counterfactual districting pla
 Once measured for each voter, researchers can examine the distribution of harm by geography, partisanship, race, or other factors.
 @sec-motivation gives a simple example of this idea; @sec-indiv-harm formalizes it.
 
-A key feature of our framework is its clear separation of theoretical quantities of interest and empirical strategies for estimating them [@katz2022].
+A core feature of our framework is its clear separation of theoretical quantities of interest and empirical strategies for estimating them [@katz2022].
 The methods section discusses the challenge of estimating harm and differential harm from observed data.
 Recent advances in redistricting simulation, which can generate a large number of random districting plans that respect relevant legal constraints, are critical to this effort [@fifield2020mcmc; @deford2019; @carter2019; @mccartan2020].
 These algorithmically-generated sets of districting plans can provide a realistic set of counterfactuals for our measures.
@@ -259,7 +259,7 @@ $$
   \Delta_{G_k-G_l}H(q) \dfeq \E[H(q)\mid I\in G_k] - \E[H(q)\mid I\in G_l].
 $$
 So $\Delta_{G_k-G_l}H(q)$ will be positive if voters in group $G_k$ are harmed at a higher rate than voters in group $G_l$, indicating that plan $q$ favors $G_l$ over $G_k$.
-The estimation of harm by group may require methods like ecological inference [@king1997solution], as discussed in @sec-estimating.
+The estimation of harm by group may require methods like ecological inference, as discussed in the methods section.
 
 Zero differential harm between groups is analogous to the notion of *error rate balance* in the algorithmic fairness literature, which seeks to equalize false positive and negative rates across groups [@zafar2017fairness; @chouldechova2017fair].
 There, the implicit counterfactual is a perfect predictor; the actual process harms individuals whenever it makes an incorrect prediction.
@@ -300,7 +300,7 @@ These measures, and their distribution in the baseline, are shown in @fig-nj-mea
 
 [^9]: We choose to calculate $\Delta_{\dem-\rep}H(q)$, so positive values correspond to a Republican-favoring plan.
 
-The estimate of differential partisan harm aligns with the expected partisan skew of each plan, with a value of $-3.6\%$ for the Democratic proposal and $2.0\%$ for the Republican proposal.
+The estimate of differential partisan harm aligns with the expected partisan skew of each plan, with a value of $-3.6\%$ for the Democratic and $2.0\%$ for the Republican proposal.
 This means that, for example, an average Democratic voter is $3.6$pp less likely to be misrepresented than their average Republican counter-partisan.
 Overall, the Democratic plan has lower average harm, and a lower ranked marginal deviation [@herschlag2020quantifying].
 
