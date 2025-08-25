@@ -97,7 +97,7 @@ This avoids the pitfalls of party-centric approaches.
 The harm framework combines two key ideas, further motivated in @sec-motivation.
 First, it operates at the level of the individual voter and measures whether each voter is represented by the candidate of their choice.
 This unifies gerrymandering analyses across contexts and reflects the goal that elected officials represent the preferences of the voting public [see also @brunell2010].
-Few existing measures, with the exception of partisan disclocation [@defoeubarodd21], are focused on the invididual voter this way.
+Few existing measures, with the exception of partisan dislocation [@defoeubarodd21], are focused on individual voters this way.
 
 Second, the proposed framework considers *counterfactual* districting plans, not just a single enacted plan.
 Many factors influence the qualities of a districting plan, and without a well-defined comparison, it is impossible to differentiate which qualities, like its partisan performance, are consequences of laws and political geography or result from improper manipulation of the system for political gain [@chen:rodd:13].
