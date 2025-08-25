@@ -195,11 +195,11 @@ p4 = ggplot(d_harm, aes(x=type, y=harm, fill=group)) +
                                Circle="#dfdfdf", Square="#dfdfdf"), guide="none") +
     scale_y_continuous("Average harm", expand=expansion(mult=c(0, 0.05))) +
     annotate("segment", x=0.9, xend=0.9, y=d_harm$harm[1], yend=d_harm$harm[2],
-             arrow = arrow(ends="both", angle=90, length=unit(.2, "cm")), size=0.9) +
+             arrow = arrow(ends="both", angle=90, length=unit(.2, "cm")), linewidth=0.9) +
     annotate("text", x=0.9, y=0.23, angle=90, label="Differential harm",
              vjust=-0.5, family="Times", size=2.8) +
     annotate("segment", x=1.9, xend=1.9, y=d_harm$harm[3], yend=d_harm$harm[4],
-             arrow = arrow(ends="both", angle=90, length=unit(.2, "cm")), size=0.9) +
+             arrow = arrow(ends="both", angle=90, length=unit(.2, "cm")), linewidth=0.9) +
     annotate("text", x=1.9, y=0.25, angle=90, label="Diff. harm",
              vjust=-0.5, family="Times", size=2.8) +
     annotate("point", x=2.225, y=d_harm$harm[4]/2, size=5, color="#555555", shape=15) +
