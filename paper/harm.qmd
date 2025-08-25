@@ -54,6 +54,7 @@ format:
     cmc-article-pdf:
         journal:
             blinded: true
+        keep-tex: true
         fontsize: 11pt
         biblio-style: apsr
         include-in-header: "header.tex"
@@ -81,7 +82,7 @@ At the local level, where most redistricting occurs, partisanship is less salien
 The diversity of types of gerrymandering is further apparent from a survey of major litigation over the past decades, which includes allegations of gerrymandering involving party [@2018league; @2019rucho], race [@1993shaw; @2022merrill], religion [@1977ujo; @2020ercsd], incarceration status [@2015calvin; @2016davidson], and residency or citizenship [@1966burns; @2016evenwel].
 
 The academic study of gerrymandering has not reflected this diversity.
-Nearly all research has been on partisan gerrymandering, and has centered on how districting plans treat political parties, as captured in the *seats-votes curve* or notions of *partisan symmetry* [@tufte1973pb; @grofman1983measures; @king1987democratic; @king1989representation; @gelman1994unified; @thomas2013estimating; @katz2020].
+Nearly all research has been on partisan gerrymandering, and has centered on how districting plans treat political parties, as captured in the *seats-votes curve* or notions of *partisan symmetry* [@tufte1973pb; @grofman1983measures; @king1987democratic; @king1989representation; @thomas2013estimating; @katz2020].
 A large number of formulas for quantifying partisan gerrymanders have also been developed [@stephanopoulos2015; @mcdonald2015unfair; @warrington18].
 The study of racial gerrymandering has been largely shaped by the legal framework for challenging such gerrymanders: the Voting Rights Act of 1965 (VRA).
 This literature focuses on identifying the voting preferences of racial groups through techniques such as ecological inference [@oloughlin1982id; @grofman1991identifying; @king1997solution; @greiner2006ecological].
@@ -115,8 +116,8 @@ Recent advances in redistricting simulation, which can generate a large number o
 These algorithmically-generated sets of districting plans can provide a realistic set of counterfactuals for our measures.
 
 The harm framework has important similarities with the common-law approach to voting rights litigation.
-To proceed with a legal challenge to an alleged gerrymander, a voter must demonstrate that their individual right to vote has been harmed by the enacted district boundaries [@1964reynolds; @1962baker; @issakarl98].
-This requires proof that *but for* the alleged gerrymander, the voter would have been more likely to elect their chosen candidate [@2004vieth; @2018league; @2019lewis].
+To proceed with a legal challenge to an alleged gerrymander, a voter must demonstrate that their individual right to vote has been harmed by the enacted district boundaries [e.g., @1962baker; @issakarl98].
+This requires proof that *but for* the alleged gerrymander, the voter would have been more likely to elect their chosen candidate [e.g., @2004vieth].
 Indeed, a primary factor in the Supreme Court's ruling that partisan gerrymandering is not justiciable was that existing redistricting measures are not clearly tied to individual injury [@2017gill].
 The harm measure also captures or generalizes the three *Gingles* preconditions for vote dilution litigation under the Voting Rights Act of 1965, as discussed further in [Appendix @sec-connections].
 
@@ -199,23 +200,21 @@ $$h_i(v,q,\tilde q) = \ind\{v(i) \neq \win_i(v, q)\} \ind\{v(i) = \win_i(v, \til
 
 Harm requires both terms to be true: the first measuring if a voter is not represented by their chosen candidate under $q$, and the second term measuring if they would have been represented by their chosen candidate under the counterfactual plan $\tilde q$.
 
-Notice the fundamental asymmetry in this definition: $h_i(v,q,\tilde q)\neq h_i(v,\tilde q,q)$, as $\ind\{v(i) \neq \win_i(v, q)\} \neq \ind\{v(i) \neq \win_i(v, \tilde q)\}$.
-Exchanging the role of the enacted plan and the counterfactual will not simply flip the direction of our conclusion.
-
-In general, $q$ harms some individuals versus $\tilde q$, and $\tilde q$ harms a distinct, though not necessarily disjoint, set of individuals, versus $q$.
+Notice the fundamental asymmetry in this definition: $h_i(v,q,\tilde q)\neq h_i(v,\tilde q,q)$, since $\ind\{v(i) \neq \win_i(v, q)\} \neq \ind\{v(i) \neq \win_i(v, \tilde q)\}$.
+In general, $q$ harms some individuals versus $\tilde q$, and $\tilde q$ harms a distinct set of individuals versus $q$.
 A symmetric version of $h_i(v,q,\tilde q)$ would need to combine both of these groups: those harmed and those who gain by electing their chosen candidate under $q$ but not under the counterfactual $\tilde q$.
 In practice, voters, courts, or politicians may differ in their views on how to balance preventing harm and maximizing gains.
 
 ## Multiple Elections or Districting Plans
 
 As defined above, $h_i(v,q,\tilde q)$ captures harm in a single election and relative to one counterfactual districting plan $\tilde q$.
-In general, we are interested in outcomes over multiple elections and a much larger set of counterfactual plans.
-Ideally, we would average individual harm over a set of future elections under the enacted districting plan and over a set of hypothetical districting plans that are consistent with districting criteria.
-We could also consider averaging over a set of individuals with some shared characteristics.
+Researchers are generally interested in outcomes over multiple elections and a much larger set of counterfactual plans.
+<!-- Ideally, we would average individual harm over a set of future elections under the enacted districting plan and over a set of hypothetical districting plans that are consistent with districting criteria.
+We could also consider averaging over a set of individuals with some shared characteristics. -->
 
-To allow for such averaging, we replace the fixed election $v$, counterfactual districting plan $\tilde q$, and individual voter $i$ with random variables $V\in\Elecs$, $\tilde Q\in\Plans$, and $I\in\Voters$.
-The random variable $V$ can be conceptualized as ranging over possible future elections---one realization could correspond to a heavily Democratic-favoring midterm year, while another could involve incumbents under-performing particularly badly.
-The random variable $\tilde Q$ captures the range of potential counterfactual districting plans.
+To allow for this broader scope, we replace the fixed election $v$, counterfactual districting plan $\tilde q$, and individual voter $i$ with random variables $V\in\Elecs$, $\tilde Q\in\Plans$, and $I\in\Voters$.
+The random variable $V$ represents a statistical model for possible future elections---one realization could correspond to a heavily Democratic-favoring midterm year, while another could involve incumbents under-performing particularly badly.
+The random variable $\tilde Q$ represents a model for potential counterfactual districting plans.
 Rarely would an analyst have a single counterfactual plan in mind: different realizations of $\tilde Q$ correspond to different districting plans that are permissible under the relevant districting criteria.
 Finally, $I$ is defined to be a voter taken uniformly at random from $\Voters$, with $I\indep V,\tilde Q$.
 
