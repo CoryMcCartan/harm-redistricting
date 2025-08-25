@@ -320,7 +320,7 @@ Measuring differential harm by both race and party will allow us to cleanly sepa
 
 Plaintiffs had to satisfy the first *Gingles* criterion by submitting one or more remedial maps demonstrating that a new Black opportunity-to-elect district could be drawn while meeting all other redistricting requirements.
 In *Allen*, the plaintiff's expert, Moon Duchin, submitted four such plans, one of which is shown in @fig-al-maps(e).
-These plans form a natural counterfactual $\tilde Q$ to use in analyzing the challenged districting plan (@fig-al-maps(d)), especially since the district court ruled in favor of the plaintiffs and found that their remedial plans satisfied the first *Gingles* criterion.
+A uniform distribution over these plans forms a natural counterfactual $\tilde Q$ to use in analyzing the challenged districting plan (@fig-al-maps(d)), especially since the district court ruled in favor of the plaintiffs and found that their remedial plans satisfied the first *Gingles* criterion.
 In [Appendix @sec-app-alsampling], we repeat the analysis performed here on a different counterfactual consisting of plans sampled with a redistricting simulation algorithm; the results are broadly similar.
 
 ```{r fig-al-maps, fig.width=6.75}
@@ -379,7 +379,7 @@ include_graphics("figures/boston_map.pdf")
 
 To conduct our analysis, we must be able to predict individual preferences under counterfactual districting plans.
 This is more difficult than in both New Jersey and Alabama.
-First, the city council is officially nonpartisan, and city politics are dominated by the Democratic Party, so voting choices are more complex than a simple partisan preference.
+First, the lack of party labels in city council races means that voting choices are more complex than a simple partisan preference.
 <!-- To estimate election outcomes, we must map observed support for particular candidates in one election onto counterfactual support for a hypothetical slate in another election. -->
 Second, as in Alabama, we aim to examine the racial impact of the district system, and so must estimate these voting preferences by race.
 <!-- Even if we could, for instance, divide candidates into a more "liberal" and a more "conservative" group, the vote counts for each group by precinct will not alone show how different racial groups voted. -->
@@ -396,8 +396,9 @@ include_graphics("figures/boston_factors.pdf")
 
 To solve both of these problems, we develop a *latent factor ecological inference model*, which simultaneously estimates (a) turnout by precinct and race, (b) candidate positions in a latent two-dimensional political space, and (c) voter preferences in this space by precinct and race.
 @fig-boston-factors shows the key outputs from this model, and the methods section explains the model in more detail.
+This is a different modeling approach than the stochastic uniform swing model used in the previous two applications, but the harm framework is designed to accommodate such modeling flexibility.
 
-The first dimension primarily aligns with a traditional liberal-conservative spectrum, with progressives like Bernie Sanders and current Boston mayor Michelle Wu on the left, and centrists like Joseph R. Biden and Wu's opponent, Annissa Essaibi-George, on the right.
+The first dimension estimated by the model primarily aligns with a traditional liberal-conservative spectrum, with progressives like Bernie Sanders and current Boston mayor Michelle Wu on the left, and centrists like Joseph R. Biden and Wu's opponent, Annissa Essaibi-George, on the right.
 The second dimension appears to capture racial differences in support---as the factor value maps in @fig-boston-factors show, minority-majority and White areas of the city take opposite values on the second dimension, demonstrating racial polarization.
 
 To evaluate harm in a typical council election, we consider two scenarios, one in which all of the council races are contested along the ideological (first) dimension, and one in which the races are contested along the racial (second) dimension.
@@ -475,11 +476,12 @@ Estimating differential racial harm in the two-party setting can be done by firs
 Multiparty or primary elections pose additional modeling challenges.
 In @sec-boston we consider a spatial-racial model for primary elections with multiple candidates, to illustrate the application of our framework to these more complicated cases.
 
-Motivated primarily by computational convenience and simplicity, we adopt the stochastic uniform partisan swing model of @gelman1994unified, modeling the Democratic two-party vote share in district $d$ and election $v$ as
+Motivated primarily by computational convenience and simplicity, we recommend for most cases the stochastic uniform partisan swing model of @gelman1994unified, modeling the Democratic two-party vote share in district $d$ and election $v$ as
 $$
     s_{dv} = \bar{s}_d + \delta_v + \varepsilon_{dv},
 $$
 where $\bar{s}_d$ is the baseline Democratic vote share in the districts, $\delta_v\sim\Norm(0, \sigma^2_\delta)$ is a election-specific uniform shift, and $\varepsilon_{dv}\sim\Norm(0, \sigma^2_\varepsilon)$ is a district-election residual error term.
+This can be thought of as a hiererchical extension of the classic uniform swing model.
 
 The baseline $\bar{s}_d$ can be established by averaging the results of all available statewide elections over the past decade or other suitable period.
 This is done at the precinct level, since this is the most granular level that districting plans are usually built from and election returns are reported at.[^14]
@@ -505,6 +507,9 @@ While this has the advantage of simplicity, it does not account for uncertainty 
 
 More complicated election outcome models are certainly possible and are straightforward to use with the measures proposed here.
 For example, one could operate on the logit scale, model incumbency effects, or include additional data from local elections.
+
+However, the simple model presented here does a reasonable job of capturing the distribution in future elections.
+@kenny2023widespread (Appendix D) validated the model in a similar redistricting context and found it to perform well.
 
 ### Calculating Harm and Differential Harm
 
@@ -772,7 +777,7 @@ Correlations, of course, are not everything: it is the universal scale and cente
     This definition of wasted votes is also at the root of other criticisms of the efficiency gap, which note its tendency to penalize proportionality and reward 3-to-1 districts [@bernstein2017egap; @tamcho2017egap; @deford2020symmetry].
 
 Finally, it is worth comparing the proposed measures to the increasingly common application redistricting simulation techniques to cases of partisan gerrymandering.
-Standard practice in such litigation, for example, is to calculate a battery of gerrymandering metrics on the simulated plans, and show that the challenged plan is an outlier on all or most of the metrics.
+Standard practice in such litigation, for example, is to calculate a battery of gerrymandering metrics on the simulated plans, and show that the challenged plan is an outlier on all or most of the metrics: see, e.g., @2019rucho (report of Dr. Jonathan Mattingly) and @2018league (report of Dr. Wesley Pegden).
 While this can help contextualize the challenged plan, it is not foolproof---if the underlying metric is misleading, it will still be misleading when applied to thousands of simulated plans.
 In the worst cases, this can lead to directionally wrong conclusions.
 
