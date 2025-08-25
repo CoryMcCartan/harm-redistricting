@@ -129,9 +129,8 @@ We demonstrate the practical value of the proposed framework in three diverse co
 # Motivation {#sec-motivation}
 
 Consider *Minissouri*, a stylized representation of Missouri which is shown in @fig-minissouri.
-Its total population is 180, and it is divided into three districts with population between 54 and 66.
-Minissouri has two cities and a substantial rural population with a partisan breakdown of 55.6% R to 44.4% D.
-Voters' preferences are assumed to be stable across elections, and turnout is 100%.
+Minissouri has two cities and a substantial rural population with a partisan breakdown of 55.6% R to 44.4% D, and is divided into three districts.
+<!-- Voters' preferences are assumed to be stable across elections, and turnout is 100%. -->
 In addition to partisan affiliation (red or blue), each voter also belongs to a racial group (squares or circles).
 
 ```{r fig-minissouri, fig.width=6.75}
@@ -154,17 +153,21 @@ Compared to plan (b), plan (a) packs Republicans into a rural district.
 For example, in the upper leftmost precinct, there are three Republican square voters who are placed into a Democratic district in plan (a) but would have been placed into a Republican district in plan (b), and thus are harmed.
 In contrast, Republican voters in the northeast city are not harmed, since they reside in a Democratic district under both plans.
 
-After identifying which voters are harmed by plan (a) compared to counterfactual plan (b), it is natural to examine the overall composition of these harmed voters.
+After identifying which voters are harmed by plan (a) compared to counterfactual (b), it is natural to examine the overall composition of these harmed voters.
 Of the 46 harmed voters, 44 are Republicans and only 2 are Democrats.
 These represent $44\%$ of all Republicans and $2.5\%$ of all Democrats.
 We call the gap between these two rates the *differential harm*, and propose it as a general way to account for the impact of a districting plan on particular groups.
-Here, then the partisan differential harm of plan (a) is $-41.5\%$, meaning that the average Republican voter in Mininois is $41.5$pp less likely to be represented by a Republican than the average Democrat is to be represented by a Democrat, *compared to plan (b)*.
+Here, then the partisan differential harm is $-41.5\%$, meaning that the average Republican voter is $41.5$pp less likely to be represented by a Republican than the average Democrat is to be represented by a Democrat, *compared to plan (b)*.
 
 We need not limit our consideration to partisanship.
 We can also tally harm by *race*, which in Minissouri is correlated with both geography and partisanship.
 Plan (a) harms 13 circle voters and 33 square voters---a differential racial harm of $-20\%$.
-This means square voters are $20$pp more likely to be harmed than circle voters.
+<!-- This means square voters are $20$pp more likely to be harmed than circle voters. -->
 While this comparison alone cannot establish whether the drawers of plan (a) intended to harm square voters versus maximize Democratic representation, it quantifies the impact of plan (a) on these voters versus the alternative plan (b), on the same scale as differential partisan harm.
+
+We stress that the results here are tied the specific counterfactual plan (b).
+Indeed, this is a feature of the harm framework: different research questions may require different counterfactuals.
+We illustrate this aspect of the framework throughout the applications below.
 
 # Individual and Differential Harm {#sec-indiv-harm}
 
@@ -287,7 +290,8 @@ include_graphics("figures/nj_maps.pdf")
 ```
 
 
-To provide a neutral comparison baseline, we generate 10,000 districting plans across using the SMC algorithm of [@mccartan2020; implemented in @redist] setting constraints to favor compact plans that respect county lines.
+For differential harm to measure gerrymandering, a counterfactual $\tilde Q$ drawn without partisan intent is needed.
+To do so, we generate 10,000 districting plans without any partisan data, using the SMC algorithm of [@mccartan2020; implemented in @redist] setting constraints to favor compact plans that respect county lines.
 @fig-nj-maps(d) shows one such plan.
 For each of these sampled plans and the two proposals, we estimate the average harm and differential partisan harm versus the simulated baseline,[^9] and calculate the expected number of Democratic seats and several common partisan metrics.
 These measures, and their distribution in the basline, are shown in @fig-nj-meas.
@@ -403,7 +407,7 @@ The first dimension estimated by the model primarily aligns with a traditional l
 The second dimension appears to capture racial differences in support---as the factor value maps in @fig-boston-factors show, minority-majority and White areas of the city take opposite values on the second dimension, demonstrating racial polarization.
 
 To evaluate harm in a typical council election, we consider two scenarios, one in which all of the council races are contested along the ideological (first) dimension, and one in which the races are contested along the racial (second) dimension.
-We use a simulated set of council maps as our race-neutral counterfactual.
+Matching the research question, our counterfactual plans are drawn from a race-blind districting simulation.
 
 For the first scenario, we estimate that the enacted plan differentially harms White voters at a rate of only $0.79\%$ compared to the race-neutral baseline.
 For the second scenario, we estimate that the enacted plan differentially harms White voters at a rate of $4.1\%$.
