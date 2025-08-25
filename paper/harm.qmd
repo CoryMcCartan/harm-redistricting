@@ -98,14 +98,16 @@ First, it operates at the level of the individual voter and measures whether eac
 This unifies gerrymandering analyses across contexts and reflects the goal that elected officials represent the preferences of the voting public [see also @brunell2010].
 
 Second, the proposed framework considers *counterfactual* districting plans, not just a single enacted plan.
-Many factors influence the qualities of a districting plan, and without a well-defined comparison, it is impossible to differentiate which qualities, like its partisan performance, are consequences of laws and political geography or result from improper manipulation of the system for political gain @chen:rodd:13.
-For example, in Massachusetts in 2010, it was impossible to draw even one majority-Republican seat, despite 32% of voters preferring Republicans @duch:18.
+While all measures can be used with counterfactuals, our approach uses them within the definition of the measure itself.
+Many factors influence the qualities of a districting plan, and without a well-defined comparison, it is impossible to differentiate which qualities, like its partisan performance, are consequences of laws and political geography or result from improper manipulation of the system for political gain [@chen:rodd:13].
+For example, in Massachusetts in 2010, it was impossible to draw even one majority-Republican seat, despite 32% of voters preferring Republicans [@duch:18].
 Thus the 9-0 Democratic Congressional delegation reflects the homogeneity of the state's political geography, not partisan gerrymandering.
 Many existing districting metrics rely on *implicit* counterfactuals, which may be irrelevant or infeasible, as we discuss in [Appendix @sec-connections].
-By making the comparison set explicit, we can better reflect legal and geographic realities, while making the interpretation of our measures clearer.
+By making the comparison set explicit, our approach improves on existing work by better reflecting legal and geographic realities, while making the interpretation of our measures clearer.
 
 The combination of individual voter choices and counterfactual districting plans defines *individual harm*: informally, a voter is harmed if they would be represented by their candidate of choice under a counterfactual plan.
 Once measured for each voter, researchers can examine the distribution of harm by geography, partisanship, race, or other factors.
+This combination of individual-level measurement and counterfactual comparison is the key innovation of our framework.
 @sec-motivation gives a simple example of this idea; @sec-indiv-harm formalizes it.
 
 A key feature of our framework is its clear separation of theoretical quantities of interest and empirical strategies for estimating them [@katz2022].
