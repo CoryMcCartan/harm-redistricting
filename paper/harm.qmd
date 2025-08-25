@@ -97,7 +97,8 @@ This avoids the pitfalls of party-centric approaches.
 The harm framework combines two key ideas, further motivated in @sec-motivation.
 First, it operates at the level of the individual voter and measures whether each voter is represented by the candidate of their choice.
 This unifies gerrymandering analyses across contexts and reflects the goal that elected officials represent the preferences of the voting public [see also @brunell2010].
-Few existing measures, with the exception of partisan dislocation [@defoeubarodd21], are focused on individual voters this way.
+Few existing measures are focused on individual voters this way.
+The exception is partisan dislocation [@defoeubarodd21], which compares the partisanship of a voter's district with the partisanship of their nearest neighbors.
 
 Second, the proposed framework considers *counterfactual* districting plans, not just a single enacted plan.
 Many factors influence the qualities of a districting plan, and without a well-defined comparison, it is impossible to differentiate which qualities, like its partisan performance, are consequences of laws and political geography or result from improper manipulation of the system for political gain [@chen:rodd:13].
@@ -198,7 +199,9 @@ Letting $\tilde q$ denote a counterfactual districting plan, we define the *harm
 
 $$h_i(v,q,\tilde q) = \ind\{v(i) \neq \win_i(v, q)\} \ind\{v(i) = \win_i(v, \tilde q)\}.$$
 
-Harm requires both terms to be true: the first measuring if a voter is not represented by their chosen candidate under $q$, and the second term measuring if they would have been represented by their chosen candidate under the counterfactual plan $\tilde q$.
+Harm involves two terms: the first measuring if a voter is not represented by their chosen candidate under $q$, and the second term measuring if they would have been represented by their chosen candidate under the counterfactual $\tilde q$.
+This comparison differs from the one that underlies partisan dislocation [@defoeubarodd21], where the comparison is against a group of neighboring voters rather than an alternative plan.
+We discuss this difference more in [Appendix @sec-connections], and compare the two measures empirically in @sec-nj.
 
 Notice the fundamental asymmetry in this definition: $h_i(v,q,\tilde q)\neq h_i(v,\tilde q,q)$, since $\ind\{v(i) \neq \win_i(v, q)\} \neq \ind\{v(i) \neq \win_i(v, \tilde q)\}$.
 In general, $q$ harms some individuals versus $\tilde q$, and $\tilde q$ harms a distinct set of individuals versus $q$.
