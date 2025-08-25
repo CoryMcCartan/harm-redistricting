@@ -115,7 +115,7 @@ if (!file.exists(path)) {
                            labels=c(
                            rep_comm = 'Republican proposal',
                            dem_comm = 'Democratic proposal')) +
-        scale_x_continuous(NULL, labels=function(x) ifelse(x > 10 | x == 0, number(x, 1), number(x, 0.01))) +
+        scale_x_continuous(NULL, labels=function(x) ifelse(x > 10 | x == 0, number(x, 1), number(x, 0.001))) +
         scale_y_continuous("Number of plans", expand=expansion(mult=c(0, 0.05))) +
         labs(x=NULL, color="Plan") +
         theme_repr() +
