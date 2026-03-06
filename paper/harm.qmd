@@ -44,7 +44,7 @@ format:
             blinded: false
         keep-tex: true
         fontsize: 11pt
-        biblio-style: apsr
+        biblio-style: unsrtnat
         include-in-header: "header.tex"
 number-sections: false
 editor_options:
