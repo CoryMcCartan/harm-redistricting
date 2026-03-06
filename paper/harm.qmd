@@ -863,7 +863,7 @@ However, it is notable that while the Democratic proposal has a more extreme est
 In other words, a *typical* nonpartisan districting plan is not necessarily a *fair* one, even in comparison to other similarly generated districting plans.
 The sampled plan which minimizes estimated differential harm yields 8.18 expected Democratic seats, compared to a sample average of 8.41 seats, and the 6.8 seats that would be required for an outcome completely proportional to the parties' statewide vote share.
 
-Both proposals are estimated to harm the average voter at a higher rate than most of the sampled plans, though the estimate for the Democratic plan is not statistically significant ($p=0.001$ for the Republican plan versus $p=0.061$ for the Democratic plan).
+Both proposals are estimated to harm the average voter at a higher rate than most of the sampled plans, though the estimate for the Democratic plan is not statistically significant ($p=0.001$ for the Republican plan and $p=0.061$ for the Democratic plan).
 The plans which minimize estimated total harm are also those which have near-zero estimated differential partisan harm.
 Thus, at least in New Jersey, overall harm reduction is consistent with a fair map on a partisan basis.
 Minimizing bias with other measures, however, could lead one astray: plans which score an efficiency gap of zero can have estimated average harm as high as 17.2% and estimated differential harm as extreme as $-6.1\%$, nearly twice the value of the Democratic proposal.
