@@ -49,3 +49,5 @@ paper/*.pdf
 !paper/figures/corr_table.tex
 # for diffing
 paper/harm_submit.qmd
+
+/.luarc.json

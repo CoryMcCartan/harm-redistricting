@@ -50,6 +50,8 @@ number-sections: false
 editor_options:
   markdown:
     wrap: sentence
+filters:
+  - figure-caps.lua
 ---
 
 ```{r SETUP, include=FALSE}
