@@ -685,10 +685,10 @@ In sampling, we therefore set constraints to favor compact plans that respect ne
 Since we do not provide any racial information to the algorithm, this set of plans forms a good approximation of a race-neutral districting process.
 
 # Data availability {.unnumbered}
-All data are publicly available and are included in the replication package for the manuscript.
+All data are publicly available and are included in the replication package for the manuscript: <https://github.com/corymccartan/harm-redistricting>.
 
 # Code availability {.unnumbered}
-All code is included in the replication package for the manuscript.
+All code is included in the replication package for the manuscript: <https://github.com/corymccartan/harm-redistricting>.
 
 # Acknowledgements {.unnumbered}
 
@@ -828,7 +828,7 @@ All $p$-values reported in this section are two-tailed.
 
 ```{r fig-nj-pairs, fig.width=7, fig.height=7}
 #| fig.cap: |
-#|      Scatterplots for all pairs of measures.
+#|      Scatterplots for all pairs of measures, showing all $n=5000$ samples.
 #|      The Democratic and Republican gerrymanders are shown
 #|      with the blue and red lines and crosses.
 #|      The dashed line indicates a value of zero.
@@ -898,7 +898,7 @@ In particular, the New Jersey simulations are not the same as those used in @sec
 \end{center}
 ```
 
-Correlations between five gerrymandering metrics and partisan differential harm, for simulated districting plans from eight states. Declination is NA for Massachusetts since there are no Republican-leaning districts at baseline under any simulated plan.
+Correlations between five gerrymandering metrics and partisan differential harm, for $n=5000$ simulated districting plans from eight states. Declination is NA for Massachusetts since there are no Republican-leaning districts at baseline under any simulated plan.
 :::
 
 
