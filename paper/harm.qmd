@@ -70,16 +70,15 @@ In the United States, states historically used racial gerrymandering to maintain
 At the local level, where most redistricting occurs, partisanship is less salient, and manipulation may be more subtle or may favor a narrower group [@cain2002mapmaking; @halberstam2012process].
 The diversity of types of gerrymandering is further apparent from a survey of major litigation over the past decades, which includes allegations of gerrymandering involving party [@2018league; @2019rucho], race [@1993shaw; @2022merrill], religion [@1977ujo; @2020ercsd], incarceration status [@2015calvin; @2016davidson], and residency or citizenship [@1966burns; @2016evenwel].
 
-The academic study of gerrymandering has not reflected this diversity.
-Nearly all research has been on partisan gerrymandering, and has centered on how districting plans treat political parties, as captured in the *seats-votes curve* or notions of *partisan symmetry* [@tufte1973pb; @grofman1983measures; @king1987democratic; @king1989representation; @thomas2013estimating; @katz2020].
+Nearly all academic research, in contrast, has been on partisan gerrymandering, and has centered on how districting plans treat political parties, as captured in the *seats-votes curve* or notions of *partisan symmetry* [@tufte1973pb; @grofman1983measures; @king1987democratic; @king1989representation; @thomas2013estimating; @katz2020].
 A large number of formulas for quantifying partisan gerrymanders have also been developed [@stephanopoulos2015; @mcdonald2015unfair; @warrington18].
-The study of racial gerrymandering has been largely shaped by the legal framework for challenging such gerrymanders: the Voting Rights Act of 1965 (VRA).
+Studies of racial gerrymandering have largely operated within the legal framework for challenging such gerrymanders: the Voting Rights Act of 1965 (VRA).
 This literature focuses on identifying the voting preferences of racial groups through techniques such as ecological inference [@oloughlin1982id; @grofman1991identifying; @king1997solution; @greiner2006ecological].
 Work on local redistricting is even more sparse, in part because of data limitations [but see @siegel2013educational; @abott2020large; @vargas2021racial].
 
 The dominance of partisan frameworks limits redistricting analysis, even in purely partisan cases.
 By focusing only on party effects, existing tools overlook how partisan lines also have an effect of relative voting power on axes such as race, wealth, and urbanicity.
-This paper addresses these limitations with a new framework of *individual and differential harm*.
+This paper addresses these limitations by introducing a framework of *individual and differential harm*.
 Our proposed framework focuses on measuring the concentration or dilution of voting power to favor or disfavor a particular group.
 This avoids the pitfalls of party-centric approaches.
 
@@ -96,7 +95,7 @@ While consideration of counterfactual plans is now commonplace with redistrictin
 Some existing districting rely on *implicit* counterfactuals, which may be irrelevant or infeasible, as we discuss in [Appendix @sec-connections].
 By making the comparison set explicit, our approach improves on existing work by better reflecting legal and geographic realities, while making the interpretation of our measures clearer.
 
-The *combination* of individual voter choices and counterfactual districting plans is the key innovation of our framework of *individual harm*: informally, a voter is harmed if they would be represented by their candidate of choice under a counterfactual plan.
+The *combination* of individual voter choices and counterfactual districting plans is key to our framework of *individual harm*: informally, a voter is harmed if they would be represented by their candidate of choice under a counterfactual plan.
 Once measured for each voter, researchers can examine the distribution of harm by geography, partisanship, race, or other factors.
 @sec-motivation gives a simple example of this idea; @sec-indiv-harm formalizes it.
 
