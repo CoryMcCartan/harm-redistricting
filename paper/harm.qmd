@@ -828,7 +828,7 @@ All $p$-values reported in this section are two-tailed.
 
 ```{r fig-nj-pairs, fig.width=7, fig.height=7}
 #| fig.cap: |
-#|      Scatterplots for all pairs of measures, showing all $n=5000$ samples.
+#|      Scatterplots for all pairs of measures, showing all $n=10000$ samples.
 #|      The Democratic and Republican gerrymanders are shown
 #|      with the blue and red lines and crosses.
 #|      The dashed line indicates a value of zero.
