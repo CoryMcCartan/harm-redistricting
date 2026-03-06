@@ -146,6 +146,9 @@ cat("p-values:")
 pl$plan %>%
     as_tibble() %>%
     mutate(across(n_dem:h, pval)) %>%
+    filter(draw %in% c("rep_comm", "dem_comm")) %>%
+    mutate(across(-draw, scales::pvalue)) %>%
+    t() |>
     print()
 
 if (FALSE) {

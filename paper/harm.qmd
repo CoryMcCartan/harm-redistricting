@@ -829,6 +829,7 @@ In the worst cases, this can lead to directionally wrong conclusions.
 # Additional New Jersey discussion {#sec-app-nj}
 
 This section compares the partisan metrics from @sec-nj across the simulated baseline.
+All $p$-values reported in this section are two-tailed.
 @fig-nj-pairs expands on @fig-nj-meas in the main text with pairwise scatter plots and correlation summaries.
 
 ```{r fig-nj-pairs, fig.width=7, fig.height=7}
@@ -844,9 +845,9 @@ include_graphics("figures/nj_pairs.pdf")
 
 The Democratic proposal is expected to produce an average of 3.45 Republican seats under our election model, more than 79% of all sample plans.
 The Republican proposal is an outlier, yielding fewer seats on average than every single sampled plan.
-This pattern is repeated for all of the four common gerrymandering measures, where the Republican plan is a clear outlier (all $p=0.0002$, except $p=0.002$ for partisan bias) while the Democratic plan is not ($p=0.34$ for the efficiency gap, $0.50$ for declination, $0.88$ for partisan bias, and $0.17$ for the mean-median score).
+This pattern is repeated for all of the four common gerrymandering measures, where the Republican plan is a clear outlier (all $p<0.001$, except $p=0.002$ for partisan bias) while the Democratic plan is not ($p=0.344$ for the efficiency gap, $0.504$ for declination, $0.882$ for partisan bias, and $0.174$ for the mean-median score).
 
-The partisan dislocation measure [@defoeubarodd21] shows that the Democratic plan is typical ($p=0.24$) while the Republican plan is an outlier ($p=0.01$).
+The partisan dislocation measure [@defoeubarodd21] shows that the Democratic plan is typical ($p=0.235$) while the Republican plan is an outlier ($p=0.012$).
 We average each voter's dislocation to produce the statewide summary value shown in the figure.
 We find that the sign is incorrect for the Democratic plan, which has positive dislocation (indicating an average shift towards Republicans).
 Notably, the sign is positive for the simulations as well, which suggests that such a statewide average of partisan dislocation may not reliably measure partisan bias.
@@ -858,11 +859,11 @@ In this analysis, the Democratic plan sits within the range of the sampled plans
 This matches the distribution over Democratic seats, as well as average harm.
 
 The estimate of differential harm already uses the simulation output, and so comparing the proposals to the sampling distribution is not strictly required.
-However, it is notable that while the Democratic proposal has a more extreme estimate of differential partisan harm (1.6 percentage points higher), its value of $-3.7\%$ is not an outlier with respect to the distribution of differential harm for a randomly sampled plan ($p=0.43$, using the same set of samples as a counterfactual), while the Republican plan is ($p=0.0002$).
+However, it is notable that while the Democratic proposal has a more extreme estimate of differential partisan harm (1.6 percentage points higher), its value of $-3.7\%$ is not an outlier with respect to the distribution of differential harm for a randomly sampled plan ($p=0.252$, using the same set of samples as a counterfactual), while the Republican plan is ($p<0.001$).
 In other words, a *typical* nonpartisan districting plan is not necessarily a *fair* one, even in comparison to other similarly generated districting plans.
 The sampled plan which minimizes estimated differential harm yields 8.18 expected Democratic seats, compared to a sample average of 8.41 seats, and the 6.8 seats that would be required for an outcome completely proportional to the parties' statewide vote share.
 
-Both proposals are estimated to harm the average voter at a higher rate than most of the sampled plans, with the Republican plan again more extreme in this regard ($p=0.0008$ versus $p=0.061$ for the Democratic plan).
+Both proposals are estimated to harm the average voter at a higher rate than most of the sampled plans, though the estimate for the Democratic plan is not statistically significant ($p=0.001$ for the Republican plan versus $p=0.061$ for the Democratic plan).
 The plans which minimize estimated total harm are also those which have near-zero estimated differential partisan harm.
 Thus, at least in New Jersey, overall harm reduction is consistent with a fair map on a partisan basis.
 Minimizing bias with other measures, however, could lead one astray: plans which score an efficiency gap of zero can have estimated average harm as high as 17.2% and estimated differential harm as extreme as $-6.1\%$, nearly twice the value of the Democratic proposal.
