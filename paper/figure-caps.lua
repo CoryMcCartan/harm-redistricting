@@ -1,17 +1,24 @@
 -- Collects all figure captions and inserts copies at the #figure-caps div.
+-- Set `hide-figures: true` in YAML front matter to ghost body figures in PDF.
 
 local figure_captions = {}
 local fig_count = 0
 local in_appendix = false
+local hide_figures = false  -- default: show figures normally
 
 return {
-  -- First pass: collect captions, stopping when the appendix begins
+  -- Pass 0: read hide-figures from document metadata
+  {
+    Meta = function(meta)
+      hide_figures = meta["hide-figures"] == true
+    end
+  },
+  -- Pass 1: collect captions; emit \figureghostmodefalse at appendix
   {
     Header = function(el)
       if el.classes:includes("appendix") then
         in_appendix = true
-        -- Disable ghost mode so appendix figures render normally
-        if quarto.doc.isFormat("latex") then
+        if hide_figures and quarto.doc.isFormat("latex") then
           return pandoc.List({
             pandoc.RawBlock("latex", "\\figureghostmodefalse\n"),
             el
@@ -32,7 +39,16 @@ return {
       end
     end
   },
-  -- Second pass: replace #figure-caps div with the collected captions
+  -- Pass 2: if not hiding, disable ghost mode at the top of the document body
+  {
+    Pandoc = function(doc)
+      if not hide_figures and quarto.doc.isFormat("latex") then
+        table.insert(doc.blocks, 1, pandoc.RawBlock("latex", "\\figureghostmodefalse\n"))
+      end
+      return doc
+    end
+  },
+  -- Pass 3: replace #figure-caps div with collected captions
   {
     Div = function(div)
       if div.identifier == "figure-caps" then

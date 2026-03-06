@@ -52,6 +52,7 @@ editor_options:
     wrap: sentence
 filters:
   - figure-caps.lua
+hide-figures: false
 ---
 
 ```{r SETUP, include=FALSE}
@@ -693,6 +694,7 @@ All code is included in the replication package for the manuscript.
 
 The authors thank Steve Ansolabehere, Matt Blackwell, Kosuke Imai, Gary King, Shiro Kuriwaki, Tyler Simko, Nick Stephanopolous, and participants of the Fall 2021 Harvard American Politics Research Workshop, Fall 2022 Harvard Applied Statistics Workshop, and Imai Research Group for helpful comments and discussion.
 We thank Harrison Neely, executive director for the GOP delegation to the New Jersey Congressional Redistricting Committee, for providing a copy of the GOP's plan following an Open Public Records Act request.
+The authors received no specific funding for this work.
 
 # Author Contributions {.unnumbered}
 
