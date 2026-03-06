@@ -317,7 +317,7 @@ We next apply our proposed framework to @2022merrill, ongoing VRA litigation in 
 Measuring differential harm by both race and party will allow us to cleanly separate the racial and partisan effects of the Alabama districting plan, something existing approaches are unable to do.
 
 Plaintiffs had to satisfy the first *Gingles* criterion by submitting one or more remedial maps demonstrating that a new Black opportunity-to-elect district could be drawn while meeting all other redistricting requirements.
-In *Allen*, the plaintiff's expert, Moon Duchin, submitted four such plans, one of which is shown in @fig-al-maps(e).
+In *Allen*, plaintiff's expert Moon Duchin submitted four such plans, one of which is shown in @fig-al-maps(e).
 A uniform distribution over these plans forms a natural counterfactual $\tilde Q$ to use in analyzing the challenged districting plan (@fig-al-maps(d)), especially since the district court ruled in favor of the plaintiffs and found that their remedial plans satisfied the first *Gingles* criterion.
 In [Supplementary Information @sec-app-alsampling], we repeat the analysis performed here on a different counterfactual consisting of plans sampled with a redistricting simulation algorithm; the results are broadly similar.
 
