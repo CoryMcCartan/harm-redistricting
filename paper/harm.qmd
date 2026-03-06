@@ -52,6 +52,7 @@ editor_options:
     wrap: sentence
 filters:
   - figure-caps.lua
+hide-figures: false
 ---
 
 ```{r SETUP, include=FALSE}
@@ -238,11 +239,10 @@ Single-member districts are often motivated by the value in representation to sp
 It is therefore natural to consider not just the average harm to voters done by a plan, but also how this harm is distributed across certain groups of voters, defined by race, party, or other attributes.
 
 To that end, let $\Groups=\{G_1,G_2,\dots\}$ be a (random) partition of the set of voters.
-In general we will not require the group identities to be fixed with respect to elections.[^1]
+In general we will not require the group identities to be fixed with respect to elections.
+Formally, we have random indicator variables $\ind\{i\in G_k\}$ for all $i$ and $k$, subject to the constraint that $\sum_k \ind\{i\in G_k\}=1$ for all $i$.
+These indicator variables may be correlated with $V$ and/or $\tilde Q$, in general.
 This is because some identities, like partisan preference, may themselves change election-to-election.
-
-[^1]: Formally, we have random indicator variables $\ind\{i\in G_k\}$ for all $i$ and $k$, subject to the constraint that $\sum_k \ind\{i\in G_k\}=1$ for all $i$.
-    These indicator variables may be correlated with $V$ and/or $\tilde Q$, in general.
 
 Once we have defined a set of groups, we define the *differential harm* for two groups $G_k$ and $G_l$ as
 $$
@@ -268,10 +268,9 @@ We show that differential harm correctly identifies possible gerrymandering, in 
 Appendices [-@sec-app-nj] and [-@sec-app-corr] contain further comparisons between gerrymandering metrics.
 
 Since 1995, New Jersey congressional redistricting has been handled by a 13-member commission, with 6 political appointees from each party and one independent chair with *de facto* tiebreaking authority.
-@fig-nj-maps shows the baseline Democratic vote share by precinct, along with the Democratic and Republican commission proposals.[^8]
+@fig-nj-maps shows the baseline Democratic vote share by precinct, along with the Democratic and Republican commission proposals.
 In a typical election, the Democratic proposal yields 9 Democratic and 3 Republican seats, while the Republican proposal gives a 7--5 split.
-
-[^8]: The Democratic plan was enacted. The GOP plan was provided by Harrison Neely, executive director for the GOP delegation to the New Jersey Congressional Redistricting Committee, following an Open Public Records Act request.
+The Democratic plan was enacted as the state's congressional districts.
 
 ```{r fig-nj-maps, fig.width=6.25}
 #| fig.cap: |
@@ -285,10 +284,9 @@ include_graphics("figures/nj_maps.pdf")
 For differential harm to measure gerrymandering, a counterfactual $\tilde Q$ drawn without partisan intent is needed.
 To do so, we generate 10,000 districting plans without any partisan data, using the SMC algorithm of [@mccartan2020; implemented in @redist] setting constraints to favor compact plans that respect county lines.
 @fig-nj-maps(d) shows one such plan.
-For each of these sampled plans and the two proposals, we estimate the average harm and differential partisan harm versus the simulated baseline,[^9] and calculate the expected number of Democratic seats and several common partisan metrics, including partisan dislocation.
+For each of these sampled plans and the two proposals, we estimate the average harm and differential partisan harm versus the simulated baseline, and calculate the expected number of Democratic seats and several common partisan metrics, including partisan dislocation.
 These measures, and their distribution in the baseline, are shown in @fig-nj-meas.
-
-[^9]: We choose to calculate $\Delta_{\dem-\rep}H(q)$, so positive values correspond to a Republican-favoring plan.
+We calculate $\Delta_{\dem-\rep}H(q)$, so positive values correspond to a Republican-favoring plan.
 
 The estimate of differential partisan harm aligns with the expected partisan skew of each plan, with a value of $-3.6\%$ for the Democratic and $2.0\%$ for the Republican proposal.
 This means that, for example, an average Democratic voter is $3.6$pp less likely to be misrepresented than their average Republican counter-partisan.
@@ -490,11 +488,9 @@ where $\bar{s}_d$ is the baseline Democratic vote share in the districts, $\delt
 This can be thought of as a hierarchical extension of the classic uniform swing model.
 
 The baseline $\bar{s}_d$ can be established by averaging the results of all available statewide elections over the past decade or other suitable period.
-This is done at the precinct level, since this is the most granular level that districting plans are usually built from and election returns are reported at.[^14]
+This is done at the precinct level, since this is the most granular level that districting plans are usually built from and election returns are reported at.
 Since $\bar{s}_d$ is calculated for the particular configuration of district $d$, this model takes into account the specific districting plan under consideration.
 
-[^14]: When district boundaries split precincts, practitioners generally impute the returns in each component of the split precinct by population-weighted interpolation.
-    Population information comes from Census blocks, which, when populated, are practically never split.
 
 To estimate $\sigma^2_\delta$ and $\sigma^2_\varepsilon$, we use historical U.S. congressional election returns from 1976-2020, provided by the MIT Election Data Science Lab (<https://doi.org/10.7910/DVN/IG0UN2>).
 We discard elections which were uncontested by either party, or which had more than one Democratic or Republican candidate, leaving 5,931 total elections.
@@ -527,15 +523,14 @@ However, the simple model presented here does a reasonable job of capturing the 
 
 With a model for election outcomes and districting plans in hand, calculation of $H(q)$ and $\Delta H(q)$ is straightforward.
 For each sampled counterfactual districting plan $\tilde q$, we use the election model to simulate vote shares in each district of $q$ and $\tilde q$.
-We can then identify, for each precinct, how many Democratic or Republican voters were harmed.[^2]
+We can then identify, for each precinct, how many Democratic or Republican voters were harmed.
+For this, we use the baseline count of Democratic or Republican votes.
+This offers a slight simplification, since the vote share changes across random draws, and so the number of Democratic and Republican voters changes too.
+To deal with this issue completely, one must model elections at the precinct level, which requires more data and computational costs.
+
 We tally the total harm done to Democratic and Republican voters across the map and divide by the appropriate totals to get a single draw of $H(q)\mid I\in\dem$ and $H(q)\mid I\in\rep$.
 When other groups (such as racial groups) are used in $\Delta H(q)$, we must repeat these computations for each group.
 Finally, we average across all of the samples, and add or subtract across groups, to produce estimates of $E[H(q)]$ and $\Delta_{\dem-\rep} H(q)$.
-
-[^2]: For this, we use the baseline count of Democratic or Republican votes.
-    This is a slight simplification, since the vote share changes across random draws, and so the number of Democratic and Republican voters changes too.
-    To deal with this issue completely, one must model elections at the precinct level, which requires more data and computational costs.
-
 
 ## Ecological inference model for Alabama {#sec-alei}
 
@@ -685,12 +680,9 @@ However, our use of latent factors provides one way to extend our harm framework
 One could weight voter harm by the distance in latent space between each voter's preferred candidate and the elected candidate, thus dropping the implicit assumption in the definition of harm that all candidates the voter did not vote for are interchangeable.
 
 We sample 2,000 districting plans across two independent runs of the SMC algorithm of @mccartan2020
-In Boston, council districts must be equipopulous, be compact, and preserve neighborhood and community boundaries.[^11]
+In Boston, council districts must be equipopulous, be compact, and preserve neighborhood and community boundaries under the City of Boston charter.
 In sampling, we therefore set constraints to favor compact plans that respect neighborhood boundaries.
 Since we do not provide any racial information to the algorithm, this set of plans forms a good approximation of a race-neutral districting process.
-
-[^11]: City of Boston charter.
-    Available at <https://www.boston.gov/sites/default/files/embed/b/boston-city-charter-2007.pdf>.
 
 # Data availability {.unnumbered}
 All data are publicly available and are included in the replication package for the manuscript.
@@ -701,6 +693,8 @@ All code is included in the replication package for the manuscript.
 # Acknowledgements {.unnumbered}
 
 The authors thank Steve Ansolabehere, Matt Blackwell, Kosuke Imai, Gary King, Shiro Kuriwaki, Tyler Simko, Nick Stephanopolous, and participants of the Fall 2021 Harvard American Politics Research Workshop, Fall 2022 Harvard Applied Statistics Workshop, and Imai Research Group for helpful comments and discussion.
+We thank Harrison Neely, executive director for the GOP delegation to the New Jersey Congressional Redistricting Committee, for providing a copy of the GOP's plan following an Open Public Records Act request.
+The authors received no specific funding for this work.
 
 # Author Contributions {.unnumbered}
 
@@ -839,6 +833,7 @@ All $p$-values reported in this section are two-tailed.
 #|      with the blue and red lines and crosses.
 #|      The dashed line indicates a value of zero.
 #|      Below the diagonal, numbers indicate the absolute value of the correlation between variables.
+#|      Formal statistical tests for the correlations are unavailable due to the dependency between samples.
 include_graphics("figures/nj_pairs.pdf")
 ```
 
