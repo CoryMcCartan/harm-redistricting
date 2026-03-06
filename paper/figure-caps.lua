@@ -10,11 +10,18 @@ return {
     Header = function(el)
       if el.classes:includes("appendix") then
         in_appendix = true
+        -- Disable ghost mode so appendix figures render normally
+        if quarto.doc.isFormat("latex") then
+          return pandoc.List({
+            pandoc.RawBlock("latex", "\\figureghostmodefalse\n"),
+            el
+          })
+        end
       end
     end,
     FloatRefTarget = function(el)
-      if in_appendix then return end
-      if el.type == "Figure" and el.caption_long then
+      if in_appendix or el.type ~= "Figure" then return end
+      if el.caption_long then
         fig_count = fig_count + 1
         local prefix = pandoc.List({
           pandoc.Strong({pandoc.Str("Figure " .. fig_count .. ".")}),
