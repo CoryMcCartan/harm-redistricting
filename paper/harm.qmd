@@ -94,7 +94,7 @@ The exception is partisan dislocation [@defoeubarodd21], which compares the part
 Second, the proposed framework considers *counterfactual* districting plans, not just a single enacted plan.
 Many factors influence the qualities of a districting plan, and without a well-defined comparison, it is impossible to differentiate which qualities, like its partisan performance, are consequences of laws and political geography or result from improper manipulation of the system for political gain [@chen:rodd:13].
 For example, Massachusetts' 2010 districts had an efficiency gap that would normally qualify as a Democratic gerrymander, but was in fact due to the homogeneity of the state's political geography [@duch:18].
-While consideration of counterfactual plans is now commonplace with redistricting simulation algorithms [e.g., @deford2019], our approach is different in that it incorporates them within the definition of the measure itself.
+While consideration of counterfactual plans is now commonplace with redistricting simulation algorithms [e.g., @deford2019], our approach differs from most in that it incorporates them within the definition of the harm measure itself.
 Some existing districting rely on *implicit* counterfactuals, which may be irrelevant or infeasible, as we discuss in [Supplementary Information @sec-connections].
 By making the comparison set explicit, our approach improves on existing work by better reflecting legal and geographic realities, while making the interpretation of our measures clearer.
 
@@ -104,7 +104,7 @@ Once measured for each voter, researchers can examine the distribution of harm b
 
 A core feature of our framework is its clear separation of theoretical quantities of interest and empirical strategies for estimating them [@katz2022].
 The methods section discusses the challenge of estimating harm and differential harm from observed data.
-Recent advances in redistricting simulation, which can generate a large number of random districting plans that respect relevant legal constraints, are critical to this effort [@fifield2020mcmc; @deford2019; @carter2019; @mccartan2020].
+Recent advances in redistricting simulation, which can generate a large number of random districting plans that respect relevant legal constraints, are critical to this effort [@fifield2020mcmc; @deford2019; @autry2023; @mccartan2020].
 These algorithmically-generated sets of districting plans can provide a realistic set of counterfactuals for our measures.
 
 The harm framework has important similarities with the common-law approach to voting rights litigation.
@@ -268,7 +268,7 @@ We show that differential harm correctly identifies possible gerrymandering, in 
 Appendices [-@sec-app-nj] and [-@sec-app-corr] contain further comparisons between gerrymandering metrics.
 
 Since 1995, New Jersey congressional redistricting has been handled by a 13-member commission, with 6 political appointees from each party and one independent chair with *de facto* tiebreaking authority.
-@fig-nj-maps shows the baseline Democratic vote share by precinct, along with the Democratic and Republican commission proposals.
+@fig-nj-maps shows the baseline Democratic vote share by precinct, along with the Democratic and Republican commission proposals, using data from @vest_2020.
 In a typical election, the Democratic proposal yields 9 Democratic and 3 Republican seats, while the Republican proposal gives a 7--5 split.
 The Democratic plan was enacted as the state's congressional districts.
 
@@ -336,7 +336,7 @@ include_graphics("figures/al_maps.pdf")
 ```
 
 This analysis is slightly more complicated than in New Jersey, since in order to understand the racial distribution of harm we need to estimate turnout and voting preferences by race.
-As we describe in the methods section, this is accomplished with an ecological inference model.
+As we describe in the methods section, this is accomplished with an ecological inference model, using election data from @vest_2020.
 The estimates confirm that voting is highly polarized by race outside of the cities of Birmingham and Montgomery.
 
 With these estimates in hand, @fig-al-maps(c) shows the average number of voters harmed in each precinct, and @fig-al-maps(f) summarizes harm by party and race.
@@ -456,10 +456,10 @@ Either way, past election data and an enacted districting plan alone are not eno
 ### Modeling Districting Plans
 
 It is difficult to construct a tractable probability distribution for districting plans, since the space of plans is discrete and lacks a natural metric structure.
-Thankfully, in recent years a number of algorithms have been developed which sample districting plans from specific distributions [@fifield2020mcmc; @deford2019; @carter2019; @mccartan2020].
+Thankfully, in recent years a number of algorithms have been developed which sample districting plans from specific distributions [@fifield2020mcmc; @deford2019; @autry2023; @mccartan2020].
 These distributions can generally be characterized as maximum-entropy distributions on the space of all valid districting plans, in combination with several moment constraints.
 
-For example, the algorithms of @carter2019 and @mccartan2020 sample from the maximum-entropy distribution of districting plans that are geographically contiguous, have district populations within a specified deviation from equality, and which have a certain average compactness value (according to a particular graph-theoretic compactness measure).
+For example, the algorithms of @autry2023 and @mccartan2020 sample from the maximum-entropy distribution of districting plans that are geographically contiguous, have district populations within a specified deviation from equality, and which have a certain average compactness value (according to a particular graph-theoretic compactness measure).
 These maximum-entropy distributions put as few conditions as possible on the districting sampling process, as long as a set of constraints imposed by the researcher are met.
 If these constraints are precisely those which are required by law or traditional redistricting criteria, then samples from this distribution provide a natural set of counterfactual districting plans, uninfluenced by superfluous partisan or other considerations, to use in estimating $H(q)$ and $\Delta H(q)$.
 In practice, the translation from tradition and law into mathematical formulations of constraints is not always clear or even well-defined.
@@ -685,10 +685,13 @@ In sampling, we therefore set constraints to favor compact plans that respect ne
 Since we do not provide any racial information to the algorithm, this set of plans forms a good approximation of a race-neutral districting process.
 
 # Data availability {.unnumbered}
-All data are publicly available and are included in the replication package for the manuscript: <https://github.com/corymccartan/harm-redistricting>.
+
+All data are publicly available and are included in the replication package for the manuscript, available at @harmreplication.
 
 # Code availability {.unnumbered}
-All code is included in the replication package for the manuscript: <https://github.com/corymccartan/harm-redistricting>.
+
+All code is included in the replication package for the manuscript, available at @harmreplication.
+
 
 # Acknowledgements {.unnumbered}
 
@@ -803,7 +806,7 @@ It is this confounding which explains many of the concerns that have been raised
 The standard calculation of partisan bias, $\beta(\half)$, can give unintuitive results in more lopsided states, which, if not interpreted carefully, can lead practitioners to make incorrect conclusions about the presence and direction of a partisan gerrymander.[^5]
 And none of the measures take into account any aspect of political geography, and therefore suffer in states like Massachusetts, where, for example, the efficiency gap takes a value generally indicating an extreme Democratic gerrymander.
 
-[^5]: This has been called by some the "Utah paradox" [@deford2020symmetry], though the paradoxical nature is contested as a mistake of using it for description, rather than inference [@katz2022].
+[^5]: This has been called by some the "Utah paradox" [@deford2023implementing], though the paradoxical nature is contested as a mistake of using it for description, rather than inference [@katz2022].
     Even when interpreted carefully, however, partisan bias requires significant extrapolation from observed election outcomes in lopsided states---how realistic is it to evaluate the counterfactual where Democrats run even with Republicans statewide in Utah?
 
 Despite these differences, there are also empirical similarities in many cases.
@@ -812,10 +815,10 @@ Similarly, in competitive states, where the baseline election has a statewide vo
 Correlations, of course, are not everything: it is the universal scale and centering of our harm measure which makes it more useful in evaluating partisan gerrymanders, as we demonstrate in @sec-nj.
 
 [^6]: The differences stem from the efficiency gap considering a vote to be wasted if it is in excess of the 50% threshold needed to win, while the harm framework does not penalize such votes, since every such voter is happily represented by their candidate of choice.
-    This definition of wasted votes is also at the root of other criticisms of the efficiency gap, which note its tendency to penalize proportionality and reward 3-to-1 districts [@bernstein2017egap; @tamcho2017egap; @deford2020symmetry].
+    This definition of wasted votes is also at the root of other criticisms of the efficiency gap, which note its tendency to penalize proportionality and reward 3-to-1 districts [@bernstein2017egap; @tamcho2017egap; @deford2023implementing].
 
 Finally, it is worth comparing the proposed measures to the increasingly common application redistricting simulation techniques to cases of partisan gerrymandering.
-Standard practice in such litigation, for example, is to calculate a battery of gerrymandering metrics on the simulated plans, and show that the challenged plan is an outlier on all or most of the metrics: see, e.g., @2019rucho (report of Dr. Jonathan Mattingly) and @2018league (report of Dr. Wesley Pegden).
+A common practice in such litigation is to calculate a battery of gerrymandering metrics on the simulated plans, and show that the challenged plan is an outlier on all or most of the metrics, often by district: see, e.g., @2019rucho (report of Dr. Jonathan Mattingly) and @2018league (report of Dr. Wesley Pegden).
 While this can help contextualize the challenged plan, it is not foolproof---if the underlying metric is misleading, it will still be misleading when applied to thousands of simulated plans.
 In the worst cases, this can lead to directionally wrong conclusions.
 
