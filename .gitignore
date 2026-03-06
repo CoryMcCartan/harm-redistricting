@@ -43,6 +43,7 @@ out/
 paper/*.pdf
 *.png
 *.zip
+*.docx
 
 # needed tex files
 !paper/header.tex
