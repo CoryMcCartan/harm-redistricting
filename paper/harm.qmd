@@ -710,6 +710,15 @@ C.Mc. and C.T.K. both contributed to the conception, design, analysis, data coll
 
 The authors declare no competing interests.
 
+# Tables {.unnumbered}
+
+This section is intentionally left blank.
+
+# Figure Captions {.unnumbered}
+
+::: {#figure-caps}
+:::
+
 ::: {#refs}
 :::
 
