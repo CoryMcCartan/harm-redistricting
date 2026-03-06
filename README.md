@@ -1,5 +1,7 @@
 # [Individual and Differential Harm in Redistricting](https://osf.io/preprints/socarxiv/nc2x7/)
 
+[![](https://zenodo.org/badge/DOI/10.5281/zenodo.18895840.svg)](https://doi.org/10.5281/zenodo.18895840)
+
 ### [Cory McCartan](https://corymccartan.com) and [Christopher T. Kenny](https://www.christophertkenny.com)
 
 ![Harm schematic](https://user-images.githubusercontent.com/2958471/187107731-ac78132f-479a-4c5c-bc6d-546d33f20500.png)
