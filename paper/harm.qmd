@@ -830,6 +830,7 @@ This section compares the partisan metrics from @sec-nj across the simulated bas
 #|      with the blue and red lines and crosses.
 #|      The dashed line indicates a value of zero.
 #|      Below the diagonal, numbers indicate the absolute value of the correlation between variables.
+#|      Formal statistical tests for the correlations are unavailable due to the dependency between samples.
 include_graphics("figures/nj_pairs.pdf")
 ```
 
