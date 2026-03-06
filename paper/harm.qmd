@@ -33,13 +33,6 @@ abstract: |
   We discuss strategies for estimating harm, and demonstrate the utility of our framework
   through analyses of partisan gerrymandering in New Jersey, voting rights
   litigation in Alabama, and racial dynamics of Boston City Council elections.
-thanks: |
-  The authors thank Steve Ansolabehere, Matt Blackwell, Kosuke Imai, Gary King,
-  Shiro Kuriwaki, Tyler Simko, Nick Stephanopolous, and
-  participants of the Fall 2021 Harvard American Politics Research Workshop,
-  Fall 2022 Harvard Applied Statistics Workshop,
-  and Imai Research Group for helpful comments and discussion.
-  Replication code and data are available at <https://github.com/CoryMcCartan/harm-redistricting>.
 keywords:
   - representation
   - redistricting
@@ -54,6 +47,7 @@ format:
         fontsize: 11pt
         biblio-style: apsr
         include-in-header: "header.tex"
+number-sections: false
 editor_options:
   markdown:
     wrap: sentence
@@ -68,7 +62,7 @@ opts_chunk$set(echo=FALSE, message=FALSE, warning=FALSE,
                fig.width=(8.5-2*1)/2, out.width="100%", fig.asp=0.8)
 ```
 
-# Introduction
+# Main text
 
 For as long as there have been district-based electoral systems, groups, individuals, and parties have manipulated them for political gain.
 Partisan gerrymandering, going back to Elbridge Gerry's salamander-shaped district [@griffith1907rise, pp. 72--73], is perhaps the most consistently visible manifestation of this tendency.
@@ -124,7 +118,7 @@ We demonstrate the practical value of the proposed framework in three diverse co
 @sec-boston applies the framework to local redistricting, quantifying the benefits of race-aware boundaries for Black voters in Boston.
 @sec-discussion concludes.
 
-# Motivation {#sec-motivation}
+## Motivation {#sec-motivation}
 
 Consider *Minissouri*, a stylized representation of Missouri which is shown in @fig-minissouri.
 Minissouri has two cities and a substantial rural population with a partisan breakdown of 55.6% R to 44.4% D, and is divided into three districts.
@@ -167,7 +161,7 @@ We stress that the results here are tied to the specific counterfactual plan (b)
 Indeed, this is a feature of the harm framework: different research questions may require different counterfactuals.
 We illustrate this aspect of the framework throughout the applications below.
 
-# Individual and Differential Harm {#sec-indiv-harm}
+## Individual and Differential Harm {#sec-indiv-harm}
 
 We formalize and generalize the concepts in @sec-motivation.
 Let $\Voters$ be the set of individuals, or *voters*, in the region and time period.
@@ -188,7 +182,7 @@ This notation obscures the complex relationships and feedback effects between in
 For example, different districting plans may lead to different candidates running, depending on district partisanship and incumbent residency.
 The assumptions we make on these relationships are made explicit by the statistical models used to estimate the harm measure; these models may be as simple or complex as the researcher chooses, as we discuss in the methods section.
 
-## Harm {#sec-harm}
+### Harm {#sec-harm}
 
 The key intuition from @sec-motivation is that to be harmed, a voter must have a better outcome in the counterfactual world where a different districting plan was in place.
 Letting $\tilde q$ denote a counterfactual districting plan, we define the *harm* to an individual $i$ in election $v$ held under districting plan $q$ as
@@ -204,7 +198,7 @@ In general, $q$ harms some individuals versus $\tilde q$, and $\tilde q$ harms a
 A symmetric version of $h_i(v,q,\tilde q)$ would need to combine both of these groups: those harmed and those who gain by electing their chosen candidate under $q$ but not under the counterfactual $\tilde q$.
 In practice, voters, courts, or politicians may differ in their views on how to balance preventing harm and maximizing gains.
 
-## Multiple Elections or Districting Plans
+### Multiple Elections or Districting Plans
 
 As defined above, $h_i(v,q,\tilde q)$ captures harm in a single election and relative to one counterfactual districting plan $\tilde q$.
 Researchers are generally interested in outcomes over multiple elections and a larger set of counterfactual plans.
@@ -237,7 +231,7 @@ $$
 $$
 that is, the probability that a randomly selected voter in this election is misrepresented under the adopted plan but would not have been under a randomly selected counterfactual. -->
 
-## Differential Harm {#sec-diff-harm}
+### Differential Harm {#sec-diff-harm}
 
 Single-member districts are often motivated by the value in representation to specific communities with shared interests.
 <!-- Preserving "communities of interest" is one of the most common statutory and constitutional requirements imposed by states on the plan-drawing process [@ncslcriteria]. -->
@@ -267,7 +261,7 @@ Importantly, it separates *vote choice* from *group membership*, allowing one to
 
 Estimating these quantities from available data is another matter, of course, and requires additional assumptions, as we describe in the methods section.
 
-# Application to Partisan Gerrymandering in New Jersey {#sec-nj}
+## Application to Partisan Gerrymandering in New Jersey {#sec-nj}
 
 To demonstrate the proposed framework in a classic partisan gerrymandering context, we provide a brief analysis of congressional districting in the state of New Jersey.
 We show that differential harm correctly identifies possible gerrymandering, in contrast to some common redistricting metrics.
@@ -317,7 +311,7 @@ The raw metrics, and these two counterintuitive results, can be better contextua
 That appendix also compares the correlations between the various metrics in the simulated sample.
 We find strong correlations of differential harm with the number of seats won by each party, while several common metrics like the mean-median gap and partisan bias are very weakly correlated with seats won.
 
-# Application to Voting Rights Litigation in Alabama {#sec-alabama}
+## Application to Voting Rights Litigation in Alabama {#sec-alabama}
 
 We next apply our proposed framework to @2022merrill, ongoing VRA litigation in which civil rights groups have argued that the existing Black majority district packs Black voters, and so a second Black opportunity-to-elect district should be drawn.
 Measuring differential harm by both race and party will allow us to cleanly separate the racial and partisan effects of the Alabama districting plan, something existing approaches are unable to do.
@@ -360,7 +354,7 @@ Unlike in a traditional *Gingles* analysis, there is no need to identify a parti
 The harm measure also treats voters of every race and location equally, recording just their inability to elect their preferred candidate.
 <!-- Only once we have aggregated these individual harms does it become apparent that the challenged plan concentrates the harm among certain groups of voters. -->
 
-# Application to Primary Elections in Boston {#sec-boston}
+## Application to Primary Elections in Boston {#sec-boston}
 
 The proposed harm measures are particularly easy to calculate in two-party elections, since the preferences of each kind of partisan are directly observable as partisan vote shares.
 However, the same framework can be fruitfully applied to more complex settings, providing insights unavailable with traditional methods.
@@ -420,7 +414,7 @@ What is the harm of switching to race-neutral districting from the current race-
 We can flip the above setup and compute harm by averaging over the simulated plans with the enacted plan as the counterfactual.
 For this reverse comparison, along the first dimension, we estimate that a race-neutral baseline would differentially harm Black voters at a rate of 3.1% compared to the enacted plan Along the second dimension, the differential harm to Black voters would be 1.8%. -->
 
-# Discussion {#sec-discussion}
+## Discussion {#sec-discussion}
 
 We offer a new framework for studying redistricting that brings together a focus on individual voter preferences and the causal-inference logic of counterfactuals.
 The combination of these ideas imbues the analysis of districting plans with historical understandings of legal standing and harm.
@@ -704,6 +698,18 @@ All data are publicly available and are included in the replication package for 
 # Code availability {.unnumbered}
 All code is included in the replication package for the manuscript.
 
+# Acknowledgements {.unnumbered}
+
+The authors thank Steve Ansolabehere, Matt Blackwell, Kosuke Imai, Gary King, Shiro Kuriwaki, Tyler Simko, Nick Stephanopolous, and participants of the Fall 2021 Harvard American Politics Research Workshop, Fall 2022 Harvard Applied Statistics Workshop, and Imai Research Group for helpful comments and discussion.
+
+# Author Contributions {.unnumbered}
+
+C.Mc. and C.T.K. both contributed to the conception, design, analysis, data collection, and writing.
+
+# Competing Interests {.unnumbered}
+
+The authors declare no competing interests.
+
 ::: {#refs}
 :::
 
@@ -913,4 +919,3 @@ Similarly, 73,000 are Democratic, while only 71,000 are Republican.
 Normalizing by group sizes, the expected harm for a Black Democrat is 9.6%, for a Black Republican is 16.8%, for a White Democrat is 9.7%, and for a White Republican is 5.2%.
 So the challenged plan differentially harms Democratic voters, but does not differentially harm Black Democrats versus White Democrats.
 However, it it especially harms Black Republicans, who have an estimated differential harm of 7.2% versus Black Democrats and of 11.6% versus White Republicans.
-
