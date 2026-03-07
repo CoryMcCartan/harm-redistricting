@@ -718,13 +718,3 @@ This section is intentionally left blank.
 
 ::: {#refs}
 :::
-
-al @sec-alabama
-
-bos @sec-boston
-
-est @sec-estimating
-
-nj @sec-nj
-
-njmeas @fig-nj-meas
