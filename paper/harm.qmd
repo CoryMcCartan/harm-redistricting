@@ -60,9 +60,16 @@ hide-figures: true
 library(knitr)
 library(here)
 
-opts_chunk$set(echo=FALSE, message=FALSE, warning=FALSE,
-               fig.path=here("paper/figures/"), fig.align="center",
-               fig.width=(8.5-2*1)/2, out.width="100%", fig.asp=0.8)
+opts_chunk$set(
+  echo = FALSE,
+  message = FALSE,
+  warning = FALSE,
+  fig.path = here("paper/figures/"),
+  fig.align = "center",
+  fig.width = (8.5 - 2 * 1) / 2,
+  out.width = "100%",
+  fig.asp = 0.8
+)
 ```
 
 # Main text
@@ -283,7 +290,7 @@ include_graphics("figures/nj_maps.pdf")
 
 
 For differential harm to measure gerrymandering, a counterfactual $\tilde Q$ drawn without partisan intent is needed.
-To do so, we generate 10,000 districting plans without any partisan data, using the SMC algorithm of [@mccartan2020; implemented in @redist] setting constraints to favor compact plans that respect county lines.
+To do so, we generate 10,000 districting plans without any partisan data, using the SMC algorithm of [@mccartan2020; @redist] setting constraints to favor compact plans that respect county lines.
 @fig-nj-maps(d) shows one such plan.
 For each of these sampled plans and the two proposals, we estimate the average harm and differential partisan harm versus the simulated baseline, and calculate the expected number of Democratic seats and several common partisan metrics, including partisan dislocation.
 These measures, and their distribution in the baseline, are shown in @fig-nj-meas.
@@ -687,7 +694,7 @@ Since we do not provide any racial information to the algorithm, this set of pla
 
 ## Statistical and data notes
 
-The data used in these analyses are based on the full Census and all election returns for the included contests, and as such, there is no data inclusion.
+The data used in these analyses are based on the full 2020 Census [@census2020decennial; @census2020vtd] and all election returns for the included contests, and as such, there is no data inclusion.
 All $p$-values reported in the text are two-sided.
 
 # Data availability {.unnumbered}
