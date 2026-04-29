@@ -45,6 +45,7 @@ format:
         keep-tex: true
         fontsize: 11pt
         biblio-style: unsrtnat
+        natbiboptions: "super,numbers,compress"
         include-in-header: "header.tex"
 number-sections: false
 editor_options:
@@ -67,7 +68,7 @@ opts_chunk$set(echo=FALSE, message=FALSE, warning=FALSE,
 # Main text
 
 For as long as there have been district-based electoral systems, groups, individuals, and parties have manipulated them for political gain.
-Partisan gerrymandering, going back to Elbridge Gerry's salamander-shaped district [@griffith1907rise, pp. 72--73], is perhaps the most consistently visible manifestation of this tendency.
+Partisan gerrymandering, going back to Elbridge Gerry's salamander-shaped district [@griffith1907rise] (pp. 72--73), is perhaps the most consistently visible manifestation of this tendency.
 But gerrymandering takes other forms as well.
 In the United States, states historically used racial gerrymandering to maintain White political supremacy [@gilliland1969racial].
 At the local level, where most redistricting occurs, partisanship is less salient, and manipulation may be more subtle or may favor a narrower group [@cain2002mapmaking; @halberstam2012process].
