@@ -95,7 +95,7 @@ Second, the proposed framework considers *counterfactual* districting plans, not
 Many factors influence the qualities of a districting plan, and without a well-defined comparison, it is impossible to differentiate which qualities, like its partisan performance, are consequences of laws and political geography or result from improper manipulation of the system for political gain [@chen:rodd:13].
 For example, Massachusetts' 2010 districts had an efficiency gap that would normally qualify as a Democratic gerrymander, but was in fact due to the homogeneity of the state's political geography [@duch:18].
 While consideration of counterfactual plans is now commonplace with redistricting simulation algorithms [e.g., @deford2019], our approach differs from most in that it incorporates them within the definition of the harm measure itself.
-Some existing districting rely on *implicit* counterfactuals, which may be irrelevant or infeasible, as we discuss in **Supplementary Information A**.
+Some existing districting rely on *implicit* counterfactuals, which may be irrelevant or infeasible, as we discuss in Supplementary Information A.
 By making the comparison set explicit, our approach improves on existing work by better reflecting legal and geographic realities, while making the interpretation of our measures clearer.
 
 The *combination* of individual voter choices and counterfactual districting plans is key to our framework of *individual harm*: informally, a voter is harmed if they would be represented by their candidate of choice under a counterfactual plan.
@@ -111,7 +111,7 @@ The harm framework has important similarities with the common-law approach to vo
 To proceed with a legal challenge to an alleged gerrymander, a voter must demonstrate that their individual right to vote has been harmed by the enacted district boundaries [e.g., @1962baker; @issakarl98].
 This requires proof that *but for* the alleged gerrymander, the voter would have been more likely to elect their chosen candidate [e.g., @2004vieth].
 Indeed, a primary factor in the Supreme Court's ruling that partisan gerrymandering is not justiciable was that existing redistricting measures are not clearly tied to individual injury [@2017gill].
-The harm measure also captures or generalizes the three *Gingles* preconditions for vote dilution litigation under the Voting Rights Act of 1965, as discussed further in **Supplementary Information A**.
+The harm measure also captures or generalizes the three *Gingles* preconditions for vote dilution litigation under the Voting Rights Act of 1965, as discussed further in Supplementary Information A.
 
 We demonstrate the practical value of the proposed framework in three diverse contexts.
 @sec-nj analyzes New Jersey congressional districts, showing how traditional metrics can misidentify both the magnitude and direction of partisan gerrymanders.
@@ -192,7 +192,7 @@ $$h_i(v,q,\tilde q) = \ind\{v(i) \neq \win_i(v, q)\} \ind\{v(i) = \win_i(v, \til
 
 Harm involves two terms: the first measuring if a voter is not represented by their chosen candidate under $q$, and the second term measuring if they would have been represented by their chosen candidate under the counterfactual $\tilde q$.
 This comparison differs from the one that underlies partisan dislocation [@defoeubarodd21], where the comparison is against a group of neighboring voters rather than an alternative plan.
-We discuss this difference more in **Supplementary Information A**, and compare the two measures empirically in @sec-nj.
+We discuss this difference more in Supplementary Information A, and compare the two measures empirically in @sec-nj.
 
 Notice the fundamental asymmetry in this definition: $h_i(v,q,\tilde q)\neq h_i(v,\tilde q,q)$, since $\ind\{v(i) \neq \win_i(v, q)\} \neq \ind\{v(i) \neq \win_i(v, \tilde q)\}$.
 In general, $q$ harms some individuals versus $\tilde q$, and $\tilde q$ harms a distinct set of individuals versus $q$.
@@ -305,9 +305,9 @@ Most of the other metrics agree with differential harm that each party's proposa
 The efficiency gap and partisan bias score both plans almost equally in absolute value, in comparison to declination, which identifies the Republican proposal as slightly more extreme.
 However, the mean-median and partisan dislocation measures both classify the Democratic proposal as favoring Republicans, even though it produces more Democratic seats than the typical simulated plan.
 
-The raw metrics, and these two counterintuitive results, can be better contextualized in comparison to the distribution across the sampled plans, something we discuss in **Supplementary Information B**.
+The raw metrics, and these two counterintuitive results, can be better contextualized in comparison to the distribution across the sampled plans, something we discuss in Supplementary Information B.
 That Supplementary Information also compares the correlations between the various metrics in the simulated sample.
-We find strong correlations of differential harm with the number of seats won by each party, while several common metrics like the mean-median gap and partisan bias are very weakly correlated with seats won.
+We find strong correlations of differential harm with the number of seats won by each party (correlation of 0.86 or so, $p<0.001$), while several common metrics like the mean-median gap and partisan bias are very weakly correlated with seats won (correlation 0.18 and 0.074, respectively, both $p<0.001$).
 
 ## Application to Voting Rights Litigation in Alabama {#sec-alabama}
 
@@ -315,9 +315,8 @@ We next apply our proposed framework to @2022merrill, ongoing VRA litigation in 
 Measuring differential harm by both race and party will allow us to cleanly separate the racial and partisan effects of the Alabama districting plan, something existing approaches are unable to do.
 
 Plaintiffs had to satisfy the first *Gingles* criterion by submitting one or more remedial maps demonstrating that a new Black opportunity-to-elect district could be drawn while meeting all other redistricting requirements.
-In *Allen*, plaintiff's expert Moon Duchin submitted four such plans, one of which is shown in @fig-al-maps(e).
+In  @fig-al-maps(e), we illustrate one of the plans submitted by a plaintiff's expert in Allen.
 A uniform distribution over these plans forms a natural counterfactual $\tilde Q$ to use in analyzing the challenged districting plan (@fig-al-maps(d)), especially since the district court ruled in favor of the plaintiffs and found that their remedial plans satisfied the first *Gingles* criterion.
-In **Supplementary Information D**, we repeat the analysis performed here on a different counterfactual consisting of plans sampled with a redistricting simulation algorithm; the results are broadly similar.
 
 ```{r fig-al-maps, fig.width=6.75}
 #| fig.cap: |
@@ -350,6 +349,7 @@ Thus while the challenged plan differentially harms both Black voters and Democr
 These calculations are made by aggregating harm within racial groups at the precinct level, and so they automatically take into account individual voter preferences.
 Unlike in a traditional *Gingles* analysis, there is no need to identify a particular party as the uniform statewide "choice" of the minority racial group, nor is there any cause for concern because of lower racial voting polarization in urban areas.
 The harm measure also treats voters of every race and location equally, recording just their inability to elect their preferred candidate.
+In Supplementary Information D, we repeat the analysis performed here on a different counterfactual consisting of plans sampled with a redistricting simulation algorithm; the results are broadly similar: the challenged plan diﬀerentially harms Democratic voters and Black Republican voters.
 <!-- Only once we have aggregated these individual harms does it become apparent that the challenged plan concentrates the harm among certain groups of voters. -->
 
 ## Application to Primary Elections in Boston {#sec-boston}
@@ -414,7 +414,7 @@ For this reverse comparison, along the first dimension, we estimate that a race-
 
 ## Discussion {#sec-discussion}
 
-We offer a new framework for studying redistricting that brings together a focus on individual voter preferences and the causal-inference logic of counterfactuals.
+We offer a framework for studying redistricting that brings together a focus on individual voter preferences and the causal-inference logic of counterfactuals.
 The combination of these ideas imbues the analysis of districting plans with historical understandings of legal standing and harm.
 
 A key advantage of the harm framework is that it applies without modification beyond partisanship, so that harms can be measured by race or other protected groups.
@@ -661,7 +661,7 @@ We draw $s_{jk}$ from a $\Beta(20\bar s, 20(1-\bar s))$ distribution, where $\ba
 
 The model's predictions (posterior medians) for the turnout and vote share in each precinct are shown in @fig-boston-gen-pred.
 Considering the differences between a primary and general election, and the additional campaign time elapsed between the elections, the predictions are remarkably accurate.
-The predicted turnout has a Spearman correlation of 0.84 with the actual turnout, and the predicted and actual vote shares have a correlation 0.87.
+The predicted turnout has a Spearman correlation of 0.84 ($p<0.001$) with the actual turnout, and the predicted and actual vote shares have a correlation 0.87 ($p<0.001$), across the $n=255$ precincts.
 The turnout and support levels are also in relatively close agreement.
 The accuracy of these validation predictions tracks with previous work using factor models to predict runoff outcomes after a first-stage election [@kamakura2006modeling].
 
@@ -684,13 +684,18 @@ In Boston, council districts must be equipopulous, be compact, and preserve neig
 In sampling, we therefore set constraints to favor compact plans that respect neighborhood boundaries.
 Since we do not provide any racial information to the algorithm, this set of plans forms a good approximation of a race-neutral districting process.
 
+## Statistical and data notes
+
+The data used in these analyses are based on the full Census and all election returns for the included contests, and as such, there is no data inclusion.
+All $p$-values reported in the text are two-sided.
+
 # Data availability {.unnumbered}
 
-All data are publicly available and are included in the replication package for the manuscript, available at @harmreplication.
+All data are publicly available and are included in the replication package for the manuscript, available at <https://doi.org/10.5281/zenodo.18895840>.
 
 # Code availability {.unnumbered}
 
-All code is included in the replication package for the manuscript, available at @harmreplication.
+All code is included in the replication package for the manuscript, available at <https://doi.org/10.5281/zenodo.18895840>.
 
 
 # Acknowledgements {.unnumbered}

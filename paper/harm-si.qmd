@@ -1,5 +1,7 @@
 ---
-title: Individual and Differential Harm in Redistricting
+title: |
+    Supplemental Information for\linebreak
+    "Individual and Differential Harm in Redistricting"
 date: last-modified
 authors:
   - name: Cory McCartan
