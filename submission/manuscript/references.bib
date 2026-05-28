@@ -1,3 +1,16 @@
+@phdthesis{mccartan2023computational,
+  title={Computational and Bayesian Methods for Geographic Data in the Social Sciences},
+  author={McCartan, Cory},
+  year={2023},
+  school={Harvard University}
+}
+@phdthesis{kenny2025drawing,
+  title={Drawing Democracies: Redistricting in America},
+  author={Kenny, Christopher Thomas},
+  year={2025},
+  school={Harvard University}
+}
+
 % VOTER REPRESENTATION %%%%%%%%%%%%%%%
 
 @book{brunell2010,
@@ -277,7 +290,7 @@
     day = {31},
 }
 @article{mccartan2020,
-  title={Sequential Monte Carlo for sampling balanced and compact redistricting plans},
+  title={{Sequential Monte Carlo} for sampling balanced and compact redistricting plans},
   author={McCartan, Cory and Imai, Kosuke},
   journal={arXiv preprint arXiv:2008.06131},
   year={2020}
@@ -398,7 +411,7 @@ url = {https://gking.harvard.edu/files/gking/files/paresp.pdf}
 
 % EI AND RACIAL GERRYMANDERING %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-@article{king1997solution,
+@book{king1997solution,
   title={A Solution to the Ecological Inference Problem: Reconstructing Individual Behavior from Aggregate Data},
   author={King, Gary},
   year={1997},
@@ -461,10 +474,14 @@ url = {https://gking.harvard.edu/files/gking/files/paresp.pdf}
 }
 
 @article{kuriwaki2021geography,
-  title={The Geography of Racially Polarized Voting: Calibrating Surveys at the District Level},
+  title={The geography of racially polarized voting: calibrating surveys at the district level},
   author={Kuriwaki, Shiro and Ansolabehere, Stephen and Dagonel, Angelo and Yamauchi, Soichiro},
-  year={2021},
-  publisher={OSF Preprints}
+  journal={American Political Science Review},
+  volume={118},
+  number={2},
+  pages={922--939},
+  year={2024},
+  publisher={Cambridge University Press}
 }
 
 @article{stephanopoulos2014south,
@@ -754,12 +771,30 @@ url = {https://gking.harvard.edu/files/gking/files/paresp.pdf}
                   },
 }
 
-@Data{vest_2020,
-  author    = {{Voting and Election Science Team}},
-  doi       = {10.7910/DVN/K7760H},
+@misc{vest_2020,
+  author = {{Voting and Election Science Team}},
+  doi = {10.7910/DVN/K7760H},
   publisher = {Harvard Dataverse},
-  title     = {{2020 Precinct-Level Election Results}},
-  url       = {https://doi.org/10.7910/DVN/K7760H},
-  version   = {V35},
-  year      = {2020},
+  title = {{2020 Precinct-Level Election Results}},
+  url = {https://doi.org/10.7910/DVN/K7760H},
+  version = {V35},
+  year = {2020},
+}
+
+@misc{census2020vtd,
+  author = {{U.S. Census Bureau}},
+  title = {{2020 Voting Districts}},
+  year = {2020},
+  howpublished = {TIGER/Line Shapefiles},
+  url = {https://www2.census.gov/geo/tiger/TIGER2020PL/LAYER/VTD/},
+  note = {Accessed: May 3, 2022}
+}
+
+@misc{census2020decennial,
+  author = {{U.S. Census Bureau}},
+  title = {{Decennial Census: Redistricting Data (PL 94-171)}},
+  year = {2020},
+  howpublished = {U.S. Census Bureau API},
+  url = {https://api.census.gov/data/2020/dec/pl},
+  note = {Accessed: May 3, 2022}
 }
